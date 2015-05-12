@@ -3,7 +3,7 @@ Comp 354 Project
 
 This is the GitHub repo.
 
-Facebook group: https://www.facebook.com/groups/762140137183379/
+Facebook group: https://www.facebook.com/groups/1603813203198576/
 
 
 Trello board: coming soon
