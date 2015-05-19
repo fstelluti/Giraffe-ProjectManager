@@ -10,10 +10,13 @@ import java.sql.Statement;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.*;
 import controller.DataManager;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+@RunWith(JUnit4.class)
 public class DataManagerTest {
 
 	@Before
@@ -29,17 +32,21 @@ public class DataManagerTest {
 		fail("Not yet implemented");
 	}*/
 	
-	@org.junit.Test
+	@Test
 	public void connectionReturnedShouldBeValid() {
 		Connection c = DataManager.getConnection();
 		assertNotNull("The returned database connection is null!", c);
-		boolean isValid = false;
+		boolean isValid = true;
 		try {
-			isValid = c.isValid(0);
-		}
-		catch (Exception e) {
+			isValid = c.isClosed();
+		} catch (Exception e) {
 			fail("An Exception was thrown!");
 		}
-		assertTrue("The returned database connection is invalid!", isValid);
+		assertFalse("The returned database connection is invalid!", isValid);
+		try {
+			c.close();
+		} catch (Exception e) {
+			fail("An exception was thrown when trying to close the database connection!");
+		}
 	}
 }
