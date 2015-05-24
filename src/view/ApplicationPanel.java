@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,18 +11,21 @@ public class ApplicationPanel extends JFrame
 {
 	public List<JPanel> cardPanels = new ArrayList<JPanel>();
 	public JPanel cardsHolder;
+	private LoginPanel loginPanel;
 	public CardLayout cardLayout;
 	public ApplicationPanel()
 	{
+		JFrame.setDefaultLookAndFeelDecorated(true);
 		cardsHolder = new JPanel();
 		setTitle("Project management application");
 		cardLayout = new CardLayout();
 		cardsHolder.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(450, 210);
+		this.setSize(1200, 800);
+		this.setResizable(false);
 		this.setVisible(true);
 		buildCardsPanel();
-		getContentPane().add(cardsHolder, BorderLayout.CENTER);
+		getContentPane().add(cardsHolder);
 		setDefaultLookAndFeelDecorated(true);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -31,7 +33,7 @@ public class ApplicationPanel extends JFrame
 	
 	public void buildCardsPanel()
 	{
-		addCardPanel(new LoginPanel(), "LoginPanel");
+		addCardPanel(getLoginPanel(), "LoginPanel");
 		cardLayout.show(cardsHolder, "LoginPanel");
 	}
 	
@@ -39,5 +41,14 @@ public class ApplicationPanel extends JFrame
 	{
 		cardPanels.add(panelToAdd);
 		cardsHolder.add(panelToAdd, cardPanelName);
+	}
+	
+	public LoginPanel getLoginPanel()
+	{
+		if (loginPanel == null)
+		{
+			loginPanel = new LoginPanel();
+		}
+		return loginPanel;
 	}
 }

@@ -4,158 +4,226 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.User;
 
 public class DataManager
 {
 	public static Connection getConnection()
 	{
 		Connection c = null;
-	    try {
-	      Class.forName("org.sqlite.JDBC");
-	      c = DriverManager.getConnection("jdbc:sqlite:projectManagement.db");
-	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
-	    }
-	    return c;
+		try
+		{
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:projectManagement.db");
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return c;
 	}
-	
+
 	public static boolean checkLogin(String userName, char[] password)
 	{
 		boolean result = false;
 		String passwordString = new String(password);
 		Connection c = null;
-	    Statement stmt = null;
-	    try
-	    {
-	      c = DataManager.getConnection();
-	      c.setAutoCommit(false);
-	      System.out.println("Opened database successfully");
+		Statement stmt = null;
+		try
+		{
+			c = DataManager.getConnection();
+			c.setAutoCommit(false);
 
-	      stmt = c.createStatement();
-	      ResultSet rs = stmt.executeQuery( "SELECT userName, password FROM USERS WHERE userName = '" + userName +
-	    		  							"' AND password = '" + passwordString + "';");
-	      int resultCount = 0;
-	      String userNameDB = "";
-	      String passwordDB = "";
-	      while (rs.next())
-	      {
-	         userNameDB = rs.getString("userName");
-	         passwordDB = rs.getString("password");
-	         resultCount++;
-	      }
-	      
-	      if (resultCount == 1 && userNameDB.equals(userName) && passwordDB.equals(passwordString))
-	      {
-	    	  result = true;
-	      }
-	      rs.close();
-	      stmt.close();
-	      c.close();
-	    } catch (Exception e)
-	    {
-	      System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	      System.exit(0);
-	    }
-	    return true;
-		//return result;//temporarily returns true before database is properly set up - to be removed
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT userName, password FROM USERS WHERE userName = '"
+							+ userName
+							+ "' AND password = '"
+							+ passwordString
+							+ "';");
+			int resultCount = 0;
+			String userNameDB = "";
+			String passwordDB = "";
+			while (rs.next())
+			{
+				userNameDB = rs.getString("userName");
+				passwordDB = rs.getString("password");
+				resultCount++;
+			}
+
+			if (resultCount == 1 && userNameDB.equals(userName)
+					&& passwordDB.equals(passwordString))
+			{
+				result = true;
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return result;
 	}
-	
-	public static void createTable()
+
+	public static void createTableUsers()
 	{
 		Connection c = null;
-	    Statement stmt = null;
-	    try {
-	      //Class.forName("org.sqlite.JDBC");
-	      c = getConnection();
-	      System.out.println("Opened database successfully");
+		Statement stmt = null;
+		try
+		{
+			c = getConnection();
 
-	      stmt = c.createStatement();
-	      String sql = "CREATE TABLE COMPANY " +
-	                   "(ID INT PRIMARY KEY     NOT NULL," +
-	                   " NAME           TEXT    NOT NULL, " + 
-	                   " AGE            INT     NOT NULL, " + 
-	                   " ADDRESS        CHAR(50), " + 
-	                   " SALARY         REAL)"; 
-	      stmt.executeUpdate(sql);
-	      stmt.close();
-	      c.close();
-	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
-	    }
-	    System.out.println("Table created successfully");
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE USERS "
+					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ " USERNAME       TEXT    NOT NULL, "
+					+ " PASSWORD       TEXT     NOT NULL, "
+					+ " EMAIL        	CHAR(50), "
+					+ " REGDATE 		DATETIME DEFAULT CURRENT_TIMESTAMP, "
+					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT)";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
-	
-	public static void insertIntoTable()
+
+	public static void insertIntoTableUsers(String userName, String password,
+			String email, String firstName, String lastName)
 	{
 		Connection c = null;
-	    Statement stmt = null;
-	    try {
-	      c = DataManager.getConnection();
-	      c.setAutoCommit(false);
-	      System.out.println("Opened database successfully");
+		Statement stmt = null;
+		try
+		{
+			c = DataManager.getConnection();
+			c.setAutoCommit(false);
 
-	      stmt = c.createStatement();
-	      String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
-	                   "VALUES (1, 'Paul', 32, 'California', 20000.00 );"; 
-	      stmt.executeUpdate(sql);
-
-	      sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
-	            "VALUES (2, 'Allen', 25, 'Texas', 15000.00 );"; 
-	      stmt.executeUpdate(sql);
-
-	      sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
-	            "VALUES (3, 'Teddy', 23, 'Norway', 20000.00 );"; 
-	      stmt.executeUpdate(sql);
-
-	      sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
-	            "VALUES (4, 'Mark', 25, 'Rich-Mond ', 65000.00 );"; 
-	      stmt.executeUpdate(sql);
-
-	      stmt.close();
-	      c.commit();
-	      c.close();
-	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
-	    }
-	    System.out.println("Records created successfully");
+			stmt = c.createStatement();
+			String sql = "INSERT INTO USERS (ID,USERNAME,PASSWORD,EMAIL,FIRSTNAME,LASTNAME) "
+					+ "VALUES (NULL, '"
+					+ userName
+					+ "', '"
+					+ password
+					+ "', '"
+					+ email + "', '" + firstName + "', '" + lastName + "')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
-	
-	public static void selectFromTable()
+
+	public static List<User> getAllUsers()
 	{
+		List<User> users = new ArrayList<User>();
 		Connection c = null;
-	    Statement stmt = null;
-	    try {
-	      c = DataManager.getConnection();
-	      c.setAutoCommit(false);
-	      System.out.println("Opened database successfully");
+		Statement stmt = null;
+		try
+		{
+			c = DataManager.getConnection();
+			c.setAutoCommit(false);
 
-	      stmt = c.createStatement();
-	      ResultSet rs = stmt.executeQuery( "SELECT * FROM COMPANY;" );
-	      while ( rs.next() ) {
-	         int id = rs.getInt("id");
-	         String  name = rs.getString("name");
-	         int age  = rs.getInt("age");
-	         String  address = rs.getString("address");
-	         float salary = rs.getFloat("salary");
-	         System.out.println( "ID = " + id );
-	         System.out.println( "NAME = " + name );
-	         System.out.println( "AGE = " + age );
-	         System.out.println( "ADDRESS = " + address );
-	         System.out.println( "SALARY = " + salary );
-	         System.out.println();
-	      }
-	      rs.close();
-	      stmt.close();
-	      c.close();
-	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	      System.exit(0);
-	    }
-	    System.out.println("Operation done successfully");
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS;");
+			while (rs.next())
+			{
+				User user = null;
+				int id = rs.getInt("id");
+				String userName = rs.getString("username");
+				String password = rs.getString("password");
+				String email = rs.getString("email");
+				String firstName = rs.getString("firstname");
+				String lastName = rs.getString("lastname");
+				user = new User(id, userName, password, email, firstName, lastName);
+				users.add(user);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return users;
 	}
 	
+	public static User getUserById(int id)
+	{
+		User user = null;
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = DataManager.getConnection();
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE ID = " + id + ";");
+			while (rs.next())
+			{
+				String userName = rs.getString("username");
+				String password = rs.getString("password");
+				String email = rs.getString("email");
+				String firstName = rs.getString("firstname");
+				String lastName = rs.getString("lastname");
+				
+				user = new User(id, userName, password, email, firstName, lastName);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return user;
+	}
+	
+	public static User getUserByUserName(String userName)
+	{
+		User user = null;
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = DataManager.getConnection();
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE USERNAME = '" + userName + "';");
+			while (rs.next())
+			{
+				int id = rs.getInt("id");
+				String password = rs.getString("password");
+				String email = rs.getString("email");
+				String firstName = rs.getString("firstname");
+				String lastName = rs.getString("lastname");
+				
+				user = new User(id, userName, password, email, firstName, lastName);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return user;
+	}
 
 }
