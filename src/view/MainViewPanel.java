@@ -2,14 +2,21 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import controller.DataManager;
+import controller.ViewManager;
 import model.User;
 
 public class MainViewPanel extends JPanel
@@ -19,6 +26,7 @@ public class MainViewPanel extends JPanel
 	private JPanel southPanel;
 	private JSplitPane splitPanel;
 	private User user;
+	private JButton createProject, editProject, addActivity;
 	
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
 	
@@ -34,9 +42,46 @@ public class MainViewPanel extends JPanel
 	
 	private void createToolBarButtons()
 	{
-		JButton createProject = new JButton("Create new project");
-		JButton editProject = new JButton("Edit a project");
-		JButton addActivity = new JButton("Add activity");
+		createProject = new JButton("Create new project");
+		editProject = new JButton("Edit a project");
+		addActivity = new JButton("Add activity");
+		
+		createProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == createProject)
+				{
+					CreateProjectDialog test = new CreateProjectDialog(null, "Create a Project", true);
+				}	
+			}
+		});
+		
+		editProject.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == editProject)
+				{
+					EditProjectDialog test = new EditProjectDialog(null, "Edit a Project", true);
+				}	
+			}
+		});
+		
+		addActivity.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == addActivity)
+				{
+					AddActivityDialog test = new AddActivityDialog(null, "Add an activity", true);
+				}	
+			}
+		});
+		
 		addToolbarButton(createProject);
 		addToolbarButton(editProject);
 		addToolbarButton(addActivity);
