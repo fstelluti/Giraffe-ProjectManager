@@ -46,6 +46,7 @@ public class MainViewPanel extends JPanel
 		editProject = new JButton("Edit a project");
 		addActivity = new JButton("Add activity");
 		
+		//Open "Create Project" Dialog
 		createProject.addActionListener(new ActionListener() {
 			
 			@Override
@@ -58,6 +59,7 @@ public class MainViewPanel extends JPanel
 			}
 		});
 		
+		//Open "Edit Project" Dialog
 		editProject.addActionListener(new ActionListener() {
 			
 			@Override
@@ -70,6 +72,7 @@ public class MainViewPanel extends JPanel
 			}
 		});
 		
+		//Open "Create Activity" Dialog
 		addActivity.addActionListener(new ActionListener() {
 			
 			@Override
