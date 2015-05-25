@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -12,17 +13,20 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.DataManager;
+import model.Activity;
 import model.Project;
 
 public class AddActivityDialog extends JDialog 
 {
 
   private JTextField activityName, dueDate;
-  private JComboBox<?> projectName, status;
-  private JLabel projectNameLabel, activityNameLabel, dueDateLabel, statusLabel;
+  private JComboBox<?> project, status;
+  private JLabel projectLabel, activityNameLabel, dueDateLabel, statusLabel;
 
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
@@ -41,11 +45,15 @@ public class AddActivityDialog extends JDialog
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
 	  panName.setPreferredSize(new Dimension(220, 60));
-	  projectName = new JComboBox<Project>();
+	  
+	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES ONCE PROJECT DB AND QUERIES HAVE BEEN CREATED
+	  
+	  project = new JComboBox<String>(new String[]{"test"});
+	  project.setSelectedIndex(0);
 	  panName.setBorder(BorderFactory.createTitledBorder("Project"));
-	  projectNameLabel = new JLabel("Select Project:");
-	  panName.add(projectNameLabel);
-	  panName.add(projectName);
+	  projectLabel = new JLabel("Select Project:");
+	  panName.add(projectLabel);
+	  panName.add(project);
 	  
 	  //Activity Name
 	  JPanel panActivity = new JPanel();
@@ -85,7 +93,15 @@ public class AddActivityDialog extends JDialog
 	  JButton okButton = new JButton("Add Activity");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  //Add Activity
+	    	  if(activityName.getText().hashCode() != 0){
+	    		  DataManager.insertIntoTableActivities(
+	    				  project.getSelectedIndex(), activityName.getText(), 
+	    				  null, status.getSelectedIndex());
+	    		  setVisible(false);
+	    	  }
+	    	  else{
+	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields");
+	    	  }
 	      }      
 	    });
 	  JButton cancelButton = new JButton("Cancel");
