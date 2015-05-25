@@ -1,14 +1,15 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.Activity;
+import model.Project;
 import model.User;
 
 public class DataManager
@@ -255,7 +256,7 @@ public class DataManager
 		}
 	}
 	
-	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, String activityName, Date startDate, Date dueDate, int status)
+	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, String activityName, String startDate, String dueDate, int status)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -350,5 +351,99 @@ public class DataManager
 			System.exit(0);
 		}
 		return activity;
+	}
+	
+	public static void insertIntoTableProjects(String connectionString, String name, String startDate, String dueDate, int projectManagerID)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "INSERT INTO PROJECTS (id,name,startdate, duedate,projectManagerID) "
+					+ "VALUES (NULL, '"
+					+ name
+					+ "', '"
+					+ startDate
+					+ "', '"
+					+ dueDate
+					+ "', '"
+					+ projectManagerID + "')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
+	
+	public static List<Project> getProjects(String connectionString)
+	{
+		List<Project> projects = new ArrayList<Project>();
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM PROJECTS;");
+			while (rs.next())
+			{
+				Project project = null;
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				Date startDate = rs.getDate("startdate");
+				Date dueDate = rs.getDate("duedate");
+				int projectManagerID = rs.getInt("projectManagerID");
+				project = new Project(id, name, startDate, dueDate, projectManagerID);
+				projects.add(project);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return projects;
+	}
+	public static Project getProjectById(String connectionString, int id)
+	{
+		Project project = null;
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = "+id+";");
+			while (rs.next())
+			{
+				String name = rs.getString("name");
+				Date startDate = rs.getDate("startdate");
+				Date dueDate = rs.getDate("duedate");
+				int projectManagerID = rs.getInt("projectManagerID");
+				project = new Project(id, name, startDate, dueDate, projectManagerID);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return project;
 	}
 }
