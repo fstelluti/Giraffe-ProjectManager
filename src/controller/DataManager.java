@@ -242,6 +242,7 @@ public class DataManager
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
 					+ " NAME       TEXT     NOT NULL, "
+					+ " STARTDATE 		DATE, "
 					+ " DUEDATE 		DATE, "
 					+ " STATUS		INTEGER 	NOT NULL)";
 			stmt.executeUpdate(sql);
@@ -254,7 +255,7 @@ public class DataManager
 		}
 	}
 	
-	public static void insertIntoTableActivities(int associatedProjectId, String activityName, Date dueDate, int status)
+	public static void insertIntoTableActivities(int associatedProjectId, String activityName, Date startDate, Date dueDate, int status)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -264,11 +265,13 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,DUEDATE,STATUS) "
+			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS) "
 					+ "VALUES (NULL, '"
 					+ associatedProjectId
 					+ "', '"
 					+ activityName
+					+ "', '"
+					+ startDate
 					+ "', '"
 					+ dueDate
 					+ "', '"
@@ -301,9 +304,10 @@ public class DataManager
 				Activity activity = null;
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
+				Date startDate = rs.getDate("startdate");
 				Date dueDate = rs.getDate("duedate");
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, dueDate, status);
+				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 				activities.add(activity);
 			}
 			rs.close();
@@ -332,9 +336,10 @@ public class DataManager
 			{
 				int projectId = rs.getInt("projectid");
 				String name = rs.getString("name");
+				Date startDate = rs.getDate("startdate");
 				Date dueDate = rs.getDate("duedate");
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, dueDate, status);
+				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 			}
 			rs.close();
 			stmt.close();
