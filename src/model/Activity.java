@@ -1,14 +1,15 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+
 
 public class Activity
 {
 	private int 	id;
 	private int 	projectId;
 	private String 	name;
-	private Date 	startDate  = new Date();
-	private Date 	dueDate = new Date();
+	private Date 	startDate;
+	private Date 	dueDate;
 	private int 	status = 1;
 	public String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
 	
@@ -19,7 +20,7 @@ public class Activity
 		this.id = id;
 		this.projectId = projectId;
 		this.name = name;
-		this.setStartDate(startDate);
+		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.status = status;
 	}

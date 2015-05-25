@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,6 +32,7 @@ public class AddActivityDialog extends JDialog
   private JFormattedTextField dueDate, startDate;
   private JComboBox<?> project, status;
   private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel;
+  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
@@ -74,9 +76,9 @@ public class AddActivityDialog extends JDialog
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(220, 60));
-	  startDate = new JFormattedTextField(new SimpleDateFormat("MM/dd/yy").format(new Date()));
+	  startDate = new JFormattedTextField(dateFormat.format(new Date()));
 	  startDate.setPreferredSize(new Dimension(100, 25));
-	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date (YYYY-MM-DD)"));
 	  startDateLabel = new JLabel("Start Date:");
 	  panStartDate.add(startDateLabel);
 	  panStartDate.add(startDate);
@@ -85,9 +87,9 @@ public class AddActivityDialog extends JDialog
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(220, 60));
-	  dueDate = new JFormattedTextField(new SimpleDateFormat("MM/dd/yy").format(new Date()));
+	  dueDate = new JFormattedTextField(dateFormat.format(new Date()));
 	  dueDate.setPreferredSize(new Dimension(100, 25));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date (YYYY-MM-DD)"));
 	  dueDateLabel = new JLabel("Due Date:");
 	  panDueDate.add(dueDateLabel);
 	  panDueDate.add(dueDate);
@@ -106,16 +108,19 @@ public class AddActivityDialog extends JDialog
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Add Activity");
+	  
+	  //Creates action
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  if(activityName.getText().hashCode() != 0){
+	    	  //Verifies all text boxes are filled out before submission is allowed
+	    	  if(activityName.getText().hashCode() != 0 && startDate.getText().hashCode() != 0 && dueDate.getText().hashCode() != 0){
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 	    				  project.getSelectedIndex(), activityName.getText(), 
-	    				  null, null, status.getSelectedIndex());
+	    				 startDate.getText() , dueDate.getText(), status.getSelectedIndex());
 	    		  setVisible(false);
 	    	  }
 	    	  else{
-	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields");
+	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	      }      
 	    });
