@@ -26,8 +26,8 @@ public class CreateProjectDialog extends JDialog
 {
 
  private JTextField projectName, projectManager;
- private JLabel projectNameLabel, projectManagerLabel, dueDateLabel;
- private JFormattedTextField dueDate;
+ private JLabel projectNameLabel, projectManagerLabel, dueDateLabel, startDateLabel;
+ private JFormattedTextField dueDate, startDate;
  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal)
@@ -65,6 +65,17 @@ public class CreateProjectDialog extends JDialog
 	  panManager.add(projectManagerLabel);
 	  panManager.add(projectManager);
 	  
+	  //Start Date
+	  JPanel panStartDate = new JPanel();
+	  panStartDate.setBackground(Color.white);
+	  panStartDate.setPreferredSize(new Dimension(220, 60));
+	  startDate = new JFormattedTextField(dateFormat.format(new Date()));
+	  startDate.setPreferredSize(new Dimension(100, 25));
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date (YYYY-MM-DD)"));
+	  startDateLabel = new JLabel("Start Date:");
+	  panStartDate.add(startDateLabel);
+	  panStartDate.add(startDate);
+	  
 	  //Due date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
@@ -98,6 +109,7 @@ public class CreateProjectDialog extends JDialog
 	  content.add(panName);
 	  content.add(panManager);
 	  content.add(panDueDate);
+	  content.add(panStartDate);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

@@ -12,17 +12,18 @@ public class Project
 {
 	private int id;
 	private String name;
-	private String projectManager;
-	private Date dueDate;
+	private int projectManagerID;
+	private Date startDate, dueDate;
 	
 	public Project(){}
 	
 	//Will probably have more arguments
-	public Project(int id, String name, String projectManager, Date dueDate)
+	public Project(int id, String name, Date startDate, Date dueDate, int projectManagerID)
 	{
 		this.id = id;
 		this.name = name;
-		this.projectManager = projectManager;
+		this.projectManagerID = projectManagerID;
+		this.startDate = startDate;
 		this.dueDate = dueDate;
 	}
 	
@@ -51,8 +52,12 @@ public class Project
 		return name;
 	}
 	
-	public String getProjectManager(){
-		return projectManager;
+	public int getProjectManager(){
+		return projectManagerID;
+	}
+	
+	public Date getStartDate(){
+		return startDate;
 	}
 	
 	public Date getDueDate(){
@@ -64,8 +69,12 @@ public class Project
 		this.name = newName;
 	}
 	
-	public void setProjectManager(String newPM){
-		this.projectManager = newPM;
+	public void setProjectManager(int newPM){
+		this.projectManagerID = newPM;
+	}
+	
+	public void setStartDate(Date newDate){
+		this.startDate = newDate;
 	}
 	
 	public void setDueDate(Date newDate){
