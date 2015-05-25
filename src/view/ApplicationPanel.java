@@ -21,7 +21,6 @@ public class ApplicationPanel extends JFrame
 		cardLayout = new CardLayout();
 		cardsHolder.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(1200, 800);
 		this.setResizable(false);
 		this.setVisible(true);
 		buildCardsPanel();
@@ -49,6 +48,7 @@ public class ApplicationPanel extends JFrame
 		{
 			loginPanel = new LoginPanel();
 		}
+		this.setSize(400, 250);
 		return loginPanel;
 	}
 }

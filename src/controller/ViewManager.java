@@ -23,9 +23,9 @@ public class ViewManager
 			applicationPanel.addCardPanel(mainViewPanel, "MainViewPanel");
 			mainViewPanel.setSize(1200, 800);
 			applicationPanel.setSize(1200, 800);
+			applicationPanel.setLocationRelativeTo(null);
 			applicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
 		}
-		
 		return mainViewPanel;
 	}
 	

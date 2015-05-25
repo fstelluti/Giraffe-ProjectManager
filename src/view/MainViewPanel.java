@@ -111,7 +111,7 @@ public class MainViewPanel extends JPanel
 		{
 			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 			splitPanel.setLeftComponent(new TreePanel().getTreeView());
-			splitPanel.setRightComponent(new JLabel("MY PROJECTS - we should put grid of active projects here"));//here we should put a grid of projects
+			splitPanel.setRightComponent(new JLabel("MY PROJECTS - grid of active projects here"));//here we should put a grid of projects
 		}
 		return splitPanel;
 	}
