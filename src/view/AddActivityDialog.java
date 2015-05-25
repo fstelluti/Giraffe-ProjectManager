@@ -5,12 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,9 +26,10 @@ import model.Project;
 public class AddActivityDialog extends JDialog 
 {
 
-  private JTextField activityName, dueDate;
+  private JTextField activityName;
+  private JFormattedTextField dueDate, startDate;
   private JComboBox<?> project, status;
-  private JLabel projectLabel, activityNameLabel, dueDateLabel, statusLabel;
+  private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel;
 
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
@@ -66,13 +69,24 @@ public class AddActivityDialog extends JDialog
 	  panActivity.add(activityNameLabel);
 	  panActivity.add(activityName);
 	  
-	  //Duration
+	  //Start Date
+	  JPanel panStartDate = new JPanel();
+	  panStartDate.setBackground(Color.white);
+	  panStartDate.setPreferredSize(new Dimension(220, 60));
+	  startDate = new JFormattedTextField(new SimpleDateFormat("MM/dd/yy").format(new Date()));
+	  startDate.setPreferredSize(new Dimension(100, 25));
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  startDateLabel = new JLabel("Start Date:");
+	  panStartDate.add(startDateLabel);
+	  panStartDate.add(startDate);
+	  
+	  //Due Date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(220, 60));
-	  dueDate = new JTextField();
+	  dueDate = new JFormattedTextField(new SimpleDateFormat("MM/dd/yy").format(new Date()));
 	  dueDate.setPreferredSize(new Dimension(100, 25));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date:"));
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
 	  dueDateLabel = new JLabel("Due Date:");
 	  panDueDate.add(dueDateLabel);
 	  panDueDate.add(dueDate);
@@ -95,7 +109,7 @@ public class AddActivityDialog extends JDialog
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  if(activityName.getText().hashCode() != 0){
 	    		  DataManager.insertIntoTableActivities(
-	    				  project.getSelectedIndex(), activityName.getText(), 
+	    				  project.getSelectedIndex(), activityName.getText(), null,
 	    				  null, status.getSelectedIndex());
 	    		  setVisible(false);
 	    	  }
@@ -117,6 +131,7 @@ public class AddActivityDialog extends JDialog
 	  content.setBackground(Color.white);
 	  content.add(panName);
 	  content.add(panActivity);
+	  content.add(panStartDate);
 	  content.add(panDueDate);
 	  content.add(panStatus);
 	  
