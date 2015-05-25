@@ -8,14 +8,18 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -30,7 +34,7 @@ public class AddActivityDialog extends JDialog
 
   private JTextField activityName;
   private JFormattedTextField dueDate, startDate;
-  private JComboBox<?> project, status;
+  private JComboBox<?> projectBox, status;
   private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -52,14 +56,18 @@ public class AddActivityDialog extends JDialog
 	  panName.setBackground(Color.white);
 	  panName.setPreferredSize(new Dimension(220, 60));
 	  
-	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES ONCE PROJECT DB AND QUERIES HAVE BEEN CREATED
-	  
-	  project = new JComboBox<String>(new String[]{"test"});
-	  project.setSelectedIndex(0);
+	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES
+	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  String[] projectNames = new String[projects.size()];
+	  for(int i = 0; i < projectNames.length; i++){
+		  projectNames[i] = projects.get(i).getProjectName(); // this will work once getters have been created
+	  }
+	  projectBox = new JComboBox<String>(projectNames);
+	  projectBox.setSelectedIndex(0);
 	  panName.setBorder(BorderFactory.createTitledBorder("Project"));
 	  projectLabel = new JLabel("Select Project:");
 	  panName.add(projectLabel);
-	  panName.add(project);
+	  panName.add(projectBox);
 	  
 	  //Activity Name
 	  JPanel panActivity = new JPanel();
@@ -115,8 +123,11 @@ public class AddActivityDialog extends JDialog
 	    	  //Verifies all text boxes are filled out before submission is allowed
 	    	  if(activityName.getText().hashCode() != 0 && startDate.getText().hashCode() != 0 && dueDate.getText().hashCode() != 0){
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-	    				  project.getSelectedIndex(), activityName.getText(), 
-	    				 startDate.getText() , dueDate.getText(), status.getSelectedIndex());
+	    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
+	    				 activityName.getText(), 
+	    				 startDate.getText() , 
+	    				 dueDate.getText(), 
+	    				 status.getSelectedIndex());
 	    		  setVisible(false);
 	    	  }
 	    	  else{
