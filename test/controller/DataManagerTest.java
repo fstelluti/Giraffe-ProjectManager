@@ -33,8 +33,8 @@ public class DataManagerTest {
 	}*/
 	
 	@Test
-	public void connectionReturnedShouldBeValid() {
-		Connection c = DataManager.getConnection();
+	public void connectionReturnedShouldBeValid(String connectionString) {
+		Connection c = DataManager.getConnection(connectionString);
 		assertNotNull("The returned database connection is null!", c);
 		boolean isValid = true;
 		try {

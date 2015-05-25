@@ -17,6 +17,7 @@ import javax.swing.border.TitledBorder;
 
 import model.User;
 import controller.DataManager;
+import controller.DatabaseConstants;
 import controller.ViewManager;
 
 public class LoginPanel extends JPanel implements ActionListener
@@ -142,10 +143,10 @@ public class LoginPanel extends JPanel implements ActionListener
 		{
 			char[] passChar = passwordTextField.getPassword();
 			String uName = loginTextField.getText();
-			boolean checkResult = DataManager.checkLogin(loginTextField.getText(), passChar);
+			boolean checkResult = DataManager.checkLogin(DatabaseConstants.PROJECT_MANAGEMENT_DB, loginTextField.getText(), passChar);
 			if (checkResult)
 			{
-				User user = DataManager.getUserByUserName(uName);
+				User user = DataManager.getUserByUserName(DatabaseConstants.PROJECT_MANAGEMENT_DB, uName);
 				ViewManager.createMainViewPanel(user);
 			}
 			else

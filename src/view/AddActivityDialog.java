@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import controller.DataManager;
+import controller.DatabaseConstants;
 import model.Activity;
 import model.Project;
 
@@ -108,9 +109,9 @@ public class AddActivityDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  if(activityName.getText().hashCode() != 0){
-	    		  DataManager.insertIntoTableActivities(
-	    				  project.getSelectedIndex(), activityName.getText(), null,
-	    				  null, status.getSelectedIndex());
+	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+	    				  project.getSelectedIndex(), activityName.getText(), 
+	    				  null, null, status.getSelectedIndex());
 	    		  setVisible(false);
 	    	  }
 	    	  else{

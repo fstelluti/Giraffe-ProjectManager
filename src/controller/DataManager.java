@@ -13,13 +13,13 @@ import model.User;
 
 public class DataManager
 {
-	public static Connection getConnection()
+	public static Connection getConnection(String connectionString)
 	{
 		Connection c = null;
 		try
 		{
 			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:projectManagement.db");
+			c = DriverManager.getConnection(connectionString);
 		} catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -28,7 +28,7 @@ public class DataManager
 		return c;
 	}
 
-	public static boolean checkLogin(String userName, char[] password)
+	public static boolean checkLogin(String connectionString, String userName, char[] password)
 	{
 		boolean result = false;
 		String passwordString = new String(password);
@@ -36,7 +36,7 @@ public class DataManager
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -72,13 +72,13 @@ public class DataManager
 		return result;
 	}
 
-	public static void createTableUsers()
+	public static void createTableUsers(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = getConnection();
+			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE USERS "
@@ -98,14 +98,14 @@ public class DataManager
 		}
 	}
 	
-	public static void insertIntoTableUsers(String userName, String password,
+	public static void insertIntoTableUsers(String connectionString, String userName, String password,
 			String email, String firstName, String lastName)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -128,14 +128,14 @@ public class DataManager
 	}
 	
 
-	public static List<User> getAllUsers()
+	public static List<User> getAllUsers(String connectionString)
 	{
 		List<User> users = new ArrayList<User>();
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -163,14 +163,14 @@ public class DataManager
 		return users;
 	}
 	
-	public static User getUserById(int id)
+	public static User getUserById(String connectionString, int id)
 	{
 		User user = null;
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -196,14 +196,14 @@ public class DataManager
 		return user;
 	}
 	
-	public static User getUserByUserName(String userName)
+	public static User getUserByUserName(String connectionString, String userName)
 	{
 		User user = null;
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -229,13 +229,13 @@ public class DataManager
 		return user;
 	}
 	
-	public static void createTableActivities()
+	public static void createTableActivities(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = getConnection();
+			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE ACTIVITIES "
@@ -255,13 +255,13 @@ public class DataManager
 		}
 	}
 	
-	public static void insertIntoTableActivities(int associatedProjectId, String activityName, Date startDate, Date dueDate, int status)
+	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, String activityName, Date startDate, Date dueDate, int status)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -287,14 +287,14 @@ public class DataManager
 		}
 	}
 	
-	public static List<Activity> getProjectActivities(int projectId)
+	public static List<Activity> getProjectActivities(String connectionString, int projectId)
 	{
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -320,14 +320,14 @@ public class DataManager
 		}
 		return activities;
 	}
-	public static Activity getActivityById(int id)
+	public static Activity getActivityById(String connectionString, int id)
 	{
 		Activity activity = null;
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = DataManager.getConnection();
+			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
