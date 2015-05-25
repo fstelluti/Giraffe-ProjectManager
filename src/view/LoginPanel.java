@@ -23,15 +23,18 @@ public class LoginPanel extends JPanel implements ActionListener
 {
 	private JPanel loginPanel;
 	private JPanel loginSubPanel;
-	public JLabel loginLabel;
-	public JTextField loginTextField;
 	private JPanel passwordSubPanel;
-	public JLabel passwordLabel;
-	public JPasswordField passwordTextField;
 	private JPanel buttonsSubPanel;
+	
+	public JPanel newAccountLabelPanel;
+	
+	public JLabel loginLabel;
+	public JLabel passwordLabel;
+	
+	public JTextField loginTextField;
+	public JPasswordField passwordTextField;
 	public JButton loginButton, resetButton;
 	public JButton newAccountButton;
-	public JPanel newAccountLabelPanel;
 	
 	public LoginPanel()
 	{
