@@ -7,17 +7,19 @@ public class Activity
 	private int 	id;
 	private int 	projectId;
 	private String 	name;
+	private Date 	startDate  = new Date();
 	private Date 	dueDate = new Date();
 	private int 	status = 1;
 	public String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
 	
 	
-	public Activity(int id, int projectId, String name, Date dueDate, int status)
+	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status)
 	{
 		super();
 		this.id = id;
 		this.projectId = projectId;
 		this.name = name;
+		this.setStartDate(startDate);
 		this.dueDate = dueDate;
 		this.status = status;
 	}
@@ -67,6 +69,16 @@ public class Activity
 
 	public void setAssociatedProjectId(int associatedProjectId) {
 		this.projectId = associatedProjectId;
+	}
+
+	public Date getStartDate()
+	{
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate)
+	{
+		this.startDate = startDate;
 	}
 	
 	
