@@ -1,5 +1,9 @@
 package view;
 
+/**
+ * Create a Dialog window, where the user (which kind of user can?) can edit a project.
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,7 +37,7 @@ public class EditProjectDialog extends JDialog
   
   private void initComponent()
   {
-	  //Project Name - Maybe change to drop-down list with all current projects
+	  //Project Name - Maybe change to drop-down list containing all current projects
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
 	  panName.setPreferredSize(new Dimension(220, 60));

@@ -1,5 +1,9 @@
 package view;
 
+/**
+ * Create a Dialog window, where the user (which kind of user can?) can create a project.
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
