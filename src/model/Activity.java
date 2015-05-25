@@ -4,19 +4,22 @@ import java.util.Date;
 
 public class Activity
 {
-	private int activityId;
-	private String activityName;
-	private Date dueDate = new Date();
-	private int status = 1;
+	private int 	id;
+	private int 	projectId;
+	private String 	name;
+	private Date 	dueDate = new Date();
+	private int 	status = 1;
 	public String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
 	
-	public Activity(int activityId, int associatedProjectId, String activityName, Date dueDate)
+	
+	public Activity(int id, int projectId, String name, Date dueDate, int status)
 	{
 		super();
-		this.activityId = activityId;
-		this.activityName = activityName;
-		this.setDueDate(dueDate);
-		this.status = 0;
+		this.id = id;
+		this.projectId = projectId;
+		this.name = name;
+		this.dueDate = dueDate;
+		this.status = status;
 	}
 	
 	public String getStatusName() {
@@ -24,19 +27,19 @@ public class Activity
 	}
 
 	public int getActivityId() {
-		return activityId;
+		return id;
 	}
 
 	public void setActivityId(int activityId) {
-		this.activityId = activityId;
+		this.id = activityId;
 	}
 
 	public String getActivityName() {
-		return activityName;
+		return name;
 	}
 
 	public void setActivityName(String activityName) {
-		this.activityName = activityName;
+		this.name = activityName;
 	}
 
 	public int getStatus() {
@@ -56,6 +59,14 @@ public class Activity
 
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+	}
+
+	public int getAssociatedProjectId() {
+		return projectId;
+	}
+
+	public void setAssociatedProjectId(int associatedProjectId) {
+		this.projectId = associatedProjectId;
 	}
 	
 	
