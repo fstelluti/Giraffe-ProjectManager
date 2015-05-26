@@ -259,6 +259,9 @@ public class DataManager
 		}
 	}
 	
+	/*
+	 * startDate and dueDate are String variables in a format "yyyy-mm-dd"
+	 */
 	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, String activityName, String startDate, String dueDate, int status)
 	{
 		Connection c = null;
