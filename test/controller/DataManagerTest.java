@@ -446,4 +446,158 @@ public class DataManagerTest {
 			boolean condition = (id == 1);
 			assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
 		}
+		
+		/* Tests DataManager.createTableProjects();
+				@Test
+				public void createdTableProjectsShouldBeValid() {
+					String test = null;
+					String result = null;
+					boolean condition = false;
+					String tableName = "PROJECTS";
+					Connection c = null;
+					Statement stmt = null;
+					ResultSet rs = null;
+					try {
+						c = DataManager.getConnection(CONNECTION);
+						stmt = c.createStatement();
+						// PRAGMA table_info returns the set of columns with metadata, one per row
+						rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
+						
+						//One test for each column, make sure they are all there and in correct order
+						rs.next();
+						test = "ID";
+						// getString(2) returns the second index of table_info, in this case table name
+						result = rs.getString(2).trim();
+						condition = test.equalsIgnoreCase(result);
+						assertTrue("First column is not ID, but " + result + "!", condition);
+						
+						rs.next();
+						test = "NAME";
+						result = rs.getString(2).trim();
+						condition = test.equalsIgnoreCase(result);
+						assertTrue("Second column is not NAME, but " + result + "!", condition);
+						
+						rs.next();
+						test = "STARTDATE";
+						result = rs.getString(2).trim();
+						condition = test.equalsIgnoreCase(result);
+						assertTrue("Third column is not STARTDATE, but " + result + "!", condition);
+						
+						rs.next();
+						test = "DUEDATE";
+						result = rs.getString(2).trim();
+						condition = test.equalsIgnoreCase(result);
+						assertTrue("Fourth column is not DUEDATE, but " + result + "!", condition);
+						
+						stmt.close();
+						rs.close();
+						c.close();
+						
+					} catch (Exception e) {
+						fail("An Exception was thrown: " + e.getStackTrace());
+						
+					} finally {
+					    try {
+					    	if (c != null && !c.isClosed()) {
+					    		c.close();
+					    	}
+					    	if (stmt != null && !stmt.isClosed()) {
+					    		stmt.close();
+					    	}
+					    	if (rs != null && !rs.isClosed()) {
+					    		rs.close();
+					    	}
+					    } catch (Exception ex) {
+					        System.err.println ("Error closing connections");
+					    }
+					}
+				}
+		
+		// Tests DataManager.insertIntoTableProjects()
+		@Test
+		public void insertedProjectShouldMatchData() {
+			DataManager.insertIntoTableProjects(CONNECTION, ");
+			Connection c = null;
+			Statement stmt = null;
+			ResultSet rs = null;
+			try {
+				c = DataManager.getConnection(CONNECTION);
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE STATUS=42;");
+				rs.next();
+				String projectId = rs.getString("PROJECTID").trim();
+				String name = rs.getString("NAME").trim();
+				String startDate = rs.getString("STARTDATE").trim();
+				String dueDate = rs.getString("DUEDATE").trim();
+				String status = rs.getString("STATUS").trim();
+				boolean projectIdMatch = projectId.equals("1337");
+				boolean nameMatch = name.equals("dummy activity");
+				boolean startDateMatch = startDate.equals("1969-12-31");
+				boolean dueDateMatch = dueDate.equals("1970-01-01");
+				boolean statusMatch = status.equals("42");
+				if (rs.next()) {
+					fail("More than one result was returned!");
+				}
+				assertTrue("ProjectID did not match!", projectIdMatch);
+				assertTrue("Name did not match!", nameMatch);
+				assertTrue("startDate did not match!", startDateMatch);
+				assertTrue("dueDate name did not match!", dueDateMatch);
+				assertTrue("status name did not match!", statusMatch);
+				stmt.close();
+				rs.close();
+				c.close();
+			} catch (Exception e) {
+				fail("An Exception was thrown: " + e.getStackTrace());
+			} finally {
+			    try {
+			    	if (c != null && !c.isClosed()) {
+			    		c.close();
+			    	}
+			    	if (stmt != null && !stmt.isClosed()) {
+			    		stmt.close();
+			    	}
+			    	if (rs != null && !rs.isClosed()) {
+			    		rs.close();
+			    	}
+			    } catch (Exception ex) {
+			        System.err.println ("Error closing connections");
+			    }
+			}
+		}
+		
+		// Tests DataManager.getProjects()
+		@Test
+		public void returnedProjectsShouldBeValid() {
+			List<Project> projects = DataManager.getProjects(CONNECTION);
+			int counter = 0;
+			for (Activity activity : activities) {
+				++counter;
+				int id = activity.getActivityId();
+				int projectId = activity.getAssociatedProjectId();
+				boolean validProjectId = (projectId == 1337);
+				boolean nameExists = activity.getActivityName() != null && !activity.getActivityName().isEmpty();
+				boolean startDateExists = activity.getStartDate() != null;
+				boolean dueDateExists = activity.getDueDate() != null;
+				boolean statusExists = activity.getStatus() >= 0;
+				assertTrue("Project ID for ID " + id + " was invalid!", validProjectId);
+				assertTrue("A name was missing for ID " + id, nameExists);
+				assertTrue("An start date was missing for ID " + id, startDateExists);
+				assertTrue("A due date name was missing for ID " + id, dueDateExists);
+				assertTrue("A status name was missing for ID " + id, statusExists);
+			}
+			boolean correctNumberOfResults = (counter == 3);
+			assertTrue("An incorrect number of results was returned (" + counter + ", expecting 3)!", correctNumberOfResults);
+		}
+		
+		// Tests DataManager.getProjectById()
+		@Test
+		public void returnedActivityByIdShouldMatch() {
+			Activity activity = DataManager.getActivityById(CONNECTION, 1);
+			int id = activity.getActivityId();
+			boolean condition = (id == 1);
+			assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
+		}
+		*/
 }
