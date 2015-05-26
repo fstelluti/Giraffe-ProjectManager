@@ -47,6 +47,7 @@ public class ApplicationPanel extends JFrame
 		if (loginPanel == null)
 		{
 			loginPanel = new LoginPanel();
+			this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		}
 		this.setSize(400, 250);
 		return loginPanel;
