@@ -34,9 +34,10 @@ public class AddActivityDialog extends JDialog
 
   private JTextField activityName;
   private JFormattedTextField dueDate, startDate;
-  private JComboBox<?> projectBox, status;
-  private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel;
+  private JComboBox<?> projectBox, statusBox, dependBox;
+  private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  String dateRegex = "^(20)\\d\\d([-])(0[1-9]|1[012])([-])(0[1-9]|[12][0-9]|3[01])$";
 
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
@@ -51,10 +52,10 @@ public class AddActivityDialog extends JDialog
   
   private void initComponent()
   {
-	  //Project Name - Maybe change to drop-down list with all current projects
-	  JPanel panName = new JPanel();
-	  panName.setBackground(Color.white);
-	  panName.setPreferredSize(new Dimension(465, 60));
+	  //Project Name
+	  JPanel panProjectName = new JPanel();
+	  panProjectName.setBackground(Color.white);
+	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
 	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
@@ -63,10 +64,10 @@ public class AddActivityDialog extends JDialog
 		  projectNames[i] = projects.get(i).getProjectName();
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
-	  panName.setBorder(BorderFactory.createTitledBorder("Project"));
+	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project"));
 	  projectLabel = new JLabel("Select Project:");
-	  panName.add(projectLabel);
-	  panName.add(projectBox);
+	  panProjectName.add(projectLabel);
+	  panProjectName.add(projectBox);
 	  
 	  //Activity Name
 	  JPanel panActivity = new JPanel();
@@ -106,12 +107,31 @@ public class AddActivityDialog extends JDialog
 	  JPanel panStatus = new JPanel();
 	  panStatus.setBackground(Color.white);
 	  panStatus.setPreferredSize(new Dimension(230, 60));
-	  status = new JComboBox<String>(new String[]{"To do", "In Progress", "Completed"});
-	  status.setSelectedIndex(0);
+	  statusBox = new JComboBox<String>(new String[]{"To do", "In Progress", "Completed"});
+	  statusBox.setSelectedIndex(0);
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 	  statusLabel = new JLabel("Status");
 	  panStatus.add(statusLabel);
-	  panStatus.add(status);
+	  panStatus.add(statusBox);
+	  
+	  
+	//Activity Depends on - THIS ISNT WORKING YET
+	  JPanel panDepend = new JPanel();
+	  panDepend.setBackground(Color.white);
+	  panDepend.setPreferredSize(new Dimension(465, 60));
+	  
+	  final List<Activity> activities = DataManager.getProjectActivities(
+			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+	  String[] activityNames = new String[activities.size()+1];
+	  activityNames[0] = "None";
+	  for(int i = 1; i < activityNames.length; i++){
+		  activityNames[i] = activities.get(i-1).getActivityName();
+	  }
+	  dependBox = new JComboBox<String>(activityNames);
+	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
+	  dependLabel = new JLabel("Select Activity:");
+	  panDepend.add(dependLabel);
+	  panDepend.add(dependBox);
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Add Activity");
@@ -120,18 +140,22 @@ public class AddActivityDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Verifies all text boxes are filled out before submission is allowed
-	    	  if(activityName.getText().hashCode() != 0 && startDate.getText().hashCode() != 0 
-	    			  && dueDate.getText().hashCode() != 0 && projectBox.getSelectedIndex() >= 0){
-	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-	    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
-	    				 activityName.getText(), 
-	    				 startDate.getText() , 
-	    				 dueDate.getText(), 
-	    				 status.getSelectedIndex());
-	    		  setVisible(false);
+	    	  if(activityName.getText().hashCode() == 0 || startDate.getText().hashCode() == 0 
+	    			  || dueDate.getText().hashCode() == 0 || projectBox.getSelectedIndex() < 0){
+	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  else if (!startDate.getText().matches(dateRegex) || !dueDate.getText().matches(dateRegex)){
+	    		  JOptionPane.showMessageDialog(null,"Please fix date(s)", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
-	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+		    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
+		    				 activityName.getText(), 
+		    				 startDate.getText() , 
+		    				 dueDate.getText(), 
+		    				 statusBox.getSelectedIndex());
+		    		  setVisible(false);
+	    
 	    	  }
 	      }      
 	    });
@@ -146,11 +170,12 @@ public class AddActivityDialog extends JDialog
 	  
 	  JPanel content = new JPanel();
 	  content.setBackground(Color.white);
-	  content.add(panName);
+	  content.add(panProjectName);
 	  content.add(panActivity);
 	  content.add(panStatus);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
+	  content.add(panDepend);
 	  
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
