@@ -120,7 +120,8 @@ public class AddActivityDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Verifies all text boxes are filled out before submission is allowed
-	    	  if(activityName.getText().hashCode() != 0 && startDate.getText().hashCode() != 0 && dueDate.getText().hashCode() != 0){
+	    	  if(activityName.getText().hashCode() != 0 && startDate.getText().hashCode() != 0 
+	    			  && dueDate.getText().hashCode() != 0 && projectBox.getSelectedIndex() >= 0){
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 	    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
 	    				 activityName.getText(), 
