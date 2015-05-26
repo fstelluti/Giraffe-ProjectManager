@@ -115,14 +115,15 @@ public class AddActivityDialog extends JDialog
 	  panStatus.add(statusBox);
 	  
 	  
-	//Activity Depends on - THIS ISNT WORKING YET
+	//Activity Depends on - THIS ISNT WORKING YET NEEDS TO CHANGE ON PROJECT SELECTION
 	  JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(465, 60));
+	  String[] activityNames;
 	  
 	  final List<Activity> activities = DataManager.getProjectActivities(
 			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
-	  String[] activityNames = new String[activities.size()+1];
+	  activityNames = new String[activities.size()+1];
 	  activityNames[0] = "None";
 	  for(int i = 1; i < activityNames.length; i++){
 		  activityNames[i] = activities.get(i-1).getActivityName();
@@ -148,12 +149,17 @@ public class AddActivityDialog extends JDialog
 	    		  JOptionPane.showMessageDialog(null,"Please fix date(s)", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
+	    		  int dependId;
+	    		  try{dependId = activities.get(dependBox.getSelectedIndex()-1).getActivityId();} 
+	    		  catch(Exception e){dependId = 0;}
+	    		  
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 		    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
 		    				 activityName.getText(), 
 		    				 startDate.getText() , 
 		    				 dueDate.getText(), 
-		    				 statusBox.getSelectedIndex());
+		    				 statusBox.getSelectedIndex(),
+		    				 dependId);
 		    		  setVisible(false);
 	    
 	    	  }

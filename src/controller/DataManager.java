@@ -262,7 +262,8 @@ public class DataManager
 	/*
 	 * startDate and dueDate are String variables in a format "yyyy-mm-dd"
 	 */
-	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, String activityName, String startDate, String dueDate, int status)
+	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
+			String activityName, String startDate, String dueDate, int status, int depends)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -272,7 +273,7 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS) "
+			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS, DEPENDS) "
 					+ "VALUES (NULL, '"
 					+ associatedProjectId
 					+ "', '"
@@ -282,7 +283,9 @@ public class DataManager
 					+ "', '"
 					+ dueDate
 					+ "', '"
-					+ status + "')";
+					+ status
+					+ "', '"
+					+ depends + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -314,7 +317,8 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status);
+				int depends = rs.getInt("depends");
+				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
 				activities.add(activity);
 			}
 			rs.close();
@@ -346,7 +350,8 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status);
+				int depends = rs.getInt("depends");
+				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
 			}
 			rs.close();
 			stmt.close();

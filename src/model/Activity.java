@@ -12,10 +12,11 @@ public class Activity
 	private Date 	startDate;
 	private Date 	dueDate;
 	private int 	status = 1;
-	public String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
+	private String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
+	private int 	depends;
 	
 	
-	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status)
+	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, int depends)
 	{
 		super();
 		this.id = id;
@@ -24,6 +25,7 @@ public class Activity
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.status = status;
+		this.setDepends(depends);
 	}
 	
 	public String getStatusName() {
@@ -81,6 +83,14 @@ public class Activity
 	public void setStartDate(Date startDate)
 	{
 		this.startDate = startDate;
+	}
+
+	public int getDepends() {
+		return depends;
+	}
+
+	public void setDepends(int depends) {
+		this.depends = depends;
 	}
 	
 	
