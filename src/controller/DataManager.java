@@ -262,8 +262,11 @@ public class DataManager
 	/*
 	 * startDate and dueDate are String variables in a format "yyyy-mm-dd"
 	 */
+//	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
+//			String activityName, String startDate, String dueDate, int status, int depends)
 	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
-			String activityName, String startDate, String dueDate, int status, int depends)
+			String activityName, String startDate, String dueDate, int status)
+			
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -283,9 +286,9 @@ public class DataManager
 					+ "', '"
 					+ dueDate
 					+ "', '"
-					+ status
-					+ "', '"
-					+ depends + "')";
+					+ status+ "')";
+//					+ "', '"
+//					+ depends + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -317,8 +320,9 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				int depends = rs.getInt("depends");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
+//				int depends = rs.getInt("depends");
+//				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
+				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 				activities.add(activity);
 			}
 			rs.close();
@@ -350,8 +354,9 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				int depends = rs.getInt("depends");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
+//				int depends = rs.getInt("depends");
+//				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
+				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 			}
 			rs.close();
 			stmt.close();

@@ -16,7 +16,8 @@ public class Activity
 	private int 	depends;
 	
 	
-	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, int depends)
+//	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, int depends)
+	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status)
 	{
 		super();
 		this.id = id;
@@ -25,7 +26,7 @@ public class Activity
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.status = status;
-		this.setDepends(depends);
+//		this.depends = depends;
 	}
 	
 	public String getStatusName() {
@@ -85,13 +86,13 @@ public class Activity
 		this.startDate = startDate;
 	}
 
-	public int getDepends() {
-		return depends;
-	}
-
-	public void setDepends(int depends) {
-		this.depends = depends;
-	}
+//	public int getDepends() {
+//		return depends;
+//	}
+//
+//	public void setDepends(int depends) {
+//		this.depends = depends;
+//	}
 	
 	
 }
