@@ -54,7 +54,7 @@ public class AddActivityDialog extends JDialog
 	  //Project Name - Maybe change to drop-down list with all current projects
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
-	  panName.setPreferredSize(new Dimension(220, 60));
+	  panName.setPreferredSize(new Dimension(465, 60));
 	  
 	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
@@ -71,7 +71,7 @@ public class AddActivityDialog extends JDialog
 	  //Activity Name
 	  JPanel panActivity = new JPanel();
 	  panActivity.setBackground(Color.white);
-	  panActivity.setPreferredSize(new Dimension(220, 60));
+	  panActivity.setPreferredSize(new Dimension(230, 60));
 	  activityName = new JTextField();
 	  activityName.setPreferredSize(new Dimension(100, 25));
 	  panActivity.setBorder(BorderFactory.createTitledBorder("Activity Name"));
@@ -82,7 +82,7 @@ public class AddActivityDialog extends JDialog
 	  //Start Date
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
-	  panStartDate.setPreferredSize(new Dimension(220, 60));
+	  panStartDate.setPreferredSize(new Dimension(230, 60));
 	  startDate = new JFormattedTextField(dateFormat.format(new Date()));
 	  startDate.setPreferredSize(new Dimension(100, 25));
 	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date (YYYY-MM-DD)"));
@@ -93,7 +93,7 @@ public class AddActivityDialog extends JDialog
 	  //Due Date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
-	  panDueDate.setPreferredSize(new Dimension(220, 60));
+	  panDueDate.setPreferredSize(new Dimension(230, 60));
 	  dueDate = new JFormattedTextField(dateFormat.format(new Date()));
 	  dueDate.setPreferredSize(new Dimension(100, 25));
 	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date (YYYY-MM-DD)"));
@@ -105,7 +105,7 @@ public class AddActivityDialog extends JDialog
 	  //Status: to-do, in progress, completed
 	  JPanel panStatus = new JPanel();
 	  panStatus.setBackground(Color.white);
-	  panStatus.setPreferredSize(new Dimension(220, 60));
+	  panStatus.setPreferredSize(new Dimension(230, 60));
 	  status = new JComboBox<String>(new String[]{"To do", "In Progress", "Completed"});
 	  status.setSelectedIndex(0);
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
@@ -147,9 +147,10 @@ public class AddActivityDialog extends JDialog
 	  content.setBackground(Color.white);
 	  content.add(panName);
 	  content.add(panActivity);
+	  content.add(panStatus);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
-	  content.add(panStatus);
+	  
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
