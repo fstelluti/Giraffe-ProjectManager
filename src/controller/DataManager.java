@@ -1,11 +1,13 @@
 package controller;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.Activity;
@@ -14,6 +16,7 @@ import model.User;
 
 public class DataManager
 {
+	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	public static Connection getConnection(String connectionString)
 	{
 		Connection c = null;
@@ -305,8 +308,8 @@ public class DataManager
 				Activity activity = null;
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = rs.getDate("startdate");
-				Date dueDate = rs.getDate("duedate");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 				activities.add(activity);
@@ -337,8 +340,8 @@ public class DataManager
 			{
 				int projectId = rs.getInt("projectid");
 				String name = rs.getString("name");
-				Date startDate = rs.getDate("startdate");
-				Date dueDate = rs.getDate("duedate");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 			}
@@ -400,8 +403,8 @@ public class DataManager
 				Project project = null;
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = rs.getDate("startdate");
-				Date dueDate = rs.getDate("duedate");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int projectManagerID = rs.getInt("projectManagerID");
 				project = new Project(id, name, startDate, dueDate, projectManagerID);
 				projects.add(project);
@@ -431,8 +434,8 @@ public class DataManager
 			while (rs.next())
 			{
 				String name = rs.getString("name");
-				Date startDate = rs.getDate("startdate");
-				Date dueDate = rs.getDate("duedate");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int projectManagerID = rs.getInt("projectManagerID");
 				project = new Project(id, name, startDate, dueDate, projectManagerID);
 			}

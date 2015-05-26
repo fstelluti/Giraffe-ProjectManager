@@ -60,10 +60,9 @@ public class AddActivityDialog extends JDialog
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
-		  projectNames[i] = projects.get(i).getProjectName(); // this will work once getters have been created
+		  projectNames[i] = projects.get(i).getProjectName();
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
-	  projectBox.setSelectedIndex(0);
 	  panName.setBorder(BorderFactory.createTitledBorder("Project"));
 	  projectLabel = new JLabel("Select Project:");
 	  panName.add(projectLabel);
