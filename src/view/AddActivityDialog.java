@@ -38,6 +38,7 @@ public class AddActivityDialog extends JDialog
   private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   String dateRegex = "^(20)\\d\\d([-])(0[1-9]|1[012])([-])(0[1-9]|[12][0-9]|3[01])$";
+  
 
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
@@ -52,12 +53,13 @@ public class AddActivityDialog extends JDialog
   
   private void initComponent()
   {
+	  final JPanel content = new JPanel();
+	  
 	  //Project Name
 	  JPanel panProjectName = new JPanel();
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
@@ -134,6 +136,55 @@ public class AddActivityDialog extends JDialog
 //	  panDepend.add(dependLabel);
 //	  panDepend.add(dependBox);
 	  
+	  JButton addDependentButton = new JButton("Add Dependent");
+	  addDependentButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	    	  
+	    	  final JPanel panDepend = new JPanel();
+	    	  panDepend.setBackground(Color.white);
+	    	  panDepend.setPreferredSize(new Dimension(465, 60));
+	    	  String[] activityNames;
+	    	  
+	    	  final List<Activity> activities = DataManager.getProjectActivities(
+	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+	    	  activityNames = new String[activities.size()];
+	    	  for(int i = 0; i < activityNames.length; i++){
+	    		  activityNames[i] = activities.get(i).getActivityName();
+	    	  }
+	    	  dependBox = new JComboBox<String>(activityNames);
+	    	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
+	    	  dependLabel = new JLabel("Select Activity:");
+	    	  panDepend.add(dependLabel);
+	    	  panDepend.add(dependBox);
+	    	  
+	    	  JButton deleteDependentPanelButton = new JButton("X");
+	    	  panDepend.add(deleteDependentPanelButton);
+	    	  
+	    	  //When clicking delete, dependent panel is removed
+	    	  deleteDependentPanelButton.addActionListener(new ActionListener(){
+	    	      public void actionPerformed(ActionEvent arg0) {
+	    	    	  content.remove(panDepend);
+	    	    	  content.repaint();
+	    	    	  content.revalidate();
+	    	      }      
+	    	  });
+	    	  
+	    	  //This adds the dependent panel to the interface dynamically
+	    	  content.add(panDepend);
+	    	  content.repaint();
+	    	  content.revalidate();
+	    	 
+	    	  //On change of project removes all dependents
+	    	  projectBox.addActionListener(new ActionListener(){
+	    	      public void actionPerformed(ActionEvent arg0) {
+	    	    	  content.remove(panDepend);
+	    	    	  content.repaint();
+	    	    	  content.revalidate();
+	    	      }      
+	    	  });
+	      }      
+	  });
+	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Add Activity");
 	  
@@ -150,7 +201,7 @@ public class AddActivityDialog extends JDialog
 	    	  }
 	    	  else{
 //	    		  int dependId;
-//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()-1).getActivityId();} 
+//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
 //	    		  catch(Exception e){dependId = 0;}
 	    		  
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
@@ -174,7 +225,7 @@ public class AddActivityDialog extends JDialog
 	  control.add(okButton);
 	  control.add(cancelButton);
 	  
-	  JPanel content = new JPanel();
+	  
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
 	  content.add(panActivity);
@@ -182,6 +233,7 @@ public class AddActivityDialog extends JDialog
 	  content.add(panStartDate);
 	  content.add(panDueDate);
 //	  content.add(panDepend);
+	  content.add(addDependentButton);
 	  
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
