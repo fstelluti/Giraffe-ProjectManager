@@ -260,10 +260,8 @@ public class DataManager
 	}
 	
 	/*
-	 * startDate and dueDate are String variables in a format "yyyy-mm-dd"
+	 * startDate and dueDate are String variables in a format "yyyy-MM-dd"
 	 */
-//	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
-//			String activityName, String startDate, String dueDate, int status, int depends)
 	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
 			String activityName, String startDate, String dueDate, int status)
 			
@@ -276,7 +274,7 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS, DEPENDS) "
+			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS) "
 					+ "VALUES (NULL, '"
 					+ associatedProjectId
 					+ "', '"
@@ -287,8 +285,6 @@ public class DataManager
 					+ dueDate
 					+ "', '"
 					+ status+ "')";
-//					+ "', '"
-//					+ depends + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -320,8 +316,6 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-//				int depends = rs.getInt("depends");
-//				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
 				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 				activities.add(activity);
 			}
@@ -354,8 +348,6 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-//				int depends = rs.getInt("depends");
-//				activity = new Activity(id, projectId, name, startDate, dueDate, status, depends);
 				activity = new Activity(id, projectId, name, startDate, dueDate, status);
 			}
 			rs.close();
