@@ -37,15 +37,14 @@ public class AddActivityDialog extends JDialog
 {
 
   private JTextField activityName;
-  private JFormattedTextField dueDate;
-JTextField startDate;
   private JComboBox<?> projectBox, statusBox, dependBox;
-  private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel, dependLabel;
+  private JLabel projectLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   String dateRegex = "^(20)\\d\\d([-])(0[1-9]|1[012])([-])(0[1-9]|[12][0-9]|3[01])$";
   UtilDateModel startModel = new UtilDateModel();
   UtilDateModel dueModel = new UtilDateModel();
   Properties p = new Properties();
+  boolean exists;
 
   
   public AddActivityDialog(JFrame parent, String title, boolean modal)
@@ -121,7 +120,7 @@ JTextField startDate;
 	  statusBox.setSelectedIndex(0);
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 	  panStatus.add(statusBox);
-	  	  
+	  
 	  JButton addDependentButton = new JButton("Add Dependent");
 	  addDependentButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
@@ -129,11 +128,9 @@ JTextField startDate;
 	    	  final JPanel panDepend = new JPanel();
 	    	  panDepend.setBackground(Color.white);
 	    	  panDepend.setPreferredSize(new Dimension(465, 60));
-	    	  String[] activityNames;
-	    	  
 	    	  final List<Activity> activities = DataManager.getProjectActivities(
 	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
-	    	  activityNames = new String[activities.size()];
+	    	  String[] activityNames = new String[activities.size()];
 	    	  for(int i = 0; i < activityNames.length; i++){
 	    		  activityNames[i] = activities.get(i).getActivityName();
 	    	  }
@@ -177,20 +174,27 @@ JTextField startDate;
 	  //Creates action
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  //Verifies all text boxes are filled out before submission is allowed
+	    	  
+	    	  //Checks if the activity already exists
+	    	  List<Activity> activities = DataManager.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+    		  for(Activity activity:activities){
+	    		  if(activityName.getText().equals(activity.getActivityName())){ exists = true; break; } else{exists = false;}
+    		  }
+    		  
+	    	  //Verifies all text boxes are filled out, if not = error
 	    	  if(activityName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null || projectBox.getSelectedIndex() < 0){
 	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
-	   
+	    	  //Provides error if activity name exists
+	    	  else if(exists){
+    			  JOptionPane.showMessageDialog(null,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Checks that due date not before start date
 	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
-	    		  JOptionPane.showMessageDialog(null,"Please ensure Due Date is not before Start Date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    		  JOptionPane.showMessageDialog(null,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
-//	    		  int dependId;
-//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
-//	    		  catch(Exception e){dependId = 0;}
-
 	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 		    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
 		    				 activityName.getText(), 
@@ -198,7 +202,10 @@ JTextField startDate;
 		    				 dateFormat.format(dueDatePicker.getModel().getValue()),
 		    				 statusBox.getSelectedIndex());
 	    		 
-		    		  setVisible(false);
+		    		  setVisible(false); 
+//	    		  int dependId;
+//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
+//	    		  catch(Exception e){dependId = 0;}
 	    	  }
 	      }      
 	    });
