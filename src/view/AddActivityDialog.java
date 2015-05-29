@@ -99,6 +99,7 @@ public class AddActivityDialog extends JDialog
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(230, 60));
 	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  startModel.setSelected(true);
 	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
 	  final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
 	  panStartDate.add(startDatePicker);
@@ -108,6 +109,7 @@ public class AddActivityDialog extends JDialog
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(230, 60));
 	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	  dueModel.setSelected(false);
 	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	  panDueDate.add(dueDatePicker);
@@ -116,11 +118,13 @@ public class AddActivityDialog extends JDialog
 	  JPanel panStatus = new JPanel();
 	  panStatus.setBackground(Color.white);
 	  panStatus.setPreferredSize(new Dimension(230, 60));
-	  statusBox = new JComboBox<String>(new String[]{"To do", "In Progress", "Completed"});
+	  final String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
+	  statusBox = new JComboBox<String>(statusArray);
 	  statusBox.setSelectedIndex(0);
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 	  panStatus.add(statusBox);
 	  
+	  //This button is used to dynamically add dependent fields
 	  JButton addDependentButton = new JButton("Add Dependent");
 	  addDependentButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
@@ -184,25 +188,34 @@ public class AddActivityDialog extends JDialog
 	    	  //Verifies all text boxes are filled out, if not = error
 	    	  if(activityName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null || projectBox.getSelectedIndex() < 0){
-	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Provides error if activity name exists
 	    	  else if(exists){
-    			  JOptionPane.showMessageDialog(null,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+    			  JOptionPane.showMessageDialog(content,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks that due date not before start date
 	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
-	    		  JOptionPane.showMessageDialog(null,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
-	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-		    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
-		    				 activityName.getText(), 
-		    				 dateFormat.format(startDatePicker.getModel().getValue()),
-		    				 dateFormat.format(dueDatePicker.getModel().getValue()),
-		    				 statusBox.getSelectedIndex());
-	    		 
-		    		  setVisible(false); 
+	    		  int response = JOptionPane.showConfirmDialog(content,
+	    				  "Are you sure you want to create the following Activity for "
+	    						  +projects.get(projectBox.getSelectedIndex()).getProjectName()+"?\n"
+	    						  + "\nActivity Name: "+activityName.getText()
+	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
+	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue())
+	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
+	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    		  if(response == JOptionPane.YES_OPTION){
+		    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+			    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
+			    				 activityName.getText(), 
+			    				 dateFormat.format(startDatePicker.getModel().getValue()),
+			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
+			    				 statusBox.getSelectedIndex());
+			    		  setVisible(false); 
+	    		  }
 //	    		  int dependId;
 //	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
 //	    		  catch(Exception e){dependId = 0;}
