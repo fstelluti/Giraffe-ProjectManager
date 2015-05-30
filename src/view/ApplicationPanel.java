@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class ApplicationPanel extends JFrame
 {
 	public List<JPanel> cardPanels = new ArrayList<JPanel>();
