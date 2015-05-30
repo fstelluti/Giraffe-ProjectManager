@@ -132,17 +132,13 @@ public class EditProjectDialog extends JDialog
 	    	  }
 	    	  else{
 	    		  int response = JOptionPane.showConfirmDialog(content,
-	    				  "Are you sure you want to edit the following Project "
+	    				  "Are you sure you want to edit the following Project?\n"
 	    						  + "\nProject Name: "+projects.get(projectBox.getSelectedIndex()).getProjectName()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-		    		  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-		    				  	projects.get(projectBox.getSelectedIndex()).getProjectName(), 
-			    				 dateFormat.format(startDatePicker.getModel().getValue()),
-			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
-			    				 projectManagers.get(managerBox.getSelectedIndex()).getProjectManager());
+	    			  	//SQL EDIT PROJECT METHOD CALL GOES HERE
 			    		  setVisible(false); 
 	    		  }
 	    	  }

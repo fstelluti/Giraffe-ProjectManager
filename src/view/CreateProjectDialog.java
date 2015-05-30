@@ -137,7 +137,7 @@ public class CreateProjectDialog extends JDialog
 	    	  }
 	    	  else{
 	    		  int response = JOptionPane.showConfirmDialog(content,
-	    				  "Are you sure you want to create the following Project "
+	    				  "Are you sure you want to create the following Project?\n"
 	    						  + "\nProject Name: "+projectName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
