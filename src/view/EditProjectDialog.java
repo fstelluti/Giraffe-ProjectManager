@@ -34,6 +34,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import controller.DataManager;
 import controller.DatabaseConstants;
 
+@SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
 {
 	 private JComboBox<?> projectBox, managerBox;

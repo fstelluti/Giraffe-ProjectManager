@@ -4,9 +4,10 @@ package model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
- 
+
 import javax.swing.JFormattedTextField.AbstractFormatter;
  
+@SuppressWarnings("serial")
 public class DateLabelFormatter extends AbstractFormatter {
  
     private String datePattern = "yyyy-MM-dd";

@@ -19,6 +19,7 @@ import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ViewManager;
 
+@SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener
 {
 	private JPanel loginPanel;

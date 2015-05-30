@@ -15,7 +15,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -33,6 +32,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import controller.DataManager;
 import controller.DatabaseConstants;
 
+@SuppressWarnings("serial")
 public class AddActivityDialog extends JDialog 
 {
 
