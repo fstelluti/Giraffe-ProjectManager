@@ -12,23 +12,38 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import model.DateLabelFormatter;
+import model.Project;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import controller.DataManager;
+import controller.DatabaseConstants;
 
 public class CreateProjectDialog extends JDialog 
 {
 
- private JTextField projectName, projectManager;
- private JLabel projectNameLabel, projectManagerLabel, dueDateLabel, startDateLabel;
- private JFormattedTextField dueDate, startDate;
- DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+ private JTextField projectName;
+ private JComboBox<?> managerBox;
+ private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+ private UtilDateModel startModel = new UtilDateModel();
+ private UtilDateModel dueModel = new UtilDateModel();
+ private Properties p = new Properties();
+ boolean exists;
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal)
   {
@@ -43,6 +58,14 @@ public class CreateProjectDialog extends JDialog
   
   private void initComponent()
   {
+	  final JPanel content = new JPanel();
+	  
+	//These set the properties for date picker
+	  p.put("text.today", "Today");
+	  p.put("text.month", "Month");
+	  p.put("text.year", "Year");
+	  
+	  
 	  //Project Name
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
@@ -50,66 +73,100 @@ public class CreateProjectDialog extends JDialog
 	  projectName = new JTextField();
 	  projectName.setPreferredSize(new Dimension(100, 25));
 	  panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
-	  projectNameLabel = new JLabel("Project Name :");
-	  panName.add(projectNameLabel);
+	  projectName.setPreferredSize(new Dimension(200,30));
 	  panName.add(projectName);
 	  
 	  //Project Manager
 	  JPanel panManager = new JPanel();
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
-	  projectManager = new JTextField();
-	  projectManager.setPreferredSize(new Dimension(100, 25));
-	  panManager.setBorder(BorderFactory.createTitledBorder("PM Name"));
-	  projectManagerLabel = new JLabel("PM Name :");
-	  panManager.add(projectManagerLabel);
-	  panManager.add(projectManager);
+	  
+	  //THE FOLLOWING GENERATES A LIST OF PROJECTS TEMPORARILY, WILL BE PROJECT MANAGERS WHEN DB IS FIXED
+	  final List<Project> projectManagers = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  String[] projectManagerNames = new String[projectManagers.size()];
+	  for(int i = 0; i < projectManagerNames.length; i++){
+		  projectManagerNames[i] = projectManagers.get(i).getProjectName();
+	  }
+	  managerBox = new JComboBox<String>(projectManagerNames);
+	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
+	  panManager.add(managerBox);
 	  
 	  //Start Date
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(220, 60));
-	  startDate = new JFormattedTextField(dateFormat.format(new Date()));
-	  startDate.setPreferredSize(new Dimension(100, 25));
-	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date (YYYY-MM-DD)"));
-	  startDateLabel = new JLabel("Start Date:");
-	  panStartDate.add(startDateLabel);
-	  panStartDate.add(startDate);
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  startModel.setSelected(true);
+	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
+	  final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
+	  panStartDate.add(startDatePicker);
 	  
 	  //Due date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(220, 60));
-	  dueDate = new JFormattedTextField(dateFormat.format(new Date()));
-	  dueDate.setPreferredSize(new Dimension(100, 25));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date (YYYY-MM-DD)"));
-	  dueDateLabel = new JLabel("Due Date:");
-	  panDueDate.add(dueDateLabel);
-	  panDueDate.add(dueDate);
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	  dueModel.setSelected(false);
+	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
+	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
+	  panDueDate.add(dueDatePicker);
 	  
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Create Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  //Create Project
-	      }      
+	    	  //Checks if the project already exists
+	    	  List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+    		  for(Project project:projects){
+	    		  if(projectName.getText().equals(project.getProjectName())){ exists = true; break; } else{exists = false;}
+    		  }
+    		  
+	    	  //Verifies all text boxes are filled out, if not = error
+	    	  if(projectName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
+	    			  || dueDatePicker.getModel().getValue() == null){
+	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Provides error if project name exists
+	    	  else if(exists){
+    			  JOptionPane.showMessageDialog(content,"Project with this name already exists", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Checks that due date not before start date
+	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  else{
+	    		  int response = JOptionPane.showConfirmDialog(content,
+	    				  "Are you sure you want to create the following Project "
+	    						  + "\nProject Name: "+projectName.getText()
+	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
+	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
+	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    		  if(response == JOptionPane.YES_OPTION){
+		    		  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+			    				 projectName.getText(), 
+			    				 dateFormat.format(startDatePicker.getModel().getValue()),
+			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
+			    				 projectManagers.get(managerBox.getSelectedIndex()).getProjectManager());
+			    		  setVisible(false); 
+	    		  }
+	    	  }
+	      }     
 	    });
 	  JButton cancelButton = new JButton("Cancel");
 	  cancelButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	        setVisible(false);
-	      }      
+	    	  setVisible(false); 
+	      }
 	    });
 	  control.add(okButton);
 	  control.add(cancelButton);
 	  
-	  JPanel content = new JPanel();
 	  content.setBackground(Color.white);
 	  content.add(panName);
 	  content.add(panManager);
-	  content.add(panDueDate);
 	  content.add(panStartDate);
+	  content.add(panDueDate);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

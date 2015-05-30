@@ -72,7 +72,6 @@ public class AddActivityDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
@@ -89,7 +88,6 @@ public class AddActivityDialog extends JDialog
 	  panActivity.setBackground(Color.white);
 	  panActivity.setPreferredSize(new Dimension(230, 60));
 	  activityName = new JTextField();
-	  activityName.setPreferredSize(new Dimension(100, 25));
 	  panActivity.setBorder(BorderFactory.createTitledBorder("Activity Name"));
 	  activityName.setPreferredSize(new Dimension(200,30));
 	  panActivity.add(activityName);
