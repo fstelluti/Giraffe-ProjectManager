@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 
 import model.DateLabelFormatter;
 import model.Project;
+import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -56,7 +57,6 @@ public class CreateProjectDialog extends JDialog
     this.setVisible(true);
 
   }
-  
   private void initComponent()
   {
 	  final JPanel content = new JPanel();
@@ -82,11 +82,11 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  //THE FOLLOWING GENERATES A LIST OF PROJECTS TEMPORARILY, WILL BE PROJECT MANAGERS WHEN DB IS FIXED
-	  final List<Project> projectManagers = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  //FIXED - THE FOLLOWING GENERATES A LIST OF PROJECTS TEMPORARILY, WILL BE PROJECT MANAGERS WHEN DB IS FIXED
+	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
-		  projectManagerNames[i] = projectManagers.get(i).getProjectName();
+		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
 	  }
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
@@ -144,11 +144,11 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-		    		  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+	    			  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
-			    				 projectManagers.get(managerBox.getSelectedIndex()).getProjectManager());
+			    				 managerBox.getSelectedIndex());
 			    		  setVisible(false); 
 	    		  }
 	    	  }
