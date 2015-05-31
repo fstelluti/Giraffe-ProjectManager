@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import model.User;
 import view.ApplicationPanel;
+import view.CreateAccountDialog;
 import view.MainViewPanel;
 
 public class ViewManager
@@ -49,9 +50,10 @@ public class ViewManager
 		return applicationPanel;
 	}
 	
-	public static JDialog createAccountDialog()
+	public static void createAccountDialog()
 	{
-		JDialog dialog = new JDialog();
+		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationPanel, "Create account dialog", true);
+		/*JDialog dialog = new JDialog();
 		dialog.setModal(true);
 		dialog.setTitle("Create new account");
 		dialog.setSize(400, 400);
@@ -59,6 +61,6 @@ public class ViewManager
 		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		dialog.getContentPane().add(new JLabel("DialogLabel"));
 		dialog.setVisible(true);
-		return dialog;
+		return dialog;*/
 	}
 }

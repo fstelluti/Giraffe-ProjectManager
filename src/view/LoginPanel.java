@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
+
 import model.User;
 import controller.DataManager;
 import controller.DatabaseConstants;
