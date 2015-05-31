@@ -8,37 +8,45 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import controller.DataManager;
-import controller.DatabaseConstants;
 import model.Activity;
+import model.DateLabelFormatter;
 import model.Project;
 
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+import controller.DataManager;
+import controller.DatabaseConstants;
+
+@SuppressWarnings("serial")
 public class AddActivityDialog extends JDialog 
 {
 
   private JTextField activityName;
-  private JFormattedTextField dueDate, startDate;
   private JComboBox<?> projectBox, statusBox, dependBox;
-  private JLabel projectLabel, activityNameLabel, startDateLabel, dueDateLabel, statusLabel, dependLabel;
+  private JLabel projectLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   String dateRegex = "^(20)\\d\\d([-])(0[1-9]|1[012])([-])(0[1-9]|[12][0-9]|3[01])$";
+  UtilDateModel startModel = new UtilDateModel();
+  UtilDateModel dueModel = new UtilDateModel();
+  Properties p = new Properties();
+  boolean exists;
 
+  
   public AddActivityDialog(JFrame parent, String title, boolean modal)
   {
     super(parent, title, modal);
@@ -52,12 +60,18 @@ public class AddActivityDialog extends JDialog
   
   private void initComponent()
   {
+	  final JPanel content = new JPanel();
+	  
+	  //These set the properties for date picker
+	  p.put("text.today", "Today");
+	  p.put("text.month", "Month");
+	  p.put("text.year", "Year");
+	  
 	  //Project Name
 	  JPanel panProjectName = new JPanel();
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  //CODE HERE WILL PULL AN ARRAY OF PROJECT NAMES
 	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
@@ -74,65 +88,87 @@ public class AddActivityDialog extends JDialog
 	  panActivity.setBackground(Color.white);
 	  panActivity.setPreferredSize(new Dimension(230, 60));
 	  activityName = new JTextField();
-	  activityName.setPreferredSize(new Dimension(100, 25));
 	  panActivity.setBorder(BorderFactory.createTitledBorder("Activity Name"));
-	  activityNameLabel = new JLabel("Activity Name :");
-	  panActivity.add(activityNameLabel);
+	  activityName.setPreferredSize(new Dimension(200,30));
 	  panActivity.add(activityName);
 	  
 	  //Start Date
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(230, 60));
-	  startDate = new JFormattedTextField(dateFormat.format(new Date()));
-	  startDate.setPreferredSize(new Dimension(100, 25));
-	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date (YYYY-MM-DD)"));
-	  startDateLabel = new JLabel("Start Date:");
-	  panStartDate.add(startDateLabel);
-	  panStartDate.add(startDate);
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  startModel.setSelected(true);
+	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
+	  final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
+	  panStartDate.add(startDatePicker);
 	  
 	  //Due Date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(230, 60));
-	  dueDate = new JFormattedTextField(dateFormat.format(new Date()));
-	  dueDate.setPreferredSize(new Dimension(100, 25));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date (YYYY-MM-DD)"));
-	  dueDateLabel = new JLabel("Due Date:");
-	  panDueDate.add(dueDateLabel);
-	  panDueDate.add(dueDate);
-	  
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	  dueModel.setSelected(false);
+	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
+	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
+	  panDueDate.add(dueDatePicker);
 	  
 	  //Status: to-do, in progress, completed
 	  JPanel panStatus = new JPanel();
 	  panStatus.setBackground(Color.white);
 	  panStatus.setPreferredSize(new Dimension(230, 60));
-	  statusBox = new JComboBox<String>(new String[]{"To do", "In Progress", "Completed"});
+	  final String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
+	  statusBox = new JComboBox<String>(statusArray);
 	  statusBox.setSelectedIndex(0);
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
-	  statusLabel = new JLabel("Status");
-	  panStatus.add(statusLabel);
 	  panStatus.add(statusBox);
 	  
-	  
-	//Activity Depends on - THIS ISNT WORKING YET NEEDS TO CHANGE ON PROJECT SELECTION
-//	  JPanel panDepend = new JPanel();
-//	  panDepend.setBackground(Color.white);
-//	  panDepend.setPreferredSize(new Dimension(465, 60));
-//	  String[] activityNames;
-//	  
-//	  final List<Activity> activities = DataManager.getProjectActivities(
-//			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
-//	  activityNames = new String[activities.size()+1];
-//	  activityNames[0] = "None";
-//	  for(int i = 1; i < activityNames.length; i++){
-//		  activityNames[i] = activities.get(i-1).getActivityName();
-//	  }
-//	  dependBox = new JComboBox<String>(activityNames);
-//	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
-//	  dependLabel = new JLabel("Select Activity:");
-//	  panDepend.add(dependLabel);
-//	  panDepend.add(dependBox);
+	  //This button is used to dynamically add dependent fields
+	  JButton addDependentButton = new JButton("Add Dependent");
+	  addDependentButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	    	  
+	    	  final JPanel panDepend = new JPanel();
+	    	  panDepend.setBackground(Color.white);
+	    	  panDepend.setPreferredSize(new Dimension(465, 60));
+	    	  final List<Activity> activities = DataManager.getProjectActivities(
+	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+	    	  String[] activityNames = new String[activities.size()];
+	    	  for(int i = 0; i < activityNames.length; i++){
+	    		  activityNames[i] = activities.get(i).getActivityName();
+	    	  }
+	    	  dependBox = new JComboBox<String>(activityNames);
+	    	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
+	    	  dependLabel = new JLabel("Select Activity:");
+	    	  panDepend.add(dependLabel);
+	    	  panDepend.add(dependBox);
+	    	  
+	    	  JButton deleteDependentPanelButton = new JButton("X");
+	    	  panDepend.add(deleteDependentPanelButton);
+	    	  
+	    	  //When clicking delete, dependent panel is removed
+	    	  deleteDependentPanelButton.addActionListener(new ActionListener(){
+	    	      public void actionPerformed(ActionEvent arg0) {
+	    	    	  content.remove(panDepend);
+	    	    	  content.repaint();
+	    	    	  content.revalidate();
+	    	      }      
+	    	  });
+	    	  
+	    	  //This adds the dependent panel to the interface dynamically
+	    	  content.add(panDepend);
+	    	  content.repaint();
+	    	  content.revalidate();
+	    	 
+	    	  //On change of project removes all dependents
+	    	  projectBox.addActionListener(new ActionListener(){
+	    	      public void actionPerformed(ActionEvent arg0) {
+	    	    	  content.remove(panDepend);
+	    	    	  content.repaint();
+	    	    	  content.revalidate();
+	    	      }      
+	    	  });
+	      }      
+	  });
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Add Activity");
@@ -140,28 +176,47 @@ public class AddActivityDialog extends JDialog
 	  //Creates action
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  //Verifies all text boxes are filled out before submission is allowed
-	    	  if(activityName.getText().hashCode() == 0 || startDate.getText().hashCode() == 0 
-	    			  || dueDate.getText().hashCode() == 0 || projectBox.getSelectedIndex() < 0){
-	    		  JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  
+	    	  //Checks if the activity already exists
+	    	  List<Activity> activities = DataManager.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+    		  for(Activity activity:activities){
+	    		  if(activityName.getText().equals(activity.getActivityName())){ exists = true; break; } else{exists = false;}
+    		  }
+    		  
+	    	  //Verifies all text boxes are filled out, if not = error
+	    	  if(activityName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
+	    			  || dueDatePicker.getModel().getValue() == null || projectBox.getSelectedIndex() < 0){
+	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
-	    	  else if (!startDate.getText().matches(dateRegex) || !dueDate.getText().matches(dateRegex)){
-	    		  JOptionPane.showMessageDialog(null,"Please fix date(s)", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  //Provides error if activity name exists
+	    	  else if(exists){
+    			  JOptionPane.showMessageDialog(content,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Checks that due date not before start date
+	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
+	    		  int response = JOptionPane.showConfirmDialog(content,
+	    				  "Are you sure you want to create the following Activity for "
+	    						  +projects.get(projectBox.getSelectedIndex()).getProjectName()+"?\n"
+	    						  + "\nActivity Name: "+activityName.getText()
+	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
+	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue())
+	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
+	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    		  if(response == JOptionPane.YES_OPTION){
+		    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+			    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
+			    				 activityName.getText(), 
+			    				 dateFormat.format(startDatePicker.getModel().getValue()),
+			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
+			    				 statusBox.getSelectedIndex());
+			    		  setVisible(false); 
+	    		  }
 //	    		  int dependId;
-//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()-1).getActivityId();} 
+//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
 //	    		  catch(Exception e){dependId = 0;}
-	    		  
-	    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-		    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
-		    				 activityName.getText(), 
-		    				 startDate.getText() , 
-		    				 dueDate.getText(), 
-		    				 statusBox.getSelectedIndex());
-//		    				 dependId );
-		    		  setVisible(false);
-	    
 	    	  }
 	      }      
 	    });
@@ -174,15 +229,14 @@ public class AddActivityDialog extends JDialog
 	  control.add(okButton);
 	  control.add(cancelButton);
 	  
-	  JPanel content = new JPanel();
+	  
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
 	  content.add(panActivity);
 	  content.add(panStatus);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
-//	  content.add(panDepend);
-	  
+	  content.add(addDependentButton);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

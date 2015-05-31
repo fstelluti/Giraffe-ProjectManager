@@ -14,6 +14,7 @@ import javax.swing.JSplitPane;
 
 import model.User;
 
+@SuppressWarnings("serial")
 public class MainViewPanel extends JPanel
 {
 	private JPanel northPanel;

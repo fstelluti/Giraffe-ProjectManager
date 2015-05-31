@@ -13,10 +13,7 @@ public class Activity
 	private Date 	dueDate;
 	private int 	status = 1;
 	private String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
-	private int 	depends;
 	
-	
-//	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, int depends)
 	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status)
 	{
 		super();
@@ -26,7 +23,6 @@ public class Activity
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.status = status;
-//		this.depends = depends;
 	}
 	
 	public String getStatusName() {
@@ -86,13 +82,4 @@ public class Activity
 		this.startDate = startDate;
 	}
 
-//	public int getDepends() {
-//		return depends;
-//	}
-//
-//	public void setDepends(int depends) {
-//		this.depends = depends;
-//	}
-	
-	
 }

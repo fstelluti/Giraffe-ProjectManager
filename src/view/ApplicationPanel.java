@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class ApplicationPanel extends JFrame
 {
 	public List<JPanel> cardPanels = new ArrayList<JPanel>();
@@ -47,6 +48,7 @@ public class ApplicationPanel extends JFrame
 		if (loginPanel == null)
 		{
 			loginPanel = new LoginPanel();
+			this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		}
 		this.setSize(400, 250);
 		return loginPanel;

@@ -29,16 +29,38 @@ public class Project
 	
 	/**
 	 * Edit a Project
+	 * Won't change project's ID
+	 * @return a boolean stating if the changes were successful
 	 */
-	public static void editProject(Project project)
+	public boolean editProject(String newName, Date newStartDate, Date newDueDate, int newPMID)
 	{
+		if(newName != null && this.name != newName)
+		{
+			this.setProjectName(newName);
+		}
 		
+		if(newStartDate != null && this.startDate != newStartDate)
+		{
+			this.setStartDate(newStartDate);
+		}
+		
+		if(newDueDate != null && this.dueDate != newDueDate)
+		{
+			this.setDueDate(newDueDate);
+		}
+		
+		if(newPMID != 0 && this.projectManagerID != newPMID)
+		{
+			this.setProjectManagerID(newPMID);
+		}
+		
+		return true;
 	}
 	
 	/**
 	 * Delete project
 	 */
-	public static void deleteProject(Project project)
+	public void deleteProject(Project project)
 	{
 		
 	}
@@ -65,12 +87,13 @@ public class Project
 	}
 	
 	//Setters
+	//@TODO Setters will need to change the DB 
 	public void setProjectName(String newName){
 		this.name = newName;
 	}
 	
-	public void setProjectManager(int newPM){
-		this.projectManagerID = newPM;
+	public void setProjectManagerID(int newPMID){
+		this.projectManagerID = newPMID;
 	}
 	
 	public void setStartDate(Date newDate){
