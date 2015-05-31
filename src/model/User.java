@@ -1,11 +1,14 @@
 package model;
 
+import java.util.Date;
+
 public class User
 {
 	private int id;
 	private String userName;
 	private String password;
 	private String email;
+	private Date 	regDate;
 	private String firstName;
 	private String lastName;
 	
@@ -18,6 +21,7 @@ public class User
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
+		this.setRegDate(new Date());//it creates today's date by default
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
@@ -72,5 +76,15 @@ public class User
 	public void setId(int id)
 	{
 		this.id = id;
+	}
+
+	public Date getRegDate()
+	{
+		return regDate;
+	}
+
+	public void setRegDate(Date regDate)
+	{
+		this.regDate = regDate;
 	}
 }
