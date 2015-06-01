@@ -248,7 +248,8 @@ public class DataManager
 					+ " NAME       TEXT     NOT NULL, "
 					+ " STARTDATE 		DATE, "
 					+ " DUEDATE 		DATE, "
-					+ " STATUS		INTEGER 	NOT NULL)";
+					+ " STATUS		INTEGER 	NOT NULL,"
+					+ "FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
@@ -329,6 +330,7 @@ public class DataManager
 		}
 		return activities;
 	}
+	
 	public static Activity getActivityById(String connectionString, int id)
 	{
 		Activity activity = null;
@@ -359,6 +361,33 @@ public class DataManager
 			System.exit(0);
 		}
 		return activity;
+	}
+	
+	public static void createTableProjects(String connectionString)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE PROJECTS "
+					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ " PROJECTID       INTEGER    NOT NULL, "
+					+ " NAME       TEXT     NOT NULL, "
+					+ " STARTDATE 		DATE, "
+					+ " DUEDATE 		DATE, "
+					+ " PROJECTMANAGERID		INTEGER,"
+					+ " FOREIGN KEY(PROJECTMANAGERID) REFERENCES USERS (ID))";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
 	
 	public static void insertIntoTableProjects(String connectionString, String name, String startDate, String dueDate, int projectManagerID)
@@ -424,6 +453,7 @@ public class DataManager
 		}
 		return projects;
 	}
+	
 	public static Project getProjectById(String connectionString, int id)
 	{
 		Project project = null;
@@ -453,5 +483,145 @@ public class DataManager
 			System.exit(0);
 		}
 		return project;
+	}
+	
+	
+	public static void createTablePredecessors(String connectionString)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE PREDECESSORS "
+					+ "(ACTIVITYID		INTEGER,"
+					+ " PREDECESSORID 	INTEGER,"
+					+ " PRIMARY KEY(ACTIVITYID,PREDECESSORID),"
+					+ " FOREIGN KEY(ACTIVITYID) REFERENCES ACTIVITIES(ID),"
+					+ " FOREIGN KEY(PREDECESSORID) REFERENCES ACTIVITIES(ROLEID))";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
+	
+	public static void insertIntoTablePredecessors(String connectionString, int activityID, int predecessorID)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "INSERT INTO PREDECESSORS (activityID, predecessorID) "
+					+ "VALUES (NULL, '"
+					+ activityID
+					+ "', '"
+					+ predecessorID + "')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
+	
+	public static List<Activity> getPredecessors(String connectionString, int activityID)
+	{
+		List<Activity> activities = new ArrayList<Activity>();
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = "+activityID+";");
+			
+			while (rs.next())
+			{
+				int predecessorID = rs.getInt("predecessorId");
+				ResultSet rs2 = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = "+predecessorID+";");
+				Activity activity = null;
+				int projectId = rs2.getInt("projectId");
+				String name = rs2.getString("name");
+				Date startDate = dateFormat.parse(rs2.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs2.getString("dueDate"));
+				int status = rs2.getInt("status");
+				activity = new Activity(activityID, projectId, name, startDate, dueDate, status);
+				activities.add(activity);
+				rs2.close();
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return activities;
+	}
+	
+	public static void createTableUserRoles(String connectionString)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE USERROLES "
+					+ "(USERID 		INTEGER,"
+					+ " PROJECTID 	INTEGER,"
+					+ " ROLEID  	INTEGER,"
+					+ " PRIMARY KEY(USERID,PROJECTID),"
+					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"
+					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID),"
+					+ " FOREIGN KEY(ROLEID) REFERENCES USERSROLESDICT(ROLEID))";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+	}
+	
+	public static void createTableUserRolesDict(String connectionString)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+
+			stmt = c.createStatement();
+			String sql = "CREATE TABLE USERROLESDICT "
+					+ "(ROLEID  	INTEGER,"
+					+ " ROLENAME	TEXT,"
+					+ " PRIMARY KEY(ROLEID))";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
 	}
 }
