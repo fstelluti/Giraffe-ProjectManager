@@ -175,7 +175,14 @@ public class AddActivityDialog extends JDialog
 	  
 	  //Creates action
 	  okButton.addActionListener(new ActionListener(){
-	      public void actionPerformed(ActionEvent arg0) {
+	      @SuppressWarnings("deprecation")
+		public void actionPerformed(ActionEvent arg0) {
+	    	  //Sets variables to simplify verifications
+	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
+	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
+	    	  Date projectStartDate = projects.get(projectBox.getSelectedIndex()).getStartDate();
+	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
+	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
 	    	  
 	    	  //Checks if the activity already exists
 	    	  List<Activity> activities = DataManager.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
@@ -184,8 +191,8 @@ public class AddActivityDialog extends JDialog
     		  }
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
-	    	  if(activityName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
-	    			  || dueDatePicker.getModel().getValue() == null || projectBox.getSelectedIndex() < 0){
+	    	  if(activityName.getText().hashCode() == 0 || activityStartDate == null
+	    			  || activityDueDate == null || projectBox.getSelectedIndex() < 0){
 	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Provides error if activity name exists
@@ -193,24 +200,40 @@ public class AddActivityDialog extends JDialog
     			  JOptionPane.showMessageDialog(content,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks that due date not before start date
-	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
+	    	  else if(activityDueDate.before(activityStartDate)){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Checks if activity start date falls in project date constraints
+	    	  else if(activityStartDate.getDate() < projectStartDate.getDate() 
+	    			  && activityStartDate.getMonth() <= projectStartDate.getMonth() 
+	    			  && activityStartDate.getYear() <= projectStartDate.getYear()){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure start date is within project dates:"
+	    				  + dateFormat.format(projectStartDate) +" to "
+	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Checks if activity due date falls in project date constraints
+	    	  else if(activityDueDate.getDate() > projectDueDate.getDate() 
+	    			  && activityDueDate.getMonth() >= projectDueDate.getMonth() 
+	    			  && activityDueDate.getYear() >= projectDueDate.getYear()){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is within project dates : "
+	    				  + dateFormat.format(projectStartDate) +" to "
+	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to create the following Activity for "
-	    						  +projects.get(projectBox.getSelectedIndex()).getProjectName()+"?\n"
+	    						  + projectName+"?\n"
 	    						  + "\nActivity Name: "+activityName.getText()
-	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
-	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue())
+	    						  + "\nStart Date: "+activityStartDate
+	    						  + "\nDue Date: "+activityDueDate
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
 	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 		    		  DataManager.insertIntoTableActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 			    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
 			    				 activityName.getText(), 
-			    				 dateFormat.format(startDatePicker.getModel().getValue()),
-			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
+			    				 dateFormat.format(activityStartDate),
+			    				 dateFormat.format(activityDueDate),
 			    				 statusBox.getSelectedIndex());
 			    		  setVisible(false); 
 	    		  }
