@@ -526,7 +526,6 @@ public class DataManager
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE PROJECTS "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ " PROJECTID       INTEGER    NOT NULL, "
 					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
 					+ " DUEDATE 		DATE)";
 			stmt.executeUpdate(sql);
