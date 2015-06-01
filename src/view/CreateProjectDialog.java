@@ -82,7 +82,6 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  //FIXED - THE FOLLOWING GENERATES A LIST OF PROJECTS TEMPORARILY, WILL BE PROJECT MANAGERS WHEN DB IS FIXED
 	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
@@ -147,8 +146,7 @@ public class CreateProjectDialog extends JDialog
 	    			  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
-			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
-			    				 managerBox.getSelectedIndex());
+			    				 dateFormat.format(dueDatePicker.getModel().getValue()));
 			    		  setVisible(false); 
 	    		  }
 	    	  }

@@ -17,6 +17,7 @@ import model.User;
 public class DataManager
 {
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	public static Connection getConnection(String connectionString)
 	{
 		Connection c = null;
@@ -32,7 +33,8 @@ public class DataManager
 		return c;
 	}
 
-	public static boolean checkLogin(String connectionString, String userName, char[] password)
+	public static boolean checkLogin(String connectionString, String userName,
+			char[] password)
 	{
 		boolean result = false;
 		String passwordString = new String(password);
@@ -101,9 +103,10 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
-	public static void insertIntoTableUsers(String connectionString, String userName, String password,
-			String email, String firstName, String lastName)
+
+	public static void insertIntoTableUsers(String connectionString,
+			String userName, String password, String email, String firstName,
+			String lastName)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -130,7 +133,6 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
 
 	public static List<User> getAllUsers(String connectionString)
 	{
@@ -153,7 +155,8 @@ public class DataManager
 				String email = rs.getString("email");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
-				user = new User(id, userName, password, email, firstName, lastName);
+				user = new User(id, userName, password, email, firstName,
+						lastName);
 				users.add(user);
 			}
 			rs.close();
@@ -166,7 +169,7 @@ public class DataManager
 		}
 		return users;
 	}
-	
+
 	public static User getUserById(String connectionString, int id)
 	{
 		User user = null;
@@ -178,7 +181,8 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE ID = " + id + ";");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE ID = "
+					+ id + ";");
 			while (rs.next())
 			{
 				String userName = rs.getString("username");
@@ -186,8 +190,9 @@ public class DataManager
 				String email = rs.getString("email");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
-				
-				user = new User(id, userName, password, email, firstName, lastName);
+
+				user = new User(id, userName, password, email, firstName,
+						lastName);
 			}
 			rs.close();
 			stmt.close();
@@ -199,8 +204,9 @@ public class DataManager
 		}
 		return user;
 	}
-	
-	public static User getUserByUserName(String connectionString, String userName)
+
+	public static User getUserByUserName(String connectionString,
+			String userName)
 	{
 		User user = null;
 		Connection c = null;
@@ -211,7 +217,9 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM USERS WHERE USERNAME = '" + userName + "';");
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM USERS WHERE USERNAME = '"
+							+ userName + "';");
 			while (rs.next())
 			{
 				int id = rs.getInt("id");
@@ -219,8 +227,9 @@ public class DataManager
 				String email = rs.getString("email");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
-				
-				user = new User(id, userName, password, email, firstName, lastName);
+
+				user = new User(id, userName, password, email, firstName,
+						lastName);
 			}
 			rs.close();
 			stmt.close();
@@ -232,7 +241,7 @@ public class DataManager
 		}
 		return user;
 	}
-	
+
 	public static void createTableActivities(String connectionString)
 	{
 		Connection c = null;
@@ -245,10 +254,8 @@ public class DataManager
 			String sql = "CREATE TABLE ACTIVITIES "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
-					+ " NAME       TEXT     NOT NULL, "
-					+ " STARTDATE 		DATE, "
-					+ " DUEDATE 		DATE, "
-					+ " STATUS		INTEGER 	NOT NULL,"
+					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
+					+ " DUEDATE 		DATE, " + " STATUS		INTEGER 	NOT NULL,"
 					+ "FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -259,13 +266,14 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
+
 	/*
 	 * startDate and dueDate are String variables in a format "yyyy-MM-dd"
 	 */
-	public static void insertIntoTableActivities(String connectionString, int associatedProjectId, 
-			String activityName, String startDate, String dueDate, int status)
-			
+	public static void insertIntoTableActivities(String connectionString,
+			int associatedProjectId, String activityName, String startDate,
+			String dueDate, int status)
+
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -284,8 +292,7 @@ public class DataManager
 					+ startDate
 					+ "', '"
 					+ dueDate
-					+ "', '"
-					+ status+ "')";
+					+ "', '" + status + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -296,8 +303,9 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
-	public static List<Activity> getProjectActivities(String connectionString, int projectId)
+
+	public static List<Activity> getProjectActivities(String connectionString,
+			int projectId)
 	{
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
@@ -308,7 +316,9 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID = "+projectId+";");
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID = "
+							+ projectId + ";");
 			while (rs.next())
 			{
 				Activity activity = null;
@@ -317,7 +327,8 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status);
+				activity = new Activity(id, projectId, name, startDate,
+						dueDate, status);
 				activities.add(activity);
 			}
 			rs.close();
@@ -330,7 +341,7 @@ public class DataManager
 		}
 		return activities;
 	}
-	
+
 	public static Activity getActivityById(String connectionString, int id)
 	{
 		Activity activity = null;
@@ -342,7 +353,9 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = "+id+";");
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + id
+							+ ";");
 			while (rs.next())
 			{
 				int projectId = rs.getInt("projectid");
@@ -350,7 +363,8 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectId, name, startDate, dueDate, status);
+				activity = new Activity(id, projectId, name, startDate,
+						dueDate, status);
 			}
 			rs.close();
 			stmt.close();
@@ -362,8 +376,9 @@ public class DataManager
 		}
 		return activity;
 	}
-	
-	public static Activity getActivityByNameAndProjectID(String connectionString, String activityName, int projectID)
+
+	public static Activity getActivityByNameAndProjectID(
+			String connectionString, String activityName, int projectID)
 	{
 		Activity activity = null;
 		Connection c = null;
@@ -374,7 +389,10 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"+activityName+"' AND PROJECTID = "+projectID+";");
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
+							+ activityName + "' AND PROJECTID = " + projectID
+							+ ";");
 			while (rs.next())
 			{
 				int id = rs.getInt("id");
@@ -382,7 +400,8 @@ public class DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectID, name, startDate, dueDate, status);
+				activity = new Activity(id, projectID, name, startDate,
+						dueDate, status);
 			}
 			rs.close();
 			stmt.close();
@@ -394,7 +413,7 @@ public class DataManager
 		}
 		return activity;
 	}
-	
+
 	public static void createTableProjects(String connectionString)
 	{
 		Connection c = null;
@@ -407,10 +426,8 @@ public class DataManager
 			String sql = "CREATE TABLE PROJECTS "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
-					+ " NAME       TEXT     NOT NULL, "
-					+ " STARTDATE 		DATE, "
+					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
 					+ " DUEDATE 		DATE, "
-					+ " PROJECTMANAGERID		INTEGER,"
 					+ " FOREIGN KEY(PROJECTMANAGERID) REFERENCES USERS (ID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -421,8 +438,9 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
-	public static void insertIntoTableProjects(String connectionString, String name, String startDate, String dueDate, int projectManagerID)
+
+	public static void insertIntoTableProjects(String connectionString,
+			String name, String startDate, String dueDate)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -432,15 +450,9 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO PROJECTS (id,name,startdate, duedate,projectManagerID) "
-					+ "VALUES (NULL, '"
-					+ name
-					+ "', '"
-					+ startDate
-					+ "', '"
-					+ dueDate
-					+ "', '"
-					+ projectManagerID + "')";
+			String sql = "INSERT INTO PROJECTS (id,name,startdate, duedate) "
+					+ "VALUES (NULL, '" + name + "', '" + startDate + "', '"
+					+ dueDate + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -451,7 +463,7 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
+
 	public static List<Project> getProjects(String connectionString)
 	{
 		List<Project> projects = new ArrayList<Project>();
@@ -463,16 +475,20 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM PROJECTS;");
+			ResultSet rs = stmt
+					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, u.id"
+							+ " FROM PROJECTS p, USERS u, USERROLES ur"
+							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
 			while (rs.next())
 			{
 				Project project = null;
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				int projectManagerID = rs.getInt("projectManagerID");
-				project = new Project(id, name, startDate, dueDate, projectManagerID);
+				int id = rs.getInt("p.id");
+				String name = rs.getString("p.name");
+				Date startDate = dateFormat.parse(rs.getString("p.startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("p.dueDate"));
+				int projectManagerID = rs.getInt("u.id");
+				project = new Project(id, name, startDate, dueDate,
+						projectManagerID);
 				projects.add(project);
 			}
 			rs.close();
@@ -485,7 +501,7 @@ public class DataManager
 		}
 		return projects;
 	}
-	
+
 	public static Project getProjectById(String connectionString, int id)
 	{
 		Project project = null;
@@ -497,14 +513,17 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = "+id+";");
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id
+							+ ";");
 			while (rs.next())
 			{
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int projectManagerID = rs.getInt("projectManagerID");
-				project = new Project(id, name, startDate, dueDate, projectManagerID);
+				project = new Project(id, name, startDate, dueDate,
+						projectManagerID);
 			}
 			rs.close();
 			stmt.close();
@@ -516,8 +535,7 @@ public class DataManager
 		}
 		return project;
 	}
-	
-	
+
 	public static void createTablePredecessors(String connectionString)
 	{
 		Connection c = null;
@@ -542,8 +560,9 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
-	public static void insertIntoTablePredecessors(String connectionString, int activityID, int predecessorID)
+
+	public static void insertIntoTablePredecessors(String connectionString,
+			int activityID, int predecessorID)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -557,7 +576,8 @@ public class DataManager
 					+ "VALUES (NULL, '"
 					+ activityID
 					+ "', '"
-					+ predecessorID + "')";
+					+ predecessorID
+					+ "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -568,8 +588,9 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
-	public static List<Activity> getPredecessors(String connectionString, int activityID)
+
+	public static List<Activity> getPredecessors(String connectionString,
+			int activityID)
 	{
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
@@ -580,19 +601,24 @@ public class DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = "+activityID+";");
-			
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = "
+							+ activityID + ";");
+
 			while (rs.next())
 			{
 				int predecessorID = rs.getInt("predecessorId");
-				ResultSet rs2 = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = "+predecessorID+";");
+				ResultSet rs2 = stmt
+						.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = "
+								+ predecessorID + ";");
 				Activity activity = null;
 				int projectId = rs2.getInt("projectId");
 				String name = rs2.getString("name");
 				Date startDate = dateFormat.parse(rs2.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs2.getString("dueDate"));
 				int status = rs2.getInt("status");
-				activity = new Activity(activityID, projectId, name, startDate, dueDate, status);
+				activity = new Activity(activityID, projectId, name, startDate,
+						dueDate, status);
 				activities.add(activity);
 				rs2.close();
 			}
@@ -606,7 +632,7 @@ public class DataManager
 		}
 		return activities;
 	}
-	
+
 	public static void createTableUserRoles(String connectionString)
 	{
 		Connection c = null;
@@ -616,10 +642,8 @@ public class DataManager
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE USERROLES "
-					+ "(USERID 		INTEGER,"
-					+ " PROJECTID 	INTEGER,"
-					+ " ROLEID  	INTEGER,"
+			String sql = "CREATE TABLE USERROLES " + "(USERID 		INTEGER,"
+					+ " PROJECTID 	INTEGER," + " ROLEID  	INTEGER,"
 					+ " PRIMARY KEY(USERID,PROJECTID),"
 					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID),"
@@ -633,7 +657,7 @@ public class DataManager
 			System.exit(0);
 		}
 	}
-	
+
 	public static void createTableUserRolesDict(String connectionString)
 	{
 		Connection c = null;
@@ -643,10 +667,8 @@ public class DataManager
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE USERROLESDICT "
-					+ "(ROLEID  	INTEGER,"
-					+ " ROLENAME	TEXT,"
-					+ " PRIMARY KEY(ROLEID))";
+			String sql = "CREATE TABLE USERROLESDICT " + "(ROLEID  	INTEGER,"
+					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
