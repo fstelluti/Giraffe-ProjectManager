@@ -204,17 +204,23 @@ public class AddActivityDialog extends JDialog
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks if activity start date falls in project date constraints
-	    	  else if(activityStartDate.getDate() < projectStartDate.getDate() 
+	    	  else if((activityStartDate.getDate() < projectStartDate.getDate() 
 	    			  && activityStartDate.getMonth() <= projectStartDate.getMonth() 
-	    			  && activityStartDate.getYear() <= projectStartDate.getYear()){
+	    			  && activityStartDate.getYear() <= projectStartDate.getYear())
+	    			  || (activityStartDate.getMonth() < projectStartDate.getMonth() 
+	    			  && activityStartDate.getYear() <= projectStartDate.getYear())
+	    			  || activityStartDate.getYear() < projectStartDate.getYear()){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure start date is within project dates:"
 	    				  + dateFormat.format(projectStartDate) +" to "
 	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks if activity due date falls in project date constraints
-	    	  else if(activityDueDate.getDate() > projectDueDate.getDate() 
+	    	  else if((activityDueDate.getDate() > projectDueDate.getDate() 
 	    			  && activityDueDate.getMonth() >= projectDueDate.getMonth() 
-	    			  && activityDueDate.getYear() >= projectDueDate.getYear()){
+	    			  && activityDueDate.getYear() >= projectDueDate.getYear())
+	    			  || (activityDueDate.getMonth() > projectDueDate.getMonth() 
+	    			  && activityDueDate.getYear() >= projectDueDate.getYear())
+	    			  || activityDueDate.getYear() > projectDueDate.getYear()){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is within project dates : "
 	    				  + dateFormat.format(projectStartDate) +" to "
 	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
