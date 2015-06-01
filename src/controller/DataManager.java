@@ -363,6 +363,38 @@ public class DataManager
 		return activity;
 	}
 	
+	public static Activity getActivityByNameAndProjectID(String connectionString, String activityName, int projectID)
+	{
+		Activity activity = null;
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"+activityName+"' AND PROJECTID = "+projectID+";");
+			while (rs.next())
+			{
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				int status = rs.getInt("status");
+				activity = new Activity(id, projectID, name, startDate, dueDate, status);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		} catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		return activity;
+	}
+	
 	public static void createTableProjects(String connectionString)
 	{
 		Connection c = null;
