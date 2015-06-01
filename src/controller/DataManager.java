@@ -3,6 +3,7 @@ package controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -14,10 +15,26 @@ import model.Activity;
 import model.Project;
 import model.User;
 
+/**
+ * 
+ * @author Andrey Uspenskiy
+ * DataManager class is used to communicate with SQL database
+ * JDBC library is used to send queries to DB
+ * Connection class is used to open connection, attach statement/query and execute it
+ * For DML and DDL statements executeUpdate method is used; for queries - executeQuery is used
+ * ResultSet iterates over collection and retrieves DDB values by field name
+ * For 
+ */
 public class DataManager
 {
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+	/**
+	 * 
+	 * @param connectionString
+	 * @return
+	 */
+	@SuppressWarnings("finally")
 	public static Connection getConnection(String connectionString)
 	{
 		Connection c = null;
@@ -25,14 +42,31 @@ public class DataManager
 		{
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection(connectionString);
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
-		return c;
+		
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		finally
+		{
+			return c;
+		}
+		
 	}
 
+	/**
+	 * 
+	 * @param connectionString
+	 * @param userName
+	 * @param password - char because it is how it is stored in GUI
+	 * @return
+	 */
+	@SuppressWarnings("finally")
 	public static boolean checkLogin(String connectionString, String userName,
 			char[] password)
 	{
@@ -59,23 +93,31 @@ public class DataManager
 			{
 				userNameDB = rs.getString("userName");
 				passwordDB = rs.getString("password");
-				resultCount++;
+				resultCount++;//computes number of occurences of userName/password pairs
 			}
 
 			if (resultCount == 1 && userNameDB.equals(userName)
-					&& passwordDB.equals(passwordString))
+					&& passwordDB.equals(passwordString))//exactly on pair exists - it means the userName and password are valid
 			{
 				result = true;
 			}
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
-		return result;
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		finally
+		{
+			return result;
+		}
+		
 	}
 
 	public static void createTableUsers(String connectionString)
@@ -97,10 +139,14 @@ public class DataManager
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -127,10 +173,14 @@ public class DataManager
 			stmt.close();
 			c.commit();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -162,14 +212,26 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return users;
 	}
 
+	/**
+	 * Method searches for a user in DB (connectionString) by id
+	 * precondition id is valid
+	 * When method is called check if it returns null in which case a user with a given id doesn't exist
+	 * @param connectionString
+	 * @param id
+	 * @return
+	 */
 	public static User getUserById(String connectionString, int id)
 	{
 		User user = null;
@@ -197,14 +259,26 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return user;
 	}
 
+	/**
+	 * Method searches for a user in DB (connectionString) by userName
+	 * Precondition: userName is valid
+	 * When method is called check if it returns null in which case a user with a given userName doesn't exist
+	 * @param connectionString
+	 * @param userName
+	 * @return
+	 */
 	public static User getUserByUserName(String connectionString,
 			String userName)
 	{
@@ -234,10 +308,14 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return user;
 	}
@@ -260,10 +338,14 @@ public class DataManager
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -297,10 +379,15 @@ public class DataManager
 			stmt.close();
 			c.commit();
 			c.close();
-		} catch (Exception e)
+		}
+		
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -334,10 +421,15 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return activities;
 	}
@@ -369,10 +461,15 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return activity;
 	}
@@ -406,10 +503,14 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return activity;
 	}
@@ -427,15 +528,18 @@ public class DataManager
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
 					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
-					+ " DUEDATE 		DATE, "
-					+ " FOREIGN KEY(PROJECTMANAGERID) REFERENCES USERS (ID))";
+					+ " DUEDATE 		DATE)";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -457,10 +561,14 @@ public class DataManager
 			stmt.close();
 			c.commit();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -494,10 +602,14 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return projects;
 	}
@@ -528,10 +640,14 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return project;
 	}
@@ -554,10 +670,14 @@ public class DataManager
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -582,10 +702,14 @@ public class DataManager
 			stmt.close();
 			c.commit();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -625,10 +749,14 @@ public class DataManager
 			rs.close();
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return activities;
 	}
@@ -651,10 +779,14 @@ public class DataManager
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 
@@ -672,10 +804,14 @@ public class DataManager
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
-		} catch (Exception e)
+		}
+		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
 }
