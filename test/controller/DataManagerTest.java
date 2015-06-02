@@ -58,7 +58,7 @@ public class DataManagerTest {
 									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (42, 'activity4', '1969-12-31', '1970-01-01', 0);"
 									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (42, 'activity5', '1970-01-01', '1970-01-02', 1);";
 		
-		String projectFixtureQuery =  "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, VALUES ('project1', '1969-12-28', '1969-12-29');"
+		String projectFixtureQuery =  "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project1', '1969-12-28', '1969-12-29');"
 									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project2', '1969-12-29', '1969-12-30');"
 									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project3', '1969-12-30', '1969-12-31');"
 									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project4', '1969-12-31', '1970-01-01');"
@@ -74,10 +74,11 @@ public class DataManagerTest {
 		// Execute queries and commit
 		Statement stmt = c.createStatement();
 		stmt.executeUpdate(fixtureQuery);
-		stmt.close();
 		c.commit();
+		stmt.close();
 		c.close();
 	}
+	
 	// Try to keep @Before and @Afters free of class methods as much as possible as those will be tested by the rest of class
 	// (i.e. make sure there is minimum coupling between test classes and classes themselves, defeats purpose of testing)
 	@Before
@@ -94,8 +95,8 @@ public class DataManagerTest {
 		c.setAutoCommit(false);
 		Statement stmt = c.createStatement();
 		stmt.executeUpdate(dbClearQuery);
-		stmt.close();
 		c.commit();
+		stmt.close();
 		c.close();
 	}
 
@@ -193,11 +194,12 @@ public class DataManagerTest {
 			result = rs.getString(2).trim();
 			condition = test.equalsIgnoreCase(result);
 			assertTrue("Seventh column is not LASTNAME, but " + result + "!", condition);
+			
 			stmt.close();
 			rs.close();
 			c.close();
 		} catch (SQLException e) {
-			fail("An Exception was thrown: " + e.getStackTrace());
+			fail("An SQLException was thrown: " + e.getStackTrace());
 		} finally {
 		    try {
 		    	if (c != null && !c.isClosed()) {
@@ -229,24 +231,33 @@ public class DataManagerTest {
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM USERS WHERE EMAIL='test@dummy.com';");
 			rs.next();
+			
+			// Extract all the data from the resultset
 			String username = rs.getString("USERNAME").trim();
 			String password = rs.getString("PASSWORD").trim();
 			String email = rs.getString("EMAIL").trim();
 			String firstName = rs.getString("FIRSTNAME").trim();
 			String lastName = rs.getString("LASTNAME").trim();
+			
+			// Check against passed input
 			boolean usernameMatch = username.equals("testDummy");
 			boolean passwordMatch = password.equals("trustno1");
 			boolean emailMatch = email.equals("test@dummy.com");
 			boolean firstNameMatch = firstName.equals("Test");
 			boolean lastNameMatch = lastName.equals("Dummy");
+			
 			if (rs.next()) {
-				fail("More than one result was returned!");
+				fail("More than 1 result was returned, expecting 1!");
 			}
+			
+			// Assert all conditions
 			assertTrue("Username did not match!", usernameMatch);
 			assertTrue("Password did not match!", passwordMatch);
 			assertTrue("Email did not match!", emailMatch);
 			assertTrue("First name did not match!", firstNameMatch);
 			assertTrue("Last name did not match!", lastNameMatch);
+			
+			// Close up database objects
 			stmt.close();
 			rs.close();
 			c.close();
@@ -517,7 +528,7 @@ public class DataManagerTest {
 			test = "STARTDATE";
 			result = rs.getString(2).trim();
 			condition = test.equalsIgnoreCase(result);
-			assertTrue("Fourth column is not STARDATE, but " + result + "!", condition);
+			assertTrue("Fourth column is not STARTDATE, but " + result + "!", condition);
 			
 			rs.next();
 			test = "DUEDATE";
@@ -562,17 +573,25 @@ public class DataManagerTest {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE name='testProject';");
-			rs.next();
-			String startDate = rs.getString("STARTDATE").trim();
-			String dueDate = rs.getString("DUEDATE").trim();
-			boolean startDateMatch = startDate.equals("1969-12-31");
-			boolean dueDateMatch = dueDate.equals("1970-01-01");
+			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE name='testProject';");
+			
+			boolean startDateMatch = false;
+			boolean dueDateMatch = false;
+			// if an entry is returned, test it, otherwise fail
 			if (rs.next()) {
-				fail("More than one result was returned!");
+				String startDate = rs.getString("STARTDATE").trim();
+				String dueDate = rs.getString("DUEDATE").trim();
+				startDateMatch = startDate.equals("1969-12-31");
+				dueDateMatch = dueDate.equals("1970-01-01");
+				if (rs.next()) {
+					fail("More than one result was returned!");
+				}
+			} else {
+				fail("No results were returned, expected 1!");
 			}
 			assertTrue("startDate did not match!", startDateMatch);
 			assertTrue("dueDate name did not match!", dueDateMatch);
+			c.commit();
 			stmt.close();
 			rs.close();
 			c.close();
@@ -619,7 +638,12 @@ public class DataManagerTest {
 	@Test
 	public void returnedProjectByIdShouldMatch() {
 		Project project = DataManager.getProjectById(CONNECTION, 1);
-		int id = project.getProjectid();
+		int id = -1;
+		try {
+			id = project.getProjectid();
+		} catch (NullPointerException e) {
+			fail("No ProjectID was returned, expected returned project with ID 1!");
+		}
 		boolean condition = (id == 1);
 		assertTrue("The returned project ID (" + id + ") does not match requested project ID (1)!", condition);
 	}
@@ -699,6 +723,8 @@ public class DataManagerTest {
 				fail("More than one result was returned!");
 			}
 			assertTrue("dueDate name did not match!", predecessorMatch);
+			
+			c.commit();
 			stmt.close();
 			rs.close();
 			c.close();
@@ -725,15 +751,16 @@ public class DataManagerTest {
 	// Tests DataManager.getPredecessors()
 	@Test
 	public void returnedPredecessorsShouldBeValid() {
-		List<Activity> activities = DataManager.getPredecessors(CONNECTION, 1);
 		int counter = 0;
+		int id = 1;
+		List<Activity> activities = DataManager.getPredecessors(CONNECTION, id);
+		Connection c = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		for (Activity activity : activities) {
-			Connection c = null;
-			Statement stmt = null;
-			ResultSet rs = null;
-			int id = activity.getActivityId();
 			try {
 				// Need to check to see if the activities are in fact associated
+				// Get the ID of the returned predecessor
 				int predecessorId = activity.getActivityId();
 				c = DataManager.getConnection(CONNECTION);
 				c.setAutoCommit(false);
@@ -750,6 +777,21 @@ public class DataManagerTest {
 				}
 			} catch (SQLException e) {
 				System.err.println("Caught SQLException:" + e.getStackTrace());
+			} finally {
+			    try {
+			    	if (c != null && !c.isClosed()) {
+			    		c.close();
+			    	}
+			    	if (stmt != null && !stmt.isClosed()) {
+			    		stmt.close();
+			    	}
+			    	if (rs != null && !rs.isClosed()) {
+			    		rs.close();
+			    	}
+			    } catch (SQLException ex) {
+			        System.err.println ("Error closing connections");
+			        ex.printStackTrace();
+			    }
 			}
 			++counter;
 		}
@@ -774,24 +816,33 @@ public class DataManagerTest {
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
 			
 			//One test for each column, make sure they are all there and in correct order
-			rs.next();
-			test = "USERID";
-			// getString(2) returns the second index of table_info, in this case table name
-			result = rs.getString(2).trim();
-			condition = test.equalsIgnoreCase(result);
-			assertTrue("First column is not USERID, but " + result + "!", condition);
+			if (rs.next()) {
+				test = "USERID";
+				// getString(2) returns the second index of table_info, in this case table name
+				result = rs.getString(2).trim();
+				condition = test.equalsIgnoreCase(result);
+				assertTrue("First column is not USERID, but " + result + "!", condition);
+			} else {
+				fail("Column USERID was missing!");
+			}
+				
+			if (rs.next()) {
+				test = "PROJECTID";
+				result = rs.getString(2).trim();
+				condition = test.equalsIgnoreCase(result);
+				assertTrue("Third column is not PROJECTID, but " + result + "!", condition);
+			} else {
+				fail("Column PROJECTID was missing!");
+			}
 			
-			rs.next();
-			test = "PROJECTID";
-			result = rs.getString(2).trim();
-			condition = test.equalsIgnoreCase(result);
-			assertTrue("Third column is not PROJECTID, but " + result + "!", condition);
-			
-			rs.next();
-			test = "ROLEID";
-			result = rs.getString(2).trim();
-			condition = test.equalsIgnoreCase(result);
-			assertTrue("Third column is not ROLEID, but " + result + "!", condition);
+			if (rs.next()) {
+				test = "ROLEID";
+				result = rs.getString(2).trim();
+				condition = test.equalsIgnoreCase(result);
+				assertTrue("Third column is not ROLEID, but " + result + "!", condition);
+			} else {
+				fail("Column ROLEID was missing!");
+			}
 			
 			stmt.close();
 			rs.close();
@@ -824,7 +875,7 @@ public class DataManagerTest {
 		String test = null;
 		String result = null;
 		boolean condition = false;
-		String tableName = "USERROLES";
+		String tableName = "USERROLESDICT";
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
