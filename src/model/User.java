@@ -2,6 +2,10 @@ package model;
 
 import java.util.Date;
 
+import javax.swing.ImageIcon;
+
+import view.MainViewPanel;
+
 public class User
 {
 	private int id;
@@ -11,6 +15,7 @@ public class User
 	private Date 	regDate;
 	private String firstName;
 	private String lastName;
+	private ImageIcon userPicture;
 	
 	
 	public User(int id, String userName, String password, String email,
@@ -24,6 +29,7 @@ public class User
 		this.setRegDate(new Date());//it creates today's date by default
 		this.firstName = firstName;
 		this.lastName = lastName;
+		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
 	}
 	
 	public String getUserName()
@@ -86,5 +92,15 @@ public class User
 	public void setRegDate(Date regDate)
 	{
 		this.regDate = regDate;
+	}
+
+	public ImageIcon getUserPicture()
+	{
+		return userPicture;
+	}
+
+	public void setUserPicture(ImageIcon userPicture)
+	{
+		this.userPicture = userPicture;
 	}
 }

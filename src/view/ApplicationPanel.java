@@ -18,7 +18,7 @@ public class ApplicationPanel extends JFrame
 	{
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		cardsHolder = new JPanel();
-		setTitle("Project management application");
+		setTitle("Giraffe");
 		cardLayout = new CardLayout();
 		cardsHolder.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
