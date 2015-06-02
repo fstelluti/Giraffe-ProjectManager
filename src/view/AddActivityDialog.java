@@ -20,8 +20,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 import model.Activity;
 import model.DateLabelFormatter;
@@ -129,6 +129,8 @@ public class AddActivityDialog extends JDialog
 	  final JPanel panDependArea = new JPanel();
 	  panDependArea.setPreferredSize(new Dimension(465, 200));
 	  panDependArea.setBackground(Color.white);
+	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
+			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	  
 	  //This button is used to dynamically add dependent fields
 	  JButton addDependentButton = new JButton("Add Dependent");
@@ -159,6 +161,7 @@ public class AddActivityDialog extends JDialog
 	    	    	  panDependArea.remove(panDepend);
 	    	    	  panDependArea.repaint();
 	    	    	  panDependArea.revalidate();
+	    	    	  scrollPanDependArea.repaint();
 	    	      }      
 	    	  });
 	    	  
@@ -166,6 +169,7 @@ public class AddActivityDialog extends JDialog
 	    	  panDependArea.add(panDepend);
 	    	  panDependArea.repaint();
 	    	  panDependArea.revalidate();
+	    	  
 	    	 
 	    	  //On change of project removes all dependents
 	    	  projectBox.addActionListener(new ActionListener(){
@@ -273,7 +277,6 @@ public class AddActivityDialog extends JDialog
 	    });
 	  control.add(okButton);
 	  control.add(cancelButton);
-	  
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
 	  content.add(panActivity);
@@ -281,7 +284,7 @@ public class AddActivityDialog extends JDialog
 	  content.add(panStartDate);
 	  content.add(panDueDate);
 	  content.add(addDependentButton);
-	  content.add(panDependArea);
+	  content.add(scrollPanDependArea);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
