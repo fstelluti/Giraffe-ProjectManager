@@ -22,6 +22,13 @@ import model.Project;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/**
+ * The DataManagerTest set of tests tests controller/DataManager.java.
+ * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
+ * within this test class.
+ * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ */
+
 @RunWith(JUnit4.class)
 public class DataManagerTest {
 	
@@ -52,6 +59,14 @@ public class DataManagerTest {
 				                + "INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES ('testUser4', 'password4', 'test4@email.com', 'Test4', 'User4');"
 				                + "INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES ('testUser5', 'password5', 'test5@email.com', 'Test5', 'User5');";
 		
+		String userRolesQuery = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 1, 1);"
+							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 2, 1);"
+							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 3, 1);"
+							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 4, 1);"
+							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 5, 1);";
+		
+		String userRolesDictQuery = "INSERT INTO USERROLESDICT (ROLEID, ROLENAME) VALUES (1, 'manager');";
+		
 		String activityFixtureQuery = "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity1', '1969-12-28', '1969-12-29', 0);"
 									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity2', '1969-12-29', '1969-12-30', 1);"
 									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity3', '1969-12-30', '1969-12-31', 2);"
@@ -70,7 +85,7 @@ public class DataManagerTest {
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (2, 4);"
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (2, 5);";
 		
-		String fixtureQuery = userFixtureQuery + activityFixtureQuery + projectFixtureQuery + predecessorFixtureQuery;
+		String fixtureQuery = userFixtureQuery + userRolesQuery + userRolesDictQuery + activityFixtureQuery + projectFixtureQuery + predecessorFixtureQuery;
 		// Execute queries and commit
 		Statement stmt = c.createStatement();
 		stmt.executeUpdate(fixtureQuery);
