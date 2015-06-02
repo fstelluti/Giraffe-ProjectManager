@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,7 +41,6 @@ public class AddActivityDialog extends JDialog
   private JComboBox<?> projectBox, statusBox, dependBox;
   private JLabel projectLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-  String dateRegex = "^(20)\\d\\d([-])(0[1-9]|1[012])([-])(0[1-9]|[12][0-9]|3[01])$";
   UtilDateModel startModel = new UtilDateModel();
   UtilDateModel dueModel = new UtilDateModel();
   Properties p = new Properties();
@@ -55,7 +55,6 @@ public class AddActivityDialog extends JDialog
     this.setResizable(false);
     this.initComponent();
     this.setVisible(true);
-
   }
   
   private void initComponent()
@@ -183,6 +182,12 @@ public class AddActivityDialog extends JDialog
 	    	  Date projectStartDate = projects.get(projectBox.getSelectedIndex()).getStartDate();
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
+	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectid();
+	    	  
+//	    	  for (Component c : content.getComponents()){
+//	    		  if()
+//	    	  }
+	    	  int dependencies[] = new int[]{};
 	    	  
 	    	  //Checks if the activity already exists
 	    	  List<Activity> activities = DataManager.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
@@ -230,8 +235,8 @@ public class AddActivityDialog extends JDialog
 	    				  "Are you sure you want to create the following Activity for "
 	    						  + projectName+"?\n"
 	    						  + "\nActivity Name: "+activityName.getText()
-	    						  + "\nStart Date: "+activityStartDate
-	    						  + "\nDue Date: "+activityDueDate
+	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
+	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
 	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
@@ -241,6 +246,8 @@ public class AddActivityDialog extends JDialog
 			    				 dateFormat.format(activityStartDate),
 			    				 dateFormat.format(activityDueDate),
 			    				 statusBox.getSelectedIndex());
+//		    		  Activity activity = DataManager.getActivityByNameAndProjectID(DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
+//		    		  DataManager.insertIntoTablePredecessors(DatabaseConstants.PROJECT_MANAGEMENT_DB, activity.getActivityId(), predecessorID);
 			    		  setVisible(false); 
 	    		  }
 //	    		  int dependId;
@@ -257,7 +264,6 @@ public class AddActivityDialog extends JDialog
 	    });
 	  control.add(okButton);
 	  control.add(cancelButton);
-	  
 	  
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
