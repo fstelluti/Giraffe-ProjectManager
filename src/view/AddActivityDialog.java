@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import model.Activity;
 import model.DateLabelFormatter;
@@ -121,6 +122,11 @@ public class AddActivityDialog extends JDialog
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 	  panStatus.add(statusBox);
 	  
+	  //This creates an area to add dependents, this area created so it can be iterated later to add dependencies to table
+	  final JPanel panDependArea = new JPanel();
+	  panDependArea.setPreferredSize(new Dimension(465, 200));
+	  panDependArea.setBackground(Color.white);
+	  
 	  //This button is used to dynamically add dependent fields
 	  JButton addDependentButton = new JButton("Add Dependent");
 	  addDependentButton.addActionListener(new ActionListener(){
@@ -147,23 +153,23 @@ public class AddActivityDialog extends JDialog
 	    	  //When clicking delete, dependent panel is removed
 	    	  deleteDependentPanelButton.addActionListener(new ActionListener(){
 	    	      public void actionPerformed(ActionEvent arg0) {
-	    	    	  content.remove(panDepend);
-	    	    	  content.repaint();
-	    	    	  content.revalidate();
+	    	    	  panDependArea.remove(panDepend);
+	    	    	  panDependArea.repaint();
+	    	    	  panDependArea.revalidate();
 	    	      }      
 	    	  });
 	    	  
 	    	  //This adds the dependent panel to the interface dynamically
-	    	  content.add(panDepend);
-	    	  content.repaint();
-	    	  content.revalidate();
+	    	  panDependArea.add(panDepend);
+	    	  panDependArea.repaint();
+	    	  panDependArea.revalidate();
 	    	 
 	    	  //On change of project removes all dependents
 	    	  projectBox.addActionListener(new ActionListener(){
 	    	      public void actionPerformed(ActionEvent arg0) {
-	    	    	  content.remove(panDepend);
-	    	    	  content.repaint();
-	    	    	  content.revalidate();
+	    	    	  panDependArea.remove(panDepend);
+	    	    	  panDependArea.repaint();
+	    	    	  panDependArea.revalidate();
 	    	      }      
 	    	  });
 	      }      
@@ -183,11 +189,6 @@ public class AddActivityDialog extends JDialog
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
 	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectid();
-	    	  
-//	    	  for (Component c : content.getComponents()){
-//	    		  if()
-//	    	  }
-	    	  int dependencies[] = new int[]{};
 	    	  
 	    	  //Checks if the activity already exists
 	    	  List<Activity> activities = DataManager.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
@@ -246,13 +247,18 @@ public class AddActivityDialog extends JDialog
 			    				 dateFormat.format(activityStartDate),
 			    				 dateFormat.format(activityDueDate),
 			    				 statusBox.getSelectedIndex());
-//		    		  Activity activity = DataManager.getActivityByNameAndProjectID(DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
-//		    		  DataManager.insertIntoTablePredecessors(DatabaseConstants.PROJECT_MANAGEMENT_DB, activity.getActivityId(), predecessorID);
-			    		  setVisible(false); 
+		    		  
+		    		  //Gets id of activity just created
+		    		  Activity activity = DataManager.getActivityByNameAndProjectID(
+		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
+		    		  
+		    		  //SUPPOSED to iterate through all dependents but only iterates through first one (choses first dependBox only)
+		    		  for (Component j : panDependArea.getComponents()){
+		    				  DataManager.insertIntoTablePredecessors(DatabaseConstants.PROJECT_MANAGEMENT_DB, 
+		    						  activity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
+		    		  }
+		    		  setVisible(false); 
 	    		  }
-//	    		  int dependId;
-//	    		  try{dependId = activities.get(dependBox.getSelectedIndex()).getActivityId();} 
-//	    		  catch(Exception e){dependId = 0;}
 	    	  }
 	      }      
 	    });
@@ -272,6 +278,7 @@ public class AddActivityDialog extends JDialog
 	  content.add(panStartDate);
 	  content.add(panDueDate);
 	  content.add(addDependentButton);
+	  content.add(panDependArea);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

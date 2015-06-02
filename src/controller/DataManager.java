@@ -697,7 +697,7 @@ public class DataManager
 
 			stmt = c.createStatement();
 			String sql = "INSERT INTO PREDECESSORS (activityID, predecessorID) "
-					+ "VALUES (NULL, '"
+					+ "VALUES ( '"
 					+ activityID
 					+ "', '"
 					+ predecessorID
