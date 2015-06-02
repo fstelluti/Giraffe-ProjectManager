@@ -617,6 +617,58 @@ public class DataManager
 		}
 		return projects;
 	}
+	/**
+	 * Method to get projects of a particular user
+	 * @param connectionString
+	 * @param userId
+	 * @return
+	 */
+	public static List<Project> getUserProjects(String connectionString, int userId)
+	{
+		List<Project> projects = new ArrayList<Project>();
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, u.id"
+							+ " FROM PROJECTS p, USERS u, USERROLES ur"
+							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userId + ";");
+			while (rs.next())
+			{
+				Project project = null;
+//				int id = rs.getInt("p.id");
+//				String name = rs.getString("p.name");
+//				Date startDate = dateFormat.parse(rs.getString("p.startDate"));
+//				Date dueDate = dateFormat.parse(rs.getString("p.dueDate"));
+//				int projectManagerID = rs.getInt("u.id");
+				int id = rs.getInt(1);
+				String name = rs.getString(2);
+				Date startDate = dateFormat.parse(rs.getString(3));
+				Date dueDate = dateFormat.parse(rs.getString(4));
+				int projectManagerID = rs.getInt(5);
+				project = new Project(id, name, startDate, dueDate,
+						projectManagerID);
+				projects.add(project);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		return projects;
+	}
 
 	public static Project getProjectById(String connectionString, int id)
 	{
