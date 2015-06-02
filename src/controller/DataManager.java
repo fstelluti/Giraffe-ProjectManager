@@ -584,8 +584,8 @@ public class DataManager
 			stmt = c.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, u.id"
-							+ " FROM PROJECTS p, USERS u, USERROLES ur"
-							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
+							+ " FROM PROJECTS p, USERS u, USERROLES ur, USERROLESDICT"
+							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND USERROLESDICT.roleName = \"manager\";");
 			while (rs.next())
 			{
 				Project project = null;
