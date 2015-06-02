@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 
 import model.DateLabelFormatter;
 import model.Project;
+import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -44,10 +45,12 @@ public class EditProjectDialog extends JDialog
 	 private UtilDateModel dueModel = new UtilDateModel();
 	 private Properties p = new Properties();
 	 boolean exists;
+	 private User user;
 
-  public EditProjectDialog(JFrame parent, String title, boolean modal)
+  public EditProjectDialog(JFrame parent, String title, boolean modal, User currentUser)
   {
     super(parent, title, modal);
+    this.user = currentUser;
     this.setSize(500, 500);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
@@ -70,7 +73,7 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<Project> projects = DataManager.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
 		  projectNames[i] = projects.get(i).getProjectName();

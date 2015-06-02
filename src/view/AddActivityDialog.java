@@ -26,6 +26,7 @@ import javax.swing.border.Border;
 import model.Activity;
 import model.DateLabelFormatter;
 import model.Project;
+import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -35,7 +36,7 @@ import controller.DataManager;
 import controller.DatabaseConstants;
 
 @SuppressWarnings("serial")
-public class AddActivityDialog extends JDialog 
+public class AddActivityDialog extends JDialog
 {
 
   private JTextField activityName;
@@ -45,12 +46,14 @@ public class AddActivityDialog extends JDialog
   UtilDateModel startModel = new UtilDateModel();
   UtilDateModel dueModel = new UtilDateModel();
   Properties p = new Properties();
-  boolean exists;
+  private boolean exists;
+  private User user;
 
   
-  public AddActivityDialog(JFrame parent, String title, boolean modal)
+  public AddActivityDialog(JFrame parent, String title, boolean modal, User currentUser)
   {
     super(parent, title, modal);
+    this.user = currentUser;
     this.setSize(500, 500);
     this.setLocationRelativeTo(null);
     this.setResizable(false);
@@ -72,7 +75,7 @@ public class AddActivityDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<Project> projects = DataManager.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
 		  projectNames[i] = projects.get(i).getProjectName();

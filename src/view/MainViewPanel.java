@@ -71,7 +71,7 @@ public class MainViewPanel extends JPanel
 				if (e.getSource() == editProject)
 				{
 					EditProjectDialog test = new EditProjectDialog(null,
-							"Edit a Project", true);
+							"Edit a Project", true, user);
 				}
 			}
 		});
@@ -85,7 +85,7 @@ public class MainViewPanel extends JPanel
 				if (e.getSource() == addActivity)
 				{
 					AddActivityDialog test = new AddActivityDialog(null,
-							"Add an activity", true);
+							"Add an activity", true, user);
 				}
 			}
 		});
