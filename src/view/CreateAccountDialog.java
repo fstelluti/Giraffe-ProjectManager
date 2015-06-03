@@ -12,6 +12,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -21,9 +22,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import model.User;
+import controller.DataManager;
+import controller.DatabaseConstants;
 
 ///THIS CLASS IS NOT FINISHED YET - Andrey Uspenskiy
 public class CreateAccountDialog extends JDialog
@@ -142,7 +148,11 @@ public class CreateAccountDialog extends JDialog
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
-				// Create Project
+				if(isInputValid())
+				{
+					DataManager.insertIntoTableUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB, userName.getText().trim(), getPassword(userPassword.getPassword()), email.getText(), firstName.getText(), lastName.getText());
+				}
+				
 			}
 		});
 		JButton cancelButton = new JButton("Cancel");
@@ -179,5 +189,70 @@ public class CreateAccountDialog extends JDialog
             return null;
         }
     }
-
+	
+	private String getPassword(char[] pass)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < pass.length; i++)
+		{
+			builder.append(pass[i]);
+		}
+		return builder.toString();
+	}
+	private boolean isInputValid()
+	{
+		List<User> users = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		for (User user : users)
+		{
+			if (user.getEmail().equals(email.getText().trim()))
+			{
+				JOptionPane.showMessageDialog(null, "A user with e-mail" + email.getText().trim() + " already exists");
+				email.setText("");
+				return false;
+			}
+			
+			if (user.getUserName().equals(userName.getText().trim()))
+			{
+				JOptionPane.showMessageDialog(null, "A user with username" + userName.getText().trim() + " already exists");
+				userName.setText("");
+				return false;
+			}
+			
+			if (!areCharsEqual(userPassword.getPassword(), repeatPassword.getPassword()))
+			{
+				JOptionPane.showMessageDialog(null, "Passwords do not match. Please try again!");
+				userPassword.setText("");
+				repeatPassword.setText("");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//not used yet but might be used later
+	private void resetForm()
+	{
+		firstName.setText("");
+		lastName.setText("");
+		email.setText("");
+		userName.setText("");
+		userPassword.setText("");
+		repeatPassword.setText("");
+	}
+	
+	private boolean areCharsEqual (char[] first, char[] second)
+	{
+		if (first.length != second.length)
+		{
+			return false;
+		}
+		for (int i = 0; i < second.length; i++)
+		{
+			if(first[i] != second[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 }
