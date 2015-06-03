@@ -1,11 +1,17 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,8 +19,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import model.User;
 import controller.DataManager;
@@ -28,6 +32,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	private JPanel loginSubPanel;
 	private JPanel passwordSubPanel;
 	private JPanel buttonsSubPanel;
+	private JPanel logoPanel;
 	
 	public JPanel newAccountLabelPanel;
 	
@@ -44,12 +49,22 @@ public class LoginPanel extends JPanel implements ActionListener
 		loginPanel = new JPanel();
 		loginPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Login"));
 		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
+		loginPanel.add(createLogoPanel());
 		loginPanel.add(createLogin());
 		loginPanel.add(createPassword());
 		loginPanel.add(createButtons());
 		loginPanel.add(createNewAccountLabel());
 		this.add(loginPanel);
 		this.setVisible(true);
+	}
+	
+	private JPanel createLogoPanel(){
+		logoPanel = new JPanel();
+		ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/giraffe.jpg"));
+		JLabel label = new JLabel(icon);
+		logoPanel.add(label);
+		return logoPanel;
+		
 	}
 	
 	private JPanel createLogin()
