@@ -845,6 +845,41 @@ public class DataManager
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
+	
+	//Role id 1 = manager
+	public static void insertIntoTableUserRole(String connectionString,
+			int userID, int projectID, int roleID)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
+					+ "VALUES ( '"
+					+ userID
+					+ "', '"
+					+ projectID
+					+ "', '"
+					+ roleID
+					+ "')";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
 
 	public static void createTableUserRolesDict(String connectionString)
 	{
