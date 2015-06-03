@@ -147,7 +147,16 @@ public class CreateProjectDialog extends JDialog
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()));
+	    			  
+	    			  //Gets id of project just created
+		    		  Project project = DataManager.getProjectByName(
+		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectName.getText());
+		    		  
+		    		  //Sets initial project manager for project
+		    		  DataManager.insertIntoTableUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectid(), 1);
 			    		  setVisible(false); 
+			    		  
 	    		  }
 	    	  }
 	      }     

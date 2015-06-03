@@ -617,6 +617,42 @@ public class DataManager
 		}
 		return projects;
 	}
+	
+	
+	public static void editProjectByID(String connectionString, int id,
+			String name, String startDate, String dueDate, int projectManagerID)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE PROJECTS SET "
+					+ "name = '"+ name +"',"
+					+ "startdate = '" + startDate+"',"
+					+ "duedate = '" + dueDate+"' "
+					+ "WHERE id = "+id+"; "
+					+" UPDATE USERROLES SET "
+					+ "userid = '" + projectManagerID+"' "
+					+ "WHERE projectid = "+id;
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
+	
 	/**
 	 * Method to get projects of a particular user
 	 * @param connectionString
@@ -686,6 +722,47 @@ public class DataManager
 							+ ";");
 			while (rs.next())
 			{
+				String name = rs.getString("name");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				int projectManagerID = rs.getInt("projectManagerID");
+				project = new Project(id, name, startDate, dueDate,
+						projectManagerID);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		return project;
+	}
+	
+	public static Project getProjectByName(
+			String connectionString, String projectName)
+	{
+		Project project = null;
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM PROJECTS WHERE WHERE NAME = '"
+							+ projectName + "'"
+							+ ";");
+			while (rs.next())
+			{
+				int id = rs.getInt("id");
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
