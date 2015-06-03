@@ -15,6 +15,15 @@ public class User
 	private Date 	regDate;
 	private String firstName;
 	private String lastName;
+	@Override
+	public String toString()
+	{
+		return "User [id=" + id + ", userName=" + userName + ", password="
+				+ "*****" + ", email=" + email + ", regDate=" + regDate
+				+ ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", userPicture=" + userPicture + "]";
+	}
+
 	private ImageIcon userPicture;
 	
 	
