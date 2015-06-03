@@ -32,8 +32,7 @@ public class CreateAccountDialog extends JDialog
 	private JPasswordField userPassword, repeatPassword;
 	private JFileChooser userPicChooser;
 	private JButton openFileButton;
-	private JLabel userNameLabel, userPasswordLabel, repeatPasswordLabel,
-			emailLabel, firstNameLabel, lastNameLabel, fileChooserLabel, imageLabel;
+	private JLabel fileChooserLabel, imageLabel;
 	private JPanel imagePanel;
 	// private JFormattedTextField dueDate, startDate;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -55,22 +54,18 @@ public class CreateAccountDialog extends JDialog
 		firstNameContainer.setBackground(Color.white);
 		firstNameContainer.setPreferredSize(new Dimension(220, 60));
 		firstName = new JTextField();
-		firstName.setPreferredSize(new Dimension(100, 25));
+		firstName.setPreferredSize(new Dimension(200, 25));
 		firstNameContainer.setBorder(BorderFactory
 				.createTitledBorder("First Name"));
-		firstNameLabel = new JLabel("First Name :");
-		firstNameContainer.add(firstNameLabel);
 		firstNameContainer.add(firstName);
 
 		JPanel lastNameContainer = new JPanel();
 		lastNameContainer.setBackground(Color.white);
 		lastNameContainer.setPreferredSize(new Dimension(220, 60));
 		lastName = new JTextField();
-		lastName.setPreferredSize(new Dimension(100, 25));
+		lastName.setPreferredSize(new Dimension(200, 25));
 		lastNameContainer.setBorder(BorderFactory
 				.createTitledBorder("Last Name"));
-		lastNameLabel = new JLabel("Last Name :");
-		lastNameContainer.add(lastNameLabel);
 		lastNameContainer.add(lastName);
 
 		openFileButton = new JButton("Open a File...",
@@ -107,24 +102,29 @@ public class CreateAccountDialog extends JDialog
 		userNameContainer.setBackground(Color.white);
 		userNameContainer.setPreferredSize(new Dimension(220, 60));
 		userName = new JTextField();
-		userName.setPreferredSize(new Dimension(100, 25));
+		userName.setPreferredSize(new Dimension(200, 25));
 		userNameContainer.setBorder(BorderFactory
 				.createTitledBorder("User Name"));
-		userNameLabel = new JLabel("User Name :");
-
-		userNameContainer.add(userNameLabel);
 		userNameContainer.add(userName);
+		
+		// Email
+		JPanel emailContainer = new JPanel();
+		emailContainer.setBackground(Color.white);
+		emailContainer.setPreferredSize(new Dimension(220, 60));
+		email = new JTextField();
+		email.setPreferredSize(new Dimension(200, 25));
+		emailContainer.setBorder(BorderFactory
+				.createTitledBorder("Email"));
+		emailContainer.add(email);
 
 		// Password
 		JPanel userPasswordContainer = new JPanel();
 		userPasswordContainer.setBackground(Color.white);
 		userPasswordContainer.setPreferredSize(new Dimension(220, 60));
 		userPassword = new JPasswordField();
-		userPassword.setPreferredSize(new Dimension(100, 25));
+		userPassword.setPreferredSize(new Dimension(200, 25));
 		userPasswordContainer.setBorder(BorderFactory
 				.createTitledBorder("Password"));
-		userPasswordLabel = new JLabel("Password :");
-		userPasswordContainer.add(userPasswordLabel);
 		userPasswordContainer.add(userPassword);
 
 		// Repeat Password
@@ -132,11 +132,9 @@ public class CreateAccountDialog extends JDialog
 		repeatPasswordContainer.setBackground(Color.white);
 		repeatPasswordContainer.setPreferredSize(new Dimension(220, 60));
 		repeatPassword = new JPasswordField();
-		repeatPassword.setPreferredSize(new Dimension(100, 25));
+		repeatPassword.setPreferredSize(new Dimension(200, 25));
 		repeatPasswordContainer.setBorder(BorderFactory
 				.createTitledBorder("Repeat password"));
-		repeatPasswordLabel = new JLabel("Repeat :");
-		repeatPasswordContainer.add(repeatPasswordLabel);
 		repeatPasswordContainer.add(repeatPassword);
 
 		JPanel control = new JPanel();
@@ -162,6 +160,7 @@ public class CreateAccountDialog extends JDialog
 		content.add(firstNameContainer);
 		content.add(lastNameContainer);
 		content.add(userNameContainer);
+		content.add(emailContainer);
 		content.add(userPasswordContainer);
 		content.add(repeatPasswordContainer);
 		content.add(fileChooserContainer);
