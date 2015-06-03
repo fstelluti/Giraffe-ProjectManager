@@ -23,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import model.DateLabelFormatter;
 import model.Project;
@@ -38,6 +39,7 @@ import controller.DatabaseConstants;
 @SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
 {
+	 private JTextField projectName;
 	 private JComboBox<?> projectBox, managerBox;
 	 private JLabel projectLabel;
 	 private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -68,7 +70,7 @@ public class EditProjectDialog extends JDialog
 	  p.put("text.month", "Month");
 	  p.put("text.year", "Year");
 	  
-	//Project Name
+	//Choose the Project
 	  JPanel panProjectName = new JPanel();
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
@@ -79,17 +81,26 @@ public class EditProjectDialog extends JDialog
 		  projectNames[i] = projects.get(i).getProjectName();
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
-	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project"));
+	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project to Edit"));
 	  projectLabel = new JLabel("Select Project:");
 	  panProjectName.add(projectLabel);
 	  panProjectName.add(projectBox);
+	  
+	  JPanel panName = new JPanel();
+	  panName.setBackground(Color.white);
+	  panName.setPreferredSize(new Dimension(220, 60));
+	  projectName = new JTextField();
+	  projectName.setPreferredSize(new Dimension(100, 25));
+	  panName.setBorder(BorderFactory.createTitledBorder("New Project Name"));
+	  projectName.setPreferredSize(new Dimension(200,30));
+	  panName.add(projectName);
 	  
 	  
 	//Start Date
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(220, 60));
-	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("New Start Date"));
 	  startModel.setSelected(true);
 	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
 	  final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
@@ -99,7 +110,7 @@ public class EditProjectDialog extends JDialog
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(220, 60));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("New Due Date"));
 	  dueModel.setSelected(false);
 	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
@@ -117,7 +128,7 @@ public class EditProjectDialog extends JDialog
 		  projectManagerNames[i] = projectManagers.get(i).getProjectName();
 	  }
 	  managerBox = new JComboBox<String>(projectManagerNames);
-	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
+	  panManager.setBorder(BorderFactory.createTitledBorder("New Project Manager"));
 	  panManager.add(managerBox);
 	  
 	  JPanel control = new JPanel();
@@ -126,7 +137,8 @@ public class EditProjectDialog extends JDialog
 	      public void actionPerformed(ActionEvent arg0) {
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
-	    	  if(startDatePicker.getModel().getValue() == null
+	    	  if(projectName.getText().hashCode() == 0 
+	    			  || startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null){
 	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
@@ -137,13 +149,14 @@ public class EditProjectDialog extends JDialog
 	    	  else{
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to edit the following Project?\n"
-	    						  + "\nProject Name: "+projects.get(projectBox.getSelectedIndex()).getProjectName()
-	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
-	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
+	    						  + "\nNew Project Name: " + projectName.getText()
+	    						  + "\nNew Start Date: "+dateFormat.format(startDatePicker.getModel().getValue())
+	    						  + "\nNew Due Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  	//SQL EDIT PROJECT METHOD CALL GOES HERE
-			    		  setVisible(false); 
+	    			  	//projectBox.getSelectedIndex().editProject(projectName.getText(), dateFormat.format(startDatePicker.getModel().getValue()),dateFormat.format(dueDatePicker.getModel().getValue()));
+			    		setVisible(false); 
 	    		  }
 	    	  }
 	      }     
@@ -160,6 +173,7 @@ public class EditProjectDialog extends JDialog
 	  
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
+	  content.add(panName);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
 	  content.add(panManager);
