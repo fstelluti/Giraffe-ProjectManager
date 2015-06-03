@@ -3,7 +3,7 @@ package model;
 import java.util.Date;
 
 import controller.DatabaseConstants;
-import controller.EditProjectDataManager;
+import controller.DataManager;
 
 /**
  * Create a project.
@@ -33,21 +33,21 @@ public class Project
 	 * Won't change project's ID
 	 * @return a boolean stating if the changes were successful
 	 */
-	public boolean editProject(String newName, Date newStartDate, Date newDueDate /*, int newPMID*/)
+	public boolean editProject(String newName, String newStartDate, String newDueDate /*, int newPMID*/)
 	{
 		if(newName != null && this.name != newName)
 		{
-			this.setProjectName(newName);
+			DataManager.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
 		}
 		
-		if(newStartDate != null && this.startDate != newStartDate)
+		if(newStartDate != null)
 		{
-			this.setStartDate(newStartDate);
+			DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
 		}
 		
-		if(newDueDate != null && this.dueDate != newDueDate)
+		if(newDueDate != null)
 		{
-			this.setDueDate(newDueDate);
+			DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
 		}
 		
 		/*
@@ -88,7 +88,6 @@ public class Project
 	//@TODO Setters will need to change the DB 
 	public void setProjectName(String newName){
 		this.name = newName;
-		EditProjectDataManager.updateProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
 	}
 	
 	public void setStartDate(Date newDate){
@@ -97,6 +96,5 @@ public class Project
 	
 	public void setDueDate(Date newDate){
 		this.dueDate = newDate;
-		EditProjectDataManager.updateProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDate);
 	}
 }

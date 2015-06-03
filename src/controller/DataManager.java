@@ -974,4 +974,125 @@ public class DataManager
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
+	
+	// START OF EDITING PROJECT METHODS
+	
+	/**
+	 * Edit a project's name
+	 * @param connectionString as a String
+	 * @param projectID as an int
+	 * @param newProjectName as a String
+	 */
+	public static void editProjectName(String connectionString,
+			int projectID, String newProjectName)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE PROJECTS "
+					+ "SET name='"
+					+ newProjectName
+					+ "' WHERE id='"
+					+ projectID 
+					+ "';"
+					;
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Edit a project's start date
+	 * @param connectionString
+	 * @param projectID
+	 * @param newStartDate
+	 */
+	public static void editProjectStartDate(String connectionString,
+			int projectID, String newStartDate)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE PROJECTS "
+					+ "SET startDate='"
+					+ newStartDate
+					+ "' WHERE id='"
+					+ projectID 
+					+ "';"
+					;
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Edit a project's due date
+	 * @param connectionString
+	 * @param projectID
+	 * @param newDueDate
+	 */
+	public static void editProjectDueDate(String connectionString,
+			int projectID, String newDueDate)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE PROJECTS "
+					+ "SET dueDate='"
+					+ newDueDate
+					+ "' WHERE id='"
+					+ projectID 
+					+ "';"
+					;
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
+	
+	// END OF EDITING PROJECT METHODS
 }

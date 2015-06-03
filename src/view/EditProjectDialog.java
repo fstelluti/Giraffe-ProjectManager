@@ -155,7 +155,7 @@ public class EditProjectDialog extends JDialog
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  	//SQL EDIT PROJECT METHOD CALL GOES HERE
-	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), (Date)startDatePicker.getModel().getValue(), (Date)dueDatePicker.getModel().getValue());
+	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), dateFormat.format(startDatePicker.getModel().getValue()), dateFormat.format(dueDatePicker.getModel().getValue()));
 			    		setVisible(false); 
 	    		  }
 	    	  }
