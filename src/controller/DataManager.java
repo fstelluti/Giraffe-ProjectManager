@@ -1094,5 +1094,38 @@ public class DataManager
 		}
 	}
 	
+	public static void editProjectUserRole(String connectionString,
+			int userID, int projectID, int roleID)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE USERROLES "
+					+ "SET USERID='"
+					+ userID
+					+ "' WHERE PROJECTID='"
+					+ projectID 
+					+ "';"
+					;
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
+	
 	// END OF EDITING PROJECT METHODS
 }

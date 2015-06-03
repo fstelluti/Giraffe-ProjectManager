@@ -121,14 +121,13 @@ public class EditProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  //THE FOLLOWING GENERATES A LIST OF PROJECTS TEMPORARILY, WILL BE PROJECT MANAGERS WHEN DB IS FIXED
-	  final List<Project> projectManagers = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
-		  projectManagerNames[i] = projectManagers.get(i).getProjectName();
+		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
 	  }
 	  managerBox = new JComboBox<String>(projectManagerNames);
-	  panManager.setBorder(BorderFactory.createTitledBorder("New Project Manager"));
+	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
 	  panManager.add(managerBox);
 	  
 	  JPanel control = new JPanel();
@@ -155,7 +154,10 @@ public class EditProjectDialog extends JDialog
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  	//SQL EDIT PROJECT METHOD CALL GOES HERE
-	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), dateFormat.format(startDatePicker.getModel().getValue()), dateFormat.format(dueDatePicker.getModel().getValue()));
+	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), 
+	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
+	    					  dateFormat.format(dueDatePicker.getModel().getValue()), 
+	    					  projectManagers.get(managerBox.getSelectedIndex()).getId(), 1);
 			    		setVisible(false); 
 	    		  }
 	    	  }

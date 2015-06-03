@@ -33,7 +33,7 @@ public class Project
 	 * Won't change project's ID
 	 * @return a boolean stating if the changes were successful
 	 */
-	public boolean editProject(String newName, String newStartDate, String newDueDate /*, int newPMID*/)
+	public boolean editProject(String newName, String newStartDate, String newDueDate , int newPMID, int roleID)
 	{
 		if(newName != null && this.name != newName)
 		{
@@ -50,11 +50,8 @@ public class Project
 			DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
 		}
 		
-		/*
-		if(newPMID != 0 && this.projectManagerID != newPMID)
-		{
-			this.setProjectManagerID(newPMID);
-		}*/
+		
+		DataManager.editProjectUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB, newPMID, this.id, roleID);
 		
 		return true;
 	}
