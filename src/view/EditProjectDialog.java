@@ -95,6 +95,19 @@ public class EditProjectDialog extends JDialog
 	  projectName.setPreferredSize(new Dimension(200,30));
 	  panName.add(projectName);
 	  
+	//Project Manager
+	  JPanel panManager = new JPanel();
+	  panManager.setBackground(Color.white);
+	  panManager.setPreferredSize(new Dimension(220, 60));
+	  
+	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  String[] projectManagerNames = new String[projectManagers.size()];
+	  for(int i = 0; i < projectManagerNames.length; i++){
+		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
+	  }
+	  managerBox = new JComboBox<String>(projectManagerNames);
+	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
+	  panManager.add(managerBox);
 	  
 	//Start Date
 	  JPanel panStartDate = new JPanel();
@@ -115,20 +128,6 @@ public class EditProjectDialog extends JDialog
 	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	  panDueDate.add(dueDatePicker);
-	  
-	  //Project Manager
-	  JPanel panManager = new JPanel();
-	  panManager.setBackground(Color.white);
-	  panManager.setPreferredSize(new Dimension(220, 60));
-	  
-	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
-	  String[] projectManagerNames = new String[projectManagers.size()];
-	  for(int i = 0; i < projectManagerNames.length; i++){
-		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
-	  }
-	  managerBox = new JComboBox<String>(projectManagerNames);
-	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
-	  panManager.add(managerBox);
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Edit Project");
@@ -177,9 +176,9 @@ public class EditProjectDialog extends JDialog
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
 	  content.add(panName);
+	  content.add(panManager);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
-	  content.add(panManager);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
