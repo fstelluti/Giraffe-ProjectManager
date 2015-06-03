@@ -636,7 +636,7 @@ public class DataManager
 					+ "duedate = '" + dueDate+"' "
 					+ "WHERE id = "+id+"; "
 					+" UPDATE USERROLES SET "
-					+ "userid = '" + projectManagerID+"' "
+					+ "userid = " + projectManagerID+" "
 					+ "WHERE projectid = "+id;
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -757,7 +757,7 @@ public class DataManager
 
 			stmt = c.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT * FROM PROJECTS WHERE WHERE NAME = '"
+					.executeQuery("SELECT * FROM PROJECTS WHERE NAME = '"
 							+ projectName + "'"
 							+ ";");
 			while (rs.next())
@@ -766,7 +766,7 @@ public class DataManager
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				int projectManagerID = rs.getInt("projectManagerID");
+				int projectManagerID = 0; // This needs to be removed when fixing project model
 				project = new Project(id, name, startDate, dueDate,
 						projectManagerID);
 			}
@@ -936,13 +936,13 @@ public class DataManager
 
 			stmt = c.createStatement();
 			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
-					+ "VALUES ( '"
+					+ "VALUES ( "
 					+ userID
-					+ "', '"
+					+ ", "
 					+ projectID
-					+ "', '"
+					+ ", "
 					+ roleID
-					+ "')";
+					+ ")";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
