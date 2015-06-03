@@ -15,17 +15,15 @@ public class Project
 {
 	private int id;
 	private String name;
-	private int projectManagerID;
 	private Date startDate, dueDate;
 	
 	public Project(){}
 	
 	//Will probably have more arguments
-	public Project(int id, String name, Date startDate, Date dueDate, int projectManagerID)
+	public Project(int id, String name, Date startDate, Date dueDate)
 	{
 		this.id = id;
 		this.name = name;
-		this.projectManagerID = projectManagerID;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 	}
@@ -78,10 +76,6 @@ public class Project
 		return name;
 	}
 	
-	public int getProjectManager(){
-		return projectManagerID;
-	}
-	
 	public Date getStartDate(){
 		return startDate;
 	}
@@ -95,10 +89,6 @@ public class Project
 	public void setProjectName(String newName){
 		this.name = newName;
 		EditProjectDataManager.updateProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
-	}
-	
-	public void setProjectManagerID(int newPMID){
-		this.projectManagerID = newPMID;
 	}
 	
 	public void setStartDate(Date newDate){

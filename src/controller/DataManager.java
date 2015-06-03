@@ -598,9 +598,7 @@ public class DataManager
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));
 				Date dueDate = dateFormat.parse(rs.getString(4));
-				int projectManagerID = rs.getInt(5);
-				project = new Project(id, name, startDate, dueDate,
-						projectManagerID);
+				project = new Project(id, name, startDate, dueDate);
 				projects.add(project);
 			}
 			rs.close();
@@ -686,9 +684,7 @@ public class DataManager
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));
 				Date dueDate = dateFormat.parse(rs.getString(4));
-				int projectManagerID = rs.getInt(5);
-				project = new Project(id, name, startDate, dueDate,
-						projectManagerID);
+				project = new Project(id, name, startDate, dueDate);
 				projects.add(project);
 			}
 			rs.close();
@@ -725,9 +721,7 @@ public class DataManager
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				int projectManagerID = rs.getInt("projectManagerID");
-				project = new Project(id, name, startDate, dueDate,
-						projectManagerID);
+				project = new Project(id, name, startDate, dueDate);
 			}
 			rs.close();
 			stmt.close();
@@ -766,9 +760,7 @@ public class DataManager
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				int projectManagerID = 0; // This needs to be removed when fixing project model
-				project = new Project(id, name, startDate, dueDate,
-						projectManagerID);
+				project = new Project(id, name, startDate, dueDate);
 			}
 			rs.close();
 			stmt.close();
