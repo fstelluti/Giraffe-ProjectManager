@@ -153,7 +153,8 @@ public class EditProjectDialog extends JDialog
 	    						  + "\nNew Due Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  	//SQL EDIT PROJECT METHOD CALL GOES HERE
+	    			  //Call the editing Method of a given project
+	    			  // TODO change ROLEID (last parameter of the call)
 	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), 
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()), 

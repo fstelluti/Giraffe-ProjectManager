@@ -1094,6 +1094,13 @@ public class DataManager
 		}
 	}
 	
+	/**
+	 * Edit Project Manager role
+	 * @param connectionString as a String
+	 * @param userID as an integer
+	 * @param projectID	as an integer
+	 * @param roleID as an integer
+	 */
 	public static void editProjectUserRole(String connectionString,
 			int userID, int projectID, int roleID)
 	{

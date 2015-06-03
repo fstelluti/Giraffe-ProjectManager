@@ -30,30 +30,17 @@ public class Project
 	
 	/**
 	 * Edit a Project
-	 * Won't change project's ID
 	 * @return a boolean stating if the changes were successful
 	 */
-	public boolean editProject(String newName, String newStartDate, String newDueDate , int newPMID, int roleID)
+	public void editProject(String newName, String newStartDate, String newDueDate , int newPMID, int roleID)
 	{
-		if(newName != null && this.name != newName)
-		{
-			DataManager.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
-		}
+		DataManager.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
 		
-		if(newStartDate != null)
-		{
-			DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
-		}
-		
-		if(newDueDate != null)
-		{
-			DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
-		}
-		
+		DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
+
+		DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
 		
 		DataManager.editProjectUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB, newPMID, this.id, roleID);
-		
-		return true;
 	}
 	
 	/**
