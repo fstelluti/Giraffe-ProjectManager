@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -132,6 +133,7 @@ public class AddActivityDialog extends JDialog
 	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
 			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	  
+	  final List<JPanel> dependList = new ArrayList<JPanel>();
 	  //This button is used to dynamically add dependent fields
 	  JButton addDependentButton = new JButton("Add Dependent");
 	  addDependentButton.addActionListener(new ActionListener(){
@@ -162,6 +164,7 @@ public class AddActivityDialog extends JDialog
 	    	    	  panDependArea.repaint();
 	    	    	  panDependArea.revalidate();
 	    	    	  scrollPanDependArea.repaint();
+	    	    	  dependList.remove(panDepend);
 	    	      }      
 	    	  });
 	    	  
@@ -169,6 +172,7 @@ public class AddActivityDialog extends JDialog
 	    	  panDependArea.add(panDepend);
 	    	  panDependArea.repaint();
 	    	  panDependArea.revalidate();
+	    	  dependList.add(panDepend);
 	    	  
 	    	 
 	    	  //On change of project removes all dependents
@@ -259,10 +263,13 @@ public class AddActivityDialog extends JDialog
 		    		  Activity activity = DataManager.getActivityByNameAndProjectID(
 		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
 		    		  
-		    		  //SUPPOSED to iterate through all dependents but only iterates through first one (choses first dependBox only)
-		    		  for (Component j : panDependArea.getComponents()){
-		    				  DataManager.insertIntoTablePredecessors(DatabaseConstants.PROJECT_MANAGEMENT_DB, 
-		    						  activity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
+		    		  //Iterates through all dependents and adds them to the DB
+		    		  Component[] components = panDependArea.getComponents();
+		    		  for (int i = 0; i < components.length; i++){
+		    			  JPanel dependPanel = (JPanel) components[i];
+			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
+			    		  DataManager.insertIntoTablePredecessors(DatabaseConstants.PROJECT_MANAGEMENT_DB, 
+			    				  activity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
 		    		  }
 		    		  setVisible(false); 
 	    		  }
