@@ -153,7 +153,7 @@ public class EditProjectDialog extends JDialog
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  //Call the editing Method of a given project
-	    			  // TODO change ROLEID (last parameter of the call)
+	    			  // TODO change ROLEID (last parameter of the call) - This is already implemented in the DataManager.editProjectByID
 	    			  projects.get(projectBox.getSelectedIndex()).editProject(projectName.getText(), 
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()), 
