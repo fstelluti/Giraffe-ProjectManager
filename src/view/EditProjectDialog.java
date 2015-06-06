@@ -35,6 +35,8 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import controller.DataManager;
 import controller.DatabaseConstants;
+import controller.ProjectDB;
+import controller.UserDB;
 
 @SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
@@ -75,7 +77,7 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = DataManager.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
 		  projectNames[i] = projects.get(i).getProjectName();
@@ -100,7 +102,7 @@ public class EditProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<User> projectManagers = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
 		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();

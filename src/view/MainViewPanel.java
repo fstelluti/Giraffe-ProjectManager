@@ -17,6 +17,7 @@ import javax.swing.table.TableModel;
 
 import controller.DataManager;
 import controller.DatabaseConstants;
+import controller.ProjectDB;
 import model.User;
 
 @SuppressWarnings("serial")
@@ -115,7 +116,7 @@ public class MainViewPanel extends JPanel
 		if (splitPanel == null)
 		{
 			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-			splitPanel.setLeftComponent(new TreePanel(DataManager
+			splitPanel.setLeftComponent(new TreePanel(ProjectDB
 					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 							this.user.getId())).getTreeView());
 			splitPanel.setRightComponent(new GridProjects(this.user));

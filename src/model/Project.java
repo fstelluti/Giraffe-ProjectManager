@@ -4,6 +4,7 @@ import java.util.Date;
 
 import controller.DatabaseConstants;
 import controller.DataManager;
+import controller.ProjectDB;
 
 /**
  * Create a project.
@@ -34,13 +35,13 @@ public class Project
 	 */
 	public void editProject(String newName, String newStartDate, String newDueDate , int newPMID, int roleID)
 	{
-		DataManager.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
+		ProjectDB.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
 		
-		DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
+		ProjectDB.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
 
-		DataManager.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
+		ProjectDB.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
 		
-		DataManager.editProjectUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB, newPMID, this.id, roleID);
+		ProjectDB.editProjectUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB, newPMID, this.id, roleID);
 	}
 	
 	/**

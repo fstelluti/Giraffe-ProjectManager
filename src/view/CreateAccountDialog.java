@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import model.User;
 import controller.DataManager;
 import controller.DatabaseConstants;
+import controller.UserDB;
 
 ///THIS CLASS IS NOT FINISHED YET - Andrey Uspenskiy
 public class CreateAccountDialog extends JDialog
@@ -150,7 +151,7 @@ public class CreateAccountDialog extends JDialog
 			{
 				if(isInputValid())
 				{
-					DataManager.insertIntoTableUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB, userName.getText().trim(), getPassword(userPassword.getPassword()), email.getText(), firstName.getText(), lastName.getText());
+					UserDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB, userName.getText().trim(), getPassword(userPassword.getPassword()), email.getText(), firstName.getText(), lastName.getText());
 				}
 				
 			}
@@ -201,7 +202,7 @@ public class CreateAccountDialog extends JDialog
 	}
 	private boolean isInputValid()
 	{
-		List<User> users = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		List<User> users = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 		for (User user : users)
 		{
 			if (user.getEmail().equals(email.getText().trim()))

@@ -15,6 +15,9 @@ import org.junit.Test;
 import controller.DataManager;
 
 import java.util.List;
+
+import javax.annotation.PreDestroy;
+
 import model.User;
 import model.Activity;
 import model.Project;
@@ -45,12 +48,12 @@ public class DataManagerTest {
 		// Create database using create methods in DataManager
 		// Cheating, sort of, but correct output will be tested in other tests anyway so no big deal (?)
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
-		DataManager.createTableUsers(CONNECTION);
-		DataManager.createTableActivities(CONNECTION);
-		DataManager.createTableProjects(CONNECTION);
-		DataManager.createTablePredecessors(CONNECTION);
-		DataManager.createTableUserRoles(CONNECTION);
-		DataManager.createTableUserRolesDict(CONNECTION);
+		UserDB.create(CONNECTION);
+		ActivityDB.create(CONNECTION);
+		ProjectDB.create(CONNECTION);
+		PredecessorDB.create(CONNECTION);
+		UserRolesDB.create(CONNECTION);
+		UserRolesDictDB.create(CONNECTION);
 		
 		// Create fixtures
 		String userFixtureQuery = "INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES ('testUser1', 'password1', 'test1@email.com', 'Test1', 'User1');"
@@ -138,10 +141,10 @@ public class DataManagerTest {
 	@Test
 	public void checkedLoginShouldBeValid() {
 		// Test four conditions
-		boolean validUserPass = DataManager.checkLogin(CONNECTION, "testUser1", "password1".toCharArray());
-		boolean validUser = DataManager.checkLogin(CONNECTION, "testUser1", "assword1".toCharArray());
-		boolean validPass = DataManager.checkLogin(CONNECTION, "pestUser1", "password1".toCharArray());
-		boolean invalidUserPass = DataManager.checkLogin(CONNECTION, "pestUser1", "assword1".toCharArray());
+		boolean validUserPass = UserDB.checkLogin(CONNECTION, "testUser1", "password1".toCharArray());
+		boolean validUser = UserDB.checkLogin(CONNECTION, "testUser1", "assword1".toCharArray());
+		boolean validPass = UserDB.checkLogin(CONNECTION, "pestUser1", "password1".toCharArray());
+		boolean invalidUserPass = UserDB.checkLogin(CONNECTION, "pestUser1", "assword1".toCharArray());
 		
 		// Assert 'em
 		assertTrue("Valid user/pass failed!", validUserPass);
@@ -235,7 +238,7 @@ public class DataManagerTest {
 	// Tests DataManager.insertIntoTableUsers()
 	@Test
 	public void insertedUserShouldMatchData() {
-		DataManager.insertIntoTableUsers(CONNECTION, "testDummy", "trustno1", "test@dummy.com", "Test", "Dummy");
+		UserDB.insert(CONNECTION, "testDummy", "trustno1", "test@dummy.com", "Test", "Dummy");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -299,7 +302,7 @@ public class DataManagerTest {
 	// Tests DataManager.getAllUsers()
 	@Test
 	public void returnedUsersShouldBeValid() {
-		List<User> users = DataManager.getAllUsers(CONNECTION);
+		List<User> users = UserDB.getAll(CONNECTION);
 		for (User user : users) {
 			int id = user.getId();
 			boolean usernameExists = user.getUserName() != null && !user.getUserName().isEmpty();
@@ -318,7 +321,7 @@ public class DataManagerTest {
 	// Tests DataManager.getUserById()
 	@Test
 	public void returnedUserByIdShouldMatch() {
-		User user = DataManager.getUserById(CONNECTION, 1);
+		User user = UserDB.getById(CONNECTION, 1);
 		int id = user.getId();
 		boolean condition = (id == 1);
 		assertTrue("The returned user ID does not match requested user ID!", condition);
@@ -327,7 +330,7 @@ public class DataManagerTest {
 	// Tests DataManager.getUserByUserName()
 	@Test
 	public void returnedUserByNameShouldMatch() {
-		User user = DataManager.getUserByUserName(CONNECTION, "testUser1");
+		User user = UserDB.getByName(CONNECTION, "testUser1");
 		String username = user.getUserName().trim();
 		boolean condition = username.equals("testUser1");
 		assertTrue("The returned username does not match the requested username!", condition);
@@ -415,7 +418,7 @@ public class DataManagerTest {
 	// Tests DataManager.insertIntoTableActivities()
 	@Test
 	public void insertedActivityShouldMatchData() {
-		DataManager.insertIntoTableActivities(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42);
+		ActivityDB.insert(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -470,7 +473,7 @@ public class DataManagerTest {
 	// Tests DataManager.getProjectActivities()
 	@Test
 	public void returnedActivitiesShouldBeValid() {
-		List<Activity> activities = DataManager.getProjectActivities(CONNECTION, 1337);
+		List<Activity> activities = ActivityDB.getProjectActivities(CONNECTION, 1337);
 		int counter = 0;
 		for (Activity activity : activities) {
 			++counter;
@@ -494,7 +497,7 @@ public class DataManagerTest {
 	// Tests DataManager.getActivityById()
 	@Test
 	public void returnedActivityByIdShouldMatch() {
-		Activity activity = DataManager.getActivityById(CONNECTION, 1);
+		Activity activity = ActivityDB.getById(CONNECTION, 1);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
@@ -503,7 +506,7 @@ public class DataManagerTest {
 	// Tests DataManager.getActivityByNameAndProjectId()
 	@Test
 	public void returnedActivityByNameAndProjectIdShouldMatch() {
-		Activity activity = DataManager.getActivityByNameAndProjectID(CONNECTION, "activity1", 1337);
+		Activity activity = ActivityDB.getByNameAndProjectId(CONNECTION, "activity1", 1337);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
@@ -579,7 +582,7 @@ public class DataManagerTest {
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
 	public void insertedProjectShouldMatchData() {
-		DataManager.insertIntoTableProjects(CONNECTION, "testProject", "1969-12-31", "1970-01-01");
+		ProjectDB.insert(CONNECTION, "testProject", "1969-12-31", "1970-01-01");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -633,7 +636,7 @@ public class DataManagerTest {
 	// Tests DataManager.getProjects()
 	@Test
 	public void returnedProjectsShouldBeValid() {
-		List<Project> projects = DataManager.getProjects(CONNECTION);
+		List<Project> projects = ProjectDB.getAll(CONNECTION);
 		int counter = 0;
 		for (Project project : projects) {
 			++counter;
@@ -652,7 +655,7 @@ public class DataManagerTest {
 	// Tests DataManager.getProjectById()
 	@Test
 	public void returnedProjectByIdShouldMatch() {
-		Project project = DataManager.getProjectById(CONNECTION, 1);
+		Project project = ProjectDB.getById(CONNECTION, 1);
 		int id = -1;
 		try {
 			id = project.getProjectid();
@@ -721,7 +724,7 @@ public class DataManagerTest {
 	// Tests DataManager.insertIntoTablePredecessors()
 	@Test
 	public void insertedPredecessorShouldMatchData() {
-		DataManager.insertIntoTablePredecessors(CONNECTION, 42, 1337);
+		PredecessorDB.insert(CONNECTION, 42, 1337);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -768,7 +771,7 @@ public class DataManagerTest {
 	public void returnedPredecessorsShouldBeValid() {
 		int counter = 0;
 		int id = 1;
-		List<Activity> activities = DataManager.getPredecessors(CONNECTION, id);
+		List<Activity> activities = PredecessorDB.getPredecessors(CONNECTION, id);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

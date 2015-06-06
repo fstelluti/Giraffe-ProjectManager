@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
+import controller.ActivityDB;
 import controller.DataManager;
 import controller.DatabaseConstants;
 import model.Activity;
@@ -34,7 +35,7 @@ public class TreePanel
 		{
 			projectNode = new TreeNode(project.getProjectName());
 			root.add(projectNode);
-			List<Activity> activities = DataManager.getProjectActivities(
+			List<Activity> activities = ActivityDB.getProjectActivities(
 					DatabaseConstants.PROJECT_MANAGEMENT_DB,
 					project.getProjectid());
 			for (Activity activity : activities)

@@ -34,6 +34,9 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import controller.DataManager;
 import controller.DatabaseConstants;
+import controller.ProjectDB;
+import controller.UserDB;
+import controller.UserRolesDB;
 
 @SuppressWarnings("serial")
 public class CreateProjectDialog extends JDialog 
@@ -82,7 +85,7 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  final List<User> projectManagers = DataManager.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<User> projectManagers = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
 		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
@@ -117,7 +120,7 @@ public class CreateProjectDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Checks if the project already exists
-	    	  List<Project> projects = DataManager.getProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	    	  List<Project> projects = ProjectDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
     		  for(Project project:projects){
 	    		  if(projectName.getText().equals(project.getProjectName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -143,18 +146,18 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  DataManager.insertIntoTableProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+	    			  ProjectDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()));
 	    			  
 	    			  //Gets id of project just created
-		    		  Project project = DataManager.getProjectByName(
+		    		  Project project = ProjectDB.getByName(
 		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectName.getText());
 		    		  
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
-		    		  DataManager.insertIntoTableUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+		    		  UserRolesDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectid(), 1);
 			    		  setVisible(false); 
 			    		  
