@@ -113,7 +113,7 @@ public class ProjectDB extends DataManager
 		return projects;
 	}
 	
-	public static void editProjectByID(String connectionString, int id,
+	public static void editProjectById(String connectionString, int id,
 			String name, String startDate, String dueDate, int projectManagerID)
 	{
 		Connection c = null;

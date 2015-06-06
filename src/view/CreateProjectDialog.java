@@ -158,7 +158,7 @@ public class CreateProjectDialog extends JDialog
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
 		    		  UserRolesDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectid(), 1);
+		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectId(), 1);
 			    		  setVisible(false); 
 			    		  
 	    		  }

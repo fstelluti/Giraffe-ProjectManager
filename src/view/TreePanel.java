@@ -37,7 +37,7 @@ public class TreePanel
 			root.add(projectNode);
 			List<Activity> activities = ActivityDB.getProjectActivities(
 					DatabaseConstants.PROJECT_MANAGEMENT_DB,
-					project.getProjectid());
+					project.getProjectId());
 			for (Activity activity : activities)
 			{
 				treeNode = new TreeNode(activity.getActivityName());

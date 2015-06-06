@@ -146,7 +146,7 @@ public class AddActivityDialog extends JDialog
 	    	  panDepend.setBackground(Color.white);
 	    	  panDepend.setPreferredSize(new Dimension(465, 60));
 	    	  final List<Activity> activities = ActivityDB.getProjectActivities(
-	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    	  String[] activityNames = new String[activities.size()];
 	    	  for(int i = 0; i < activityNames.length; i++){
 	    		  activityNames[i] = activities.get(i).getActivityName();
@@ -202,10 +202,10 @@ public class AddActivityDialog extends JDialog
 	    	  Date projectStartDate = projects.get(projectBox.getSelectedIndex()).getStartDate();
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
-	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectid();
+	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
 	    	  
 	    	  //Checks if the activity already exists
-	    	  List<Activity> activities = ActivityDB.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectid());
+	    	  List<Activity> activities = ActivityDB.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectId());
     		  for(Activity activity:activities){
 	    		  if(activityName.getText().equals(activity.getActivityName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -256,7 +256,7 @@ public class AddActivityDialog extends JDialog
 	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 		    		  ActivityDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-			    				 projects.get(projectBox.getSelectedIndex()).getProjectid(),
+			    				 projects.get(projectBox.getSelectedIndex()).getProjectId(),
 			    				 activityName.getText(), 
 			    				 dateFormat.format(activityStartDate),
 			    				 dateFormat.format(activityDueDate),

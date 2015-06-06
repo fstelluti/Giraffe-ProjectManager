@@ -30,21 +30,6 @@ public class Project
 	}
 	
 	/**
-	 * Edit a Project
-	 * @return a boolean stating if the changes were successful
-	 */
-	public void editProject(String newName, String newStartDate, String newDueDate , int newPMID, int roleID)
-	{
-		ProjectDB.editProjectName(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newName);
-		
-		ProjectDB.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newStartDate);
-
-		ProjectDB.editProjectDueDate(DatabaseConstants.PROJECT_MANAGEMENT_DB, this.id, newDueDate);
-		
-		ProjectDB.editProjectUserRole(DatabaseConstants.PROJECT_MANAGEMENT_DB, newPMID, this.id, roleID);
-	}
-	
-	/**
 	 * Delete project
 	 */
 	public void deleteProject(Project project)
@@ -53,7 +38,7 @@ public class Project
 	}
 	
 	// Getters
-	public int getProjectid() {
+	public int getProjectId() {
 		return id;
 	}
 	
