@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -34,7 +36,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import controller.ActivityDB;
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.PredecessorDB;
 import controller.ProjectDB;
@@ -131,10 +132,12 @@ public class AddActivityDialog extends JDialog
 	  
 	  //This creates an area to add dependents, this area created so it can be iterated later to add dependencies to table
 	  final JPanel panDependArea = new JPanel();
-	  panDependArea.setPreferredSize(new Dimension(465, 200));
 	  panDependArea.setBackground(Color.white);
+	  panDependArea.setLayout(new BoxLayout(panDependArea, BoxLayout.Y_AXIS));
+	  
 	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
 			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	  scrollPanDependArea.setPreferredSize(new Dimension(465, 200));
 	  
 	  final List<JPanel> dependList = new ArrayList<JPanel>();
 	  //This button is used to dynamically add dependent fields
@@ -144,7 +147,7 @@ public class AddActivityDialog extends JDialog
 	    	  
 	    	  final JPanel panDepend = new JPanel();
 	    	  panDepend.setBackground(Color.white);
-	    	  panDepend.setPreferredSize(new Dimension(465, 60));
+	    	  panDepend.setPreferredSize(new Dimension(445, 60));
 	    	  final List<Activity> activities = ActivityDB.getProjectActivities(
 	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    	  String[] activityNames = new String[activities.size()];
@@ -166,7 +169,6 @@ public class AddActivityDialog extends JDialog
 	    	    	  panDependArea.remove(panDepend);
 	    	    	  panDependArea.repaint();
 	    	    	  panDependArea.revalidate();
-	    	    	  scrollPanDependArea.repaint();
 	    	    	  dependList.remove(panDepend);
 	    	      }      
 	    	  });
@@ -285,6 +287,7 @@ public class AddActivityDialog extends JDialog
 	        setVisible(false);
 	      }      
 	    });
+	  
 	  control.add(okButton);
 	  control.add(cancelButton);
 	  content.setBackground(Color.white);
@@ -295,6 +298,7 @@ public class AddActivityDialog extends JDialog
 	  content.add(panDueDate);
 	  content.add(addDependentButton);
 	  content.add(scrollPanDependArea);
+	  
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
