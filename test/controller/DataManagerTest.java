@@ -640,7 +640,7 @@ public class DataManagerTest {
 		int counter = 0;
 		for (Project project : projects) {
 			++counter;
-			int id = project.getProjectid();
+			int id = project.getProjectId();
 			boolean nameExists = project.getProjectName() != null && !project.getProjectName().isEmpty();
 			boolean startDateExists = project.getStartDate() != null;
 			boolean dueDateExists = project.getDueDate() != null;
@@ -658,7 +658,7 @@ public class DataManagerTest {
 		Project project = ProjectDB.getById(CONNECTION, 1);
 		int id = -1;
 		try {
-			id = project.getProjectid();
+			id = project.getProjectId();
 		} catch (NullPointerException e) {
 			fail("No ProjectID was returned, expected returned project with ID 1!");
 		}
