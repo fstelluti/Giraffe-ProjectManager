@@ -23,6 +23,5 @@ public class GridProjects extends JPanel
 	{
 		this.user = user;
 		grid = new JTable();
-		projects = new ArrayList<Project>();
 	}
 }
