@@ -33,10 +33,10 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 import controller.UserDB;
+import controller.UserRolesDB;
 
 @SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
@@ -50,6 +50,7 @@ public class EditProjectDialog extends JDialog
 	 private Properties p = new Properties();
 	 boolean exists;
 	 private User user;
+	 private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
   public EditProjectDialog(JFrame parent, String title, boolean modal, User currentUser)
   {
@@ -77,7 +78,7 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = ProjectDB.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
 		  projectNames[i] = projects.get(i).getProjectName();
@@ -88,12 +89,13 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.add(projectLabel);
 	  panProjectName.add(projectBox);
 	  
+	  //Rename Project Name Box
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
 	  panName.setPreferredSize(new Dimension(220, 60));
 	  projectName = new JTextField();
 	  projectName.setPreferredSize(new Dimension(100, 25));
-	  panName.setBorder(BorderFactory.createTitledBorder("New Project Name"));
+	  panName.setBorder(BorderFactory.createTitledBorder("New Project Name (Optional)"));
 	  projectName.setPreferredSize(new Dimension(200,30));
 	  panName.add(projectName);
 	  
@@ -102,7 +104,7 @@ public class EditProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  final List<User> projectManagers = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<User> projectManagers = UserDB.getAll(connectionString);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
 		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
@@ -131,14 +133,35 @@ public class EditProjectDialog extends JDialog
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	  panDueDate.add(dueDatePicker);
 	  
+	  //Set Content to project selection
+	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  startModel.setValue(currentProject.getStartDate());
+	  dueModel.setValue(currentProject.getDueDate());
+	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
+	  managerBox.setSelectedIndex(projectManagerID - 1);
+	  
+	  
+	  //On change of project Set Content to project selection
+	  projectBox.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	    	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  startModel.setValue(currentProject.getStartDate());
+	    	  dueModel.setValue(currentProject.getDueDate());
+	    	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
+	    	  User projectManager = UserDB.getById(connectionString, projectManagerID);
+	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
+	    	  content.repaint();
+	    	  content.revalidate();
+	      }      
+	  });
+	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Edit Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
-	    	  if(projectName.getText().hashCode() == 0 
-	    			  || startDatePicker.getModel().getValue() == null
+	    	  if(startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null){
 	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
@@ -147,17 +170,25 @@ public class EditProjectDialog extends JDialog
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
+	    		  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+    			  String rename = (projectName.getText().length() > 0 ) ? projectName.getText() : currentProject.getProjectName();
+	    		  
 	    		  int response = JOptionPane.showConfirmDialog(content,
-	    				  "Are you sure you want to edit the following Project?\n"
-	    						  + "\nNew Project Name: " + projectName.getText()
-	    						  + "\nNew Start Date: "+dateFormat.format(startDatePicker.getModel().getValue())
-	    						  + "\nNew Due Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
+	    				  "Are you sure you want to edit the following Project: \n"
+	    						  + "\nProject Name: " + currentProject.getProjectName()
+	    						  + "\nStart Date: "+ dateFormat.format(currentProject.getStartDate())
+	    						  + "\nDue Date: "+ dateFormat.format(currentProject.getDueDate())
+	    						  +  "\n\nWith the following modifications: \n"
+	    						  + "\nProject Name: " + rename
+	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
+	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
+	    			  
 	    			  //Call the editing Method of a given project
 	    			  ProjectDB.editProjectById(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 	    					  projects.get(projectBox.getSelectedIndex()).getProjectId(),
-	    					  projectName.getText(),
+	    					  rename,
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()),
 	    					  projectManagers.get(managerBox.getSelectedIndex()).getId());

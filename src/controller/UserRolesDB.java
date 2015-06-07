@@ -1,8 +1,12 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
+
+import model.Project;
 
 public class UserRolesDB extends DataManager
 {
@@ -68,5 +72,34 @@ public class UserRolesDB extends DataManager
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
+		}
+		
+		public static int getProjectManagerIDByProjectID(String connectionString, int id)
+		{
+			int projectManagerID = 0;
+			Connection c = null;
+			Statement stmt = null;
+			try
+			{
+				c = getConnection(connectionString);
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				ResultSet rs = stmt
+						.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
+				projectManagerID = rs.getInt("USERID");
+				rs.close();
+				stmt.close();
+				c.close();
+			}
+			catch (SQLException e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			catch (Exception e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			return projectManagerID;
 		}
 }
