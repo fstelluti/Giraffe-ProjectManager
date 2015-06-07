@@ -57,6 +57,7 @@ public class AddActivityDialog extends JDialog
   Properties p = new Properties();
   private boolean exists;
   private User user;
+  private boolean refresh = false;
   
 
   
@@ -274,6 +275,8 @@ public class AddActivityDialog extends JDialog
 			    				 dateFormat.format(activityDueDate),
 			    				 statusBox.getSelectedIndex());
 		    		  
+		    		  refresh = true;
+		    		  
 		    		  //Gets id of activity just created
 		    		  Activity activity = ActivityDB.getByNameAndProjectId(
 		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
@@ -312,5 +315,11 @@ public class AddActivityDialog extends JDialog
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
+  }
+  
+  public boolean isRefresh()
+  {
+	  return refresh;
+	  
   }
 }

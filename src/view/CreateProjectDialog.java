@@ -49,6 +49,7 @@ public class CreateProjectDialog extends JDialog
  private UtilDateModel dueModel = new UtilDateModel();
  private Properties p = new Properties();
  boolean exists;
+ boolean refresh = false;
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal)
   {
@@ -159,6 +160,7 @@ public class CreateProjectDialog extends JDialog
 		    		  //Sets initial project manager for project
 		    		  UserRolesDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectId(), 1);
+		    		  refresh = true;
 			    		  setVisible(false); 
 			    		  
 	    		  }
@@ -182,5 +184,10 @@ public class CreateProjectDialog extends JDialog
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
+  }
+  
+  public boolean isRefresh()
+  {
+	  return refresh;
   }
 }

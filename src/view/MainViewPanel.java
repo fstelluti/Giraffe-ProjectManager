@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 import javax.swing.event.TableModelListener;
@@ -25,9 +26,9 @@ import model.User;
 public class MainViewPanel extends JPanel
 {
 	private JPanel northPanel;
-	private JPanel centerPanel;
+	private JScrollPane treeView;
 	private JPanel southPanel;
-	private JSplitPane splitPanel;
+	public JSplitPane splitPanel;
 	private User user;
 	private GreetingLabel greetingLabel;
 	private JButton createProject, editProject, addActivity;
@@ -61,6 +62,10 @@ public class MainViewPanel extends JPanel
 				{
 					CreateProjectDialog test = new CreateProjectDialog(null,
 							"Create a Project", true);
+					if(test.isRefresh())
+					{
+						refresh();
+					}
 				}
 			}
 		});
@@ -96,6 +101,10 @@ public class MainViewPanel extends JPanel
 				{
 					AddActivityDialog test = new AddActivityDialog(null,
 							"Add an activity", true, user);
+					if(test.isRefresh())
+					{
+						refresh();
+					}
 				}
 			}
 		});
@@ -124,10 +133,27 @@ public class MainViewPanel extends JPanel
 	{
 		if (splitPanel == null)
 		{
-			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-			splitPanel.setLeftComponent(new TreePanel(ProjectDB
+			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT){
+
+			    private final int location = 150;
+			    {
+			        setDividerLocation( location );
+			    }
+			    @Override
+			    public int getDividerLocation() {
+			        return location ;
+			    }
+			    @Override
+			    public int getLastDividerLocation() {
+			        return location ;
+			    }
+
+			};
+			
+			treeView = new TreePanel(ProjectDB
 					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-							this.user.getId())).getTreeView());
+							this.user.getId())).getTreeView();
+			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
 		}
 		return splitPanel;
@@ -146,6 +172,14 @@ public class MainViewPanel extends JPanel
 			}
 		}
 		return northPanel;
+	}
+	
+	public void refresh()
+	{
+		getSplitPanel().setLeftComponent(new TreePanel(ProjectDB
+					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+							this.user.getId())).getTreeView());
+		getSplitPanel().setDividerLocation(150);
 	}
 
 	public User getCurrentUser()
