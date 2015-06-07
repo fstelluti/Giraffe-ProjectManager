@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
@@ -30,6 +31,7 @@ public class MainViewPanel extends JPanel
 	private User user;
 	private GreetingLabel greetingLabel;
 	private JButton createProject, editProject, addActivity;
+	private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
 
@@ -71,8 +73,15 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editProject)
 				{
-					EditProjectDialog test = new EditProjectDialog(null,
-							"Edit a Project", true, user);
+					if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
+						JOptionPane.showMessageDialog(null,"User has no projects to edit."
+								+ "\nPlease create a project before attempting to edit.", 
+								"No Projects Available to Edit", JOptionPane.ERROR_MESSAGE);
+					}
+					else{
+						EditProjectDialog test = new EditProjectDialog(null,
+								"Edit a Project", true, user);
+					}
 				}
 			}
 		});
