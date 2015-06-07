@@ -2,10 +2,6 @@ package model;
 
 import java.util.Date;
 
-import controller.DatabaseConstants;
-import controller.DataManager;
-import controller.ProjectDB;
-
 /**
  * Create a project.
  * Possibility of editing it.

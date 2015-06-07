@@ -3,15 +3,11 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -19,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,11 +23,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.User;
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.UserDB;
 
-///THIS CLASS IS NOT FINISHED YET - Andrey Uspenskiy
+//Andrey Uspenskiy
 public class CreateAccountDialog extends JDialog
 {
 	private JTextField userName, email, firstName, lastName;
@@ -41,7 +35,6 @@ public class CreateAccountDialog extends JDialog
 	private JButton openFileButton;
 	private JLabel fileChooserLabel, imageLabel;
 	private JPanel imagePanel;
-	// private JFormattedTextField dueDate, startDate;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public CreateAccountDialog(JFrame parent, String title, boolean modal)
@@ -76,8 +69,8 @@ public class CreateAccountDialog extends JDialog
 		lastNameContainer.add(lastName);
 
 		openFileButton = new JButton("Open a File...",
-                createImageIcon("images/Open16.gif"));
-		
+				createImageIcon("images/Open16.gif"));
+
 		JPanel fileChooserContainer = new JPanel();
 		fileChooserContainer.setBackground(Color.white);
 		fileChooserContainer.setPreferredSize(new Dimension(430, 60));
@@ -88,18 +81,20 @@ public class CreateAccountDialog extends JDialog
 		fileChooserContainer.add(openFileButton);
 		imagePanel = new JPanel();
 		openFileButton.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				int choice = userPicChooser.showOpenDialog(null);
-				if (choice == JFileChooser.APPROVE_OPTION) {
-	                File file = userPicChooser.getSelectedFile();
-	                String sname = file.getAbsolutePath();
-	                imageLabel = new JLabel("", new ImageIcon(sname), JLabel.CENTER);
-	                imagePanel.add(imageLabel, BorderLayout.CENTER);
-	                imagePanel.revalidate();
-	                imagePanel.repaint();
+				if (choice == JFileChooser.APPROVE_OPTION)
+				{
+					File file = userPicChooser.getSelectedFile();
+					String sname = file.getAbsolutePath();
+					imageLabel = new JLabel("", new ImageIcon(sname),
+							JLabel.CENTER);
+					imagePanel.add(imageLabel, BorderLayout.CENTER);
+					imagePanel.revalidate();
+					imagePanel.repaint();
 				}
 			}
 		});
@@ -113,15 +108,14 @@ public class CreateAccountDialog extends JDialog
 		userNameContainer.setBorder(BorderFactory
 				.createTitledBorder("User Name"));
 		userNameContainer.add(userName);
-		
+
 		// Email
 		JPanel emailContainer = new JPanel();
 		emailContainer.setBackground(Color.white);
 		emailContainer.setPreferredSize(new Dimension(220, 60));
 		email = new JTextField();
 		email.setPreferredSize(new Dimension(200, 25));
-		emailContainer.setBorder(BorderFactory
-				.createTitledBorder("Email"));
+		emailContainer.setBorder(BorderFactory.createTitledBorder("Email"));
 		emailContainer.add(email);
 
 		// Password
@@ -149,11 +143,33 @@ public class CreateAccountDialog extends JDialog
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0)
 			{
-				if(isInputValid())
+				if (isInputValid())
 				{
-					UserDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB, userName.getText().trim(), getPassword(userPassword.getPassword()), email.getText(), firstName.getText(), lastName.getText());
+					int response = JOptionPane
+							.showConfirmDialog(
+									null,
+									"Are you sure that you want to create a new account?",
+									"Confirm",
+									JOptionPane.YES_NO_CANCEL_OPTION,
+									JOptionPane.QUESTION_MESSAGE, null);
+					switch (response)
+					{
+						case JOptionPane.CANCEL_OPTION:
+							return;
+						case JOptionPane.NO_OPTION:
+							resetForm();
+							return;
+						case JOptionPane.YES_OPTION:
+							UserDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+									userName.getText().trim(),
+									getPassword(userPassword.getPassword()),
+									email.getText(), firstName.getText(),
+									lastName.getText());
+							setVisible(false);
+							break;
+					}
 				}
-				
+
 			}
 		});
 		JButton cancelButton = new JButton("Cancel");
@@ -180,17 +196,20 @@ public class CreateAccountDialog extends JDialog
 		this.getContentPane().add(content, BorderLayout.CENTER);
 		this.getContentPane().add(control, BorderLayout.SOUTH);
 	}
-	
-	protected static ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = CreateAccountDialog.class.getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Could not find file: " + path);
-            return null;
-        }
-    }
-	
+
+	protected static ImageIcon createImageIcon(String path)
+	{
+		java.net.URL imgURL = CreateAccountDialog.class.getResource(path);
+		if (imgURL != null)
+		{
+			return new ImageIcon(imgURL);
+		} else
+		{
+			System.err.println("Could not find file: " + path);
+			return null;
+		}
+	}
+
 	private String getPassword(char[] pass)
 	{
 		StringBuilder builder = new StringBuilder();
@@ -200,37 +219,54 @@ public class CreateAccountDialog extends JDialog
 		}
 		return builder.toString();
 	}
+
 	private boolean isInputValid()
 	{
-		List<User> users = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		List<User> users = UserDB
+				.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 		for (User user : users)
 		{
 			if (user.getEmail().equals(email.getText().trim()))
 			{
-				JOptionPane.showMessageDialog(null, "A user with e-mail" + email.getText().trim() + " already exists");
+				JOptionPane.showMessageDialog(null, "A user with e-mail"
+						+ email.getText().trim() + " already exists");
 				email.setText("");
 				return false;
 			}
-			
+
 			if (user.getUserName().equals(userName.getText().trim()))
 			{
-				JOptionPane.showMessageDialog(null, "A user with username" + userName.getText().trim() + " already exists");
+				JOptionPane.showMessageDialog(null, "A user with username"
+						+ userName.getText().trim() + " already exists");
 				userName.setText("");
 				return false;
 			}
-			
-			if (!areCharsEqual(userPassword.getPassword(), repeatPassword.getPassword()))
+
+			if (!areCharsEqual(userPassword.getPassword(),
+					repeatPassword.getPassword()))
 			{
-				JOptionPane.showMessageDialog(null, "Passwords do not match. Please try again!");
+				JOptionPane.showMessageDialog(null,
+						"Passwords do not match. Please try again!");
 				userPassword.setText("");
 				repeatPassword.setText("");
 				return false;
+			} else
+			{
+				if (userPassword.getPassword().length == 0
+						&& repeatPassword.getPassword().length == 0)
+				{
+					JOptionPane
+							.showMessageDialog(null,
+									"Password fields are empty. Please enter password!");
+					userPassword.setText("");
+					repeatPassword.setText("");
+					return false;
+				}
 			}
 		}
 		return true;
 	}
-	
-	//not used yet but might be used later
+
 	private void resetForm()
 	{
 		firstName.setText("");
@@ -240,8 +276,8 @@ public class CreateAccountDialog extends JDialog
 		userPassword.setText("");
 		repeatPassword.setText("");
 	}
-	
-	private boolean areCharsEqual (char[] first, char[] second)
+
+	private boolean areCharsEqual(char[] first, char[] second)
 	{
 		if (first.length != second.length)
 		{
@@ -249,7 +285,7 @@ public class CreateAccountDialog extends JDialog
 		}
 		for (int i = 0; i < second.length; i++)
 		{
-			if(first[i] != second[i])
+			if (first[i] != second[i])
 			{
 				return false;
 			}
