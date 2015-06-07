@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -14,8 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -53,6 +57,7 @@ public class AddActivityDialog extends JDialog
   Properties p = new Properties();
   private boolean exists;
   private User user;
+  
 
   
   public AddActivityDialog(JFrame parent, String title, boolean modal, User currentUser)
@@ -140,6 +145,9 @@ public class AddActivityDialog extends JDialog
 	  scrollPanDependArea.setPreferredSize(new Dimension(465, 200));
 	  
 	  final List<JPanel> dependList = new ArrayList<JPanel>();
+	  
+	  final ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
+	  
 	  //This button is used to dynamically add dependent fields
 	  JButton addDependentButton = new JButton("Add Dependent");
 	  addDependentButton.addActionListener(new ActionListener(){
@@ -160,7 +168,9 @@ public class AddActivityDialog extends JDialog
 	    	  panDepend.add(dependLabel);
 	    	  panDepend.add(dependBox);
 	    	  
-	    	  JButton deleteDependentPanelButton = new JButton("X");
+	    	  JButton deleteDependentPanelButton = new JButton(icon);
+	    	  deleteDependentPanelButton.setBorder(BorderFactory.createEmptyBorder());
+	    	  deleteDependentPanelButton.setContentAreaFilled(false);
 	    	  panDepend.add(deleteDependentPanelButton);
 	    	  
 	    	  //When clicking delete, dependent panel is removed
