@@ -226,6 +226,16 @@ public class CreateAccountDialog extends JDialog
 				.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 		for (User user : users)
 		{
+			if(email.getText().hashCode() == 0 || 
+					userName.getText().hashCode() == 0 || 
+					userPassword.getPassword().length==0 ||
+					firstName.getText().hashCode() == 0 ||
+					lastName.getText().hashCode() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create User", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+				
 			if (user.getEmail().equals(email.getText().trim()))
 			{
 				JOptionPane.showMessageDialog(null, "A user with e-mail"
@@ -242,28 +252,20 @@ public class CreateAccountDialog extends JDialog
 				return false;
 			}
 
-			if (!areCharsEqual(userPassword.getPassword(),
-					repeatPassword.getPassword()))
+			else
 			{
-				JOptionPane.showMessageDialog(null,
-						"Passwords do not match. Please try again!");
-				userPassword.setText("");
-				repeatPassword.setText("");
-				return false;
-			} else
-			{
-				if (userPassword.getPassword().length == 0
-						&& repeatPassword.getPassword().length == 0)
+				if (!areCharsEqual(userPassword.getPassword(),
+						repeatPassword.getPassword()))
 				{
-					JOptionPane
-							.showMessageDialog(null,
-									"Password fields are empty. Please enter password!");
+					JOptionPane.showMessageDialog(null,
+							"Passwords do not match. Please try again!");
 					userPassword.setText("");
 					repeatPassword.setText("");
 					return false;
 				}
 			}
 		}
+				
 		return true;
 	}
 
