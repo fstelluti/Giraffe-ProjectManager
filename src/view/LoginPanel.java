@@ -76,7 +76,8 @@ public class LoginPanel extends JPanel implements ActionListener
 			loginSubPanel.setLayout(new FlowLayout());
 			loginLabel = new JLabel("Please enter user name: ", JLabel.RIGHT);
 			// @TODO Remove the string for presentation
-			loginTextField = new JTextField("username1", 10);
+//			loginTextField = new JTextField("username1", 10);
+			loginTextField = new JTextField(10);
 			loginSubPanel.add(loginLabel);
 			loginSubPanel.add(loginTextField);
 		}
@@ -91,7 +92,8 @@ public class LoginPanel extends JPanel implements ActionListener
 			passwordSubPanel.setLayout(new FlowLayout());
 			passwordLabel = new JLabel("Please enter password: ", JLabel.RIGHT);
 			// @TODO Remove the string for presentation
-			passwordTextField = new JPasswordField("password1", 10);
+//			passwordTextField = new JPasswordField("password1", 10);
+			passwordTextField = new JPasswordField(10);
 			passwordSubPanel.add(passwordLabel);
 			passwordSubPanel.add(passwordTextField);
 		}
