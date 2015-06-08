@@ -135,7 +135,7 @@ public class MainViewPanel extends JPanel
 		{
 			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT){
 
-			    private final int location = 150;
+			    private final int location = 200;
 			    {
 			        setDividerLocation( location );
 			    }
@@ -179,7 +179,7 @@ public class MainViewPanel extends JPanel
 		getSplitPanel().setLeftComponent(new TreePanel(ProjectDB
 					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 							this.user.getId())).getTreeView());
-		getSplitPanel().setDividerLocation(150);
+		getSplitPanel().setDividerLocation(200);
 	}
 
 	public User getCurrentUser()
