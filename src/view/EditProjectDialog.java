@@ -25,6 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.Activity;
 import model.DateLabelFormatter;
 import model.Project;
 import model.User;
@@ -33,6 +34,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import controller.ActivityDB;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 import controller.UserDB;
@@ -163,11 +165,19 @@ public class EditProjectDialog extends JDialog
 	    	  //Verifies all text boxes are filled out, if not = error
 	    	  if(startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null){
-	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
+	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields.", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks that due date not before start date
 	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
-	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Check if related activities have no conflict with new start date
+	    	  else if(!checkStartDate(projects.get(projectBox.getSelectedIndex()).getProjectId(), (Date)startDatePicker.getModel().getValue())){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities start dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Check if related activities have no conflict with new due date
+	    	  else if(!checkDueDate(projects.get(projectBox.getSelectedIndex()).getProjectId(), (Date)dueDatePicker.getModel().getValue())){
+	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities due dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
 	    		  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
@@ -216,5 +226,43 @@ public class EditProjectDialog extends JDialog
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);
+  }
+  
+  /**
+   * Check if new start date conflicts with project's activities start date
+   * @return a bool stating if conflict in start date
+   */
+  private static boolean checkStartDate(int projectID, Date newStartDate)
+  {
+	  List<Activity> activities = ActivityDB.getProjectActivities(
+			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectID);
+	  
+	  for(Activity a : activities)
+	  {
+		  if((a.getStartDate()).before(newStartDate))
+		  {
+			  return false;
+		  }
+	  }
+	  return true;
+  }
+  
+  /**
+   * Check if new due date conflicts with project's activities due date
+   * @return a bool stating if conflict in due date
+   */
+  private static boolean checkDueDate(int projectID, Date newDueDate)
+  {
+	  List<Activity> activities = ActivityDB.getProjectActivities(
+			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectID);
+	  
+	  for(Activity a : activities)
+	  {
+		  if(newDueDate.before(a.getDueDate()))
+		  {
+			  return false;
+		  }
+	  }
+	  return true;
   }
 }
