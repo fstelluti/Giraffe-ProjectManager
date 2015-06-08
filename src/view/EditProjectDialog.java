@@ -139,6 +139,7 @@ public class EditProjectDialog extends JDialog
 	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
+	  projectName.setText(currentProject.getProjectName());
 	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
 	  managerBox.setSelectedIndex(projectManagerID - 1);
 	  
@@ -149,6 +150,7 @@ public class EditProjectDialog extends JDialog
 	    	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
+	    	  projectName.setText(currentProject.getProjectName());
 	    	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
 	    	  User projectManager = UserDB.getById(connectionString, projectManagerID);
 	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
@@ -163,7 +165,7 @@ public class EditProjectDialog extends JDialog
 	      public void actionPerformed(ActionEvent arg0) {
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
-	    	  if(startDatePicker.getModel().getValue() == null
+	    	  if(projectName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null){
 	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields.", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
