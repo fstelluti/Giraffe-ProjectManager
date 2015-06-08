@@ -50,6 +50,7 @@ public class CreateProjectDialog extends JDialog
  private Properties p = new Properties();
  boolean exists;
  boolean refresh = false;
+ private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal)
   {
@@ -86,7 +87,7 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  final List<User> projectManagers = UserDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	  final List<User> projectManagers = UserDB.getAll(connectionString);
 	  String[] projectManagerNames = new String[projectManagers.size()];
 	  for(int i = 0; i < projectManagerNames.length; i++){
 		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
@@ -121,7 +122,7 @@ public class CreateProjectDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Checks if the project already exists
-	    	  List<Project> projects = ProjectDB.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+	    	  List<Project> projects = ProjectDB.getAll(connectionString);
     		  for(Project project:projects){
 	    		  if(projectName.getText().equals(project.getProjectName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -147,18 +148,18 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  ProjectDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+	    			  ProjectDB.insert(connectionString,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()));
 	    			  
 	    			  //Gets id of project just created
 		    		  Project project = ProjectDB.getByName(
-		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectName.getText());
+		    				  connectionString, projectName.getText());
 		    		  
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
-		    		  UserRolesDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+		    		  UserRolesDB.insert(connectionString,
 		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectId(), 1);
 		    		  refresh = true;
 			    		  setVisible(false); 

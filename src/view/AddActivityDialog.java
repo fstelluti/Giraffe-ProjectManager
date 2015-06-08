@@ -58,6 +58,7 @@ public class AddActivityDialog extends JDialog
   private boolean exists;
   private User user;
   private boolean refresh = false;
+  private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
   
 
   
@@ -86,7 +87,7 @@ public class AddActivityDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = ProjectDB.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
 	  String[] projectNames = new String[projects.size()];
 	  for(int i = 0; i < projectNames.length; i++){
 		  projectNames[i] = projects.get(i).getProjectName();
@@ -158,7 +159,7 @@ public class AddActivityDialog extends JDialog
 	    	  panDepend.setBackground(Color.white);
 	    	  panDepend.setPreferredSize(new Dimension(445, 60));
 	    	  final List<Activity> activities = ActivityDB.getProjectActivities(
-	    			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    			  connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    	  String[] activityNames = new String[activities.size()];
 	    	  for(int i = 0; i < activityNames.length; i++){
 	    		  activityNames[i] = activities.get(i).getActivityName();
@@ -218,7 +219,7 @@ public class AddActivityDialog extends JDialog
 	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
 	    	  
 	    	  //Checks if the activity already exists
-	    	  List<Activity> activities = ActivityDB.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
     		  for(Activity activity:activities){
 	    		  if(activityName.getText().equals(activity.getActivityName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -268,7 +269,7 @@ public class AddActivityDialog extends JDialog
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
 	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-		    		  ActivityDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+		    		  ActivityDB.insert(connectionString,
 			    				 projects.get(projectBox.getSelectedIndex()).getProjectId(),
 			    				 activityName.getText(), 
 			    				 dateFormat.format(activityStartDate),
@@ -279,14 +280,14 @@ public class AddActivityDialog extends JDialog
 		    		  
 		    		  //Gets id of activity just created
 		    		  Activity activity = ActivityDB.getByNameAndProjectId(
-		    				  DatabaseConstants.PROJECT_MANAGEMENT_DB, activityName.getText(), projectID);
+		    				  connectionString, activityName.getText(), projectID);
 		    		  
 		    		  //Iterates through all dependents and adds them to the DB
 		    		  Component[] components = panDependArea.getComponents();
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
 			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-			    		  PredecessorDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB, 
+			    		  PredecessorDB.insert(connectionString, 
 			    				  activity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
 		    		  }
 		    		  setVisible(false); 
