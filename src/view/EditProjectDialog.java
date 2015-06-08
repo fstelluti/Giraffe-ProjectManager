@@ -51,6 +51,7 @@ public class EditProjectDialog extends JDialog
 	 private UtilDateModel dueModel = new UtilDateModel();
 	 private Properties p = new Properties();
 	 boolean exists;
+	 boolean refresh = false;
 	 private User user;
 	 private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
@@ -204,7 +205,8 @@ public class EditProjectDialog extends JDialog
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()),
 	    					  projectManagers.get(managerBox.getSelectedIndex()).getId());
-	    			  setVisible(false); 
+	    			  setVisible(false);
+	    			  refresh = true;
 	    		  }
 	    	  }
 	      }     
@@ -266,5 +268,10 @@ public class EditProjectDialog extends JDialog
 		  }
 	  }
 	  return true;
+  }
+  
+  public boolean isRefresh()
+  {
+	  return refresh;
   }
 }

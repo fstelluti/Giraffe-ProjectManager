@@ -86,6 +86,10 @@ public class MainViewPanel extends JPanel
 					else{
 						EditProjectDialog test = new EditProjectDialog(null,
 								"Edit a Project", true, user);
+						if(test.isRefresh())
+						{
+							refresh();
+						}
 					}
 				}
 			}
