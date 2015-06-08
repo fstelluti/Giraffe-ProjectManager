@@ -4,9 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-//This class will test the methods in the view/LoginPanel.java Class
+/**
+ * Tests view/LoginPanel.java.
+ * Only non-trivial and non-GUI, public methods are tested.
+ * @author: Francois Stelluti
+ */
 public class LoginPanelTest {
 
+	//Tests constructor of LoginPanel
 	@Test
 	public void shouldCreateLoginPanel() {
 		
@@ -16,10 +21,5 @@ public class LoginPanelTest {
 		assertNotNull("Login Panel object is null", login);
 		
 	}
-
-//  This method will have to be tested through the GUI
-//	@Test
-//	public void shouldActionPerformed() {}	//change name??
-
 
 }

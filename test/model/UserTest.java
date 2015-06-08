@@ -4,9 +4,14 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import java.util.Date;
 
-//This class will test the methods in the model/User.java Class
+/**
+ * Tests model/User.java
+ * 100% test coverage completed for this class
+ * @author: Francois Stelluti
+ */
 public class UserTest {
 
+  //Tests constructor
 	@Test
 	public void userShouldBeCreated() {
 	  //Test variables for the constructor
@@ -33,6 +38,7 @@ public class UserTest {
 	  assertEquals("No date was created", testUser.getRegDate(), regDate);
 	}
 
+	//Tests getUserName()
 	@Test
 	public void shouldGetUserName() {
 	  //Only create User object with a user name
@@ -43,6 +49,7 @@ public class UserTest {
 	  assertEquals("Did not get correct user name", testUser.getUserName(), userName);
 	}
 
+	//Tests setUserName()
 	@Test
 	public void shouldSetUserName() {
 	  //Create an "empty" Object 
@@ -55,6 +62,7 @@ public class UserTest {
 	  assertNotNull("Username not set properly", testUser.getUserName());
 	}
 
+	//Tests getPassword()
 	@Test
 	public void shouldGetPassword() {
 	  //Only create User object with a password
@@ -65,6 +73,7 @@ public class UserTest {
 	  assertEquals("Did not get correct password", testUser.getPassword(), password);
 	}
 
+	//Tests setPassword()
 	@Test
 	public void shouldSetPassword() {
 	  //Create an "empty" Object 
@@ -77,6 +86,7 @@ public class UserTest {
 	  assertNotNull("Password not set properly", testUser.getPassword());
 	}
 
+	//Tests getEmail()
 	@Test
 	public void shouldGetEmail() {
 	  //Only create User object with an email address
@@ -87,6 +97,7 @@ public class UserTest {
 	  assertEquals("Did not get correct email", testUser.getEmail(), email);
 	}
 
+	//Tests setEmail()
 	@Test
 	public void shouldSetEmail() {
 	  //Create an "empty" Object 
@@ -99,6 +110,7 @@ public class UserTest {
 	  assertNotNull("Email not set properly", testUser.getEmail());
 	}
 
+	//Tests getFirstName()
 	@Test
 	public void shouldGetFirstName() {
 	  //Only create User object with a first name
@@ -109,6 +121,7 @@ public class UserTest {
 	  assertEquals("Did not get correct first name", testUser.getFirstName(), firstName);
 	}
 
+	//Tests setFirstName()
 	@Test
 	public void shouldSetFirstName() {
 	  //Create an "empty" Object 
@@ -121,6 +134,7 @@ public class UserTest {
 	  assertNotNull("First name not set properly", testUser.getFirstName());
 	}
 
+	//Tests getLastName()
 	@Test
 	public void shouldGetLastName() {
 	  //Only create User object with a last name
@@ -131,6 +145,7 @@ public class UserTest {
 	  assertEquals("Did not get correct last name", testUser.getLastName(), lastName);
 	}
 
+	//Tests setLastName()
 	@Test
 	public void shouldSetLastName() {
 	  //Create an "empty" Object 
@@ -143,6 +158,7 @@ public class UserTest {
 	  assertNotNull("Last name not set properly", testUser.getLastName());
 	}
 
+	//Tests getId()
 	@Test
 	public void shouldGetId() {
 	  //Only create User object with a user ID
@@ -153,6 +169,7 @@ public class UserTest {
 	  assertEquals("Did not get correct user ID", testUser.getId(), ID);
 	}
 
+	//Tests setId()
 	@Test
 	public void shouldSetId() {
 	  //Create an "empty" Object 
@@ -165,6 +182,7 @@ public class UserTest {
 	  assertEquals("ID not set properly", testUser.getId(), ID);
 	}
 	
+	//Tests getRegDate()
 	@Test
 	public void shouldGetRegDate() {
 	  //Create an "empty" Object 
@@ -173,6 +191,7 @@ public class UserTest {
 	  assertNotNull("Registration date does not exist", testUser.getRegDate());
 	}
 	
+	//Tests setRegDate()
 	@Test
 	public void shouldSetRegDate() {
 	  //Create an "empty" Object 

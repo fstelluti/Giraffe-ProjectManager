@@ -11,8 +11,14 @@ import model.User;
 import view.ApplicationPanel;
 import view.MainViewPanel;
 
+/**
+ * Tests controller/ViewManager.java
+ * Only non-trivial and non-GUI, public methods are tested.
+ * @author: Francois Stelluti
+ */
 public class ViewManagerTest {
 	
+	//Tests if the main view panel was created
 	@Test
 	public void shouldCreateMainViewPanel() {
 	  //Create a User with test variables 
@@ -23,31 +29,9 @@ public class ViewManagerTest {
 	  ViewManager.startApplication();
 		
 	  //Create a JPanel and simply test if it is not null at the end
-      JPanel mainViewPanel = ViewManager.createMainViewPanel(user1);
+    JPanel mainViewPanel = ViewManager.createMainViewPanel(user1);
 		
 	  assertNotNull("The Main view panel was not created!", mainViewPanel);
 	}
-	
-// This method will have to be tested through the GUI
-//	@Test
-//	public void shouldShowLogin() {}
-
-	@Test
-	public void shouldStartApplication() {
-	  ApplicationPanel applicationPanel = new ApplicationPanel();
-		
-	  //Test that the Application Panel object was created
-	  assertNotNull("The Application Panel was not created!", applicationPanel);
-	}
-
-//  Might not be needed, method currentely returns void
-//	@Test
-//	public void shouldCreateAccountDialog() {
-//		
-//		JDialog dialog = new JDialog();
-//		
-//		//Test that the Dialog object was created
-//		assertNotNull("The Create account dialog was not created!", dialog);
-//	}
 
 }

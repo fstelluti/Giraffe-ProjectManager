@@ -11,7 +11,11 @@ import org.junit.runners.Suite;
 	controller.UserRolesDBTest.class,
 	controller.UserRolesDictDBTest.class,
 	controller.ViewManagerTest.class,
-	model.UserTest.class
+	model.UserTest.class,
+	view.LoginPanelTest.class,
+	view.TreePanelTest.class,
+	view.MainViewPanelTest.class,
+	view.ApplicationPanel.class
 })
 
 public class TestSuite {}  	
