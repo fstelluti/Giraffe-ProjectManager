@@ -61,7 +61,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	
 	private JPanel createLogoPanel(){
 		logoPanel = new JPanel();
-		ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/giraffe.jpg"));
+		ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/giraffe.png"));
 		JLabel label = new JLabel(icon);
 		logoPanel.add(label);
 		return logoPanel;
