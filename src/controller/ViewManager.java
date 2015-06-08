@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.SQLException;
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,6 +47,11 @@ public class ViewManager
 	{
 		if (applicationPanel == null)
 		{
+			try {
+				DataManager.createTables(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			applicationPanel = new ApplicationPanel();
 		}
 		return applicationPanel;
