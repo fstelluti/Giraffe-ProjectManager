@@ -184,6 +184,7 @@ public class MainViewPanel extends JPanel
 					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 							this.user.getId())).getTreeView());
 		getSplitPanel().setDividerLocation(200);
+		getSplitPanel().setRightComponent(new GridProjects(this.user));
 	}
 
 	public User getCurrentUser()

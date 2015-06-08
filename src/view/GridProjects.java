@@ -1,9 +1,11 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -11,6 +13,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import model.User;
+import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 
@@ -24,19 +27,36 @@ public class GridProjects extends JPanel
 	
 	public GridProjects(User user)
 	{
-		
 		this.user = user;
 		this.setLayout(new BorderLayout());
-		
-		//UNCOMMENT THE FOLLOWING TO ACTIVATE THE INITIAL GRID VIEW (VERY EARLY STAGES)
-		
-		try {
-			grid = new JTable(buildTableModel(ProjectDB.RSgetUserProjects(connectionString, user.getId())) );
-		} catch (SQLException e) {
-			e.printStackTrace();
+		Connection c = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try
+		{
+			c = DataManager.getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			rs = stmt
+					.executeQuery("SELECT p.name, p.startDate, p.dueDate"
+							+ " FROM PROJECTS p, USERS u, USERROLES ur"
+							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + user.getId() + ";");
+			grid = new JTable(buildTableModel(rs) );
+			this.add(grid, BorderLayout.NORTH);
+			rs.close();
+			stmt.close();
+			c.close();
+			
 		}
-		
-		this.add(grid, BorderLayout.NORTH);
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
 		
 	}
 	

@@ -113,33 +113,6 @@ public class ProjectDB extends DataManager
 		return projects;
 	}
 	
-	public static ResultSet RSgetUserProjects(String connectionString, int userID)
-	{
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try
-		{
-			c = getConnection(connectionString);
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			rs = stmt
-					.executeQuery("SELECT p.name, p.startDate, p.dueDate"
-							+ " FROM PROJECTS p, USERS u, USERROLES ur"
-							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userID + ";");
-			
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		return rs;
-	}
 	
 	public static void editProjectById(String connectionString, int id,
 			String name, String startDate, String dueDate, int projectManagerID)
