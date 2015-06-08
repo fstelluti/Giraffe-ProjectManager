@@ -126,7 +126,7 @@ public class ActivityDBTest {
 	// Tests DataManager.insertIntoTableActivities()
 	@Test
 	public void insertedActivityShouldMatchData() {
-		ActivityDB.insert(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42);
+		ActivityDB.insert(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42, "dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

@@ -114,7 +114,7 @@ public class ProjectDBTest {
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
 	public void insertedProjectShouldMatchData() {
-		ProjectDB.insert(CONNECTION, "testProject", "1969-12-31", "1970-01-01");
+		ProjectDB.insert(CONNECTION, "testProject", "1969-12-31", "1970-01-01","dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

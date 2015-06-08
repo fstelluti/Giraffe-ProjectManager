@@ -26,7 +26,7 @@ public class ActivityTest {
 		Date date2 = new Date(5);
 		
 		//Create Activity object with test data
-		Activity activity = new Activity(1,3,"Frank", date1, date2, status);
+		Activity activity = new Activity(1,3,"Frank", date1, date2, status,"Frank is eating");
 		
 		//Test if sets status to 1
 		

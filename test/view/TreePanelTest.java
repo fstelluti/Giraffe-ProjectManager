@@ -30,7 +30,7 @@ public class TreePanelTest {
 		Date d2 = new Date(10);
 		
 		//Create the project with test data
-		Project p1 = new Project(1,"Frank", d1, d2);
+		Project p1 = new Project(1,"Frank", d1, d2, "Frank is eating");
 		
 		//Add the project to the list
 		projects.add(p1);
