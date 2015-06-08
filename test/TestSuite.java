@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 	controller.UserRolesDictDBTest.class,
 	controller.ViewManagerTest.class,
 	model.UserTest.class,
+	model.Activity.class,
 	view.LoginPanelTest.class,
 	view.TreePanelTest.class,
 	view.MainViewPanelTest.class,

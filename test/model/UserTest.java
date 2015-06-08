@@ -6,7 +6,8 @@ import java.util.Date;
 
 /**
  * Tests model/User.java
- * 100% test coverage completed for this class
+ * 100% test coverage completed for this class, only for this class as typically testing
+ * getters/setters is not required. 
  * @author: Francois Stelluti
  */
 public class UserTest {
