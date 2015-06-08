@@ -22,7 +22,7 @@ public class ApplicationPanel extends JFrame
 		cardLayout = new CardLayout();
 		cardsHolder.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setResizable(false);
+		this.setResizable(true);
 		this.setVisible(true);
 		buildCardsPanel();
 		getContentPane().add(cardsHolder);
