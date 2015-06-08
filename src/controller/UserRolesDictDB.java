@@ -16,7 +16,9 @@ public class UserRolesDictDB extends DataManager
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE USERROLESDICT " + "(ROLEID  	INTEGER,"
-					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID))";
+					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID)); "
+					+ "INSERT INTO USERROLESDICT (roleid, rolename) "
+					+ "VALUES (1, 'manager')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.close();
