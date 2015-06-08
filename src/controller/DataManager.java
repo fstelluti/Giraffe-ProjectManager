@@ -59,11 +59,16 @@ public abstract class DataManager
 	}
 	
 	public static void createTables(String connectionString) throws SQLException{
-			UserDB.create(connectionString);
-			ProjectDB.create(connectionString);
-			ActivityDB.create(connectionString);
-			PredecessorDB.create(connectionString);
-			UserRolesDB.create(connectionString);
-			UserRolesDictDB.create(connectionString);
+			try{
+				UserDB.getAll(connectionString);
+			}
+			catch(Exception e){
+				UserDB.create(connectionString);
+				ProjectDB.create(connectionString);
+				ActivityDB.create(connectionString);
+				PredecessorDB.create(connectionString);
+				UserRolesDB.create(connectionString);
+				UserRolesDictDB.create(connectionString);
+			}
 	}
 }

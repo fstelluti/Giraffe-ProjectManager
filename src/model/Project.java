@@ -13,16 +13,18 @@ public class Project
 	private int id;
 	private String name;
 	private Date startDate, dueDate;
+	private String description;
 	
 	public Project(){}
 	
 	//Will probably have more arguments
-	public Project(int id, String name, Date startDate, Date dueDate)
+	public Project(int id, String name, Date startDate, Date dueDate, String description)
 	{
 		this.id = id;
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
+		this.description = description;
 	}
 	
 	/**
@@ -62,5 +64,13 @@ public class Project
 	
 	public void setDueDate(Date newDate){
 		this.dueDate = newDate;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

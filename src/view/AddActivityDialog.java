@@ -28,6 +28,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import model.Activity;
@@ -49,6 +50,8 @@ public class AddActivityDialog extends JDialog
 {
 
   private JTextField activityName;
+  private JTextArea activityDescription;
+  private JScrollPane scrollPanDescription;
   private JComboBox<?> projectBox, statusBox, dependBox;
   private JLabel projectLabel, dependLabel;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -137,6 +140,20 @@ public class AddActivityDialog extends JDialog
 	  panStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 	  panStatus.add(statusBox);
 	  
+	  //Activity Description
+	  JPanel panDescription = new JPanel();
+	  panDescription.setBackground(Color.white);
+	  panDescription.setPreferredSize(new Dimension(465, 100));
+	  activityDescription = new JTextArea();
+	  panDescription.setBorder(BorderFactory.createTitledBorder("Description (optional)"));
+	  activityDescription.setBorder( new JTextField().getBorder() );
+	  activityDescription.setLineWrap(true);
+	  activityDescription.setWrapStyleWord(true);
+	  scrollPanDescription = new JScrollPane(activityDescription, 
+			  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	  scrollPanDescription.setPreferredSize(new Dimension(445,65));
+	  panDescription.add(scrollPanDescription);
+	  
 	  //This creates an area to add dependents, this area created so it can be iterated later to add dependencies to table
 	  final JPanel panDependArea = new JPanel();
 	  panDependArea.setBackground(Color.white);
@@ -144,7 +161,7 @@ public class AddActivityDialog extends JDialog
 	  
 	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
 			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	  scrollPanDependArea.setPreferredSize(new Dimension(465, 200));
+	  scrollPanDependArea.setPreferredSize(new Dimension(330, 100));
 	  
 	  final List<JPanel> dependList = new ArrayList<JPanel>();
 	  
@@ -157,7 +174,7 @@ public class AddActivityDialog extends JDialog
 	    	  
 	    	  final JPanel panDepend = new JPanel();
 	    	  panDepend.setBackground(Color.white);
-	    	  panDepend.setPreferredSize(new Dimension(445, 60));
+	    	  panDepend.setPreferredSize(new Dimension(310, 60));
 	    	  final List<Activity> activities = ActivityDB.getProjectActivities(
 	    			  connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    	  String[] activityNames = new String[activities.size()];
@@ -267,6 +284,7 @@ public class AddActivityDialog extends JDialog
 	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
 	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
+//	    						  + "\nDescription: "+activityDescription.getText().substring(0, 100) + "...",
 	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 		    		  ActivityDB.insert(connectionString,
@@ -274,7 +292,8 @@ public class AddActivityDialog extends JDialog
 			    				 activityName.getText(), 
 			    				 dateFormat.format(activityStartDate),
 			    				 dateFormat.format(activityDueDate),
-			    				 statusBox.getSelectedIndex());
+			    				 statusBox.getSelectedIndex(),
+			    				 activityDescription.getText());
 		    		  
 		    		  refresh = true;
 		    		  
@@ -310,6 +329,7 @@ public class AddActivityDialog extends JDialog
 	  content.add(panStatus);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
+	  content.add(panDescription);
 	  content.add(addDependentButton);
 	  content.add(scrollPanDependArea);
 	  

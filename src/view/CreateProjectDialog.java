@@ -22,7 +22,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import model.DateLabelFormatter;
 import model.Project;
@@ -32,7 +35,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 import controller.UserDB;
@@ -43,6 +45,8 @@ public class CreateProjectDialog extends JDialog
 {
 
  private JTextField projectName;
+ private JTextArea projectDescription;
+ private JScrollPane scrollPanDescription;
  private JComboBox<?> managerBox;
  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
  private UtilDateModel startModel = new UtilDateModel();
@@ -75,7 +79,7 @@ public class CreateProjectDialog extends JDialog
 	  //Project Name
 	  JPanel panName = new JPanel();
 	  panName.setBackground(Color.white);
-	  panName.setPreferredSize(new Dimension(220, 60));
+	  panName.setPreferredSize(new Dimension(230, 60));
 	  projectName = new JTextField();
 	  projectName.setPreferredSize(new Dimension(100, 25));
 	  panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
@@ -85,7 +89,7 @@ public class CreateProjectDialog extends JDialog
 	  //Project Manager
 	  JPanel panManager = new JPanel();
 	  panManager.setBackground(Color.white);
-	  panManager.setPreferredSize(new Dimension(220, 60));
+	  panManager.setPreferredSize(new Dimension(230, 60));
 	  
 	  final List<User> projectManagers = UserDB.getAll(connectionString);
 	  String[] projectManagerNames = new String[projectManagers.size()];
@@ -99,7 +103,7 @@ public class CreateProjectDialog extends JDialog
 	  //Start Date
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
-	  panStartDate.setPreferredSize(new Dimension(220, 60));
+	  panStartDate.setPreferredSize(new Dimension(230, 60));
 	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
 	  startModel.setSelected(true);
 	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
@@ -109,13 +113,26 @@ public class CreateProjectDialog extends JDialog
 	  //Due date
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
-	  panDueDate.setPreferredSize(new Dimension(220, 60));
+	  panDueDate.setPreferredSize(new Dimension(230, 60));
 	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
 	  dueModel.setSelected(false);
 	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	  panDueDate.add(dueDatePicker);
 	  
+	  //Project Description
+	  JPanel panDescription = new JPanel();
+	  panDescription.setBackground(Color.white);
+	  panDescription.setPreferredSize(new Dimension(465, 120));
+	  projectDescription = new JTextArea();
+	  panDescription.setBorder(BorderFactory.createTitledBorder("Description (optional)"));
+	  projectDescription.setBorder( new JTextField().getBorder() );
+	  projectDescription.setLineWrap(true);
+	  projectDescription.setWrapStyleWord(true);
+	  scrollPanDescription = new JScrollPane(projectDescription, 
+			  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	  scrollPanDescription.setPreferredSize(new Dimension(445,85));
+	  panDescription.add(scrollPanDescription);
 	  
 	  JPanel control = new JPanel();
 	  JButton okButton = new JButton("Create Project");
@@ -151,7 +168,9 @@ public class CreateProjectDialog extends JDialog
 	    			  ProjectDB.insert(connectionString,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
-			    				 dateFormat.format(dueDatePicker.getModel().getValue()));
+			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
+			    				 projectDescription.getText()
+	    					  );
 	    			  
 	    			  //Gets id of project just created
 		    		  Project project = ProjectDB.getByName(
@@ -182,6 +201,7 @@ public class CreateProjectDialog extends JDialog
 	  content.add(panManager);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
+	  content.add(panDescription);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

@@ -23,6 +23,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import model.Activity;
@@ -44,6 +46,8 @@ import controller.UserRolesDB;
 public class EditProjectDialog extends JDialog 
 {
 	 private JTextField projectName;
+	 private JTextArea projectDescription;
+	 private JScrollPane scrollPanDescription;
 	 private JComboBox<?> projectBox, managerBox;
 	 private JLabel projectLabel;
 	 private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,7 +102,7 @@ public class EditProjectDialog extends JDialog
 	  panName.setPreferredSize(new Dimension(220, 60));
 	  projectName = new JTextField();
 	  projectName.setPreferredSize(new Dimension(100, 25));
-	  panName.setBorder(BorderFactory.createTitledBorder("New Project Name (Optional)"));
+	  panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
 	  projectName.setPreferredSize(new Dimension(200,30));
 	  panName.add(projectName);
 	  
@@ -120,7 +124,7 @@ public class EditProjectDialog extends JDialog
 	  JPanel panStartDate = new JPanel();
 	  panStartDate.setBackground(Color.white);
 	  panStartDate.setPreferredSize(new Dimension(220, 60));
-	  panStartDate.setBorder(BorderFactory.createTitledBorder("New Start Date"));
+	  panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
 	  startModel.setSelected(true);
 	  JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
 	  final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
@@ -130,11 +134,25 @@ public class EditProjectDialog extends JDialog
 	  JPanel panDueDate = new JPanel();
 	  panDueDate.setBackground(Color.white);
 	  panDueDate.setPreferredSize(new Dimension(220, 60));
-	  panDueDate.setBorder(BorderFactory.createTitledBorder("New Due Date"));
+	  panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
 	  dueModel.setSelected(false);
 	  JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
 	  final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	  panDueDate.add(dueDatePicker);
+	  
+	  //Project Description
+	  JPanel panDescription = new JPanel();
+	  panDescription.setBackground(Color.white);
+	  panDescription.setPreferredSize(new Dimension(465, 120));
+	  projectDescription = new JTextArea();
+	  panDescription.setBorder(BorderFactory.createTitledBorder("Description (optional)"));
+	  projectDescription.setBorder( new JTextField().getBorder() );
+	  projectDescription.setLineWrap(true);
+	  projectDescription.setWrapStyleWord(true);
+	  scrollPanDescription = new JScrollPane(projectDescription, 
+			  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	  scrollPanDescription.setPreferredSize(new Dimension(445,85));
+	  panDescription.add(scrollPanDescription);
 	  
 	  //Set Content to project selection
 	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
@@ -143,6 +161,7 @@ public class EditProjectDialog extends JDialog
 	  projectName.setText(currentProject.getProjectName());
 	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
 	  managerBox.setSelectedIndex(projectManagerID - 1);
+	  projectDescription.setText(currentProject.getDescription());
 	  
 	  
 	  //On change of project Set Content to project selection
@@ -155,6 +174,7 @@ public class EditProjectDialog extends JDialog
 	    	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
 	    	  User projectManager = UserDB.getById(connectionString, projectManagerID);
 	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
+	    	  projectDescription.setText(currentProject.getDescription());
 	    	  content.repaint();
 	    	  content.revalidate();
 	      }      
@@ -184,7 +204,6 @@ public class EditProjectDialog extends JDialog
 	    	  }
 	    	  else{
 	    		  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
-    			  String rename = (projectName.getText().length() > 0 ) ? projectName.getText() : currentProject.getProjectName();
 	    		  
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to edit the following Project: \n"
@@ -192,7 +211,7 @@ public class EditProjectDialog extends JDialog
 	    						  + "\nStart Date: "+ dateFormat.format(currentProject.getStartDate())
 	    						  + "\nDue Date: "+ dateFormat.format(currentProject.getDueDate())
 	    						  +  "\n\nWith the following modifications: \n"
-	    						  + "\nProject Name: " + rename
+	    						  + "\nProject Name: " + projectName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -201,9 +220,10 @@ public class EditProjectDialog extends JDialog
 	    			  //Call the editing Method of a given project
 	    			  ProjectDB.editProjectById(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 	    					  projects.get(projectBox.getSelectedIndex()).getProjectId(),
-	    					  rename,
+	    					  projectName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()),
+	    					  projectDescription.getText(),
 	    					  projectManagers.get(managerBox.getSelectedIndex()).getId());
 	    			  setVisible(false);
 	    			  refresh = true;
@@ -227,6 +247,7 @@ public class EditProjectDialog extends JDialog
 	  content.add(panManager);
 	  content.add(panStartDate);
 	  content.add(panDueDate);
+	  content.add(panDescription);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

@@ -11,10 +11,11 @@ public class Activity
 	private String 	name;
 	private Date 	startDate;
 	private Date 	dueDate;
+	private String	description;
 	private int 	status = 1;
 	private String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
 	
-	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status)
+	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description)
 	{
 		super();
 		this.id = id;
@@ -23,6 +24,7 @@ public class Activity
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.status = status;
+		this.description = description;
 	}
 	
 	public String getStatusName() {
@@ -80,6 +82,14 @@ public class Activity
 	public void setStartDate(Date startDate)
 	{
 		this.startDate = startDate;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 }

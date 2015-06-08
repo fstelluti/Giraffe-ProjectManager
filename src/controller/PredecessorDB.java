@@ -101,8 +101,9 @@ public class PredecessorDB extends DataManager
 				Date startDate = dateFormat.parse(rs2.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs2.getString("dueDate"));
 				int status = rs2.getInt("status");
+				String description = rs.getString("description");
 				activity = new Activity(activityID, projectId, name, startDate,
-						dueDate, status);
+						dueDate, status, description);
 				activities.add(activity);
 				rs2.close();
 			}

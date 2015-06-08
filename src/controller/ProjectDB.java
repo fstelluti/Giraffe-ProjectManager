@@ -40,7 +40,7 @@ public class ProjectDB extends DataManager
 	}
 	
 	public static void insert(String connectionString,
-			String name, String startDate, String dueDate)
+			String name, String startDate, String dueDate, String description)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -50,9 +50,9 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO PROJECTS (id,name,startdate, duedate) "
+			String sql = "INSERT INTO PROJECTS (id,name,startdate, duedate, description) "
 					+ "VALUES (NULL, '" + name + "', '" + startDate + "', '"
-					+ dueDate + "')";
+					+ dueDate + "', '" + description + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -80,7 +80,7 @@ public class ProjectDB extends DataManager
 
 			stmt = c.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, u.id"
+					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
 							+ " FROM PROJECTS p, USERS u, USERROLES ur, USERROLESDICT"
 							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND USERROLESDICT.roleName = \"manager\";");
 			while (rs.next())
@@ -95,7 +95,8 @@ public class ProjectDB extends DataManager
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));
 				Date dueDate = dateFormat.parse(rs.getString(4));
-				project = new Project(id, name, startDate, dueDate);
+				String description = rs.getString(5);
+				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
 			}
 			rs.close();
@@ -115,7 +116,7 @@ public class ProjectDB extends DataManager
 	
 	
 	public static void editProjectById(String connectionString, int id,
-			String name, String startDate, String dueDate, int projectManagerID)
+			String name, String startDate, String dueDate, String description, int projectManagerID)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -128,7 +129,8 @@ public class ProjectDB extends DataManager
 			String sql = "UPDATE PROJECTS SET "
 					+ "name = '"+ name +"',"
 					+ "startdate = '" + startDate+"',"
-					+ "duedate = '" + dueDate+"' "
+					+ "duedate = '" + dueDate+"',"
+					+ "description = '" + description+"' "
 					+ "WHERE id = "+id+"; "
 					+" UPDATE USERROLES SET "
 					+ "userid = " + projectManagerID+" "
@@ -166,7 +168,7 @@ public class ProjectDB extends DataManager
 
 			stmt = c.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, u.id"
+					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
 							+ " FROM PROJECTS p, USERS u, USERROLES ur"
 							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userId + ";");
 			while (rs.next())
@@ -181,7 +183,8 @@ public class ProjectDB extends DataManager
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));
 				Date dueDate = dateFormat.parse(rs.getString(4));
-				project = new Project(id, name, startDate, dueDate);
+				String description = rs.getString(5);
+				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
 			}
 			rs.close();
@@ -218,7 +221,8 @@ public class ProjectDB extends DataManager
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				project = new Project(id, name, startDate, dueDate);
+				String description = rs.getString("description");
+				project = new Project(id, name, startDate, dueDate, description);
 			}
 			rs.close();
 			stmt.close();
@@ -257,7 +261,8 @@ public class ProjectDB extends DataManager
 				String name = rs.getString("name");
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				project = new Project(id, name, startDate, dueDate);
+				String description = rs.getString("description");
+				project = new Project(id, name, startDate, dueDate, description);
 			}
 			rs.close();
 			stmt.close();

@@ -47,7 +47,7 @@ public class ActivityDB extends DataManager
 	 */
 	public static void insert(String connectionString,
 			int associatedProjectId, String activityName, String startDate,
-			String dueDate, int status)
+			String dueDate, int status, String description)
 
 	{
 		Connection c = null;
@@ -58,7 +58,7 @@ public class ActivityDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS) "
+			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS, DESCRIPTION) "
 					+ "VALUES (NULL, '"
 					+ associatedProjectId
 					+ "', '"
@@ -67,7 +67,10 @@ public class ActivityDB extends DataManager
 					+ startDate
 					+ "', '"
 					+ dueDate
-					+ "', '" + status + "')";
+					+ "', '"
+					+ status
+					+ "', '"
+					+ description + "')";
 			stmt.executeUpdate(sql);
 			stmt.close();
 			c.commit();
@@ -107,8 +110,9 @@ public class ActivityDB extends DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
+				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,
-						dueDate, status);
+						dueDate, status, description);
 				activities.add(activity);
 			}
 			rs.close();
@@ -148,8 +152,9 @@ public class ActivityDB extends DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
+				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,
-						dueDate, status);
+						dueDate, status, description);
 			}
 			rs.close();
 			stmt.close();
@@ -168,7 +173,7 @@ public class ActivityDB extends DataManager
 	}
 	
 	public static Activity getByNameAndProjectId(
-			String connectionString, String activityName, int projectID)
+			String connectionString, String activityName, int projectId)
 	{
 		Activity activity = null;
 		Connection c = null;
@@ -181,7 +186,7 @@ public class ActivityDB extends DataManager
 			stmt = c.createStatement();
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
-							+ activityName + "' AND PROJECTID = " + projectID
+							+ activityName + "' AND PROJECTID = " + projectId
 							+ ";");
 			while (rs.next())
 			{
@@ -190,8 +195,9 @@ public class ActivityDB extends DataManager
 				Date startDate = dateFormat.parse(rs.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
-				activity = new Activity(id, projectID, name, startDate,
-						dueDate, status);
+				String description = rs.getString("description");
+				activity = new Activity(id, projectId, name, startDate,
+						dueDate, status, description);
 			}
 			rs.close();
 			stmt.close();
