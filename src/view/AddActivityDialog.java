@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -90,9 +91,9 @@ public class AddActivityDialog extends JDialog
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
 	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
-	  String[] projectNames = new String[projects.size()];
-	  for(int i = 0; i < projectNames.length; i++){
-		  projectNames[i] = projects.get(i).getProjectName();
+	  Vector<String> projectNames = new Vector<String>();
+	  for(Project project: projects){
+		  projectNames.add(project.getProjectName());
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
 	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project"));
@@ -297,13 +298,12 @@ public class AddActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(
-			  connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
-	  String[] activityNames = new String[activities.size()];
-	  for(int i = 0; i < activityNames.length; i++){
-		  activityNames[i] = activities.get(i).getActivityName();
+	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  final Vector<String> activitiesNames = new Vector<String>();
+	  for(Activity activity: activities){
+		  activitiesNames.add(activity.getActivityName());
 	  }
-	  dependBox = new JComboBox<String>(activityNames);
+	  dependBox = new JComboBox<String>(activitiesNames);
 	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
 	  dependLabel = new JLabel("Select Activity:");
 	  panDepend.add(dependLabel);

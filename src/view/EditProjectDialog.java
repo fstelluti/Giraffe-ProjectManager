@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -86,9 +87,9 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
 	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
-	  String[] projectNames = new String[projects.size()];
-	  for(int i = 0; i < projectNames.length; i++){
-		  projectNames[i] = projects.get(i).getProjectName();
+	  Vector<String> projectNames = new Vector<String>();
+	  for(Project project: projects){
+		  projectNames.add(project.getProjectName());
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
 	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project to Edit"));
@@ -112,9 +113,9 @@ public class EditProjectDialog extends JDialog
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
 	  final List<User> projectManagers = UserDB.getAll(connectionString);
-	  String[] projectManagerNames = new String[projectManagers.size()];
-	  for(int i = 0; i < projectManagerNames.length; i++){
-		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
+	  Vector<String> projectManagerNames = new Vector<String>();
+	  for(User projectManager : projectManagers){
+		  projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  }
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));

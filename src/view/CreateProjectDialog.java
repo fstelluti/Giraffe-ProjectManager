@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -91,9 +92,9 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setPreferredSize(new Dimension(230, 60));
 	  
 	  final List<User> projectManagers = UserDB.getAll(connectionString);
-	  String[] projectManagerNames = new String[projectManagers.size()];
-	  for(int i = 0; i < projectManagerNames.length; i++){
-		  projectManagerNames[i] = projectManagers.get(i).getFirstName() + " " + projectManagers.get(i).getLastName();
+	  Vector<String> projectManagerNames = new Vector<String>();
+	  for(User projectManager : projectManagers){
+		  projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  }
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
