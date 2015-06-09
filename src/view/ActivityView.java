@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +9,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 import model.Activity;
 import model.Project;
@@ -27,31 +31,36 @@ public class ActivityView extends JPanel
 	@SuppressWarnings("deprecation")
 	private void initComponent()
 	{
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		JPanel activityPanel = new JPanel();
+		activityPanel.setLayout(new BoxLayout(activityPanel, BoxLayout.Y_AXIS));
+		//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		activityPanel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Activity"));
 		JLabel activityNameLabel = new JLabel("Activity name: " + activity.getActivityName());
-		this.add(activityNameLabel);
+		activityPanel.add(activityNameLabel);
 		labels.add(activityNameLabel);
 		
 		JLabel activityStatusLabel = new JLabel("Activity status: " + activity.getStatusName());
-		this.add(activityStatusLabel);
+		activityPanel.add(activityStatusLabel);
 		labels.add(activityStatusLabel);
 		
 		JLabel parentProjectLabel = new JLabel("Parent project of activity: " + parentProject.getProjectName());
-		this.add(parentProjectLabel);
+		activityPanel.add(parentProjectLabel);
 		labels.add(parentProjectLabel);
 		
 		JLabel startDateLabel = new JLabel("Start date: " + activity.getStartDate().toLocaleString());
-		this.add(startDateLabel);
+		activityPanel.add(startDateLabel);
 		labels.add(startDateLabel);
 		
 		JLabel dueDateLabel = new JLabel("Due date: " + activity.getDueDate().toLocaleString());
-		this.add(dueDateLabel);
+		activityPanel.add(dueDateLabel);
 		labels.add(dueDateLabel);
 
 		JLabel descrLabel = new JLabel("Description: " + activity.getDescription());
-		this.add(descrLabel);
+		activityPanel.add(descrLabel);
 		labels.add(descrLabel);
-		setLabelFonts(new Font("Arial", Font.ITALIC, 25));
+		setLabelFonts(new Font("Arial", Font.PLAIN, 18));
+		this.add(activityPanel);
 	}
 	
 	private void setLabelFonts(Font font)
