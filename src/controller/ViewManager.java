@@ -24,7 +24,7 @@ public class ViewManager
 			mainViewPanel.setSize(1200, 800);
 			applicationPanel.setSize(1200, 800);
 			applicationPanel.setLocationRelativeTo(null);
-			applicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
+			ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
 		}
 		return mainViewPanel;
 	}
@@ -32,7 +32,7 @@ public class ViewManager
 	public static void showLogin()
 	{
 		JOptionPane.showMessageDialog(null, "Username and/or password do not match", "Login failed", JOptionPane.ERROR_MESSAGE);
-		applicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
+		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
 	}
 	
 	/**

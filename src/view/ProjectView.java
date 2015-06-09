@@ -22,6 +22,7 @@ public class ProjectView extends JPanel
 		initComponent();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void initComponent()
 	{
 		this.setFont(new Font("Arial", Font.ITALIC, 26));

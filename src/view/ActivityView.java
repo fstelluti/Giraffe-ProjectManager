@@ -1,6 +1,5 @@
 package view;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ public class ActivityView extends JPanel
 		initComponent();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void initComponent()
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
