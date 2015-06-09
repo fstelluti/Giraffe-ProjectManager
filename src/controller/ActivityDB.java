@@ -288,4 +288,61 @@ public class ActivityDB extends DataManager
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 	}
+	
+	public static void deleteActivity(String connectionString,
+			int activityId)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "DELETE FROM ACTIVITIES "
+					+ "WHERE id = "+activityId+";";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		deleteActivityPredecessors(connectionString, activityId);
+	}
+	
+	public static void deleteActivityPredecessors(String connectionString,
+			int activityId)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "DELETE FROM PREDECESSORS "
+					+ "WHERE activityid = "+activityId+";";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
 }

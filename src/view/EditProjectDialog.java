@@ -247,11 +247,30 @@ public class EditProjectDialog extends JDialog
 	  JButton cancelButton = new JButton("Cancel");
 	  cancelButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  setVisible(false); 
+	    	  setVisible(false);
+	      }
+	    });
+	  
+	  JButton deleteButton = new JButton("Delete Project");
+	  deleteButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	    	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  int response = JOptionPane.showConfirmDialog(content,
+    				  "Are you sure you want to DELETE the following Project: \n"
+    						  + "\nProject Name: " + currentProject.getProjectName(),
+    						  "Confirm "+currentProject.getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    		  if(response == JOptionPane.YES_OPTION){
+    			  //Call the editing Method of a given project
+    			  ProjectDB.deleteProject(connectionString, currentProject.getProjectId());
+    			  setVisible(false);
+    			  refresh = true;
+    		  }
+	    	  
 	      }
 	    });
 	  control.add(okButton);
 	  control.add(cancelButton);
+	  control.add(deleteButton);
 	  
 	  
 	  content.setBackground(Color.white);

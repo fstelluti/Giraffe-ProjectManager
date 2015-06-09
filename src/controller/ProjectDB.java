@@ -439,5 +439,90 @@ public class ProjectDB extends DataManager
 			}
 		}
 		
+		public static void deleteProject(String connectionString,
+				int projectId)
+		{
+			Connection c = null;
+			Statement stmt = null;
+			try
+			{
+				c = getConnection(connectionString);
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				String sql = "DELETE FROM PROJECTS "
+						+ "WHERE id = "+projectId+";";
+				stmt.executeUpdate(sql);
+				stmt.close();
+				c.commit();
+				c.close();
+			}
+			catch (SQLException e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			catch (Exception e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			deleteProjectActivities(connectionString, projectId);
+			deleteProjectPMRelation(connectionString, projectId);
+		}
+		
+		public static void deleteProjectActivities(String connectionString,
+				int projectId)
+		{
+			Connection c = null;
+			Statement stmt = null;
+			try
+			{
+				c = getConnection(connectionString);
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				String sql = "DELETE FROM ACTIVITIES "
+						+ "WHERE projectid = "+projectId+";";
+				stmt.executeUpdate(sql);
+				stmt.close();
+				c.commit();
+				c.close();
+			}
+			catch (SQLException e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			catch (Exception e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+		}
+		
+		public static void deleteProjectPMRelation(String connectionString,
+				int projectId)
+		{
+			Connection c = null;
+			Statement stmt = null;
+			try
+			{
+				c = getConnection(connectionString);
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				String sql = "DELETE FROM USERROLES "
+						+ "WHERE projectid = "+projectId+";";
+				stmt.executeUpdate(sql);
+				stmt.close();
+				c.commit();
+				c.close();
+			}
+			catch (SQLException e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+			catch (Exception e)
+			{
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			}
+		}
 		// END OF EDITING PROJECT METHODS
 }

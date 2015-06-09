@@ -383,9 +383,27 @@ public class EditActivityDialog extends JDialog
 	        setVisible(false);
 	      }      
 	    });
+	  JButton deleteButton = new JButton("Delete Activity");
+	  deleteButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	    	  Activity currentActivity = ActivityDB.getById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
+	    	  int response = JOptionPane.showConfirmDialog(content,
+    				  "Are you sure you want to DELETE the following Activity: \n"
+    						  + "\nActivity Name: " + currentActivity.getActivityName(),
+    						  "Confirm "+currentActivity.getActivityName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    		  if(response == JOptionPane.YES_OPTION){
+    			  //Call the editing Method of a given project
+    			  ActivityDB.deleteActivity(connectionString, currentActivity.getActivityId());
+    			  setVisible(false);
+    			  refresh = true;
+    		  }
+	    	  
+	      }
+	    }); 
 	  
 	  control.add(okButton);
 	  control.add(cancelButton);
+	  control.add(deleteButton);
 	  content.setBackground(Color.white);
 	  content.add(panProjectName);
 	  content.add(panActivitiesNames);
