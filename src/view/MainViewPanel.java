@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -286,7 +287,9 @@ public class MainViewPanel extends JPanel
 				{
 					Activity activity = (Activity) object;
 					TreeNode parentNode = (TreeNode)node.getParent();
-					getSplitPanel().setRightComponent(new ActivityView(activity, parentNode.getUserObject(), user, mainViewPanel));
+					JScrollPane scroll = new JScrollPane(new ActivityView(activity, parentNode.getUserObject(), user, mainViewPanel));
+					scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+					getSplitPanel().setRightComponent(scroll);
 				} else
 				{
 					if (node.isRoot())
@@ -295,7 +298,9 @@ public class MainViewPanel extends JPanel
 					} else
 					{
 						Project project = (Project) object;
-						getSplitPanel().setRightComponent(new ProjectView(project, user, mainViewPanel));
+						JScrollPane scroll = new JScrollPane(new ProjectView(project, user, mainViewPanel));
+						scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+						getSplitPanel().setRightComponent(scroll);
 					}
 				}
 				getSplitPanel().setDividerLocation(200);
