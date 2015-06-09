@@ -13,7 +13,7 @@ public class ApplicationPanel extends JFrame
 	public List<JPanel> cardPanels = new ArrayList<JPanel>();
 	public JPanel cardsHolder;
 	private LoginPanel loginPanel;
-	public CardLayout cardLayout;
+	public static CardLayout cardLayout;
 	public ApplicationPanel()
 	{
 		JFrame.setDefaultLookAndFeelDecorated(true);

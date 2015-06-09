@@ -18,10 +18,10 @@ public class TreePanel
 	public TreePanel(List<Project> projects)
 	{
 		super();
-		TreeNode top = new TreeNode("My Projects");
+		TreeNode top = new TreeNode("My Projects", null);
 		createNodes(top, projects);
 		tree = new JTree(top);
-		treeView = new JScrollPane(tree);
+		treeView = new JScrollPane(tree);	
 	}
 
 	private void createNodes(TreeNode root, List<Project> projects)
@@ -31,44 +31,26 @@ public class TreePanel
 
 		for (Project project : projects)
 		{
-			projectNode = new TreeNode(project.getProjectName());
+			projectNode = new TreeNode(project.getProjectName(), project);
 			root.add(projectNode);
 			List<Activity> activities = ActivityDB.getProjectActivities(
 					DatabaseConstants.PROJECT_MANAGEMENT_DB,
 					project.getProjectId());
 			for (Activity activity : activities)
 			{
-				treeNode = new TreeNode(activity.getActivityName());
+				treeNode = new TreeNode(activity.getActivityName(), activity);
 				projectNode.add(treeNode);
 			}
 		}
-		/*projectNode = new TreeNode("Project1");
-		root.add(projectNode);
-
-		treeNode = new TreeNode(new String("Activities"));
-		projectNode.add(treeNode);
-
-		treeNode = new TreeNode(new String("Members"));
-		projectNode.add(treeNode);
-
-		treeNode = new TreeNode(new String("Schedule"));
-		projectNode.add(treeNode);
-
-		projectNode = new TreeNode("Project2");
-		root.add(projectNode);
-
-		treeNode = new TreeNode(new String("Activities"));
-		projectNode.add(treeNode);
-
-		treeNode = new TreeNode(new String("Members"));
-		projectNode.add(treeNode);
-
-		treeNode = new TreeNode(new String("Schedule"));
-		projectNode.add(treeNode);*/
 	}
 
 	public JScrollPane getTreeView()
 	{
 		return treeView;
+	}
+	
+	protected JTree getTree()
+	{
+		return tree;
 	}
 }

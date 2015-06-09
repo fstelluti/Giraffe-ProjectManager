@@ -12,8 +12,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeSelectionModel;
 
+import model.Activity;
+import model.Project;
 import model.User;
 import controller.ActivityDB;
 import controller.DatabaseConstants;
@@ -24,6 +30,7 @@ public class MainViewPanel extends JPanel
 {
 	private JPanel northPanel;
 	private JScrollPane treeView;
+	private TreePanel treePanel;
 	private JPanel southPanel;
 	public JSplitPane splitPanel;
 	private User user;
@@ -60,7 +67,7 @@ public class MainViewPanel extends JPanel
 				{
 					CreateProjectDialog test = new CreateProjectDialog(null,
 							"Create a Project", true);
-					if(test.isRefresh())
+					if (test.isRefresh())
 					{
 						refresh();
 					}
@@ -76,15 +83,21 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editProject)
 				{
-					if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
-						JOptionPane.showMessageDialog(null,"User has no projects to edit."
-								+ "\nPlease create a project before attempting to edit.", 
-								"No Projects Available to Edit", JOptionPane.ERROR_MESSAGE);
-					}
-					else{
+					if (ProjectDB.getUserProjects(connectionString,
+							user.getId()).isEmpty())
+					{
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"User has no projects to edit."
+												+ "\nPlease create a project before attempting to edit.",
+										"No Projects Available to Edit",
+										JOptionPane.ERROR_MESSAGE);
+					} else
+					{
 						EditProjectDialog test = new EditProjectDialog(null,
 								"Edit a Project", true, user);
-						if(test.isRefresh())
+						if (test.isRefresh())
 						{
 							refresh();
 						}
@@ -101,15 +114,21 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == addActivity)
 				{
-					if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
-						JOptionPane.showMessageDialog(null,"User has no projects to add activity to."
-								+ "\nPlease create a project before attempting to add an activity.", 
-								"No Projects Available to Add Activity", JOptionPane.ERROR_MESSAGE);
-					}
-					else{
+					if (ProjectDB.getUserProjects(connectionString,
+							user.getId()).isEmpty())
+					{
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"User has no projects to add activity to."
+												+ "\nPlease create a project before attempting to add an activity.",
+										"No Projects Available to Add Activity",
+										JOptionPane.ERROR_MESSAGE);
+					} else
+					{
 						AddActivityDialog test = new AddActivityDialog(null,
 								"Add an activity", true, user);
-						if(test.isRefresh())
+						if (test.isRefresh())
 						{
 							refresh();
 						}
@@ -117,36 +136,47 @@ public class MainViewPanel extends JPanel
 				}
 			}
 		});
-		
-		// Open "Edit Activity" Dialog
-				editActivity.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e)
+		// Open "Edit Activity" Dialog
+		editActivity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if (e.getSource() == editActivity)
+				{
+					if (ProjectDB.getUserProjects(connectionString,
+							user.getId()).isEmpty())
 					{
-						if (e.getSource() == editActivity)
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"User has no projects to edit an activity."
+												+ "\nPlease create a project before attempting to edit an activity.",
+										"No Projects Available to Edit an Activity",
+										JOptionPane.ERROR_MESSAGE);
+					} else if (ActivityDB.getAllActivities(connectionString)
+							.isEmpty())
+					{
+						JOptionPane
+								.showMessageDialog(
+										null,
+										"User has no activities to edit."
+												+ "\nPlease create a activity before attempting to edit.",
+										"No Activites Available",
+										JOptionPane.ERROR_MESSAGE);
+					} else
+					{
+						EditActivityDialog test = new EditActivityDialog(null,
+								"Edit an Activity", true, user);
+						if (test.isRefresh())
 						{
-							if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
-								JOptionPane.showMessageDialog(null,"User has no projects to edit an activity."
-										+ "\nPlease create a project before attempting to edit an activity.", 
-										"No Projects Available to Edit an Activity", JOptionPane.ERROR_MESSAGE);
-							}
-							else if(ActivityDB.getAllActivities(connectionString).isEmpty()){
-								JOptionPane.showMessageDialog(null,"User has no activities to edit."
-										+ "\nPlease create a activity before attempting to edit.", 
-										"No Activites Available", JOptionPane.ERROR_MESSAGE);
-							}
-							else{
-								EditActivityDialog test = new EditActivityDialog(null,
-										"Edit an Activity", true, user);
-								if(test.isRefresh())
-								{
-									refresh();
-								}
-							}
+							refresh();
 						}
 					}
-				});
+				}
+			}
+		});
 
 		addToolbarButton(createProject);
 		addToolbarButton(editProject);
@@ -173,28 +203,32 @@ public class MainViewPanel extends JPanel
 	{
 		if (splitPanel == null)
 		{
-			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT){
+			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT) {
 
-			    private final int location = 200;
-			    {
-			        setDividerLocation( location );
-			    }
-			    @Override
-			    public int getDividerLocation() {
-			        return location ;
-			    }
-			    @Override
-			    public int getLastDividerLocation() {
-			        return location ;
-			    }
+				private final int location = 200;
+				{
+					setDividerLocation(location);
+				}
+
+				@Override
+				public int getDividerLocation()
+				{
+					return location;
+				}
+
+				@Override
+				public int getLastDividerLocation()
+				{
+					return location;
+				}
 
 			};
-			
-			treeView = new TreePanel(ProjectDB
-					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-							this.user.getId())).getTreeView();
+			treePanel = new TreePanel(ProjectDB.getUserProjects(
+					DatabaseConstants.PROJECT_MANAGEMENT_DB, this.user.getId()));
+			treeView = treePanel.getTreeView();
 			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
+			addTreeSelectionListener();
 		}
 		return splitPanel;
 	}
@@ -213,14 +247,54 @@ public class MainViewPanel extends JPanel
 		}
 		return northPanel;
 	}
-	
+
 	public void refresh()
 	{
-		getSplitPanel().setLeftComponent(new TreePanel(ProjectDB
-					.getUserProjects(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-							this.user.getId())).getTreeView());
+		getSplitPanel().setLeftComponent(
+				new TreePanel(ProjectDB.getUserProjects(
+						DatabaseConstants.PROJECT_MANAGEMENT_DB,
+						this.user.getId())).getTreeView());
 		getSplitPanel().setDividerLocation(200);
 		getSplitPanel().setRightComponent(new GridProjects(this.user));
+	}
+
+	public void addTreeSelectionListener()
+	{
+		final JTree tree = treePanel.getTree();
+		tree.getSelectionModel().setSelectionMode(
+				TreeSelectionModel.SINGLE_TREE_SELECTION);
+
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+
+			@Override
+			public void valueChanged(TreeSelectionEvent e)
+			{
+				TreeNode node = (TreeNode) tree.getLastSelectedPathComponent();
+
+				if (node == null)
+				{
+					return;
+				}
+
+				Object object = node.getUserObject();
+
+				if (node.isLeaf())
+				{
+					Activity activity = (Activity) object;
+				} else
+				{
+					if (node.isRoot())
+					{
+						getSplitPanel().setRightComponent(new GridProjects(user));
+					} else
+					{
+						Project project = (Project) object;
+						getSplitPanel().setRightComponent(new ProjectView(project));
+					}
+				}
+				getSplitPanel().setDividerLocation(200);
+			}
+		});
 	}
 
 	public User getCurrentUser()
