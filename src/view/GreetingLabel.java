@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 
 import model.User;
 
+@SuppressWarnings("serial")
 public class GreetingLabel extends JLabel
 {
 

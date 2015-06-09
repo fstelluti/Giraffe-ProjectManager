@@ -2,8 +2,8 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -172,15 +171,22 @@ public class EditActivityDialog extends JDialog
 	  scrollPanDescription.setPreferredSize(new Dimension(445,45));
 	  panDescription.add(scrollPanDescription);
 	  
-	  //This creates an area to add dependents, this area created so it can be iterated later to add dependencies to table
-	  panDependArea.setBackground(Color.white);
-	  panDependArea.setLayout(new BoxLayout(panDependArea, BoxLayout.Y_AXIS));
+	  //TEMPORARY MESSAGE
+	  JLabel dependMesage = new JLabel("Editing Dependents is not yet possible");
+	  Font font = new Font(null, 2, 18);
+	  dependMesage.setFont(font);
 	  
-	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
-			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	  scrollPanDependArea.setPreferredSize(new Dimension(330, 80));
+	  //UNCOMMENT BELOW TO REACTIVATE DEPENDENT FIELDS
 	  
-	  
+//	  //This creates an area to add dependents, this area created so it can be iterated later to add dependencies to table
+//	  panDependArea.setBackground(Color.white);
+//	  panDependArea.setLayout(new BoxLayout(panDependArea, BoxLayout.Y_AXIS));
+//	  
+//	  final JScrollPane scrollPanDependArea = new JScrollPane(panDependArea, 
+//			  JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//	  scrollPanDependArea.setPreferredSize(new Dimension(330, 80));
+//	  
+//	  
 //	  final JPanel panDepend = new JPanel();
 //	  panDepend.setBackground(Color.white);
 //	  panDepend.setPreferredSize(new Dimension(310, 60));
@@ -210,7 +216,7 @@ public class EditActivityDialog extends JDialog
 	  
 	  //Set Content to activity selection
 	  Activity currentActivity = ActivityDB.getById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
-	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
+//	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
 	  
 	  startModel.setValue(currentActivity.getStartDate());
 	  dueModel.setValue(currentActivity.getDueDate());
@@ -261,7 +267,7 @@ public class EditActivityDialog extends JDialog
 	  activitiesBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  Activity currentActivity = ActivityDB.getById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
-	    	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
+//	    	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
 
 	    	  startModel.setValue(currentActivity.getStartDate());
 	    	  dueModel.setValue(currentActivity.getDueDate());
@@ -291,8 +297,6 @@ public class EditActivityDialog extends JDialog
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
 	    	  Date projectStartDate = projects.get(projectBox.getSelectedIndex()).getStartDate();
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
-	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
-	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
 	    	  
 	    	  //Checks if the activity already exists
 	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
@@ -393,7 +397,7 @@ public class EditActivityDialog extends JDialog
 	  content.add(panDescription);
 //	  content.add(addDependentButton);
 //	  content.add(scrollPanDependArea);
-	  
+	  content.add(dependMesage);
 	  
 	  this.getContentPane().add(content, BorderLayout.CENTER);
 	  this.getContentPane().add(control, BorderLayout.SOUTH);

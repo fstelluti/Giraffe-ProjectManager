@@ -1,15 +1,10 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,7 +16,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import model.User;
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.UserDB;
 import controller.ViewManager;

@@ -163,7 +163,6 @@ public class EditProjectDialog extends JDialog
 	  managerBox.setSelectedIndex(projectManagerID - 1);
 	  projectDescription.setText(currentProject.getDescription());
 	  
-	  
 	  //On change of project Set Content to project selection
 	  projectBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {

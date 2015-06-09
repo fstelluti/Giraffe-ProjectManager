@@ -1,16 +1,14 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 
-import controller.ActivityDB;
-import controller.DataManager;
-import controller.DatabaseConstants;
 import model.Activity;
 import model.Project;
+import controller.ActivityDB;
+import controller.DatabaseConstants;
 
 public class TreePanel
 {

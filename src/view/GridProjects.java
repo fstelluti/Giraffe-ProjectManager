@@ -18,6 +18,7 @@ import controller.DatabaseConstants;
 import controller.ProjectDB;
 
 //NOT FINISHED
+@SuppressWarnings("all")
 public class GridProjects extends JPanel
 {
 	private JTable grid;

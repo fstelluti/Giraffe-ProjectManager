@@ -8,20 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
 
+import model.User;
 import controller.ActivityDB;
-import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
-import model.User;
 
 @SuppressWarnings("serial")
 public class MainViewPanel extends JPanel

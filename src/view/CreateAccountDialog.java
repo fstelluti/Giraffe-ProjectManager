@@ -27,6 +27,7 @@ import controller.DatabaseConstants;
 import controller.UserDB;
 
 //Andrey Uspenskiy
+@SuppressWarnings("serial")
 public class CreateAccountDialog extends JDialog
 {
 	private JTextField userName, email, firstName, lastName;
