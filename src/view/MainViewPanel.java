@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class MainViewPanel extends JPanel
 	private TreePanel treePanel;
 	private JPanel southPanel;
 	public JSplitPane splitPanel;
-	private User user;
+	public User user;
 	private GreetingLabel greetingLabel;
 	private JButton createProject, editProject, addActivity, editActivity;
 	private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
@@ -238,6 +239,7 @@ public class MainViewPanel extends JPanel
 		if (northPanel == null)
 		{
 			northPanel = new JPanel();
+			northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			greetingLabel = new GreetingLabel(this.user, SwingConstants.LEFT);
 			northPanel.add(greetingLabel);
 			for (JButton element : toolbarButtons)
@@ -262,6 +264,7 @@ public class MainViewPanel extends JPanel
 	public void addTreeSelectionListener()
 	{
 		final JTree tree = treePanel.getTree();
+		final MainViewPanel mainViewPanel = this;
 		tree.getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 
@@ -283,7 +286,7 @@ public class MainViewPanel extends JPanel
 				{
 					Activity activity = (Activity) object;
 					TreeNode parentNode = (TreeNode)node.getParent();
-					getSplitPanel().setRightComponent(new ActivityView(activity, parentNode.getUserObject()));
+					getSplitPanel().setRightComponent(new ActivityView(activity, parentNode.getUserObject(), user, mainViewPanel));
 				} else
 				{
 					if (node.isRoot())
@@ -292,7 +295,7 @@ public class MainViewPanel extends JPanel
 					} else
 					{
 						Project project = (Project) object;
-						getSplitPanel().setRightComponent(new ProjectView(project));
+						getSplitPanel().setRightComponent(new ProjectView(project, user, mainViewPanel));
 					}
 				}
 				getSplitPanel().setDividerLocation(200);

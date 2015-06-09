@@ -1,9 +1,12 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +22,7 @@ import controller.ActivityDB;
 import controller.DatabaseConstants;
 import model.Activity;
 import model.Project;
+import model.User;
 
 @SuppressWarnings("serial")
 public class ProjectView extends JPanel
@@ -27,9 +31,13 @@ public class ProjectView extends JPanel
 	private List<JLabel> labels = new ArrayList<JLabel>();
 	private List<Activity> projectActivities = new ArrayList<Activity>();
 	private List<JPanel> activityPanels = new ArrayList<JPanel>();
-	public ProjectView(Project project)
+	private User user;
+	private MainViewPanel mainViewPanel;
+	public ProjectView(Project project, User user, MainViewPanel mainViewPanel)
 	{
 		this.project = project;
+		this.user = user;
+		this.mainViewPanel = mainViewPanel;
 		initComponent();
 		createProjectPanel();
 		createActivityPanels();
@@ -53,7 +61,7 @@ public class ProjectView extends JPanel
 	{
 		for (Activity activity : getProjectActivities())
 		{
-			JPanel panel = new JPanel();
+			final JPanel panel = new JPanel();
 			panel.setBackground(Color.white);
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 			panel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Activity"));
@@ -63,6 +71,27 @@ public class ProjectView extends JPanel
 			panel.add(new JLabel("Due date: " + activity.getDueDate().toLocaleString()));
 			panel.add(new JLabel("Description: " + activity.getDescription()));
 			activityPanels.add(panel);
+			panel.addMouseListener(new MouseAdapter() {
+			    @Override
+			    public void mouseClicked(MouseEvent e) {
+			    	EditActivityDialog test = new EditActivityDialog(null,
+							"Edit an Activity", true, user);
+					if (test.isRefresh())
+					{
+						mainViewPanel.refresh();
+					}
+			    }
+			    
+			    @Override
+			    public void mouseEntered(MouseEvent e) {
+			    	panel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			    }
+			    
+			    @Override
+			    public void mouseExited(MouseEvent e) {
+			    	panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			    }
+			});
 		}
 	}
 	
@@ -70,7 +99,7 @@ public class ProjectView extends JPanel
 	{
 		JPanel projectPanelHolder = new JPanel();
 		projectPanelHolder.setLayout(new FlowLayout(FlowLayout.LEFT));
-		JPanel projectPanel = new JPanel();
+		final JPanel projectPanel = new JPanel();
 		projectPanel.setLayout(new BoxLayout(projectPanel, BoxLayout.Y_AXIS));
 		projectPanel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Project"));
 		
@@ -89,6 +118,28 @@ public class ProjectView extends JPanel
 		JLabel descrLabel = new JLabel("Description: " + project.getDescription());
 		labels.add(descrLabel);
 		projectPanel.add(descrLabel);
+		
+		projectPanel.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		    	EditProjectDialog test = new EditProjectDialog(null,
+						"Edit a Project", true, user);
+				if (test.isRefresh())
+				{
+					mainViewPanel.refresh();
+				}
+		    }
+		    
+		    @Override
+		    public void mouseEntered(MouseEvent e) {
+		    	projectPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		    }
+		    
+		    @Override
+		    public void mouseExited(MouseEvent e) {
+		    	projectPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		    }
+		});
 		
 		setLabelFonts(new Font("Arial", Font.PLAIN, 20));
 		projectPanelHolder.add(projectPanel);
