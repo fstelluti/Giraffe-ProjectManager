@@ -281,6 +281,8 @@ public class MainViewPanel extends JPanel
 				if (node.isLeaf())
 				{
 					Activity activity = (Activity) object;
+					TreeNode parentNode = (TreeNode)node.getParent();
+					getSplitPanel().setRightComponent(new ActivityView(activity, parentNode.getUserObject()));
 				} else
 				{
 					if (node.isRoot())
