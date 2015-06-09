@@ -160,7 +160,9 @@ public class EditProjectDialog extends JDialog
 	  dueModel.setValue(currentProject.getDueDate());
 	  projectName.setText(currentProject.getProjectName());
 	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
-	  managerBox.setSelectedIndex(projectManagerID - 1);
+	  User projectManager = UserDB.getById(connectionString, projectManagerID);
+	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
+	  managerBox.setSelectedIndex(selectedIndex);
 	  projectDescription.setText(currentProject.getDescription());
 	  
 	  //On change of project Set Content to project selection

@@ -67,7 +67,7 @@ public class MainViewPanel extends JPanel
 				if (e.getSource() == createProject)
 				{
 					CreateProjectDialog test = new CreateProjectDialog(null,
-							"Create a Project", true);
+							"Create a Project", true, user);
 					if (test.isRefresh())
 					{
 						refresh();

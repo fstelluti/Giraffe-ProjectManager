@@ -48,6 +48,7 @@ public class CreateProjectDialog extends JDialog
  private JTextArea projectDescription;
  private JScrollPane scrollPanDescription;
  private JComboBox<?> managerBox;
+ private User user;
  private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
  private UtilDateModel startModel = new UtilDateModel();
  private UtilDateModel dueModel = new UtilDateModel();
@@ -56,10 +57,11 @@ public class CreateProjectDialog extends JDialog
  boolean refresh = false;
  private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
-  public CreateProjectDialog(JFrame parent, String title, boolean modal)
+  public CreateProjectDialog(JFrame parent, String title, boolean modal, User user)
   {
     super(parent, title, modal);
     this.setSize(500, 500);
+    this.user = user;
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     this.initComponent();
@@ -99,6 +101,9 @@ public class CreateProjectDialog extends JDialog
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
 	  panManager.add(managerBox);
+	  User projectManager = UserDB.getById(connectionString, user.getId());
+	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
+	  managerBox.setSelectedIndex(selectedIndex);
 	  
 	  //Start Date
 	  JPanel panStartDate = new JPanel();
