@@ -102,10 +102,10 @@ public class LoginPanel extends JPanel implements ActionListener
 			newAccountButton = new JButton("Or create new account");
 			newAccountLabelPanel.add(newAccountButton);
 			
-			newAccountButton.setBorderPainted(false);
+			/*newAccountButton.setBorderPainted(false);
 			newAccountButton.setContentAreaFilled(false);
 			newAccountButton.setFocusPainted(false);
-			newAccountButton.setOpaque(false);
+			newAccountButton.setOpaque(false);*/
 			newAccountButton.addActionListener(new ActionListener() {
 				
 				@Override
