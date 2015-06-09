@@ -250,12 +250,13 @@ public class MainViewPanel extends JPanel
 
 	public void refresh()
 	{
-		getSplitPanel().setLeftComponent(
-				new TreePanel(ProjectDB.getUserProjects(
-						DatabaseConstants.PROJECT_MANAGEMENT_DB,
-						this.user.getId())).getTreeView());
+		treePanel = new TreePanel(ProjectDB.getUserProjects(
+				DatabaseConstants.PROJECT_MANAGEMENT_DB, this.user.getId()));
+		treeView = treePanel.getTreeView();
+		getSplitPanel().setLeftComponent(treeView);
 		getSplitPanel().setDividerLocation(200);
 		getSplitPanel().setRightComponent(new GridProjects(this.user));
+		addTreeSelectionListener();
 	}
 
 	public void addTreeSelectionListener()
