@@ -226,4 +226,20 @@ public class UserDBTest {
 		boolean condition = username.equals("testUser1");
 		assertTrue("The returned username does not match the requested username!", condition);
 	}
+	
+	// Tests userDB.checkLogin()
+	@Test
+	public void checkedLoginShouldBeValid() {
+		// Test four conditions
+		boolean validUserPass = UserDB.checkLogin(CONNECTION, "testUser1", "password1".toCharArray());
+		boolean validUser = UserDB.checkLogin(CONNECTION, "testUser1", "assword1".toCharArray());
+		boolean validPass = UserDB.checkLogin(CONNECTION, "pestUser1", "password1".toCharArray());
+		boolean invalidUserPass = UserDB.checkLogin(CONNECTION, "pestUser1", "assword1".toCharArray());
+		
+		// Assert 'em
+		assertTrue("Valid user/pass failed!", validUserPass);
+		assertFalse("Invalid pass worked!", validUser);
+		assertFalse("Invalid user worked!", validPass);
+		assertFalse("Invalid user/pass worked!", invalidUserPass);
+	}
 }

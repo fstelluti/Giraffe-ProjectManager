@@ -42,7 +42,7 @@ public class DataManagerTest {
 		ActivityDB.create(CONNECTION);
 		ProjectDB.create(CONNECTION);
 		PredecessorDB.create(CONNECTION);
-		UserRolesDB.create(CONNECTION);
+		UserRolesDB.create(CONNECTION); 	
 		UserRolesDictDB.create(CONNECTION);
 		
 		// Create fixtures
@@ -58,19 +58,19 @@ public class DataManagerTest {
 							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 4, 1);"
 							  + "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) VALUES (1, 5, 1);";
 		
-		String userRolesDictQuery = "INSERT INTO USERROLESDICT (ROLEID, ROLENAME) VALUES (1, 'manager');";
+		String userRolesDictQuery = "INSERT INTO USERROLESDICT (ROLENAME) VALUES ('manager');";
 		
-		String activityFixtureQuery = "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity1', '1969-12-28', '1969-12-29', 0, 'Activity Descrtiption');"
-									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity2', '1969-12-29', '1969-12-30', 1, 'Activity Descrtiption');"
-									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (1337, 'activity3', '1969-12-30', '1969-12-31', 2, 'Activity Descrtiption');"
-									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (42, 'activity4', '1969-12-31', '1970-01-01', 0, 'Activity Descrtiption');"
-									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS) VALUES (42, 'activity5', '1970-01-01', '1970-01-02', 1, 'Activity Descrtiption');";
+		String activityFixtureQuery = "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) VALUES (1337, 'activity1', '1969-12-28', '1969-12-29', 0, 'Activity Descrtiption 1');"
+									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) VALUES (1337, 'activity2', '1969-12-29', '1969-12-30', 1, 'Activity Descrtiption 2');"
+									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) VALUES (1337, 'activity3', '1969-12-30', '1969-12-31', 2, 'Activity Descrtiption 3');"
+									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) VALUES (42, 'activity4', '1969-12-31', '1970-01-01', 0, 'Activity Descrtiption 4');"
+									+ "INSERT INTO ACTIVITIES (PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) VALUES (42, 'activity5', '1970-01-01', '1970-01-02', 1, 'Activity Descrtiption 5');";
 		
-		String projectFixtureQuery =  "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project1', '1969-12-28', '1969-12-29', 'Project Descrtiption');"
-									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project2', '1969-12-29', '1969-12-30', 'Project Descrtiption');"
-									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project3', '1969-12-30', '1969-12-31', 'Project Descrtiption');"
-									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project4', '1969-12-31', '1970-01-01', 'Project Descrtiption');"
-									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE) VALUES ('project5', '1970-01-01', '1970-01-02', 'Project Descrtiption');";
+		String projectFixtureQuery =  "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, DESCRIPTION) VALUES ('project1', '1969-12-28', '1969-12-29', 'Project Descrtiption 1');"
+									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, DESCRIPTION) VALUES ('project2', '1969-12-29', '1969-12-30', 'Project Descrtiption 1');"
+									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, DESCRIPTION) VALUES ('project3', '1969-12-30', '1969-12-31', 'Project Descrtiption 1');"
+									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, DESCRIPTION) VALUES ('project4', '1969-12-31', '1970-01-01', 'Project Descrtiption 1');"
+									+ "INSERT INTO PROJECTS (NAME, STARTDATE, DUEDATE, DESCRIPTION) VALUES ('project5', '1970-01-01', '1970-01-02', 'Project Descrtiption 1');";
 		
 		String predecessorFixtureQuery =  "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (1, 2);"
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (1, 3);"
@@ -78,7 +78,7 @@ public class DataManagerTest {
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (2, 4);"
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (2, 5);";
 		
-		String fixtureQuery = userFixtureQuery + userRolesQuery + userRolesDictQuery + activityFixtureQuery + projectFixtureQuery + predecessorFixtureQuery;
+		String fixtureQuery = userFixtureQuery + userRolesQuery  + userRolesDictQuery + activityFixtureQuery + projectFixtureQuery + predecessorFixtureQuery;
 		// Execute queries and commit
 		Statement stmt = c.createStatement();
 		stmt.executeUpdate(fixtureQuery);
@@ -119,20 +119,6 @@ public class DataManagerTest {
 		}
 	}
 	
-	// Tests DataManager.checkLogin()
-	@Test
-	public void checkedLoginShouldBeValid() {
-		// Test four conditions
-		boolean validUserPass = UserDB.checkLogin(CONNECTION, "testUser1", "password1".toCharArray());
-		boolean validUser = UserDB.checkLogin(CONNECTION, "testUser1", "assword1".toCharArray());
-		boolean validPass = UserDB.checkLogin(CONNECTION, "pestUser1", "password1".toCharArray());
-		boolean invalidUserPass = UserDB.checkLogin(CONNECTION, "pestUser1", "assword1".toCharArray());
-		
-		// Assert 'em
-		assertTrue("Valid user/pass failed!", validUserPass);
-		assertFalse("Invalid pass worked!", validUser);
-		assertFalse("Invalid user worked!", validPass);
-		assertFalse("Invalid user/pass worked!", invalidUserPass);
-	}
+
 	
 }
