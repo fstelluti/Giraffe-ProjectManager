@@ -17,6 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import controller.ActivityDB;
 import controller.DataManager;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
@@ -31,7 +32,7 @@ public class MainViewPanel extends JPanel
 	public JSplitPane splitPanel;
 	private User user;
 	private GreetingLabel greetingLabel;
-	private JButton createProject, editProject, addActivity;
+	private JButton createProject, editProject, addActivity, editActivity;
 	private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
@@ -51,6 +52,7 @@ public class MainViewPanel extends JPanel
 		createProject = new JButton("Create new project");
 		editProject = new JButton("Edit a project");
 		addActivity = new JButton("Add activity");
+		editActivity = new JButton("Edit activity");
 
 		// Open "Create Project" Dialog
 		createProject.addActionListener(new ActionListener() {
@@ -103,19 +105,57 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == addActivity)
 				{
-					AddActivityDialog test = new AddActivityDialog(null,
-							"Add an activity", true, user);
-					if(test.isRefresh())
-					{
-						refresh();
+					if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
+						JOptionPane.showMessageDialog(null,"User has no projects to add activity to."
+								+ "\nPlease create a project before attempting to add an activity.", 
+								"No Projects Available to Add Activity", JOptionPane.ERROR_MESSAGE);
+					}
+					else{
+						AddActivityDialog test = new AddActivityDialog(null,
+								"Add an activity", true, user);
+						if(test.isRefresh())
+						{
+							refresh();
+						}
 					}
 				}
 			}
 		});
+		
+		// Open "Edit Activity" Dialog
+				editActivity.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if (e.getSource() == editActivity)
+						{
+							if(ProjectDB.getUserProjects(connectionString, user.getId()).isEmpty()){
+								JOptionPane.showMessageDialog(null,"User has no projects to edit an activity."
+										+ "\nPlease create a project before attempting to edit an activity.", 
+										"No Projects Available to Edit an Activity", JOptionPane.ERROR_MESSAGE);
+							}
+							else if(ActivityDB.getAllActivities(connectionString).isEmpty()){
+								JOptionPane.showMessageDialog(null,"User has no activities to edit."
+										+ "\nPlease create a activity before attempting to edit.", 
+										"No Activites Available", JOptionPane.ERROR_MESSAGE);
+							}
+							else{
+								EditActivityDialog test = new EditActivityDialog(null,
+										"Edit an Activity", true, user);
+								if(test.isRefresh())
+								{
+									refresh();
+								}
+							}
+						}
+					}
+				});
 
 		addToolbarButton(createProject);
 		addToolbarButton(editProject);
 		addToolbarButton(addActivity);
+		addToolbarButton(editActivity);
 	}
 
 	public void addToolbarButton(JButton button)

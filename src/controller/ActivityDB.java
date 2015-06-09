@@ -131,6 +131,49 @@ public class ActivityDB extends DataManager
 		return activities;
 	}
 	
+	public static List<Activity> getAllActivities(String connectionString)
+	{
+		List<Activity> activities = new ArrayList<Activity>();
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM ACTIVITIES;");
+			while (rs.next())
+			{
+				Activity activity = null;
+				int id = rs.getInt("id");
+				int projectId = rs.getInt("projectId");
+				String name = rs.getString("name");
+				Date startDate = dateFormat.parse(rs.getString("startDate"));
+				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				int status = rs.getInt("status");
+				String description = rs.getString("description");
+				activity = new Activity(id, projectId, name, startDate,
+						dueDate, status, description);
+				activities.add(activity);
+			}
+			rs.close();
+			stmt.close();
+			c.close();
+		}
+		
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		return activities;
+	}
+	
 	public static Activity getById(String connectionString, int id)
 	{
 		Activity activity = null;
@@ -212,5 +255,38 @@ public class ActivityDB extends DataManager
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		return activity;
+	}
+	public static void editActivityById(String connectionString, int id,
+			String activityName, String startDate,
+			String dueDate, int status, String description)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "UPDATE ACTIVITIES SET "
+					+ "name = '"+ activityName +"',"
+					+ "startdate = '" + startDate+"',"
+					+ "duedate = '" + dueDate+"',"
+					+ "status = " + status+","
+					+ "description = '" + description+"' "
+					+ "WHERE id = "+id+"; ";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
 	}
 }
