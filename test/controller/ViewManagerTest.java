@@ -1,15 +1,12 @@
 package controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import org.junit.Test;
-
 import model.User;
-import view.ApplicationPanel;
-import view.MainViewPanel;
+
+import org.junit.Test;
 
 /**
  * Tests controller/ViewManager.java
