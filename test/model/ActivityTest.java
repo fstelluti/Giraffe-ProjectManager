@@ -15,9 +15,7 @@ public class ActivityTest {
 
 	//Make a status variable, set to default of 1, and a status array
 	private int status = 1;
-	@SuppressWarnings("unused")
-	private String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
-	
+
 	//Tests setStatus()
 	@Test
 	public void testSetStatus() {
