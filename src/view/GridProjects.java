@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -9,6 +11,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -44,7 +47,13 @@ public class GridProjects extends JPanel
 							+ " FROM PROJECTS p, USERS u, USERROLES ur"
 							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + user.getId() + ";");
 			grid = new JTable(buildTableModel(rs) );
-			this.add(grid, BorderLayout.NORTH);
+			Font dataFont = new Font(null, 2, 18);
+			Font headerFont = new Font(null, 1, 20);
+			grid.setGridColor(Color.LIGHT_GRAY);
+			grid.setRowHeight(25);
+			grid.setFont(dataFont);
+			grid.getTableHeader().setFont(headerFont);
+			this.add(new JScrollPane(grid));
 			rs.close();
 			stmt.close();
 			c.close();

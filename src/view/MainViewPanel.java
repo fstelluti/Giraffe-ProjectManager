@@ -278,7 +278,7 @@ public class MainViewPanel extends JPanel
 
 				Object object = node.getUserObject();
 
-				if (node.isLeaf())
+				if (node.isLeaf() && node.getLevel() > 1)
 				{
 					Activity activity = (Activity) object;
 					TreeNode parentNode = (TreeNode)node.getParent();
