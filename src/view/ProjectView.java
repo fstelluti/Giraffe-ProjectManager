@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -10,19 +9,17 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import sun.awt.VerticalBagLayout;
-import controller.ActivityDB;
-import controller.DatabaseConstants;
 import model.Activity;
 import model.Project;
 import model.User;
+import controller.ActivityDB;
+import controller.DatabaseConstants;
 
 @SuppressWarnings("serial")
 public class ProjectView extends JPanel
@@ -47,7 +44,8 @@ public class ProjectView extends JPanel
 	private void initComponent()
 	{
 		this.setFont(new Font("Arial", Font.ITALIC, 26));
-		this.setLayout(new VerticalBagLayout());
+		//DOESNT COMPILE INTO JAR WITH AWT
+//		this.setLayout(new VerticalBagLayout());
 	}
 	
 	private void setLabelFonts(Font font)
