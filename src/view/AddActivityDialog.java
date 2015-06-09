@@ -55,7 +55,6 @@ public class AddActivityDialog extends JDialog
   UtilDateModel startModel = new UtilDateModel();
   UtilDateModel dueModel = new UtilDateModel();
   Properties p = new Properties();
-  private boolean exists;
   private User user;
   private boolean refresh = false;
   private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
@@ -184,6 +183,7 @@ public class AddActivityDialog extends JDialog
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
 	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
+	    	  boolean exists = false;
 	    	  
 	    	  //Checks if the activity already exists
 	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());

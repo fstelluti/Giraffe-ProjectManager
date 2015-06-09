@@ -55,7 +55,6 @@ public class EditProjectDialog extends JDialog
 	 private UtilDateModel startModel = new UtilDateModel();
 	 private UtilDateModel dueModel = new UtilDateModel();
 	 private Properties p = new Properties();
-	 boolean exists;
 	 boolean refresh = false;
 	 private User user;
 	 private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
@@ -184,26 +183,38 @@ public class EditProjectDialog extends JDialog
 	  JButton okButton = new JButton("Edit Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-    		  
+	    	  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  boolean exists = false;
+	    	  List<Project> projects = ProjectDB.getAll(connectionString);
+	    	  
+	    	  //Checks if the project already exists
+    		  for(Project project:projects){
+	    		  if(projectName.getText().equals(project.getProjectName()) && !projectName.getText().equals(currentProject.getProjectName()))
+	    				  { exists = true; break; } else{exists = false;}
+    		  }
+	    	  
 	    	  //Verifies all text boxes are filled out, if not = error
 	    	  if(projectName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
 	    			  || dueDatePicker.getModel().getValue() == null){
 	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields.", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
+	    	  }
+	    	  //Provides error if project name exists
+	    	  else if(exists){
+    			  JOptionPane.showMessageDialog(content,"Project with this name already exists", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Checks that due date not before start date
 	    	  else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Check if related activities have no conflict with new start date
-	    	  else if(!checkStartDate(projects.get(projectBox.getSelectedIndex()).getProjectId(), (Date)startDatePicker.getModel().getValue())){
+	    	  else if(!checkStartDate(currentProject.getProjectId(), (Date)startDatePicker.getModel().getValue())){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities start dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Check if related activities have no conflict with new due date
-	    	  else if(!checkDueDate(projects.get(projectBox.getSelectedIndex()).getProjectId(), (Date)dueDatePicker.getModel().getValue())){
+	    	  else if(!checkDueDate(currentProject.getProjectId(), (Date)dueDatePicker.getModel().getValue())){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities due dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
-	    		  Project currentProject = ProjectDB.getById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
 	    		  
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to edit the following Project: \n"
@@ -214,12 +225,12 @@ public class EditProjectDialog extends JDialog
 	    						  + "\nProject Name: " + projectName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
-	    						  "Confirm "+projects.get(projectBox.getSelectedIndex()).getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    						  "Confirm "+currentProject.getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given project
 	    			  ProjectDB.editProjectById(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-	    					  projects.get(projectBox.getSelectedIndex()).getProjectId(),
+	    					  currentProject.getProjectId(),
 	    					  projectName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()),

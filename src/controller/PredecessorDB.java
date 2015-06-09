@@ -123,4 +123,31 @@ public class PredecessorDB extends DataManager
 		}
 		return activities;
 	}
+	public static void deleteActivityPredecessors(String connectionString,
+			int activityId)
+	{
+		Connection c = null;
+		Statement stmt = null;
+		try
+		{
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "DELETE FROM PREDECESSORS "
+					+ "WHERE activityId = "+activityId+";";
+			stmt.executeUpdate(sql);
+			stmt.close();
+			c.commit();
+			c.close();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+	}
 }
