@@ -2,11 +2,8 @@ package controller;
 
 import java.sql.SQLException;
 
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import model.User;
 import view.ApplicationPanel;
@@ -57,6 +54,7 @@ public class ViewManager
 		return applicationPanel;
 	}
 	
+	@SuppressWarnings("unused")
 	public static void createAccountDialog()
 	{
 		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationPanel, "Create account dialog", true);
