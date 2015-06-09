@@ -27,6 +27,7 @@ public class ActivityDB extends DataManager
 					+ " PROJECTID       INTEGER    NOT NULL, "
 					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
 					+ " DUEDATE 		DATE, " + " STATUS		INTEGER 	NOT NULL,"
+					+ " DESCRIPTION       TEXT,"
 					+ "FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
@@ -48,15 +49,13 @@ public class ActivityDB extends DataManager
 	public static void insert(String connectionString,
 			int associatedProjectId, String activityName, String startDate,
 			String dueDate, int status, String description)
-
-	{
+		{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
 			c = getConnection(connectionString);
 			c.setAutoCommit(false);
-
 			stmt = c.createStatement();
 			String sql = "INSERT INTO ACTIVITIES (ID,PROJECTID,NAME,STARTDATE, DUEDATE,STATUS, DESCRIPTION) "
 					+ "VALUES (NULL, '"

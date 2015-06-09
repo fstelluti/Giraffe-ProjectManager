@@ -79,6 +79,7 @@ public class PredecessorDB extends DataManager
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
 		Statement stmt = null;
+		Statement stmt2 = null;
 		try
 		{
 			c = getConnection(connectionString);
@@ -88,11 +89,11 @@ public class PredecessorDB extends DataManager
 			ResultSet rs = stmt
 					.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = "
 							+ activityID + ";");
-
 			while (rs.next())
 			{
+				stmt2 = c.createStatement();
 				int predecessorID = rs.getInt("predecessorId");
-				ResultSet rs2 = stmt
+				ResultSet rs2 = stmt2
 						.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = "
 								+ predecessorID + ";");
 				Activity activity = null;
@@ -101,11 +102,12 @@ public class PredecessorDB extends DataManager
 				Date startDate = dateFormat.parse(rs2.getString("startDate"));
 				Date dueDate = dateFormat.parse(rs2.getString("dueDate"));
 				int status = rs2.getInt("status");
-				String description = rs.getString("description");
-				activity = new Activity(activityID, projectId, name, startDate,
+				String description = rs2.getString("description");
+				activity = new Activity(predecessorID, projectId, name, startDate,
 						dueDate, status, description);
 				activities.add(activity);
 				rs2.close();
+				stmt2.close();
 			}
 			rs.close();
 			stmt.close();

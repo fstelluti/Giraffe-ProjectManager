@@ -24,6 +24,7 @@ public class ProjectDB extends DataManager
 			String sql = "CREATE TABLE PROJECTS "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
+					+ " DESCRIPTION       TEXT,"
 					+ " DUEDATE 		DATE)";
 			stmt.executeUpdate(sql);
 			stmt.close();
