@@ -74,13 +74,16 @@ public class GridProjects extends JPanel
 	        throws SQLException {
 
 	    ResultSetMetaData metaData = rs.getMetaData();
-
+	    int columnCount = metaData.getColumnCount();
+	   
 	    // names of columns
 	    Vector<String> columnNames = new Vector<String>();
-	    int columnCount = metaData.getColumnCount();
-	    for (int column = 1; column <= columnCount; column++) {
-	        columnNames.add(metaData.getColumnName(column));
-	    }
+//	    for (int column = 1; column <= columnCount; column++) {
+//	        columnNames.add(metaData.getColumnName(column));
+//	    }
+	    columnNames.add("Name");
+	    columnNames.add("Start Date");
+	    columnNames.add("Due Date");
 
 	    // data of the table
 	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
