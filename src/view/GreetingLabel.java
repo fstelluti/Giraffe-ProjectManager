@@ -15,6 +15,6 @@ public class GreetingLabel extends JLabel
 
 	public GreetingLabel(User user, int horizontalAlignment)
 	{
-		super("Hello " + user.getFirstName() + " " + user.getLastName(), user.getUserPicture(), horizontalAlignment);
+		super("Hello " + user.getFirstName() + " " + user.getLastName(), horizontalAlignment);
 	}
 }
