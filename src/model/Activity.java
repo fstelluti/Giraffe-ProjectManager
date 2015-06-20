@@ -2,7 +2,11 @@ package model;
 
 import java.util.Date;
 
-
+/**
+ * 
+ * @author zak
+ *
+ */
 
 public class Activity
 {

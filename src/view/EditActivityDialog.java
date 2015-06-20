@@ -45,6 +45,12 @@ import controller.DatabaseConstants;
 import controller.PredecessorDB;
 import controller.ProjectDB;
 
+/**
+ * 
+ * @author zak
+ *
+ */
+
 @SuppressWarnings("serial")
 public class EditActivityDialog extends JDialog
 {

@@ -7,6 +7,12 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author 
+ * @modifiedBy zak
+ */
+
 @SuppressWarnings("serial")
 public class ApplicationPanel extends JFrame
 {

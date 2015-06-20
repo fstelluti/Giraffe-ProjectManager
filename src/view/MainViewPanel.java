@@ -27,6 +27,11 @@ import controller.ActivityDB;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 
+/**
+ * 
+ * @author 
+ * @modifiedBy zak
+ */
 @SuppressWarnings("serial")
 public class MainViewPanel extends JPanel
 {

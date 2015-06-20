@@ -10,6 +10,13 @@ import java.util.List;
 
 import model.Activity;
 
+/**
+ * 
+ * @classAuthor
+ * @methodAuthor zak
+ *
+ */
+
 public class ActivityDB extends DataManager
 {
 

@@ -10,6 +10,13 @@ import java.util.List;
 
 import model.Project;
 
+/**
+ * 
+ * @classAuthor
+ * @methodAuthor zak
+ *
+ */
+
 public class ProjectDB extends DataManager
 {
 	public static void create(String connectionString)

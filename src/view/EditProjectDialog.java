@@ -43,6 +43,11 @@ import controller.ProjectDB;
 import controller.UserDB;
 import controller.UserRolesDB;
 
+/**
+ * 
+ * @author 
+ * @modifiedBy zak
+ */
 @SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
 {

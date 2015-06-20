@@ -1,5 +1,8 @@
 package model;
 
+/**
+ *  @author zak
+ */
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

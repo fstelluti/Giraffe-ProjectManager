@@ -20,6 +20,12 @@ import controller.DatabaseConstants;
 import controller.UserDB;
 import controller.ViewManager;
 
+/**
+ * 
+ * @author 
+ * @modifiedBy zak
+ */
+
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel implements ActionListener
 {
