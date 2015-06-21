@@ -63,6 +63,7 @@ public class ViewManager
 	public static void logout()
 	{
 		applicationPanel.setCardLayout("LoginPanel", LOGINPANEL_SIZE_X, LOGINPANEL_SIZE_Y);
+		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
 	}
 	
 	/**
