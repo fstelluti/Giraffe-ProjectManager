@@ -21,6 +21,12 @@ public class ViewManager
 	private static JPanel mainViewPanel;
 	private static ApplicationPanel applicationPanel;
 	
+	//Constants for the size of the Panels
+	private static final int LOGINPANEL_SIZE_X = 500;
+	private static final int LOGINPANEL_SIZE_Y = 730;
+	private static final int APPLICATION_PANEL_SIZE_X = 1200;
+	private static final int APPLICATION_PANEL_SIZE_Y = 800;
+	
 	/**
 	 * Creates the Main View Panel when User has logged in
 	 * @return JPanel
@@ -32,28 +38,23 @@ public class ViewManager
 			mainViewPanel = new MainViewPanel(user);
 			applicationPanel.setLocationRelativeTo(null);
 			applicationPanel.addCardPanel(mainViewPanel, "MainViewPanel");
-			mainViewPanel.setSize(1200, 800);
-			applicationPanel.setSize(1200, 800);
+			mainViewPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
+			applicationPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
 			applicationPanel.setLocationRelativeTo(null);
 		}
 		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
 		//and another user wants to login
-		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
-		
-		//Sets the correct size
-		applicationPanel.setSize(1200, 800);
-		applicationPanel.setLocationRelativeTo(null);
+		applicationPanel.setCardLayout("MainViewPanel", APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
 		
 		return mainViewPanel;
 	}
-	
+
 	/**
 	 * Displays an error message when user can't login correctly and returns to the LoginPanel
 	 */
 	public static void failedLogin()
 	{
 		JOptionPane.showMessageDialog(null, "Username and/or password do not match", "Login failed", JOptionPane.ERROR_MESSAGE);
-		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
 	}
 	
 	/**
@@ -61,10 +62,7 @@ public class ViewManager
 	 */
 	public static void logout()
 	{
-		//Switches to the login Panel (need to set size and location again)
-		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
-		applicationPanel.setSize(500, 730);
-		applicationPanel.setLocationRelativeTo(null);
+		applicationPanel.setCardLayout("LoginPanel", LOGINPANEL_SIZE_X, LOGINPANEL_SIZE_Y);
 	}
 	
 	/**
@@ -109,4 +107,19 @@ public class ViewManager
 		dialog.setVisible(true);
 		return dialog;*/
 	}
+	
+	/**
+	 * Getter methods for the various Panel size constants
+	 * @return Panel Size X or Y
+	 */
+	public static int getLoginPanelSizeX()
+	{
+		return LOGINPANEL_SIZE_X;
+	}
+	
+	public static int getLoginPanelSizeY()
+	{
+		return LOGINPANEL_SIZE_Y;
+	}
+	
 }

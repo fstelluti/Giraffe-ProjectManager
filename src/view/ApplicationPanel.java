@@ -7,19 +7,22 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controller.ViewManager;
+
 /**
  * 
  * @author 
- * @modifiedBy zak
+ * @modifiedBy Zachary Bergeron, Francois Stelluti
  */
 
 @SuppressWarnings("serial")
 public class ApplicationPanel extends JFrame
 {
-	public List<JPanel> cardPanels = new ArrayList<JPanel>();
-	public JPanel cardsHolder;
+	private List<JPanel> cardPanels = new ArrayList<JPanel>();
+	private JPanel cardsHolder;
 	private LoginPanel loginPanel;
-	public static CardLayout cardLayout;
+	private static CardLayout cardLayout;
+
 	public ApplicationPanel()
 	{
 		JFrame.setDefaultLookAndFeelDecorated(true);
@@ -49,6 +52,18 @@ public class ApplicationPanel extends JFrame
 		cardsHolder.add(panelToAdd, cardPanelName);
 	}
 	
+	/**
+	 * Switch to the card with the given name and sets the correct size
+	 */	
+	public void setCardLayout(String cardLayoutName, int sizeX, int sizeY) 
+	{
+		ApplicationPanel.cardLayout.show(cardsHolder, cardLayoutName);
+		
+		//Sets the correct size
+		this.setSize(sizeX, sizeY);
+		this.setLocationRelativeTo(null);
+	}
+	
 	public LoginPanel getLoginPanel()
 	{
 		if (loginPanel == null)
@@ -56,7 +71,10 @@ public class ApplicationPanel extends JFrame
 			loginPanel = new LoginPanel();
 			this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		}
-		this.setSize(500, 730);
+		
+		//Sets the proper size
+		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
+		
 		return loginPanel;
 	}
 }
