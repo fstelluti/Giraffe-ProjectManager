@@ -23,7 +23,7 @@ import controller.ViewManager;
 /**
  * 
  * @author 
- * @modifiedBy zak
+ * @modifiedBy: Zachary Bergeron, Francois Stelluti
  */
 
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	
 	public JTextField loginTextField;
 	public JPasswordField passwordTextField;
-	public JButton loginButton, resetButton;
+	public JButton loginButton, exitButton;
 	public JButton newAccountButton;
 	
 	public LoginPanel()
@@ -105,7 +105,7 @@ public class LoginPanel extends JPanel implements ActionListener
 		if(newAccountLabelPanel == null)
 		{
 			newAccountLabelPanel = new JPanel();
-			newAccountButton = new JButton("Or create new account");
+			newAccountButton = new JButton("Create new account");
 			newAccountLabelPanel.add(newAccountButton);
 			
 			/*newAccountButton.setBorderPainted(false);
@@ -135,25 +135,24 @@ public class LoginPanel extends JPanel implements ActionListener
 			buttonsSubPanel = new JPanel();
 			loginButton = new JButton("Login");
 			loginButton.addActionListener(this);
-			resetButton = new JButton("Reset");
+			exitButton = new JButton("Exit");
 			
 			
-			resetButton.addActionListener(new ActionListener() {
+			exitButton.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					if (e.getSource() == resetButton)
+					if (e.getSource() == exitButton)
 					{
-						loginTextField.setText("");
-						passwordTextField.setText("");
+						ViewManager.exitApplication();
 					}
 					
 				}
 			});
 			buttonsSubPanel.setLayout(new FlowLayout());
 			buttonsSubPanel.add(loginButton);
-			buttonsSubPanel.add(resetButton);
+			buttonsSubPanel.add(exitButton);
 		}
 		return buttonsSubPanel;
 	}
@@ -170,6 +169,10 @@ public class LoginPanel extends JPanel implements ActionListener
 			{
 				User user = UserDB.getByName(DatabaseConstants.PROJECT_MANAGEMENT_DB, uName);
 				ViewManager.createMainViewPanel(user);
+				
+				//Resets text fields so that when logged out, the fields are empty
+				loginTextField.setText("");
+				passwordTextField.setText("");
 			}
 			else
 			{

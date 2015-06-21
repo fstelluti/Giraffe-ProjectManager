@@ -26,11 +26,12 @@ import model.User;
 import controller.ActivityDB;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
+import controller.ViewManager;
 
 /**
  * 
  * @author 
- * @modifiedBy zak
+ * @modifiedBy: Zachary Bergeron, Francois Stelluti
  */
 @SuppressWarnings("serial")
 public class MainViewPanel extends JPanel
@@ -42,7 +43,7 @@ public class MainViewPanel extends JPanel
 	public JSplitPane splitPanel;
 	public User user;
 	private GreetingLabel greetingLabel;
-	private JButton createProject, editProject, addActivity, editActivity;
+	private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
 	private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
@@ -63,6 +64,7 @@ public class MainViewPanel extends JPanel
 		editProject = new JButton("Edit a project");
 		addActivity = new JButton("Add activity");
 		editActivity = new JButton("Edit activity");
+		logoutActivity = new JButton("Logout");
 
 		// Open "Create Project" Dialog
 		createProject.addActionListener(new ActionListener() {
@@ -184,11 +186,26 @@ public class MainViewPanel extends JPanel
 				}
 			}
 		});
+		
+		//Logs the user out and returns them to the login panel
+		logoutActivity.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				if(e.getSource() == logoutActivity) 
+				{
+					ViewManager.logout();		
+				}
+			}
+			
+		});
 
 		addToolbarButton(createProject);
 		addToolbarButton(editProject);
 		addToolbarButton(addActivity);
 		addToolbarButton(editActivity);
+		addToolbarButton(logoutActivity);
 	}
 
 	public void addToolbarButton(JButton button)

@@ -10,6 +10,12 @@ import view.ApplicationPanel;
 import view.CreateAccountDialog;
 import view.MainViewPanel;
 
+/**
+ * 
+ * @author: 
+ * @modifiedBy: Francois Stelluti
+ */
+
 public class ViewManager
 {
 	private static JPanel mainViewPanel;
@@ -24,8 +30,15 @@ public class ViewManager
 			mainViewPanel.setSize(1200, 800);
 			applicationPanel.setSize(1200, 800);
 			applicationPanel.setLocationRelativeTo(null);
-			ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
 		}
+		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
+		//and another user wants to login
+		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "MainViewPanel");
+		
+		//Sets the correct size
+		applicationPanel.setSize(1200, 800);
+		applicationPanel.setLocationRelativeTo(null);
+		
 		return mainViewPanel;
 	}
 	
@@ -36,10 +49,30 @@ public class ViewManager
 	}
 	
 	/**
+	 * Logs the User out of the current session and returns them to the login screen
+	 */
+	public static void logout()
+	{
+		//Switches to the login Panel (need to set size and location again)
+		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
+		applicationPanel.setSize(500, 730);
+		applicationPanel.setLocationRelativeTo(null);
+	}
+	
+	/**
+	 * Exits the Program/Application
+	 */
+	public static void exitApplication()
+	{
+		//Simply hide and close the Application
+		applicationPanel.setVisible(false);
+		applicationPanel.dispose();
+	}
+	
+	/**
 	 * method used to start the application
 	 * @return ApplicationPanel
 	 */
-	
 	public static ApplicationPanel startApplication()
 	{
 		if (applicationPanel == null)
