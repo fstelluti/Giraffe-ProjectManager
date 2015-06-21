@@ -176,7 +176,7 @@ public class LoginPanel extends JPanel implements ActionListener
 			}
 			else
 			{
-				ViewManager.showLogin();
+				ViewManager.failedLogin();
 			}
 			for (int i = 0; i < passChar.length; i++)
 			{

@@ -13,7 +13,8 @@ import model.Project;
 /**
  * 
  * @classAuthor
- * @methodAuthor zak
+ * @methodAuthor Zachary Bergeron
+ * @modifiedBy: Francois Stelluti
  *
  */
 
@@ -94,11 +95,8 @@ public class ProjectDB extends DataManager
 			while (rs.next())
 			{
 				Project project = null;
-//				int id = rs.getInt("p.id");
-//				String name = rs.getString("p.name");
-//				Date startDate = dateFormat.parse(rs.getString("p.startDate"));
-//				Date dueDate = dateFormat.parse(rs.getString("p.dueDate"));
-//				int projectManagerID = rs.getInt("u.id");
+
+				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));
@@ -182,11 +180,8 @@ public class ProjectDB extends DataManager
 			while (rs.next())
 			{
 				Project project = null;
-//				int id = rs.getInt("p.id");
-//				String name = rs.getString("p.name");
-//				Date startDate = dateFormat.parse(rs.getString("p.startDate"));
-//				Date dueDate = dateFormat.parse(rs.getString("p.dueDate"));
-//				int projectManagerID = rs.getInt("u.id");
+
+			  //Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
 				Date startDate = dateFormat.parse(rs.getString(3));

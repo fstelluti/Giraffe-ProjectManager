@@ -20,6 +20,11 @@ public class ViewManager
 {
 	private static JPanel mainViewPanel;
 	private static ApplicationPanel applicationPanel;
+	
+	/**
+	 * Creates the Main View Panel when User has logged in
+	 * @return JPanel
+	 */
 	public static JPanel createMainViewPanel(User user)
 	{
 		if (mainViewPanel == null)
@@ -42,7 +47,10 @@ public class ViewManager
 		return mainViewPanel;
 	}
 	
-	public static void showLogin()
+	/**
+	 * Displays an error message when user can't login correctly and returns to the LoginPanel
+	 */
+	public static void failedLogin()
 	{
 		JOptionPane.showMessageDialog(null, "Username and/or password do not match", "Login failed", JOptionPane.ERROR_MESSAGE);
 		ApplicationPanel.cardLayout.show(applicationPanel.cardsHolder, "LoginPanel");
