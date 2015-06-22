@@ -89,7 +89,7 @@ public class ProjectDB extends DataManager
 
 			stmt = c.createStatement();
 			ResultSet rs = stmt
-					.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
+					.executeQuery("SELECT DISTINCT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
 							+ " FROM PROJECTS p, USERS u, USERROLES ur, USERROLESDICT"
 							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND USERROLESDICT.roleName = \"manager\";");
 			while (rs.next())
