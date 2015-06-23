@@ -16,7 +16,7 @@ public class LoginPanelTest {
 	public void shouldCreateLoginPanel() {
 		
 		//Create LoginPanel object
-		LoginPanel login = new LoginPanel();
+		LoginPanel login = LoginPanel.getLoginPanelInstance();
 		
 		assertNotNull("Login Panel object is null", login);
 		

@@ -20,7 +20,7 @@ public class ApplicationPanel extends JFrame
 {
 	private List<JPanel> cardPanels = new ArrayList<JPanel>();
 	private JPanel cardsHolder;
-	private LoginPanel loginPanel;
+	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
 	public ApplicationPanel()
@@ -66,11 +66,14 @@ public class ApplicationPanel extends JFrame
 	
 	public LoginPanel getLoginPanel()
 	{
-		if (loginPanel == null)
+		/*if (loginPanel == null)
 		{
 			loginPanel = new LoginPanel();
 			this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
-		}
+		}*/
+		
+		//Sets the Login Panel button
+		this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		
 		//Sets the proper size
 		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
