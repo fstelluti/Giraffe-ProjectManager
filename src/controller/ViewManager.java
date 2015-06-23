@@ -15,6 +15,7 @@ import model.User;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
 import view.MainViewPanel;
+import view.TreeNode;
 
 /**
  * 
@@ -40,10 +41,8 @@ public class ViewManager
 	 * Creates the Main View Panel when User has logged in
 	 * @return JPanel
 	 */
-	public static JPanel createMainViewPanel(User user)
-	{
-		if (mainViewPanel == null)
-		{
+	public static JPanel createMainViewPanel(User user) {
+		if (mainViewPanel == null) {
 			mainViewPanel = new MainViewPanel(user);
 			applicationPanel.setLocationRelativeTo(null);
 			applicationPanel.addCardPanel(mainViewPanel, "MainViewPanel");
@@ -61,16 +60,14 @@ public class ViewManager
 	/**
 	 * Displays an error message when user can't login correctly and returns to the LoginPanel
 	 */
-	public static void failedLogin()
-	{
+	public static void failedLogin() {
 		JOptionPane.showMessageDialog(null, "Username and/or password do not match", "Login failed", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	/**
 	 * Logs the User out of the current session and returns them to the login screen
 	 */
-	public static void logout()
-	{
+	public static void logout() {
 		applicationPanel.setCardLayout("LoginPanel", LOGINPANEL_SIZE_X, LOGINPANEL_SIZE_Y);
 		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
 	}
@@ -78,8 +75,7 @@ public class ViewManager
 	/**
 	 * Exits the Program/Application
 	 */
-	public static void exitApplication()
-	{
+	public static void exitApplication() {
 		//Simply hide and close the Application
 		applicationPanel.setVisible(false);
 		applicationPanel.dispose();
@@ -89,10 +85,8 @@ public class ViewManager
 	 * method used to start the application
 	 * @return ApplicationPanel
 	 */
-	public static ApplicationPanel startApplication()
-	{
-		if (applicationPanel == null)
-		{
+	public static ApplicationPanel startApplication() {
+		if (applicationPanel == null) {
 			try {
 				DataManager.createTables(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 			} catch (SQLException e) {
@@ -119,16 +113,40 @@ public class ViewManager
 	}
 	
 	/**
+	 * Creates a TreeNode based on the list of current projects and activities
+	 * @param root, projects
+	 */
+	public static void createProjectTree(TreeNode root, List<Project> projects) {
+		
+		TreeNode projectNode = null;	//Node for a Project
+		TreeNode activityNode = null;			//Node for an Activity
+
+		//For each project, add it to its Tree
+		for (Project project : projects) {
+			projectNode = new TreeNode(project.getProjectName(), project);
+			root.add(projectNode);
+		  //Get a list of activities corresponding to a project
+			List<Activity> activities = ActivityDB.getProjectActivities(
+					DatabaseConstants.PROJECT_MANAGEMENT_DB,
+					project.getProjectId());
+			
+			//For each activity, add it to its project tree
+			for (Activity activity : activities) {
+				activityNode = new TreeNode(activity.getActivityName(), activity);
+				projectNode.add(activityNode);
+			}
+		}
+	}
+	
+	/**
 	 * Getter methods for the various Panel size constants
 	 * @return Panel Size X or Y
 	 */
-	public static int getLoginPanelSizeX()
-	{
+	public static int getLoginPanelSizeX() {
 		return LOGINPANEL_SIZE_X;
 	}
 	
-	public static int getLoginPanelSizeY()
-	{
+	public static int getLoginPanelSizeY() {
 		return LOGINPANEL_SIZE_Y;
 	}
 	
