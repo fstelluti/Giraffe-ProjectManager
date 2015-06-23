@@ -1,10 +1,16 @@
 package controller;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import model.Activity;
+import model.Project;
 import model.User;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
@@ -13,7 +19,7 @@ import view.MainViewPanel;
 /**
  * 
  * @author: 
- * @modifiedBy: Francois Stelluti
+ * @modifiedBy: Francois Stelluti, Matthew Mongrain
  */
 
 public class ViewManager
@@ -27,6 +33,9 @@ public class ViewManager
 	private static final int APPLICATION_PANEL_SIZE_X = 1200;
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	
+	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private static String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+
 	/**
 	 * Creates the Main View Panel when User has logged in
 	 * @return JPanel
@@ -123,4 +132,73 @@ public class ViewManager
 		return LOGINPANEL_SIZE_Y;
 	}
 	
+	public static boolean activityIsInsertable(Activity activity, Project project) throws Exception {
+  	  Date projectStartDate = project.getStartDate();
+  	  Date projectDueDate = project.getDueDate();
+  	  String projectName = project.getProjectName();
+  	  String activityName = activity.getActivityName();
+  	  Date activityStartDate = activity.getStartDate();
+  	  Date activityDueDate = activity.getDueDate();
+  	  int projectId = project.getProjectId();
+		boolean exists = false;
+		
+		//TODO: Factor this out into a method boolean ActivityDB.activityExists();
+		List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectId);
+		for(Activity activitySelected:activities){
+			if(activityName.equals(activitySelected.getActivityName())) { 
+				exists = true; 
+				break; 
+			} else {
+				exists = false;
+			}
+		}
+		  
+		//Verifies all text boxes are filled out, if not = error
+		if(activityName.hashCode() == 0 || activityStartDate == null || activityDueDate == null) {
+			throw new Exception("Please fill out all fields");
+		}
+ 
+	   	//Provides error if activity name exists
+	   	if (exists) {
+	   		throw new Exception("Activity with this name already exists");
+	   	}
+	   	//Checks that due date not before start date
+	   	if(activityDueDate.before(activityStartDate)){
+	   		throw new Exception("Please ensure due date is not before start date");
+	   	  }
+	   	  //Checks if activity start date falls in project date constraints
+	   	  if((activityStartDate.getDate() < projectStartDate.getDate() 
+	   			&& activityStartDate.getMonth() <= projectStartDate.getMonth() 
+	   			&& activityStartDate.getYear() <= projectStartDate.getYear())
+	   			|| (activityStartDate.getMonth() < projectStartDate.getMonth() 
+	   			&& activityStartDate.getYear() <= projectStartDate.getYear())
+	   			|| activityStartDate.getYear() < projectStartDate.getYear()){
+	   		throw new Exception("Please ensure due date is within project dates : " + dateFormat.format(projectStartDate) + " to " + dateFormat.format(projectDueDate));
+	   	  }
+	   	  //Checks if activity due date falls in project date constraints
+	   	  if((activityDueDate.getDate() > projectDueDate.getDate() 
+	   			  && activityDueDate.getMonth() >= projectDueDate.getMonth() 
+	   			  && activityDueDate.getYear() >= projectDueDate.getYear())
+	   			  || (activityDueDate.getMonth() > projectDueDate.getMonth() 
+	   			  && activityDueDate.getYear() >= projectDueDate.getYear())
+	   			  || activityDueDate.getYear() > projectDueDate.getYear()){
+	   		  throw new Exception("Please ensure due date is within project dates : " + dateFormat.format(projectStartDate) + " to " + dateFormat.format(projectDueDate));
+	   	  }
+	   	  
+		return true;
+		}
+	
+	public static int addActivity (Activity activity, Project project) {
+		ActivityDB.insert(
+			connectionString, 
+			project.getProjectId(), 
+			activity.getActivityName(), 
+			dateFormat.format(activity.getStartDate()), 
+			dateFormat.format(activity.getDueDate()), 
+			activity.getStatus(), 
+			activity.getDescription()
+		);
+		Activity insertedActivity = ActivityDB.getByNameAndProjectId(connectionString, activity.getActivityName(), project.getProjectId());
+		return insertedActivity.getActivityId();
+	}
 }

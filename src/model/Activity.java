@@ -37,6 +37,17 @@ public class Activity
 		this.description = description;
 	}
 	
+	public Activity(int projectId, String name, Date startDate, Date dueDate, int status, String description)
+	{
+		super();
+		this.projectId = projectId;
+		this.name = name;
+		this.startDate = startDate;
+		this.dueDate = dueDate;
+		this.status = status;
+		this.description = description;
+	}
+	
 	public String getStatusName() {
 		return statusArray[status];
 	}

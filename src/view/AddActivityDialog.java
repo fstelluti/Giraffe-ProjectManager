@@ -41,6 +41,7 @@ import controller.ActivityDB;
 import controller.DatabaseConstants;
 import controller.PredecessorDB;
 import controller.ProjectDB;
+import controller.ViewManager;
 
 /**
  * 
@@ -183,87 +184,47 @@ public class AddActivityDialog extends JDialog
 	      @SuppressWarnings("deprecation")
 		public void actionPerformed(ActionEvent arg0) {
 	    	  //Sets variables to simplify verifications
+	    	  String activityNameEntered = activityName.getText();
 	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  Date projectStartDate = projects.get(projectBox.getSelectedIndex()).getStartDate();
-	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
-	    	  String projectName = projects.get(projectBox.getSelectedIndex()).getProjectName();
 	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
-	    	  boolean exists = false;
-	    	  
+	    	  int projectIdIndex = projectBox.getSelectedIndex();
+	    	  Activity activityToInsert = new Activity(projectID, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
+	    	  Project selectedProject = ProjectDB.getById(connectionString, projectID);
 	    	  //Checks if the activity already exists
-	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
-    		  for(Activity activity:activities){
-	    		  if(activityName.getText().equals(activity.getActivityName())){ exists = true; break; } else{exists = false;}
-    		  }
-    		  
-	    	  //Verifies all text boxes are filled out, if not = error
-	    	  if(activityName.getText().hashCode() == 0 || activityStartDate == null
-	    			  || activityDueDate == null || projectBox.getSelectedIndex() < 0){
-	    		  JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+	    	  
+	    	  boolean activityIsInsertable = false;
+	    	  try {
+	    		 activityIsInsertable =  ViewManager.activityIsInsertable(activityToInsert, selectedProject);
+	    	  } catch (Exception e) {
+	    		  JOptionPane.showMessageDialog(content, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
-	    	  //Provides error if activity name exists
-	    	  else if(exists){
-    			  JOptionPane.showMessageDialog(content,"Activity with this name already exists", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  //Checks that due date not before start date
-	    	  else if(activityDueDate.before(activityStartDate)){
-	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  //Checks if activity start date falls in project date constraints
-	    	  else if((activityStartDate.getDate() < projectStartDate.getDate() 
-	    			  && activityStartDate.getMonth() <= projectStartDate.getMonth() 
-	    			  && activityStartDate.getYear() <= projectStartDate.getYear())
-	    			  || (activityStartDate.getMonth() < projectStartDate.getMonth() 
-	    			  && activityStartDate.getYear() <= projectStartDate.getYear())
-	    			  || activityStartDate.getYear() < projectStartDate.getYear()){
-	    		  JOptionPane.showMessageDialog(content,"Please ensure start date is within project dates:"
-	    				  + dateFormat.format(projectStartDate) +" to "
-	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  //Checks if activity due date falls in project date constraints
-	    	  else if((activityDueDate.getDate() > projectDueDate.getDate() 
-	    			  && activityDueDate.getMonth() >= projectDueDate.getMonth() 
-	    			  && activityDueDate.getYear() >= projectDueDate.getYear())
-	    			  || (activityDueDate.getMonth() > projectDueDate.getMonth() 
-	    			  && activityDueDate.getYear() >= projectDueDate.getYear())
-	    			  || activityDueDate.getYear() > projectDueDate.getYear()){
-	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is within project dates : "
-	    				  + dateFormat.format(projectStartDate) +" to "
-	    				  + dateFormat.format(projectDueDate), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  else{
+	    	  
+	    	  if (activityIsInsertable && projectIdIndex >= 0) {
+	    	 
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to create the following Activity for "
-	    						  + projectName+"?\n"
+	    						  + selectedProject.getProjectName() +"?\n"
 	    						  + "\nActivity Name: "+activityName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
 	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()],
 //	    						  + "\nDescription: "+activityDescription.getText().substring(0, 100) + "...",
-	    						  "Confirm "+activityName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    						  "Confirm " + activityName.getText() + " creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-		    		  ActivityDB.insert(connectionString,
-			    				 projects.get(projectBox.getSelectedIndex()).getProjectId(),
-			    				 activityName.getText(), 
-			    				 dateFormat.format(activityStartDate),
-			    				 dateFormat.format(activityDueDate),
-			    				 statusBox.getSelectedIndex(),
-			    				 activityDescription.getText());
-		    		  
+	    			  int newActivityId = ViewManager.addActivity(activityToInsert, selectedProject);
 		    		  refresh = true;
 		    		  
-		    		  //Gets id of activity just created
-		    		  Activity activity = ActivityDB.getByNameAndProjectId(
-		    				  connectionString, activityName.getText(), projectID);
 		    		  
 		    		  //Iterates through all dependents and adds them to the DB
 		    		  Component[] components = panDependArea.getComponents();
+		    		  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectID);
+
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
 			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
 			    		  PredecessorDB.insert(connectionString, 
-			    				  activity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
+			    				  newActivityId, activities.get(dependBox.getSelectedIndex()).getActivityId());
 		    		  }
 		    		  setVisible(false); 
 	    		  }
