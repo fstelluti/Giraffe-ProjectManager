@@ -5,12 +5,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 
+ * @classAuthor
+ * @methodAuthor ???
+ * @modifiedBy Anne-Marie Dube
+ *
+ */
+
+
 public class UserRolesDB extends DataManager
 {
-	public static void create(String connectionString)
+	/**
+	 * Method to create User Roles Table in the DB
+	 * @param connectionString as a String
+	 */
+	public static void createUserRolesTable(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
+		
 		try
 		{
 			c = getConnection(connectionString);
@@ -23,8 +37,6 @@ public class UserRolesDB extends DataManager
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID),"
 					+ " FOREIGN KEY(ROLEID) REFERENCES USERSROLESDICT(ROLEID))";
 			stmt.executeUpdate(sql);
-			stmt.close();
-			c.close();
 		}
 		catch (SQLException e)
 		{
@@ -33,70 +45,109 @@ public class UserRolesDB extends DataManager
 		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+				c.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections in UserRolesDB.createUserRolesTable: " + e.getMessage());
+			}
 		}
 	}
 	
-	//Role id 1 = manager
-		public static void insert(String connectionString,
-				int userID, int projectID, int roleID)
+	
+	/**
+	 * Method to insert a User Role into the Table
+	 * @param connectionString as a String
+	 * @param userID as an Int
+	 * @param projectID as an Int
+	 * @param roleID as an Int
+	 */
+	public static void insertUserRoleIntoTable(String connectionString, int userID, int projectID, int roleID) {
+		
+		//Role id 1 = manager
+		Connection c = null;
+		Statement stmt = null;
+		
+		try
 		{
-			Connection c = null;
-			Statement stmt = null;
-			try
-			{
-				c = getConnection(connectionString);
-				c.setAutoCommit(false);
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
 
-				stmt = c.createStatement();
-				String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
-						+ "VALUES ( "
-						+ userID
-						+ ", "
-						+ projectID
-						+ ", "
-						+ roleID
-						+ ")";
-				stmt.executeUpdate(sql);
+			stmt = c.createStatement();
+			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
+					+ "VALUES ( "
+					+ userID
+					+ ", "
+					+ projectID
+					+ ", "
+					+ roleID
+					+ ")";
+			stmt.executeUpdate(sql);
+			c.commit();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
 				stmt.close();
-				c.commit();
 				c.close();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			} catch (SQLException e) {
+				System.err.println("Error closing connections in UserRolesDB.InsertUserRoleIntoTable: " + e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Method to get the Project Manager associated to a Project
+	 * @param connectionString as a String
+	 * @param id as an Int
+	 * @return
+	 */
+	public static int getProjectManagerIDByProjectID(String connectionString, int id)
+	{
+		int projectManagerID = 0;
+		Connection c = null;
+		Statement stmt = null;
+		ResultSet rs  = null;
 		
-		public static int getProjectManagerIDByProjectID(String connectionString, int id)
+		try
 		{
-			int projectManagerID = 0;
-			Connection c = null;
-			Statement stmt = null;
-			try
-			{
-				c = getConnection(connectionString);
-				c.setAutoCommit(false);
+			c = getConnection(connectionString);
+			c.setAutoCommit(false);
 
-				stmt = c.createStatement();
-				ResultSet rs = stmt
-						.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
-				projectManagerID = rs.getInt("USERID");
+			stmt = c.createStatement();
+			rs = stmt.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
+			projectManagerID = rs.getInt("USERID");
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (stmt!= null) {
+					stmt.close();
+				}
 				rs.close();
 				stmt.close();
 				c.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections in UserRolesDB.getProjectManagerIDByProjectID: " + e.getMessage());
 			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			return projectManagerID;
 		}
+		
+		return projectManagerID;
+	}
 }

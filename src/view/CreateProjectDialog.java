@@ -1,8 +1,6 @@
 package view;
 
-/**
- * Create a Dialog window, where the user (which kind of user can?) can create a project.
- */
+
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,9 +39,10 @@ import controller.UserDB;
 import controller.UserRolesDB;
 
 /**
- * 
+ * Create a Dialog window, where the user can create a project.
+ *
  * @author 
- * @modifiedBy zak
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube
  */
 
 @SuppressWarnings("serial")
@@ -99,7 +98,7 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(230, 60));
 	  
-	  final List<User> projectManagers = UserDB.getAll(connectionString);
+	  final List<User> projectManagers = UserDB.getAllUsers(connectionString);
 	  Vector<String> projectManagerNames = new Vector<String>();
 	  for(User projectManager : projectManagers){
 		  projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
@@ -107,7 +106,7 @@ public class CreateProjectDialog extends JDialog
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
 	  panManager.add(managerBox);
-	  User projectManager = UserDB.getById(connectionString, user.getId());
+	  User projectManager = UserDB.getUserById(connectionString, user.getId());
 	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  managerBox.setSelectedIndex(selectedIndex);
 	  
@@ -150,7 +149,7 @@ public class CreateProjectDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Checks if the project already exists
-	    	  List<Project> projects = ProjectDB.getAll(connectionString);
+	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
     		  for(Project project:projects){
 	    		  if(projectName.getText().equals(project.getProjectName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -176,7 +175,7 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  ProjectDB.insert(connectionString,
+	    			  ProjectDB.insertProjectIntoTable(connectionString,
 			    				 projectName.getText(), 
 			    				 dateFormat.format(startDatePicker.getModel().getValue()),
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
@@ -184,12 +183,12 @@ public class CreateProjectDialog extends JDialog
 	    					  );
 	    			  
 	    			  //Gets id of project just created
-		    		  Project project = ProjectDB.getByName(
+		    		  Project project = ProjectDB.getProjectByName(
 		    				  connectionString, projectName.getText());
 		    		  
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
-		    		  UserRolesDB.insert(connectionString,
+		    		  UserRolesDB.insertUserRoleIntoTable(connectionString,
 		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectId(), 1);
 		    		  refresh = true;
 			    		  setVisible(false); 

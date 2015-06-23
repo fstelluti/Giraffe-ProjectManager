@@ -23,7 +23,7 @@ import controller.ViewManager;
 /**
  * 
  * @author 
- * @modifiedBy: Zachary Bergeron, Francois Stelluti
+ * @modifiedBy: Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
  */
 
 @SuppressWarnings("serial")
@@ -177,7 +177,7 @@ public class LoginPanel extends JPanel implements ActionListener
 			boolean checkResult = UserDB.checkLogin(DatabaseConstants.PROJECT_MANAGEMENT_DB, loginTextField.getText(), passChar);
 			if (checkResult)
 			{
-				User user = UserDB.getByName(DatabaseConstants.PROJECT_MANAGEMENT_DB, uName);
+				User user = UserDB.getUserByName(DatabaseConstants.PROJECT_MANAGEMENT_DB, uName);
 				ViewManager.createMainViewPanel(user);
 				
 				//Resets text fields so that when logged out, the fields are empty

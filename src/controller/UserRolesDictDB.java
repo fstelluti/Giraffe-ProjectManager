@@ -4,12 +4,25 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 
+ * @classAuthor
+ * @methodAuthor ????
+ * @modifiedBy Anne-Marie Dube
+ *
+ */
+
 public class UserRolesDictDB extends DataManager
 {
-	public static void create(String connectionString)
+	/**
+	 * Method to create User Role Dictionary Table in the DB
+	 * @param connectionString as a String
+	 */
+	public static void createUserRolesDictTable(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
+		
 		try
 		{
 			c = getConnection(connectionString);
@@ -20,8 +33,6 @@ public class UserRolesDictDB extends DataManager
 					+ "INSERT INTO USERROLESDICT (roleid, rolename) "
 					+ "VALUES (1, 'manager')";
 			stmt.executeUpdate(sql);
-			stmt.close();
-			c.close();
 		}
 		catch (SQLException e)
 		{
@@ -30,6 +41,13 @@ public class UserRolesDictDB extends DataManager
 		catch (Exception e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+				c.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections in UserRolesDictDB.createUserRolesDictTable: " + e.getMessage());
+			}
 		}
 	}
 }

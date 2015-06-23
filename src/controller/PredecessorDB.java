@@ -10,9 +10,22 @@ import java.util.List;
 
 import model.Activity;
 
+/**
+ * 
+ * @classAuthor
+ * @methodAuthor ?????
+ * @modifiedBy: Anne-Marie Dube
+ *
+ */
+
+
 public class PredecessorDB extends DataManager
 {
-	public static void create(String connectionString)
+	/**
+	 * Method to create the table of predecessors
+	 * @param connectionString as String
+	 */
+	public static void createPredecessorTable(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -42,14 +55,21 @@ public class PredecessorDB extends DataManager
 				stmt.close();
 				c.close();
 			} catch (SQLException e) {
-				System.err.println("Error closing connections in PredecessorDB.create: " + e.getMessage());
+				System.err.println("Error closing connections in PredecessorDB.createPredecessorTable: " + e.getMessage());
 			}
 		}
 	}
 	
-	public static void insert(String connectionString, int activityID, int predecessorID) {
+	/**
+	 * Method to insert a Predecessor Activity into the Predecessor Table
+	 * @param connectionString as a String
+	 * @param activityID as an Int
+	 * @param predecessorID as an Int
+	 */
+	public static void insertPredecessorIntoTable(String connectionString, int activityID, int predecessorID) {
 		Connection c = null;
 		Statement stmt = null;
+		
 		try {
 			c = getConnection(connectionString);
 			c.setAutoCommit(false);
@@ -63,6 +83,7 @@ public class PredecessorDB extends DataManager
 					+ "')";
 			stmt.executeUpdate(sql);
 			c.commit();
+			
 		} catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} catch (Exception e) {
@@ -72,11 +93,17 @@ public class PredecessorDB extends DataManager
 				stmt.close();
 				c.close();
 			} catch (SQLException e) {
-				System.err.println("Error closing connections in PredecessorDB.insert: " + e.getMessage());
+				System.err.println("Error closing connections in PredecessorDB.insertPredecessorIntoTable: " + e.getMessage());
 			}
 		}
 	}
 	
+	/**
+	 * Method to get all the Predecessors in the table
+	 * @param connectionString as a String
+	 * @param activityID as an Int
+	 * @return
+	 */
 	public static List<Activity> getPredecessors(String connectionString, int activityID) {
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
@@ -84,15 +111,15 @@ public class PredecessorDB extends DataManager
 		Statement stmt2 = null;
 		ResultSet rs = null;
 		ResultSet rs2 = null;
-		try
-		{
+		
+		try	{
 			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = " + activityID + ";");
-			while (rs.next())
-			{
+			
+			while (rs.next()) {
 				stmt2 = c.createStatement();
 				int predecessorID = rs.getInt("predecessorId");
 				rs2 = stmt2.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + predecessorID + ";");
@@ -126,16 +153,24 @@ public class PredecessorDB extends DataManager
 				stmt.close();
 				c.close();
 			} catch (SQLException e) {
-				System.err.println("Error closing connections in PredecessorDB.getPredecessors: " + e.getMessage());
+				System.err.println("Error closing connections in PredecessorDB.getActivityPredecessors: " + e.getMessage());
 			}
 		}
+		
 		return activities;
 	}
-	public static void deleteActivityPredecessors(String connectionString,
-			int activityId)
+	
+	/**
+	 * Method to delete an Activity's Predecessors
+	 * @param connectionString as a String
+	 * @param activityID as an Int
+	 * @return
+	 */
+	public static void deleteActivityPredecessors(String connectionString, int activityId)
 	{
 		Connection c = null;
 		Statement stmt = null;
+		
 		try
 		{
 			c = getConnection(connectionString);

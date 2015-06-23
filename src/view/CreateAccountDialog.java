@@ -26,7 +26,13 @@ import model.User;
 import controller.DatabaseConstants;
 import controller.UserDB;
 
-//Andrey Uspenskiy
+/**
+ * 
+ * @classAuthor Andrey Uspenskiy
+ * @modifiedBy Anne-Marie Dube
+ *
+ */
+
 @SuppressWarnings("serial")
 public class CreateAccountDialog extends JDialog
 {
@@ -161,7 +167,7 @@ public class CreateAccountDialog extends JDialog
 							resetForm();
 							return;
 						case JOptionPane.YES_OPTION:
-							UserDB.insert(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+							UserDB.insertUserIntoTable(DatabaseConstants.PROJECT_MANAGEMENT_DB,
 									userName.getText().trim(),
 									getPassword(userPassword.getPassword()),
 									email.getText(), firstName.getText(),
@@ -223,8 +229,7 @@ public class CreateAccountDialog extends JDialog
 
 	private boolean isInputValid()
 	{
-		List<User> users = UserDB
-				.getAll(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		List<User> users = UserDB.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 		for (User user : users)
 		{
 			if(email.getText().hashCode() == 0 || 

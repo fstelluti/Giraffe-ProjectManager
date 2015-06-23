@@ -45,7 +45,8 @@ import controller.ViewManager;
 
 /**
  * 
- * @author zak
+ * @author Zachary Bergeron
+ * @modifiedBy Anne-Marie Dube
  *
  */
 
@@ -190,7 +191,7 @@ public class AddActivityDialog extends JDialog
 	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
 	    	  int projectIdIndex = projectBox.getSelectedIndex();
 	    	  Activity activityToInsert = new Activity(projectID, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
-	    	  Project selectedProject = ProjectDB.getById(connectionString, projectID);
+	    	  Project selectedProject = ProjectDB.getProjectById(connectionString, projectID);
 	    	  //Checks if the activity already exists
 	    	  
 	    	  boolean activityIsInsertable = false;
@@ -223,7 +224,7 @@ public class AddActivityDialog extends JDialog
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
 			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-			    		  PredecessorDB.insert(connectionString, 
+			    		  PredecessorDB.insertPredecessorIntoTable(connectionString, 
 			    				  newActivityId, activities.get(dependBox.getSelectedIndex()).getActivityId());
 		    		  }
 		    		  setVisible(false); 

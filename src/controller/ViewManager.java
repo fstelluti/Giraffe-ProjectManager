@@ -20,7 +20,7 @@ import view.TreeNode;
 /**
  * 
  * @author: 
- * @modifiedBy: Francois Stelluti, Matthew Mongrain
+ * @modifiedBy: Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
  */
 
 public class ViewManager
@@ -207,7 +207,7 @@ public class ViewManager
 		}
 	
 	public static int addActivity (Activity activity, Project project) {
-		ActivityDB.insert(
+		ActivityDB.insertActivityIntoTable(
 			connectionString, 
 			project.getProjectId(), 
 			activity.getActivityName(), 
@@ -216,7 +216,7 @@ public class ViewManager
 			activity.getStatus(), 
 			activity.getDescription()
 		);
-		Activity insertedActivity = ActivityDB.getByNameAndProjectId(connectionString, activity.getActivityName(), project.getProjectId());
+		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getActivityName(), project.getProjectId());
 		return insertedActivity.getActivityId();
 	}
 }

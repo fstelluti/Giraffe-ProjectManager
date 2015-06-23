@@ -14,7 +14,8 @@ import java.text.SimpleDateFormat;
  * Connection class is used to open connection, attach statement/query and execute it
  * For DML and DDL statements executeUpdate method is used; for queries - executeQuery is used
  * ResultSet iterates over collection and retrieves DDB values by field name
- * For 
+ * 
+ * @modifiedBy Anne-Marie Dube
  */
 public abstract class DataManager
 {
@@ -50,13 +51,13 @@ public abstract class DataManager
 	}
 	
 	public static void createTables(String connectionString) throws SQLException{
-		if(UserDB.getAll(connectionString).isEmpty()){
-			UserDB.create(connectionString);
-			ProjectDB.create(connectionString);
-			ActivityDB.createTable(connectionString);
-			PredecessorDB.create(connectionString);
-			UserRolesDB.create(connectionString);
-			UserRolesDictDB.create(connectionString);
+		if(UserDB.getAllUsers(connectionString).isEmpty()){
+			UserDB.createUserTable(connectionString);
+			ProjectDB.createProjectTable(connectionString);
+			ActivityDB.createActivityTable(connectionString);
+			PredecessorDB.createPredecessorTable(connectionString);
+			UserRolesDB.createUserRolesTable(connectionString);
+			UserRolesDictDB.createUserRolesDictTable(connectionString);
 		}
 	}
 }
