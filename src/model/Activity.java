@@ -12,6 +12,12 @@ public class Activity
 {
 	private int 	id;
 	private int 	projectId;
+	private int		pessimisticDuration;
+	private int 	optimisticDuration;
+	private int		mostLikelyDuration;
+	private double 	duration;
+	private int		estimatedCost;
+	private int		actualCost;
 	private String 	name;
 	private Date 	startDate;
 	private Date 	dueDate;
@@ -94,6 +100,54 @@ public class Activity
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public double getPessimisticDuration() {
+		return pessimisticDuration;
+	}
+
+	public void setPessimisticDuration(int pessimisticDuration) {
+		this.pessimisticDuration = pessimisticDuration;
+	}
+
+	public double getOptimisticDuration() {
+		return optimisticDuration;
+	}
+
+	public void setOptimisticDuration(int optimisticDuration) {
+		this.optimisticDuration = optimisticDuration;
+	}
+
+	public double getMostLikelyDuration() {
+		return mostLikelyDuration;
+	}
+
+	public void setMostLikelyDuration(int mostLikelyDuration) {
+		this.mostLikelyDuration = mostLikelyDuration;
+	}
+
+	public double getDuration() {
+		return duration;
+	}
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+	public int getEstimatedCost() {
+		return estimatedCost;
+	}
+
+	public void setEstimatedCost(int cost) {
+		this.estimatedCost = cost;
+	}
+
+	public int getActualCost() {
+		return actualCost;
+	}
+
+	public void setActualCost(int actualCost) {
+		this.actualCost = actualCost;
 	}
 
 }

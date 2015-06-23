@@ -53,7 +53,7 @@ public abstract class DataManager
 		if(UserDB.getAll(connectionString).isEmpty()){
 			UserDB.create(connectionString);
 			ProjectDB.create(connectionString);
-			ActivityDB.create(connectionString);
+			ActivityDB.createTable(connectionString);
 			PredecessorDB.create(connectionString);
 			UserRolesDB.create(connectionString);
 			UserRolesDictDB.create(connectionString);

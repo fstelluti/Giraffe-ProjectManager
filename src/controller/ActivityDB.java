@@ -20,7 +20,7 @@ import model.Activity;
 public class ActivityDB extends DataManager
 {
 
-	public static void create(String connectionString)
+	public static void createTable(String connectionString)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -32,9 +32,16 @@ public class ActivityDB extends DataManager
 			String sql = "CREATE TABLE ACTIVITIES "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
-					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
-					+ " DUEDATE 		DATE, " + " STATUS		INTEGER 	NOT NULL,"
+					+ " NAME       TEXT     NOT NULL, " 
+					+ " STARTDATE 		DATE, "
+					+ " DUEDATE 		DATE, " 
+					+ " STATUS		INTEGER 	NOT NULL,"
 					+ " DESCRIPTION       TEXT,"
+					+ " PESSIMISTIC_DURATION INTEGER,"
+					+ " OPTIMISTIC_DURATION INTEGER,"
+					+ " MOST_LIKELY_DURATION INTEGER,"
+					+ " ESTIMATED_COST INTEGER,"
+					+ " ACTUAL_COST INTEGER,"
 					+ "FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 			stmt.close();
