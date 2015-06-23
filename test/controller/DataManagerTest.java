@@ -39,7 +39,7 @@ public class DataManagerTest {
 		// Cheating, sort of, but correct output will be tested in other tests anyway so no big deal (?)
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
 		UserDB.create(CONNECTION);
-		ActivityDB.create(CONNECTION);
+		ActivityDB.createTable(CONNECTION);
 		ProjectDB.create(CONNECTION);
 		PredecessorDB.create(CONNECTION);
 		UserRolesDB.create(CONNECTION); 	
