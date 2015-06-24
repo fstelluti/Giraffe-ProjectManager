@@ -22,7 +22,7 @@ public abstract class DataManager
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
-	 * 
+	 * Method creates the connection between the application and the DB
 	 * @param connectionString
 	 * @return
 	 */

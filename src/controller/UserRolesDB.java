@@ -59,12 +59,11 @@ public class UserRolesDB extends DataManager
 	/**
 	 * Method to insert a User Role into the Table
 	 * @param connectionString as a String
-	 * @param userID as an Int
-	 * @param projectID as an Int
-	 * @param roleID as an Int
+	 * @param userId as an Int
+	 * @param projectId as an Int
+	 * @param roleId as an Int
 	 */
-	public static void insertUserRoleIntoTable(String connectionString, int userID, int projectID, int roleID) {
-		
+	public static void insertUserRoleIntoTable(String connectionString, int userId, int projectId, int roleId) {
 		//Role id 1 = manager
 		Connection c = null;
 		Statement stmt = null;
@@ -77,11 +76,11 @@ public class UserRolesDB extends DataManager
 			stmt = c.createStatement();
 			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
 					+ "VALUES ( "
-					+ userID
+					+ userId
 					+ ", "
-					+ projectID
+					+ projectId
 					+ ", "
-					+ roleID
+					+ roleId
 					+ ")";
 			stmt.executeUpdate(sql);
 			c.commit();
@@ -109,9 +108,9 @@ public class UserRolesDB extends DataManager
 	 * @param id as an Int
 	 * @return
 	 */
-	public static int getProjectManagerIDByProjectID(String connectionString, int id)
+	public static int getProjectManagerIdByProjectId(String connectionString, int id)
 	{
-		int projectManagerID = 0;
+		int projectManagerId = 0;
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs  = null;
@@ -123,7 +122,7 @@ public class UserRolesDB extends DataManager
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
-			projectManagerID = rs.getInt("USERID");
+			projectManagerId = rs.getInt("USERID");
 		}
 		catch (SQLException e)
 		{
@@ -148,6 +147,6 @@ public class UserRolesDB extends DataManager
 			}
 		}
 		
-		return projectManagerID;
+		return projectManagerId;
 	}
 }

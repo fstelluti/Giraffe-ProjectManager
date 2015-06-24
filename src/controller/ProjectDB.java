@@ -339,10 +339,10 @@ public class ProjectDB extends DataManager
 		/**
 		 * Method to edit a project's name
 		 * @param connectionString as a String
-		 * @param projectID as an int
+		 * @param projectId as an int
 		 * @param newProjectName as a String
 		 */
-		public static void editProjectName(String connectionString,	int projectID, String newProjectName)
+		public static void editProjectName(String connectionString,	int projectId, String newProjectName)
 		{
 			Connection c = null;
 			Statement stmt = null;
@@ -357,7 +357,7 @@ public class ProjectDB extends DataManager
 						+ "SET name='"
 						+ newProjectName
 						+ "' WHERE id='"
-						+ projectID 
+						+ projectId 
 						+ "';"
 						;
 				stmt.executeUpdate(sql);
@@ -388,10 +388,10 @@ public class ProjectDB extends DataManager
 		 * @param startDate as a String
 		 * @param dueDate as a String
 		 * @param description as a String
-		 * @param projectManagerID as an Int
+		 * @param projectManagerId as an Int
 		 */
 		public static void editProjectById(String connectionString, int id,
-				String name, String startDate, String dueDate, String description, int projectManagerID)
+				String name, String startDate, String dueDate, String description, int projectManagerId)
 		{
 			Connection c = null;
 			Statement stmt = null;
@@ -409,7 +409,7 @@ public class ProjectDB extends DataManager
 						+ "description = '" + description+"' "
 						+ "WHERE id = "+id+"; "
 						+" UPDATE USERROLES SET "
-						+ "userid = " + projectManagerID+" "
+						+ "userid = " + projectManagerId+" "
 						+ "WHERE projectid = "+id;
 				stmt.executeUpdate(sql);
 				c.commit();
@@ -434,10 +434,10 @@ public class ProjectDB extends DataManager
 		/**
 		 * Method to edit a project's start date
 		 * @param connectionString as a String
-		 * @param projectID as an Int
+		 * @param projectId as an Int
 		 * @param newStartDate as a String
 		 */
-		public static void editProjectStartDate(String connectionString, int projectID, String newStartDate)
+		public static void editProjectStartDate(String connectionString, int projectId, String newStartDate)
 		{
 			Connection c = null;
 			Statement stmt = null;
@@ -452,7 +452,7 @@ public class ProjectDB extends DataManager
 						+ "SET startDate='"
 						+ newStartDate
 						+ "' WHERE id='"
-						+ projectID 
+						+ projectId 
 						+ "';"
 						;
 				stmt.executeUpdate(sql);
@@ -478,10 +478,10 @@ public class ProjectDB extends DataManager
 		/**
 		 * Method to edit a project's due date
 		 * @param connectionString as a String
-		 * @param projectID as an Int
+		 * @param projectId as an Int
 		 * @param newDueDate as a String
 		 */
-		public static void editProjectDueDate(String connectionString, int projectID, String newDueDate)
+		public static void editProjectDueDate(String connectionString, int projectId, String newDueDate)
 		{
 			Connection c = null;
 			Statement stmt = null;
@@ -496,7 +496,7 @@ public class ProjectDB extends DataManager
 						+ "SET dueDate='"
 						+ newDueDate
 						+ "' WHERE id='"
-						+ projectID 
+						+ projectId 
 						+ "';"
 						;
 				stmt.executeUpdate(sql);
@@ -522,11 +522,13 @@ public class ProjectDB extends DataManager
 		/**
 		 * Method to edit Project Manager role
 		 * @param connectionString as a String
-		 * @param userID as an integer
-		 * @param projectID	as an integer
-		 * @param roleID as an integer
+		 * @param userId as an integer
+		 * @param projectId	as an integer
+		 * @param roleId as an integer
 		 */
-		public static void editProjectUserRole(String connectionString,	int userID, int projectID, int roleID)
+		
+		//TODO roleId needs to be implemented
+		public static void editProjectUserRole(String connectionString,	int userId, int projectId, int roleId)
 		{
 			Connection c = null;
 			Statement stmt = null;
@@ -539,9 +541,9 @@ public class ProjectDB extends DataManager
 				stmt = c.createStatement();
 				String sql = "UPDATE USERROLES "
 						+ "SET USERID='"
-						+ userID
+						+ userId
 						+ "' WHERE PROJECTID='"
-						+ projectID 
+						+ projectId 
 						+ "';"
 						;
 				stmt.executeUpdate(sql);

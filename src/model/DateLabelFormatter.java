@@ -1,7 +1,7 @@
 package model;
 
 /**
- *  @author zak
+ *  @author Zachary Bergeron
  */
 
 import java.text.ParseException;

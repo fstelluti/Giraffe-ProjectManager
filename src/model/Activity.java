@@ -23,7 +23,7 @@ public class Activity
 	private Date 	dueDate;
 	private String	description;
 	private int 	status = 1;
-	private String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
+	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
 	
 	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description)
 	{

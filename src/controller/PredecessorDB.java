@@ -63,10 +63,10 @@ public class PredecessorDB extends DataManager
 	/**
 	 * Method to insert a Predecessor Activity into the Predecessor Table
 	 * @param connectionString as a String
-	 * @param activityID as an Int
+	 * @param activityId as an Int
 	 * @param predecessorID as an Int
 	 */
-	public static void insertPredecessorIntoTable(String connectionString, int activityID, int predecessorID) {
+	public static void insertPredecessorIntoTable(String connectionString, int activityId, int predecessorId) {
 		Connection c = null;
 		Statement stmt = null;
 		
@@ -77,9 +77,9 @@ public class PredecessorDB extends DataManager
 			stmt = c.createStatement();
 			String sql = "INSERT INTO PREDECESSORS (activityID, predecessorID) "
 					+ "VALUES ( '"
-					+ activityID
+					+ activityId
 					+ "', '"
-					+ predecessorID
+					+ predecessorId
 					+ "')";
 			stmt.executeUpdate(sql);
 			c.commit();
@@ -101,10 +101,10 @@ public class PredecessorDB extends DataManager
 	/**
 	 * Method to get all the Predecessors in the table
 	 * @param connectionString as a String
-	 * @param activityID as an Int
+	 * @param activityId as an Int
 	 * @return
 	 */
-	public static List<Activity> getPredecessors(String connectionString, int activityID) {
+	public static List<Activity> getPredecessors(String connectionString, int activityId) {
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
 		Statement stmt = null;
@@ -117,12 +117,12 @@ public class PredecessorDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = " + activityID + ";");
+			rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = " + activityId + ";");
 			
 			while (rs.next()) {
 				stmt2 = c.createStatement();
-				int predecessorID = rs.getInt("predecessorId");
-				rs2 = stmt2.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + predecessorID + ";");
+				int predecessorId = rs.getInt("predecessorId");
+				rs2 = stmt2.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + predecessorId + ";");
 				Activity activity = null;
 				int projectId = rs2.getInt("projectId");
 				String name = rs2.getString("name");
@@ -130,7 +130,7 @@ public class PredecessorDB extends DataManager
 				Date dueDate = dateFormat.parse(rs2.getString("dueDate"));
 				int status = rs2.getInt("status");
 				String description = rs2.getString("description");
-				activity = new Activity(predecessorID, projectId, name, startDate, dueDate, status, description);
+				activity = new Activity(predecessorId, projectId, name, startDate, dueDate, status, description);
 				activities.add(activity);
 			}
 		}
@@ -163,7 +163,7 @@ public class PredecessorDB extends DataManager
 	/**
 	 * Method to delete an Activity's Predecessors
 	 * @param connectionString as a String
-	 * @param activityID as an Int
+	 * @param activityId as an Int
 	 * @return
 	 */
 	public static void deleteActivityPredecessors(String connectionString, int activityId)

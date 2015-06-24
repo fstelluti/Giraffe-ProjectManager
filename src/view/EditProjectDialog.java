@@ -164,8 +164,8 @@ public class EditProjectDialog extends JDialog
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
 	  projectName.setText(currentProject.getProjectName());
-	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
-	  User projectManager = UserDB.getUserById(connectionString, projectManagerID);
+	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getProjectId());
+	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
 	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  managerBox.setSelectedIndex(selectedIndex);
 	  projectDescription.setText(currentProject.getDescription());
@@ -177,8 +177,8 @@ public class EditProjectDialog extends JDialog
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
 	    	  projectName.setText(currentProject.getProjectName());
-	    	  int projectManagerID = UserRolesDB.getProjectManagerIDByProjectID(connectionString, currentProject.getProjectId());
-	    	  User projectManager = UserDB.getUserById(connectionString, projectManagerID);
+	    	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getProjectId());
+	    	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
 	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
 	    	  projectDescription.setText(currentProject.getDescription());
 	    	  content.repaint();
@@ -294,10 +294,10 @@ public class EditProjectDialog extends JDialog
    * Check if new start date conflicts with project's activities start date
    * @return a bool stating if conflict in start date
    */
-  private static boolean checkStartDate(int projectID, Date newStartDate)
+  private static boolean checkStartDate(int projectId, Date newStartDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectID);
+			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectId);
 	  
 	  for(Activity a : activities)
 	  {
@@ -313,10 +313,10 @@ public class EditProjectDialog extends JDialog
    * Check if new due date conflicts with project's activities due date
    * @return a bool stating if conflict in due date
    */
-  private static boolean checkDueDate(int projectID, Date newDueDate)
+  private static boolean checkDueDate(int projectId, Date newDueDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectID);
+			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectId);
 	  
 	  for(Activity a : activities)
 	  {

@@ -139,8 +139,7 @@ public class CreateAccountDialog extends JDialog
 		repeatPasswordContainer.setPreferredSize(new Dimension(220, 60));
 		repeatPassword = new JPasswordField();
 		repeatPassword.setPreferredSize(new Dimension(200, 25));
-		repeatPasswordContainer.setBorder(BorderFactory
-				.createTitledBorder("Repeat password"));
+		repeatPasswordContainer.setBorder(BorderFactory.createTitledBorder("Repeat password"));
 		repeatPasswordContainer.add(repeatPassword);
 
 		JPanel control = new JPanel();

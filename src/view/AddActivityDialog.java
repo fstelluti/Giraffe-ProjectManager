@@ -188,10 +188,10 @@ public class AddActivityDialog extends JDialog
 	    	  String activityNameEntered = activityName.getText();
 	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  int projectID = projects.get(projectBox.getSelectedIndex()).getProjectId();
+	    	  int projectId = projects.get(projectBox.getSelectedIndex()).getProjectId();
 	    	  int projectIdIndex = projectBox.getSelectedIndex();
-	    	  Activity activityToInsert = new Activity(projectID, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
-	    	  Project selectedProject = ProjectDB.getProjectById(connectionString, projectID);
+	    	  Activity activityToInsert = new Activity(projectId, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
+	    	  Project selectedProject = ProjectDB.getProjectById(connectionString, projectId);
 	    	  //Checks if the activity already exists
 	    	  
 	    	  boolean activityIsInsertable = false;
@@ -219,7 +219,7 @@ public class AddActivityDialog extends JDialog
 		    		  
 		    		  //Iterates through all dependents and adds them to the DB
 		    		  Component[] components = panDependArea.getComponents();
-		    		  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectID);
+		    		  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectId);
 
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
