@@ -27,7 +27,7 @@ import view.TreeNode;
 public class ViewManager
 {
 	private static JPanel mainViewPanel;
-	private static ApplicationPanel applicationPanel;
+	private static ApplicationPanel applicationPanel = ApplicationPanel.getApplicationPanelInstance();
 	
 	//Constants for the size of the Panels
 	private static final int LOGINPANEL_SIZE_X = 500;
@@ -88,14 +88,14 @@ public class ViewManager
 	 * @return ApplicationPanel
 	 */
 	public static ApplicationPanel startApplication() {
-		if (applicationPanel == null) {
+		/*if (applicationPanel == null) {
 			try {
 				DataManager.createTables(DatabaseConstants.PROJECT_MANAGEMENT_DB);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			applicationPanel = new ApplicationPanel();
-		}
+		}*/
 		return applicationPanel;
 	}
 	

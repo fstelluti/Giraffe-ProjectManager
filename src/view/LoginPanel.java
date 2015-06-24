@@ -47,8 +47,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	
 	private static final LoginPanel LOGINPANEL = new LoginPanel();	//Singleton LoginPanel object
 	
-	private LoginPanel()	//private constructor for Singleton pattern
-	{
+	private LoginPanel() {	//private constructor for Singleton pattern
 		loginPanel = new JPanel();
 		loginPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Login"));
 		loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.Y_AXIS));
@@ -74,14 +73,12 @@ public class LoginPanel extends JPanel implements ActionListener
 		ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/giraffe.png"));
 		JLabel label = new JLabel(icon);
 		logoPanel.add(label);
-		return logoPanel;
 		
+		return logoPanel;
 	}
 	
-	private JPanel createLogin()
-	{
-		if (loginSubPanel == null)
-		{
+	private JPanel createLogin() {
+		if (loginSubPanel == null) {
 			loginSubPanel = new JPanel();
 			loginSubPanel.setLayout(new FlowLayout());
 			loginLabel = new JLabel("Please enter user name: ", JLabel.RIGHT);
@@ -92,10 +89,8 @@ public class LoginPanel extends JPanel implements ActionListener
 		return loginSubPanel;
 	}
 	
-	private JPanel createPassword()
-	{
-		if (passwordSubPanel == null)
-		{
+	private JPanel createPassword() {
+		if (passwordSubPanel == null) {
 			passwordSubPanel = new JPanel();
 			passwordSubPanel.setLayout(new FlowLayout());
 			passwordLabel = new JLabel("Please enter password: ", JLabel.RIGHT);
@@ -106,16 +101,13 @@ public class LoginPanel extends JPanel implements ActionListener
 		return passwordSubPanel;
 	}
 	
-	private JPanel createNewAccountLabel()
-	{
-		if(newAccountLabelPanel == null)
-		{
+	private JPanel createNewAccountLabel() {
+		if(newAccountLabelPanel == null) {
 			newAccountLabelPanel = new JPanel();
 			newAccountButton = new JButton("Create new account");
 			newAccountLabelPanel.add(newAccountButton);
 			
-			newAccountButton.addActionListener(new ActionListener() {
-				
+			newAccountButton.addActionListener(new ActionListener() {	
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
@@ -130,23 +122,17 @@ public class LoginPanel extends JPanel implements ActionListener
 		return newAccountLabelPanel;
 	}
 	
-	private JPanel createButtons()
-	{
-		if (buttonsSubPanel == null)
-		{
+	private JPanel createButtons() {
+		if (buttonsSubPanel == null) {
 			buttonsSubPanel = new JPanel();
 			loginButton = new JButton("Login");
 			loginButton.addActionListener(this);
 			exitButton = new JButton("Exit");
 			
-			
-			exitButton.addActionListener(new ActionListener() {
-				
+			exitButton.addActionListener(new ActionListener() {	
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					if (e.getSource() == exitButton)
-					{
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == exitButton) {
 						ViewManager.exitApplication();
 					}
 					
@@ -160,15 +146,12 @@ public class LoginPanel extends JPanel implements ActionListener
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e)
-	{
-		if(e.getSource() == loginButton)
-		{
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == loginButton) {
 			char[] passChar = passwordTextField.getPassword();
 			String uName = loginTextField.getText();
 			boolean checkResult = UserDB.checkLogin(DatabaseConstants.PROJECT_MANAGEMENT_DB, loginTextField.getText(), passChar);
-			if (checkResult)
-			{
+			if (checkResult) {
 				User user = UserDB.getUserByName(DatabaseConstants.PROJECT_MANAGEMENT_DB, uName);
 				ViewManager.createMainViewPanel(user);
 				
@@ -176,12 +159,10 @@ public class LoginPanel extends JPanel implements ActionListener
 				loginTextField.setText("");
 				passwordTextField.setText("");
 			}
-			else
-			{
+			else {
 				ViewManager.failedLogin();
 			}
-			for (int i = 0; i < passChar.length; i++)
-			{
+			for (int i = 0; i < passChar.length; i++) {
 				passChar[i] = 0;
 			}
 		}

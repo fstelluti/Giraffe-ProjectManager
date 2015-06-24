@@ -1,12 +1,15 @@
 package view;
 
 import java.awt.CardLayout;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import controller.DataManager;
+import controller.DatabaseConstants;
 import controller.ViewManager;
 
 /**
@@ -23,7 +26,16 @@ public class ApplicationPanel extends JFrame
 	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
-	public ApplicationPanel() {
+	private static final ApplicationPanel APPLICATIONPANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
+	
+	private ApplicationPanel() {	//private constructor for Singleton pattern
+		//First tests to see if the Database tables have been created
+		try {
+			DataManager.createTables(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		cardsHolder = new JPanel();
 		setTitle("Giraffe Manager by Giraffe Inc.");
@@ -37,6 +49,14 @@ public class ApplicationPanel extends JFrame
 		setDefaultLookAndFeelDecorated(true);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	/**
+	 * Returns singleton class instance
+	 * @return LOGINPANEL
+	 */ 
+	public static ApplicationPanel getApplicationPanelInstance() {
+		return APPLICATIONPANEL;
 	}
 	
 	public void buildCardsPanel() {
