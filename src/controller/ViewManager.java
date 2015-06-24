@@ -216,15 +216,12 @@ public class ViewManager
 		}
 	
 	public static int addActivity (Activity activity, Project project) {
-		ActivityDB.insertActivityIntoTable(
-			connectionString, 
-			project.getProjectId(), 
-			activity.getActivityName(), 
-			dateFormat.format(activity.getStartDate()), 
-			dateFormat.format(activity.getDueDate()), 
-			activity.getStatus(), 
-			activity.getDescription()
-		);
+		ActivityDB.insertActivityIntoTable(connectionString, project.getProjectId(), 
+				activity.getActivityName(), 
+				dateFormat.format(activity.getStartDate()), 
+				dateFormat.format(activity.getDueDate()), 
+				activity.getStatus(), 
+				activity.getDescription());
 		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getActivityName(), project.getProjectId());
 		return insertedActivity.getActivityId();
 	}

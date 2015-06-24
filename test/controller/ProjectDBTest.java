@@ -119,11 +119,7 @@ public class ProjectDBTest {
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
 	public void insertedProjectShouldMatchData() throws ParseException {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		Date startDateTest = df.parse("1969-12-31");
-		Date endDateTest = df.parse("1970-01-01");
-		Project projectTest = new Project("testProject", startDateTest, endDateTest, "dummy description");
-		ProjectDB.insertProjectIntoTable(CONNECTION, projectTest);
+		ProjectDB.insertProjectIntoTable(CONNECTION, "testProject", "1969-12-31", "1970-01-01", "dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

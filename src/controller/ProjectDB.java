@@ -59,13 +59,18 @@ public class ProjectDB extends DataManager
 		}
 	}
 	
-	/**
-	 * Method to insert a new project into the Project Table
-	 * @param connectionString as a String
-	 * @param project as a Project object from Project.java
-	 */
-	public static void insertProjectIntoTable(String connectionString, Project project)
-	{
+    /**
+     * Method to insert a new project into the Project Table
+     * @param connectionString as a String
+     * @param name as a String
+     * @param startDate as a String
+     * @param dueDate as a String
+     * @param description as a String
+     * @return
+     */
+    public static void insertProjectIntoTable(String connectionString, String projectName, String startDate, String dueDate, String description)
+    {
+
 		Connection c = null;
 		Statement stmt = null;
 		
@@ -76,8 +81,8 @@ public class ProjectDB extends DataManager
 
 			stmt = c.createStatement();
 			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION) "
-					+ "VALUES (NULL, '" + project.getProjectName() + "', '" + project.getStartDate() + "', '"
-					+ project.getDueDate() + "', '" + project.getDescription() + "')";
+					+ "VALUES (NULL, '" + projectName + "', '" + startDate + "', '"
+					+ dueDate + "', '" + description + "')";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}
