@@ -10,26 +10,14 @@ import org.junit.Test;
  * @author: Francois Stelluti
  */
 public class ApplicationPanelTest {
-
-	//Tests the Constructor
-	@Test
-	public void shouldCreateApplicationPanel() {
-		
-		//Create ApplicationPanel object
-		ApplicationPanel application = new ApplicationPanel();
-			
-		assertNotNull("The Application Panel was not created!", application);
-	}
+	//Get the ApplicationPanel Singleton Object
+	private static ApplicationPanel applicationPanel = ApplicationPanel.getApplicationPanelInstance();
 	
 	//Tests getLoginPanel()
 	@Test
 	public void shouldGetLoginPanel() {
-		
-		//Create ApplicationPanel object
-		ApplicationPanel application = new ApplicationPanel();
-		
 		//Store the LoginPanel object and make sure that it's not null
-		LoginPanel login = application.getLoginPanel();
+		LoginPanel login = applicationPanel.getLoginPanel();
 		
 		assertNotNull("The Login Panel was not created!", login);
 	}
