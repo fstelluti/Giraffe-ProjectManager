@@ -72,15 +72,9 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to insert an activity into the table
 	 * @param connectionString as a String
-	 * @param associatedProjectId as an Int
-	 * @param activityName as a String
-	 * @param startDate as a String
-	 * @param dueDate as a String
-	 * @param status as an Int
-	 * @param description as a String
+	 * @param activity as an Activity object from Activity.java
 	 */
-	public static void insertActivityIntoTable(String connectionString,	int associatedProjectId, String activityName, String startDate,
-			String dueDate, int status, String description)
+	public static void insertActivityIntoTable(String connectionString,	Activity activity)
 	{	
 		// startDate and dueDate are String variables in a format "yyyy-MM-dd"
 		Connection c = null;
@@ -93,17 +87,17 @@ public class ActivityDB extends DataManager
 			stmt = c.createStatement();
 			String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) "
 					+ "VALUES (NULL, '"
-					+ associatedProjectId
+					+ activity.getAssociatedProjectId()
 					+ "', '"
-					+ activityName
+					+ activity.getActivityName()
 					+ "', '"
-					+ startDate
+					+ activity.getStartDate()
 					+ "', '"
-					+ dueDate
+					+ activity.getDueDate()
 					+ "', '"
-					+ status
+					+ activity.getStatus()
 					+ "', '"
-					+ description + "')";
+					+ activity.getDescription() + "')";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}

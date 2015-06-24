@@ -135,7 +135,7 @@ public class ActivityDBTest {
 	// Tests DataManager.insertIntoTableActivities()
 	@Test
 	public void insertedActivityShouldMatchData() throws ParseException {
-		DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Date startDateTest = df.parse("1969-12-31");
 		Date endDateTest = df.parse("1970-01-01");
 		Activity activityTest = new Activity(1337, "dummy activity", startDateTest, endDateTest, 42, "dummy description"); 

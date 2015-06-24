@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * Create a project.
  * Possibility of editing it.
+ * @modifiedBy Anne-Marie Dube
  *
  */
 
@@ -21,6 +22,14 @@ public class Project
 	public Project(int id, String name, Date startDate, Date dueDate, String description)
 	{
 		this.id = id;
+		this.name = name;
+		this.startDate = startDate;
+		this.dueDate = dueDate;
+		this.description = description;
+	}
+	
+	public Project(String name, Date startDate, Date dueDate, String description)
+	{
 		this.name = name;
 		this.startDate = startDate;
 		this.dueDate = dueDate;
