@@ -85,8 +85,6 @@ public class LoginPanel extends JPanel implements ActionListener
 			loginSubPanel = new JPanel();
 			loginSubPanel.setLayout(new FlowLayout());
 			loginLabel = new JLabel("Please enter user name: ", JLabel.RIGHT);
-			// @TODO Remove the string for presentation
-//			loginTextField = new JTextField("username1", 10);
 			loginTextField = new JTextField(10);
 			loginSubPanel.add(loginLabel);
 			loginSubPanel.add(loginTextField);
@@ -101,8 +99,6 @@ public class LoginPanel extends JPanel implements ActionListener
 			passwordSubPanel = new JPanel();
 			passwordSubPanel.setLayout(new FlowLayout());
 			passwordLabel = new JLabel("Please enter password: ", JLabel.RIGHT);
-			// @TODO Remove the string for presentation
-//			passwordTextField = new JPasswordField("password1", 10);
 			passwordTextField = new JPasswordField(10);
 			passwordSubPanel.add(passwordLabel);
 			passwordSubPanel.add(passwordTextField);
@@ -118,10 +114,6 @@ public class LoginPanel extends JPanel implements ActionListener
 			newAccountButton = new JButton("Create new account");
 			newAccountLabelPanel.add(newAccountButton);
 			
-			/*newAccountButton.setBorderPainted(false);
-			newAccountButton.setContentAreaFilled(false);
-			newAccountButton.setFocusPainted(false);
-			newAccountButton.setOpaque(false);*/
 			newAccountButton.addActionListener(new ActionListener() {
 				
 				@Override

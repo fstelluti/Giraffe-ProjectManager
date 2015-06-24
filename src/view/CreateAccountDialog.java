@@ -25,6 +25,7 @@ import javax.swing.JTextField;
 import model.User;
 import controller.DatabaseConstants;
 import controller.UserDB;
+import controller.ViewManager;
 
 /**
  * 
@@ -50,12 +51,12 @@ public class CreateAccountDialog extends JDialog
 		this.setSize(500, 500);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
-		this.initComponent();
+		this.initCreateAccountDialog();
 		this.setVisible(true);
 
 	}
 
-	private void initComponent()
+	private void initCreateAccountDialog()
 	{
 		JPanel firstNameContainer = new JPanel();
 		firstNameContainer.setBackground(Color.white);
@@ -75,8 +76,7 @@ public class CreateAccountDialog extends JDialog
 				.createTitledBorder("Last Name"));
 		lastNameContainer.add(lastName);
 
-		openFileButton = new JButton("Open a File...",
-				createImageIcon("images/Open16.gif"));
+		openFileButton = new JButton("Open a File...", ViewManager.createImageIcon("images/Open16.gif"));
 
 		JPanel fileChooserContainer = new JPanel();
 		fileChooserContainer.setBackground(Color.white);
@@ -167,11 +167,12 @@ public class CreateAccountDialog extends JDialog
 							resetForm();
 							return;
 						case JOptionPane.YES_OPTION:
-							UserDB.insertUserIntoTable(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-									userName.getText().trim(),
+							User user = new User(userName.getText().trim(),
 									getPassword(userPassword.getPassword()),
 									email.getText(), firstName.getText(),
 									lastName.getText());
+							
+							UserDB.insertUserIntoTable(DatabaseConstants.PROJECT_MANAGEMENT_DB, user);
 							setVisible(false);
 							break;
 					}
@@ -202,19 +203,6 @@ public class CreateAccountDialog extends JDialog
 
 		this.getContentPane().add(content, BorderLayout.CENTER);
 		this.getContentPane().add(control, BorderLayout.SOUTH);
-	}
-
-	protected static ImageIcon createImageIcon(String path)
-	{
-		java.net.URL imgURL = CreateAccountDialog.class.getResource(path);
-		if (imgURL != null)
-		{
-			return new ImageIcon(imgURL);
-		} else
-		{
-			System.err.println("Could not find file: " + path);
-			return null;
-		}
 	}
 
 	private String getPassword(char[] pass)

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -34,8 +35,9 @@ public class ViewManager
 	private static final int APPLICATION_PANEL_SIZE_X = 1200;
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	
-	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private static String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
 
 	/**
 	 * Creates the Main View Panel when User has logged in
@@ -97,19 +99,26 @@ public class ViewManager
 		return applicationPanel;
 	}
 	
-	@SuppressWarnings("unused")
-	public static void createAccountDialog()
-	{
+	@SuppressWarnings("unused")	//Needed??
+	public static void createAccountDialog() {
 		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationPanel, "Create account dialog", true);
-		/*JDialog dialog = new JDialog();
-		dialog.setModal(true);
-		dialog.setTitle("Create new account");
-		dialog.setSize(400, 400);
-		dialog.setLocationRelativeTo(null);
-		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		dialog.getContentPane().add(new JLabel("DialogLabel"));
-		dialog.setVisible(true);
-		return dialog;*/
+	}
+	
+	/**
+	 * Creates an ImageIcon object for use as a User picture
+	 * Probably doesn't work, or need to be modified
+	 */
+	public static ImageIcon createImageIcon(String path) {
+		java.net.URL imgURL = CreateAccountDialog.class.getResource(path);
+
+		//Using a Null Object design pattern, instead of returning a null object directly
+		if(imgURL != null) {
+			return new ImageIcon(imgURL);
+		}
+		else {
+			System.err.println("Could not find file: " + path);
+			return NO_ACCOUNT_ICON;
+		}
 	}
 	
 	/**

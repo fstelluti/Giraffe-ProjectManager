@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import controller.ViewManager;
 
 /**
- * 
+ * This class defined the main application window and displays the Login Panel
  * @author 
  * @modifiedBy Zachary Bergeron, Francois Stelluti
  */
@@ -23,8 +23,7 @@ public class ApplicationPanel extends JFrame
 	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
-	public ApplicationPanel()
-	{
+	public ApplicationPanel() {
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		cardsHolder = new JPanel();
 		setTitle("Giraffe Manager by Giraffe Inc.");
@@ -40,14 +39,12 @@ public class ApplicationPanel extends JFrame
 		setVisible(true);
 	}
 	
-	public void buildCardsPanel()
-	{
+	public void buildCardsPanel() {
 		addCardPanel(getLoginPanel(), "LoginPanel");
 		cardLayout.show(cardsHolder, "LoginPanel");
 	}
 	
-	public void addCardPanel(JPanel panelToAdd, String cardPanelName)
-	{
+	public void addCardPanel(JPanel panelToAdd, String cardPanelName) {
 		cardPanels.add(panelToAdd);
 		cardsHolder.add(panelToAdd, cardPanelName);
 	}
@@ -55,8 +52,7 @@ public class ApplicationPanel extends JFrame
 	/**
 	 * Switch to the card with the given name and sets the correct size
 	 */	
-	public void setCardLayout(String cardLayoutName, int sizeX, int sizeY) 
-	{
+	public void setCardLayout(String cardLayoutName, int sizeX, int sizeY) {
 		ApplicationPanel.cardLayout.show(cardsHolder, cardLayoutName);
 		
 		//Sets the correct size
@@ -64,14 +60,11 @@ public class ApplicationPanel extends JFrame
 		this.setLocationRelativeTo(null);
 	}
 	
-	public LoginPanel getLoginPanel()
-	{
-		/*if (loginPanel == null)
-		{
-			loginPanel = new LoginPanel();
-			this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
-		}*/
-		
+	/**
+	 * Gets the LoginPanel and sets it up properly
+	 * @return LoginPanel
+	 */	
+	public LoginPanel getLoginPanel() {
 		//Sets the Login Panel button
 		this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		
