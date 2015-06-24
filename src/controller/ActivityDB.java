@@ -22,6 +22,7 @@ public class ActivityDB extends DataManager
 
 	/**
 	 * Method to create Activity Table in the DB
+	 * Gets called in DataManager.java
 	 * @param connectionString as a String
 	 */
 	public static void createActivityTable(String connectionString)
@@ -70,6 +71,8 @@ public class ActivityDB extends DataManager
 	
     /**
      * Method to insert an activity into the table
+     * Gets called in ViewManager.java when an activity is added
+     * 
      * @param connectionString as a String
      * @param associatedProjectId as an Int
      * @param activityName as a String
@@ -78,7 +81,7 @@ public class ActivityDB extends DataManager
      * @param status as an Int
      * @param description as a String
      */
-    public static void insertActivityIntoTable(String connectionString,    int associatedProjectId, String activityName, String startDate,
+    public static void insertActivityIntoTable(String connectionString, int associatedProjectId, String activityName, String startDate,
             String dueDate, int status, String description)
     {
 		// startDate and dueDate are String variables in a format "yyyy-MM-dd"
@@ -127,6 +130,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to get a project's activities
+	 * Called in ViewManager.java, used to see if an activity can be inserted and to generate the TreeView
+	 * 
 	 * @param connectionString as a String
 	 * @param projectId as an Int
 	 * @return
@@ -187,6 +192,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to get all activities in the table
+	 * Called in MainViewPanel.java to generate the view for the user
+	 * 
 	 * @param connectionString as a String
 	 * @return
 	 */
@@ -247,6 +254,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to get an activity by searching through the table with the activity id
+	 * Called by EditActivityDialog.java
+	 * 
 	 * @param connectionString as a String
 	 * @param id as an Int
 	 * @return
@@ -306,6 +315,8 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to get an activity by searching through the table with the activityName and the projectID
 	 * Both parameters are necessary as an activityName on its own is not unique
+	 * Called in ViewManager.java by addActivity() to insert an activity into a project
+	 * 
 	 * @param connectionString as a String
 	 * @param activityName as a String
 	 * @param projectId as an Int
@@ -367,6 +378,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to edit an Activity by searching for it with its ID
+	 * Called by EditActivityDialog.java
+	 * 
 	 * @param connectionString as a String
 	 * @param id as an Int
 	 * @param activityName as a String
@@ -416,6 +429,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to delete an Activity from the application
+	 * Called by EditActivityDialog.java
+	 * 
 	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 */
@@ -455,6 +470,8 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to delete the Predecessors associated to an Activity
+	 * Called by ActivityDB.java and deleteActivity()
+	 * 
 	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 */

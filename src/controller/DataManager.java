@@ -50,6 +50,13 @@ public abstract class DataManager
 		}
 	}
 	
+	
+	/**
+	 * Method creates the tables upon startup
+	 * 
+	 * @param connectionString as a String
+	 * @throws SQLException
+	 */
 	public static void createTables(String connectionString) throws SQLException{
 		if(UserDB.getAllUsers(connectionString).isEmpty()){
 			UserDB.createUserTable(connectionString);
