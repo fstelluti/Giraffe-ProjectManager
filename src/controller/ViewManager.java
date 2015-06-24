@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,6 +80,7 @@ public class ViewManager
 		//Simply hide and close the Application
 		applicationPanel.setVisible(false);
 		applicationPanel.dispose();
+		System.exit(1);		//Make sure that the program terminates
 	}
 	
 	/**
