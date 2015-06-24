@@ -6,15 +6,23 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
+
+
+
+
 import controller.DataManagerTest;
 import model.Activity;
 
+import java.util.Date;
 import java.util.List;
 
 import org.junit.runner.RunWith;
@@ -25,6 +33,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ * @modifiedBy  Anne-Marie Dube (modified method names)
  */
 
 @RunWith(JUnit4.class)
@@ -125,8 +134,12 @@ public class ActivityDBTest {
 	
 	// Tests DataManager.insertIntoTableActivities()
 	@Test
-	public void insertedActivityShouldMatchData() {
-		ActivityDB.insert(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42, "dummy description");
+	public void insertedActivityShouldMatchData() throws ParseException {
+		DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+		Date startDateTest = df.parse("1969-12-31");
+		Date endDateTest = df.parse("1970-01-01");
+		Activity activityTest = new Activity(1337, "dummy activity", startDateTest, endDateTest, 42, "dummy description"); 
+		ActivityDB.insertActivityIntoTable(CONNECTION, activityTest);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -205,7 +218,7 @@ public class ActivityDBTest {
 	// Tests ActivityDB.getById()
 	@Test
 	public void returnedActivityByIdShouldMatch() {
-		Activity activity = ActivityDB.getById(CONNECTION, 1);
+		Activity activity = ActivityDB.getActivityById(CONNECTION, 1);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
@@ -214,7 +227,7 @@ public class ActivityDBTest {
 	// Tests ActivityDB.getByNameAndProjectId()
 	@Test
 	public void returnedActivityByNameAndProjectIdShouldMatch() {
-		Activity activity = ActivityDB.getByNameAndProjectId(CONNECTION, "activity1", 1337);
+		Activity activity = ActivityDB.getActivityByNameAndProjectId(CONNECTION, "activity1", 1337);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);

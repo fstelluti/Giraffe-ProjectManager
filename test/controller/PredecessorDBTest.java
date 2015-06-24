@@ -27,6 +27,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ * @modifiedBy  Anne-Marie Dube (modified method names)
  */
 
 @RunWith(JUnit4.class)
@@ -104,7 +105,7 @@ public class PredecessorDBTest {
 	// Tests PredecessorDB.insert()
 	@Test
 	public void insertedPredecessorShouldMatchData() {
-		PredecessorDB.insert(CONNECTION, 42, 1337);
+		PredecessorDB.insertPredecessorIntoTable(CONNECTION, 42, 1337);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

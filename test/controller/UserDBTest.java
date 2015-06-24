@@ -25,6 +25,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ * @modifiedBy  Anne-Marie Dube (changed method names)
  */
 
 @RunWith(JUnit4.class)
@@ -129,7 +130,8 @@ public class UserDBTest {
 	// Tests UserDB.insert()
 	@Test
 	public void insertedUserShouldMatchData() {
-		UserDB.insert(CONNECTION, "testDummy", "trustno1", "test@dummy.com", "Test", "Dummy");
+		User userTest = new User("testDummy", "trustno1", "test@dummy.com", "Test", "Dummy");
+		UserDB.insertUserIntoTable(CONNECTION, userTest);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -193,7 +195,7 @@ public class UserDBTest {
 	// Tests UserDB.getAll()
 	@Test
 	public void returnedUsersShouldBeValid() {
-		List<User> users = UserDB.getAll(CONNECTION);
+		List<User> users = UserDB.getAllUsers(CONNECTION);
 		for (User user : users) {
 			int id = user.getId();
 			boolean usernameExists = user.getUserName() != null && !user.getUserName().isEmpty();
@@ -212,7 +214,7 @@ public class UserDBTest {
 	// Tests UserDB.getById()
 	@Test
 	public void returnedUserByIdShouldMatch() {
-		User user = UserDB.getById(CONNECTION, 1);
+		User user = UserDB.getUserById(CONNECTION, 1);
 		int id = user.getId();
 		boolean condition = (id == 1);
 		assertTrue("The returned user ID does not match requested user ID!", condition);
@@ -221,7 +223,7 @@ public class UserDBTest {
 	// Tests UserDB.getByName()
 	@Test
 	public void returnedUserByNameShouldMatch() {
-		User user = UserDB.getByName(CONNECTION, "testUser1");
+		User user = UserDB.getUserByName(CONNECTION, "testUser1");
 		String username = user.getUserName().trim();
 		boolean condition = username.equals("testUser1");
 		assertTrue("The returned username does not match the requested username!", condition);

@@ -20,6 +20,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within all db test classes.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ * @modifiedBy  Anne-Marie Dube (modified method names)
  */
 
 @RunWith(JUnit4.class)
@@ -38,12 +39,12 @@ public class DataManagerTest {
 		// Create database using create methods in DataManager
 		// Cheating, sort of, but correct output will be tested in other tests anyway so no big deal (?)
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
-		UserDB.create(CONNECTION);
-		ActivityDB.createTable(CONNECTION);
-		ProjectDB.create(CONNECTION);
-		PredecessorDB.create(CONNECTION);
-		UserRolesDB.create(CONNECTION); 	
-		UserRolesDictDB.create(CONNECTION);
+		UserDB.createUserTable(CONNECTION);
+		ActivityDB.createActivityTable(CONNECTION);
+		ProjectDB.createProjectTable(CONNECTION);
+		PredecessorDB.createPredecessorTable(CONNECTION);
+		UserRolesDB.createUserRolesTable(CONNECTION); 	
+		UserRolesDictDB.createUserRolesDictTable(CONNECTION);
 		
 		// Create fixtures
 		String userFixtureQuery = "INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES ('testUser1', 'password1', 'test1@email.com', 'Test1', 'User1');"

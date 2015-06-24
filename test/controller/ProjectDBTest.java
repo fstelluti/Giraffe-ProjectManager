@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +17,7 @@ import org.junit.Test;
 import controller.DataManagerTest;
 
 import java.util.List;
+import java.util.Date;
 
 import model.Project;
 
@@ -25,6 +29,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
+ * @modifiedBy  Anne-Marie Dube (modified method names)
  */
 
 @RunWith(JUnit4.class)
@@ -113,8 +118,12 @@ public class ProjectDBTest {
 
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
-	public void insertedProjectShouldMatchData() {
-		ProjectDB.insert(CONNECTION, "testProject", "1969-12-31", "1970-01-01","dummy description");
+	public void insertedProjectShouldMatchData() throws ParseException {
+		DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+		Date startDateTest = df.parse("1969-12-31");
+		Date endDateTest = df.parse("1970-01-01");
+		Project projectTest = new Project("testProject", startDateTest, endDateTest, "dummy description");
+		ProjectDB.insertProjectIntoTable(CONNECTION, projectTest);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -168,7 +177,7 @@ public class ProjectDBTest {
 	// Tests DataManager.getProjects()
 	@Test
 	public void returnedProjectsShouldBeValid() {
-		List<Project> projects = ProjectDB.getAll(CONNECTION);
+		List<Project> projects = ProjectDB.getAllProjects(CONNECTION);
 		int counter = 0;
 		for (Project project : projects) {
 			++counter;
@@ -187,7 +196,7 @@ public class ProjectDBTest {
 	// Tests DataManager.getProjectById()
 	@Test
 	public void returnedProjectByIdShouldMatch() {
-		Project project = ProjectDB.getById(CONNECTION, 1);
+		Project project = ProjectDB.getProjectById(CONNECTION, 1);
 		int id = -1;
 		try {
 			id = project.getProjectId();
