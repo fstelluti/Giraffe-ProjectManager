@@ -6,6 +6,15 @@ import javax.swing.ImageIcon;
 
 import view.MainViewPanel;
 
+/**
+ * Create a user.
+ * Possibility of editing it.
+ * 
+ * @modifiedBy Anne-Marie Dube
+ *
+ */
+
+
 public class User
 {
 	private int id;
@@ -27,8 +36,7 @@ public class User
 	private ImageIcon userPicture;
 	
 	
-	public User(int id, String userName, String password, String email,
-			String firstName, String lastName)
+	public User(int id, String userName, String password, String email,	String firstName, String lastName)
 	{
 		super();
 		this.id = id;
@@ -36,6 +44,18 @@ public class User
 		this.password = password;
 		this.email = email;
 		this.setRegDate(new Date());//it creates today's date by default
+		this.firstName = firstName;
+		this.lastName = lastName;
+		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
+	}
+	
+	public User(String userName, String password, String email, String firstName, String lastName)
+	{
+		super();
+		this.userName = userName;
+		this.password = password;
+		this.email = email;
+		this.setRegDate(new Date());
 		this.firstName = firstName;
 		this.lastName = lastName;
 		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));

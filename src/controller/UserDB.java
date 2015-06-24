@@ -59,18 +59,14 @@ public class UserDB extends DataManager {
 		}
 	}
 	
+	
 	/**
 	 * Method inserts a new User into the User Table
 	 * @param connectionString as a String
-	 * @param userName as a String
-	 * @param password as a Char
-	 * @param email as a String
-	 * @param firstName as a String
-	 * @param lastName as a String
+	 * @param user as a User from User.java
 	 * @return
 	 */
-	public static void insertUserIntoTable(String connectionString, String userName, String password, String email, 
-			String firstName, String lastName)
+	public static void insertUserIntoTable(String connectionString, User user)
 	{
 		Connection c = null;
 		Statement stmt = null;
@@ -81,13 +77,13 @@ public class UserDB extends DataManager {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO USERS (ID,USERNAME,PASSWORD,EMAIL,FIRSTNAME,LASTNAME) "
+			String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) "
 					+ "VALUES (NULL, '"
-					+ userName
+					+ user.getUserName()
 					+ "', '"
-					+ password
+					+ user.getPassword()
 					+ "', '"
-					+ email + "', '" + firstName + "', '" + lastName + "')";
+					+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() + "')";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}
