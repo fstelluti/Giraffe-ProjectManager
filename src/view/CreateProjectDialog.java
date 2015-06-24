@@ -41,7 +41,7 @@ import controller.UserRolesDB;
 /**
  * Create a Dialog window, where the user can create a project.
  *
- * @author 
+ * @author Lukas Cardot-Goyette
  * @modifiedBy Zachary Bergeron, Anne-Marie Dube
  */
 

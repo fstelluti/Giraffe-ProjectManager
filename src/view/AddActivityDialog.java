@@ -45,8 +45,8 @@ import controller.ViewManager;
 
 /**
  * 
- * @author Zachary Bergeron
- * @modifiedBy Anne-Marie Dube
+ * @author Zachary Bergeron, Lukas Cardot-Goyette
+ * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube
  *
  */
 

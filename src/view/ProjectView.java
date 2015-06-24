@@ -21,6 +21,12 @@ import model.User;
 import controller.ActivityDB;
 import controller.DatabaseConstants;
 
+/**
+ * 
+ * @author Andrey Uspenskiy
+ *
+ */
+
 @SuppressWarnings("serial")
 public class ProjectView extends JPanel
 {

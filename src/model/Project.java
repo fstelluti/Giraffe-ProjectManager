@@ -5,6 +5,8 @@ import java.util.Date;
 /**
  * Create a project.
  * Possibility of editing it.
+ * 
+ * @author Lukas Cardot-Goyette
  * @modifiedBy Anne-Marie Dube
  *
  */

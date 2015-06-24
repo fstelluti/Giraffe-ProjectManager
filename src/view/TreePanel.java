@@ -9,8 +9,8 @@ import controller.ViewManager;
 
 /**
  * This class is responsible for created the TreeView of Projects and their corresponding activities
- * @author 
- * @modifiedBy: Francois Stelluti
+ * @author Andrey Uspenskiy
+ * @modifiedBy Francois Stelluti
  */
 
 public class TreePanel

@@ -12,8 +12,7 @@ import model.Activity;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor Zachary Bergeron
+ * @author Zachary Bergeron
  * @modifiedBy Anne-Marie Dube
  *
  */

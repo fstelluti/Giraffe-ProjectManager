@@ -19,8 +19,8 @@ import view.TreeNode;
 
 /**
  * 
- * @author: 
- * @modifiedBy: Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
+ * @author Andrey Uspenskiy
+ * @modifiedBy Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
  */
 
 public class ViewManager

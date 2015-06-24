@@ -12,9 +12,8 @@ import model.Activity;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor ?????
- * @modifiedBy: Anne-Marie Dube
+ * @author Andrey Uspenskiy
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube
  *
  */
 

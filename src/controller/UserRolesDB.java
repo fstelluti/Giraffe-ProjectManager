@@ -7,8 +7,7 @@ import java.sql.Statement;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor ???
+ * @author Andrey Uspenskiy
  * @modifiedBy Anne-Marie Dube
  *
  */
@@ -64,7 +63,6 @@ public class UserRolesDB extends DataManager
 	 * @param roleId as an Int
 	 */
 	public static void insertUserRoleIntoTable(String connectionString, int userId, int projectId, int roleId) {
-		//Role id 1 = manager
 		Connection c = null;
 		Statement stmt = null;
 		
@@ -73,6 +71,10 @@ public class UserRolesDB extends DataManager
 			c = getConnection(connectionString);
 			c.setAutoCommit(false);
 
+			// roleId 1: projectManager
+			// roleId 2: regularUser
+			// roleId 3: admin
+			
 			stmt = c.createStatement();
 			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
 					+ "VALUES ( "

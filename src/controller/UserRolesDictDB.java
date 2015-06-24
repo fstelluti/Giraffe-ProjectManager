@@ -6,8 +6,7 @@ import java.sql.Statement;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor ????
+ * @author Andrey Uspenskiy
  * @modifiedBy Anne-Marie Dube
  *
  */
@@ -31,7 +30,7 @@ public class UserRolesDictDB extends DataManager
 			String sql = "CREATE TABLE USERROLESDICT " + "(ROLEID  	INTEGER,"
 					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID)); "
 					+ "INSERT INTO USERROLESDICT (roleid, rolename) "
-					+ "VALUES (1, 'manager')";
+					+ "VALUES (1, 'projectManager')" + "VALUES (2, 'regularUser')" + "VALUES (3, 'admin')";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)

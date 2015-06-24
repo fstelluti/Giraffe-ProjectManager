@@ -2,6 +2,12 @@ package view;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+/**
+ * 
+ * @author Andrey Uspenskiy
+ *
+ */
+
 @SuppressWarnings("serial")
 public class TreeNode extends DefaultMutableTreeNode
 {

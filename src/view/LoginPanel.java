@@ -22,8 +22,8 @@ import controller.ViewManager;
 
 /**
  * 
- * @author 
- * @modifiedBy: Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
+ * @author Andrey Uspenskiy
+ * @modifiedBy Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
  */
 
 @SuppressWarnings("serial")

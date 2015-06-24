@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
  * For DML and DDL statements executeUpdate method is used; for queries - executeQuery is used
  * ResultSet iterates over collection and retrieves DDB values by field name
  * 
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube
  */
 public abstract class DataManager
 {

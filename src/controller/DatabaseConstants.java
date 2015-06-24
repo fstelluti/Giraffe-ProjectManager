@@ -1,5 +1,11 @@
 package controller;
 
+/**
+ * 
+ * @author Andrey Uspenskiy
+ *
+ */
+
 public class DatabaseConstants
 {
 	public static String PROJECT_MANAGEMENT_DB = "jdbc:sqlite:projectManagement.db";

@@ -1,5 +1,11 @@
 package view;
 
+/**
+ * 
+ * @author Zachary Bergeron
+ *
+ */
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;

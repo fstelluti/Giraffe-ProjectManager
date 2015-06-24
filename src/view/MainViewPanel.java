@@ -30,9 +30,12 @@ import controller.ViewManager;
 
 /**
  * 
- * @author 
- * @modifiedBy: Zachary Bergeron, Francois Stelluti
+ * @author Andrey Uspenskiy
+ * @modifiedBy Zachary Bergeron, Francois Stelluti
+ * 
  */
+
+
 @SuppressWarnings("serial")
 public class MainViewPanel extends JPanel
 {

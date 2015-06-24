@@ -29,8 +29,8 @@ import controller.ViewManager;
 
 /**
  * This class is responsible for displaying a dialog when creating a new account
- * @classAuthor Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti
+ * @author Andrey Uspenskiy
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Zachary Bergeron
  */
 
 @SuppressWarnings("serial")

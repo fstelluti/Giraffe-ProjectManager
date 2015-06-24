@@ -11,8 +11,7 @@ import model.User;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor ????????
+ * @author Andrey Uspenskiy
  * @modifiedBy Anne-Marie Dube
  *
  */

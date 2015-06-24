@@ -12,8 +12,7 @@ import model.Project;
 
 /**
  * 
- * @classAuthor
- * @methodAuthor Zachary Bergeron
+ * @author Zachary Bergeron
  * @modifiedBy: Francois Stelluti, Anne-Marie Dube
  *
  */

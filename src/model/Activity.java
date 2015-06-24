@@ -4,7 +4,8 @@ import java.util.Date;
 
 /**
  * 
- * @author zak
+ * @author Zachary Bergeron
+ * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube
  *
  */
 

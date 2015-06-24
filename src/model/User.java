@@ -10,6 +10,7 @@ import view.MainViewPanel;
  * Create a user.
  * Possibility of editing it.
  * 
+ * @author Andrey Uspenskiy
  * @modifiedBy Anne-Marie Dube
  *
  */

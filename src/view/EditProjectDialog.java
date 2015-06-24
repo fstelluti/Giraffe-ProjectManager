@@ -1,9 +1,5 @@
 package view;
 
-/**
- * Create a Dialog window, where the user (which kind of user can?) can edit a project.
- */
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,9 +41,11 @@ import controller.UserRolesDB;
 
 /**
  * 
- * @author 
- * @modifiedBy zak
+ * @author Lukas Cardot-Goyette
+ * @modifiedBy Zachary Bergeron
  */
+
+
 @SuppressWarnings("serial")
 public class EditProjectDialog extends JDialog 
 {
