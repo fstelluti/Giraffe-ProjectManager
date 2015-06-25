@@ -7,7 +7,7 @@ import java.sql.Statement;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -17,28 +17,24 @@ public class UserRolesDictDB extends DataManager
 	 * Method to create User Role Dictionary Table in the DB
 	 * @param connectionString as a String
 	 */
-	public static void createUserRolesDictTable(String connectionString)
-	{
+	public static void createUserRolesDictTable(String connectionString) {
 		Connection c = null;
 		Statement stmt = null;
 		
-		try
-		{
+		try {
 			c = getConnection(connectionString);
-
+			
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE USERROLESDICT " + "(ROLEID  	INTEGER,"
 					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID)); "
 					+ "INSERT INTO USERROLESDICT (roleid, rolename) "
-					+ "VALUES (1, 'projectManager')" + "VALUES (2, 'regularUser')" + "VALUES (3, 'admin')";
+					+ "VALUES (1, 'projectManager')" + ", (2, 'regularUser')" + ", (3, 'admin')";
 			stmt.executeUpdate(sql);
 		}
-		catch (SQLException e)
-		{
+		catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
-		catch (Exception e)
-		{
+		catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
