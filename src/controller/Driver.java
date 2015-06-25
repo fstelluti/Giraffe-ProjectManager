@@ -6,17 +6,16 @@ public class Driver
 {
 	public static void main(String[] args)
 	{
-		//DataManager.getAllUsers();
-		/*DataManager.insertIntoTableUsers("username1", "password1",
-				"email1", "firstName1", "lastName1");
-		DataManager.insertIntoTableUsers("username2", "password2",
-				"email2", "firstName2", "lastName2");
-		DataManager.insertIntoTableUsers("username3", "password3",
-				"email3", "firstName3", "lastName3");
-		DataManager.insertIntoTableUsers("username4", "password4",
-				"email4", "firstName4", "lastName4");
-		DataManager.insertIntoTableUsers("username5", "password5",
-				"email5", "firstName5", "lastName5");*/
+		/*DataManager.insertIntoTableUsers("j_pickle", "pickle",
+		"j_pickle@gmail.com", "Joe", "Pickle");
+		DataManager.insertIntoTableUsers("s_tansy", "tansy",
+		"s_tansy@gmail.com", "Sorrel", "Tansy");
+		DataManager.insertIntoTableUsers("a_sommer", "sommer",
+		"a_sommer@hotmail.com", "Adriana", "Sommer");
+		DataManager.insertIntoTableUsers("g_swafford", "swafford",
+		"g_swafford@hotmail.com", "Gonzalo", "Swafford");
+		DataManager.insertIntoTableUsers("r_bolduc", "bolduc",
+		"r_bolduc@hotmail.com", "Roger", "Bolduc");*/
 		
 		
 		SwingUtilities.invokeLater(new Runnable()
