@@ -59,6 +59,8 @@ public class MainViewPanel extends JPanel
 		this.setLayout(new BorderLayout());
 		this.add(getNorthPanel(), BorderLayout.NORTH);
 		this.add(getSplitPanel(), BorderLayout.CENTER);
+		
+		ViewManager.getRootPane().setDefaultButton(editProject);	//Set the default button to editProject
 	}
 
 	private void createToolBarButtons()

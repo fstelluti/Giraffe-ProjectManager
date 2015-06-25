@@ -8,12 +8,14 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
 import model.Activity;
 import model.Project;
 import model.User;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
+import view.LoginPanel;
 import view.MainViewPanel;
 import view.TreeNode;
 
@@ -27,6 +29,8 @@ public class ViewManager
 {
 	private static JPanel mainViewPanel;
 	private static ApplicationPanel applicationPanel = ApplicationPanel.getApplicationPanelInstance();
+	private static LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();
+	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
 	
 	//Constants for the size of the Panels
 	private static final int LOGINPANEL_SIZE_X = 500;
@@ -59,6 +63,14 @@ public class ViewManager
 	}
 
 	/**
+	 * Returns the main JRootPane from ApplicationPanel, needed to set default buttons
+	 * @return JRootPane
+	 */
+	public static JRootPane getRootPane() {
+		return rootPane;
+	}
+	
+	/**
 	 * Displays an error message when user can't login correctly and returns to the LoginPanel
 	 */
 	public static void failedLogin() {
@@ -70,6 +82,7 @@ public class ViewManager
 	 */
 	public static void logout() {
 		applicationPanel.setCardLayout("LoginPanel", LOGINPANEL_SIZE_X, LOGINPANEL_SIZE_Y);
+		rootPane.setDefaultButton(loginPanel.getLoginButton());		//Set the Default button back to Login
 		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
 	}
 	
