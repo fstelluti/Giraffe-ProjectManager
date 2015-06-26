@@ -219,20 +219,29 @@ public class CreateAccountDialog extends JDialog
 	 */ 
 	private boolean isInputValid() {
 		List<User> users = UserDB.getAllUsers(DatabaseConstants.DEFAULT_DB);
+		//Checks that all fields have input
+		if(email.getText().hashCode() == 0 || 
+				userName.getText().hashCode() == 0 || 
+				userPassword.getPassword().length==0 ||
+				firstName.getText().hashCode() == 0 ||
+				lastName.getText().hashCode() == 0) {
+			JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create User", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		//Makes sure that passwords match 
+		if (!areCharsEqual(userPassword.getPassword(),
+				repeatPassword.getPassword())) {
+			JOptionPane.showMessageDialog(null,
+					"Passwords do not match. Please try again!");
+			userPassword.setText("");
+			repeatPassword.setText("");
+			return false;
+		}
+		
 		for (User user : users) {
-			//Checks to see that all fields have input
-			if(email.getText().hashCode() == 0 || 
-					userName.getText().hashCode() == 0 || 
-					userPassword.getPassword().length==0 ||
-					firstName.getText().hashCode() == 0 ||
-					lastName.getText().hashCode() == 0) {
-				JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create User", JOptionPane.ERROR_MESSAGE);
-				return false;
-			}
-			
 			//Checks to see if the supplied e-mail already exist
 			if (user.getEmail().equals(email.getText().trim())) {
-				JOptionPane.showMessageDialog(null, "A user with e-mail"
+				JOptionPane.showMessageDialog(null, "A user with e-mail: "
 						+ email.getText().trim() + " already exists");
 				email.setText("");
 				return false;
@@ -240,23 +249,12 @@ public class CreateAccountDialog extends JDialog
 
 			//Checks to see if the supplied username already exist
 			if (user.getUserName().equals(userName.getText().trim())) {
-				JOptionPane.showMessageDialog(null, "A user with username"
+				JOptionPane.showMessageDialog(null, "A user with username: "
 						+ userName.getText().trim() + " already exists");
 				userName.setText("");
 				return false;
 			}
 
-			else {
-				//Makes sure that passwords match 
-				if (!areCharsEqual(userPassword.getPassword(),
-						repeatPassword.getPassword())) {
-					JOptionPane.showMessageDialog(null,
-							"Passwords do not match. Please try again!");
-					userPassword.setText("");
-					repeatPassword.setText("");
-					return false;
-				}
-			}
 		}
 				
 		return true;
