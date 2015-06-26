@@ -70,7 +70,7 @@ public class SetupPanel extends JPanel implements ActionListener
 			welcomeSubPanel.setLayout(new FlowLayout());
 			welcomeLabel = new JLabel("<html>Thanks for choosing Giraffe Manager! "
 					+ "<br>To get started, please create an administrator account. "
-					+ "<br>This account will manage user settings, projects, reports and activities.<br><br></html>",
+					+ "<br>This account will manage user settings,<br> projects, reports and activities.<br><br></html>",
 					JLabel.CENTER);
 			welcomeSubPanel.add(welcomeLabel);
 		}
