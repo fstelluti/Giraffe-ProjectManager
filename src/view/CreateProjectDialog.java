@@ -60,7 +60,7 @@ public class CreateProjectDialog extends JDialog
  private Properties p = new Properties();
  boolean exists;
  boolean refresh = false;
- private String connectionString = DatabaseConstants.DEFAULT_DB;
+ private String connectionString = DatabaseConstants.getDb();
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal, User user)
   {

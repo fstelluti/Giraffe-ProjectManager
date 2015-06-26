@@ -164,7 +164,7 @@ public class ProjectView extends JPanel
 	
 	private List<Activity> getProjectActivities()
 	{
-		projectActivities.addAll(ActivityDB.getProjectActivities(DatabaseConstants.DEFAULT_DB, project.getId()));
+		projectActivities.addAll(ActivityDB.getProjectActivities(DatabaseConstants.getDb(), project.getId()));
 		return projectActivities;
 	}
 }

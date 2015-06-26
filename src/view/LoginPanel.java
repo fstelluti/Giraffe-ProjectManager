@@ -150,9 +150,9 @@ public class LoginPanel extends JPanel implements ActionListener
 		if(e.getSource() == loginButton) {
 			char[] passChar = passwordTextField.getPassword();
 			String uName = loginTextField.getText();
-			boolean checkResult = UserDB.checkLogin(DatabaseConstants.DEFAULT_DB, loginTextField.getText(), passChar);
+			boolean checkResult = UserDB.checkLogin(DatabaseConstants.getDb(), loginTextField.getText(), passChar);
 			if (checkResult) {
-				User user = UserDB.getUserByName(DatabaseConstants.DEFAULT_DB, uName);
+				User user = UserDB.getUserByName(DatabaseConstants.getDb(), uName);
 				ViewManager.createMainViewPanel(user);
 				
 				//Resets text fields so that when logged out, the fields are empty

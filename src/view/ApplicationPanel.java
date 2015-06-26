@@ -31,7 +31,7 @@ public class ApplicationPanel extends JFrame
 	private ApplicationPanel() {	//private constructor for Singleton pattern
 		//First tests to see if the Database tables have been created
 		try {
-			DataManager.createTables(DatabaseConstants.DEFAULT_DB);
+			DataManager.createTables(DatabaseConstants.getDb());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -60,7 +60,7 @@ public class EditProjectDialog extends JDialog
 	 private Properties p = new Properties();
 	 boolean refresh = false;
 	 private User user;
-	 private String connectionString = DatabaseConstants.DEFAULT_DB;
+	 private String connectionString = DatabaseConstants.getDb();
 
   public EditProjectDialog(JFrame parent, String title, boolean modal, User currentUser)
   {
@@ -234,7 +234,7 @@ public class EditProjectDialog extends JDialog
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given project
-	    			  ProjectDB.editProjectById(DatabaseConstants.DEFAULT_DB,
+	    			  ProjectDB.editProjectById(DatabaseConstants.getDb(),
 	    					  currentProject.getId(),
 	    					  projectName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
@@ -295,7 +295,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkStartDate(int projectId, Date newStartDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.DEFAULT_DB, projectId);
+			  DatabaseConstants.getDb(), projectId);
 	  
 	  for(Activity a : activities)
 	  {
@@ -314,7 +314,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkDueDate(int projectId, Date newDueDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.DEFAULT_DB, projectId);
+			  DatabaseConstants.getDb(), projectId);
 	  
 	  for(Activity a : activities)
 	  {

@@ -33,7 +33,7 @@ public class GridProjects extends JPanel
 	private JTable grid;
 	private User user;
 	private JPanel content;
-	private String connectionString = DatabaseConstants.DEFAULT_DB;
+	private String connectionString = DatabaseConstants.getDb();
 	
 	public GridProjects(User user)
 	{

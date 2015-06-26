@@ -67,7 +67,7 @@ public class EditActivityDialog extends JDialog
   Properties p = new Properties();
   private User user;
   private boolean refresh = false;
-  private String connectionString = DatabaseConstants.DEFAULT_DB;
+  private String connectionString = DatabaseConstants.getDb();
   private final ImageIcon deleteIcon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
   final JPanel panDependArea = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
@@ -364,7 +364,7 @@ public class EditActivityDialog extends JDialog
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given activity
-	    			  ActivityDB.editActivityById(DatabaseConstants.DEFAULT_DB,
+	    			  ActivityDB.editActivityById(DatabaseConstants.getDb(),
 	    					  activities.get(activitiesBox.getSelectedIndex()).getActivityId(),
 	    					  activityName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 

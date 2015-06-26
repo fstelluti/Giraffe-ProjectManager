@@ -39,7 +39,7 @@ public class ViewManager
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	
 	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private static String connectionString = DatabaseConstants.DEFAULT_DB;
+	private static String connectionString = DatabaseConstants.getDb();
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
 
 	/**
@@ -149,7 +149,7 @@ public class ViewManager
 			root.add(projectNode);
 		  //Get a list of activities corresponding to a project
 			List<Activity> activities = ActivityDB.getProjectActivities(
-					DatabaseConstants.DEFAULT_DB,
+					DatabaseConstants.getDb(),
 					project.getId());
 			
 			//For each activity, add it to its project tree
