@@ -60,7 +60,7 @@ public abstract class DataManager
 	public static void createTables(String connectionString) throws SQLException{
 		if(UserDB.getAllUsers(connectionString).isEmpty()){
 			UserDB.createUserTable(connectionString);
-			ProjectDB.createProjectTable(connectionString);
+			ProjectDB.createTable();
 			ActivityDB.createActivityTable(connectionString);
 			PredecessorDB.createPredecessorTable(connectionString);
 			UserRolesDB.createUserRolesTable(connectionString);

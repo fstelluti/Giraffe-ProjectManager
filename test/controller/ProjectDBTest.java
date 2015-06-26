@@ -119,7 +119,7 @@ public class ProjectDBTest {
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
 	public void insertedProjectShouldMatchData() throws ParseException {
-		ProjectDB.insertProjectIntoTable(CONNECTION, "testProject", "1969-12-31", "1970-01-01", "dummy description");
+		ProjectDB.insertProjectIntoTable("testProject", "1969-12-31", "1970-01-01", "dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -177,8 +177,8 @@ public class ProjectDBTest {
 		int counter = 0;
 		for (Project project : projects) {
 			++counter;
-			int id = project.getProjectId();
-			boolean nameExists = project.getProjectName() != null && !project.getProjectName().isEmpty();
+			int id = project.getId();
+			boolean nameExists = project.getName() != null && !project.getName().isEmpty();
 			boolean startDateExists = project.getStartDate() != null;
 			boolean dueDateExists = project.getDueDate() != null;
 			assertTrue("A name was missing for ID " + id, nameExists);
@@ -195,7 +195,7 @@ public class ProjectDBTest {
 		Project project = ProjectDB.getProjectById(CONNECTION, 1);
 		int id = -1;
 		try {
-			id = project.getProjectId();
+			id = project.getId();
 		} catch (NullPointerException e) {
 			fail("No ProjectID was returned, expected returned project with ID 1!");
 		}

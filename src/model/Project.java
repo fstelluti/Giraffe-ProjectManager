@@ -2,12 +2,16 @@ package model;
 
 import java.util.Date;
 
+import controller.DatabaseConstants;
+import controller.ProjectDB;
+
 /**
  * Create a project.
  * Possibility of editing it.
  * 
  * @author Lukas Cardot-Goyette
  * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Matthew Mongrain
  *
  */
 
@@ -17,6 +21,9 @@ public class Project
 	private String name;
 	private Date startDate, dueDate;
 	private String description;
+	private int estimatedBudget;
+	private int actualBudget;
+	
 	
 	public Project(){}
 	
@@ -47,11 +54,11 @@ public class Project
 	}
 	
 	// Getters
-	public int getProjectId() {
+	public int getId() {
 		return id;
 	}
 	
-	public String getProjectName(){
+	public String getName(){
 		return name;
 	}
 	
@@ -63,8 +70,6 @@ public class Project
 		return dueDate;
 	}
 	
-	//Setters
-	//@TODO Setters will need to change the DB 
 	public void setProjectName(String newName){
 		this.name = newName;
 	}
@@ -83,5 +88,46 @@ public class Project
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public int getEstimatedBudget() {
+		return estimatedBudget;
+	}
+
+	public void setEstimatedBudget(int estimatedBudget) {
+		if (estimatedBudget < this.estimatedBudget) {
+			throw new IllegalArgumentException("estimatedBudget cannot be negative");
+		}
+		this.estimatedBudget = estimatedBudget;
+	}
+
+	public int getActualBudget() {
+		return actualBudget;
+	}
+
+	public void setActualBudget(int actualBudget) {
+		if (actualBudget < this.actualBudget) {
+			throw new IllegalArgumentException("actualBudget cannot be negative");
+		}
+		this.actualBudget = actualBudget;
+	}
+	
+	public void persist() {
+		if (this.id == 0) {
+			String startDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
+			String dueDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
+			ProjectDB.insertProjectIntoTable(name, startDate, dueDate, description);
+		}
+		else {
+			ProjectDB.update(this);
+		}
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

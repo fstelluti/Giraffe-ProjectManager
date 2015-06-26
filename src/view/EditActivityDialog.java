@@ -67,7 +67,7 @@ public class EditActivityDialog extends JDialog
   Properties p = new Properties();
   private User user;
   private boolean refresh = false;
-  private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+  private String connectionString = DatabaseConstants.DEFAULT_DB;
   private final ImageIcon deleteIcon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
   final JPanel panDependArea = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
@@ -103,7 +103,7 @@ public class EditActivityDialog extends JDialog
 	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
 	  Vector<String> projectNames = new Vector<String>();
 	  for(Project project: projects){
-		  projectNames.add(project.getProjectName());
+		  projectNames.add(project.getName());
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
 	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project to Edit"));
@@ -116,7 +116,7 @@ public class EditActivityDialog extends JDialog
 	  panActivitiesNames.setBackground(Color.white);
 	  panActivitiesNames.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
 		  activitiesNames.add(activity.getActivityName());
@@ -223,9 +223,9 @@ public class EditActivityDialog extends JDialog
 	  projectBox.addActionListener(new ActionListener(){
 		@SuppressWarnings("all")
 		public void actionPerformed(ActionEvent arg0) {
-			Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+			Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  
-			final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, currentProject.getProjectId());
+			final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, currentProject.getId());
 			final Vector<String> activitiesNames = new Vector<String>();
 			
 			for(Activity activity: activities){
@@ -255,7 +255,7 @@ public class EditActivityDialog extends JDialog
 	  //On change of activity set content
 	  activitiesBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
 	    	  final Vector<String> activitiesNames = new Vector<String>();
@@ -293,7 +293,7 @@ public class EditActivityDialog extends JDialog
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  boolean activityExists = false;
 	    	  boolean dependsOnItself = false;
-	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  Component[] dependAreaComponents = panDependArea.getComponents();
 	    	  
@@ -364,7 +364,7 @@ public class EditActivityDialog extends JDialog
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given activity
-	    			  ActivityDB.editActivityById(DatabaseConstants.PROJECT_MANAGEMENT_DB,
+	    			  ActivityDB.editActivityById(DatabaseConstants.DEFAULT_DB,
 	    					  activities.get(activitiesBox.getSelectedIndex()).getActivityId(),
 	    					  activityName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
@@ -399,7 +399,7 @@ public class EditActivityDialog extends JDialog
 	  JButton deleteButton = new JButton("Delete Activity");
 	  deleteButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  int response = JOptionPane.showConfirmDialog(content,
     				  "Are you sure you want to DELETE the following Activity: \n"
@@ -445,7 +445,7 @@ public class EditActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
 		  activitiesNames.add(activity.getActivityName());
@@ -493,7 +493,7 @@ public class EditActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	
 	  for(Activity activity: activities){

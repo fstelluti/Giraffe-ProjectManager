@@ -107,7 +107,7 @@ public class ProjectView extends JPanel
 		projectPanel.setLayout(new BoxLayout(projectPanel, BoxLayout.Y_AXIS));
 		projectPanel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Project"));
 		
-		JLabel projectNameLabel = new JLabel("Project name: " + project.getProjectName());
+		JLabel projectNameLabel = new JLabel("Project name: " + project.getName());
 		labels.add(projectNameLabel);
 		projectPanel.add(projectNameLabel);
 		
@@ -164,7 +164,7 @@ public class ProjectView extends JPanel
 	
 	private List<Activity> getProjectActivities()
 	{
-		projectActivities.addAll(ActivityDB.getProjectActivities(DatabaseConstants.PROJECT_MANAGEMENT_DB, project.getProjectId()));
+		projectActivities.addAll(ActivityDB.getProjectActivities(DatabaseConstants.DEFAULT_DB, project.getId()));
 		return projectActivities;
 	}
 }

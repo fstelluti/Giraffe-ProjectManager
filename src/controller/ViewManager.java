@@ -39,7 +39,7 @@ public class ViewManager
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	
 	private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private static String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+	private static String connectionString = DatabaseConstants.DEFAULT_DB;
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
 
 	/**
@@ -145,12 +145,12 @@ public class ViewManager
 
 		//For each project, add it to its Tree
 		for (Project project : projects) {
-			projectNode = new TreeNode(project.getProjectName(), project);
+			projectNode = new TreeNode(project.getName(), project);
 			root.add(projectNode);
 		  //Get a list of activities corresponding to a project
 			List<Activity> activities = ActivityDB.getProjectActivities(
-					DatabaseConstants.PROJECT_MANAGEMENT_DB,
-					project.getProjectId());
+					DatabaseConstants.DEFAULT_DB,
+					project.getId());
 			
 			//For each activity, add it to its project tree
 			for (Activity activity : activities) {
@@ -175,11 +175,11 @@ public class ViewManager
 	public static boolean activityIsInsertable(Activity activity, Project project) throws Exception {
   	  Date projectStartDate = project.getStartDate();
   	  Date projectDueDate = project.getDueDate();
-  	  String projectName = project.getProjectName();
+  	  String projectName = project.getName();
   	  String activityName = activity.getActivityName();
   	  Date activityStartDate = activity.getStartDate();
   	  Date activityDueDate = activity.getDueDate();
-  	  int projectId = project.getProjectId();
+  	  int projectId = project.getId();
 		boolean exists = false;
 		
 		//TODO: Factor this out into a method boolean ActivityDB.activityExists();
@@ -229,13 +229,13 @@ public class ViewManager
 		}
 	
 	public static int addActivity (Activity activity, Project project) {
-		ActivityDB.insertActivityIntoTable(connectionString, project.getProjectId(), 
+		ActivityDB.insertActivityIntoTable(connectionString, project.getId(), 
 				activity.getActivityName(), 
 				dateFormat.format(activity.getStartDate()), 
 				dateFormat.format(activity.getDueDate()), 
 				activity.getStatus(), 
 				activity.getDescription());
-		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getActivityName(), project.getProjectId());
+		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getActivityName(), project.getId());
 		return insertedActivity.getActivityId();
 	}
 }

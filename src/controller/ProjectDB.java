@@ -13,7 +13,7 @@ import model.Project;
 /**
  * 
  * @author Zachary Bergeron
- * @modifiedBy: Francois Stelluti, Anne-Marie Dube
+ * @modifiedBy: Francois Stelluti, Anne-Marie Dube, Matthew Mongrain
  *
  */
 
@@ -22,23 +22,24 @@ public class ProjectDB extends DataManager
 	
 	/**
 	 * Method to initialize the Project Table in the DB
-	 * @param connectionString as a String
 	 */
-	public static void createProjectTable(String connectionString)
+	public static void createTable()
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE PROJECTS "
-					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
-					+ " NAME       TEXT     NOT NULL, " + " STARTDATE 		DATE, "
-					+ " DUEDATE 		DATE,"
-					+ " DESCRIPTION       TEXT);";
+					+ "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+					+ " name TEXT NOT NULL, startDate DATE, "
+					+ " dueDate DATE,"
+					+ " actualBudget INTEGER,"
+					+ " estimatedBudget INTEGER,"
+					+ " description       TEXT);";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
@@ -60,14 +61,13 @@ public class ProjectDB extends DataManager
 	
     /**
      * Method to insert a new project into the Project Table
-     * @param connectionString as a String
-     * @param name as a String
      * @param startDate as a String
      * @param dueDate as a String
      * @param description as a String
+     * @param name as a String
      * @return
      */
-    public static void insertProjectIntoTable(String connectionString, String projectName, String startDate, String dueDate, String description)
+    public static void insertProjectIntoTable(String projectName, String startDate, String dueDate, String description)
     {
 
 		Connection c = null;
@@ -75,7 +75,7 @@ public class ProjectDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -680,6 +680,58 @@ public class ProjectDB extends DataManager
 					c.close();
 				} catch (SQLException e) {
 					System.err.println("Error closing connections in ProjectDB.deleteProjectPMRelation: " + e.getMessage());
+				}
+			}
+		}
+		
+		
+		/*
+		 * Saves a Project object in the database.
+		 * Throws IllegalArgumentException() if the Project has not been created.
+		 */
+		public static void update(Project project) {
+			Connection c = null;
+			Statement stmt = null;
+			
+			int projectId = project.getId();
+			
+			try
+			{
+				c = getConnection(DatabaseConstants.getDb());
+				c.setAutoCommit(false);
+
+				stmt = c.createStatement();
+				String sql = "UPDATE PROJECTS "
+						+ "SET dueDate='"
+						+ DatabaseConstants.DATE_FORMAT.format(project.getDueDate())  
+						+ "', startDate='"
+						+ DatabaseConstants.DATE_FORMAT.format(project.getStartDate())
+						+ "', name='"
+						+ project.getName()
+						+ "', estimatedBudget='"
+						+ project.getEstimatedBudget()
+						+ "', estimatedBudget='"
+						+ project.getActualBudget()
+						+ "', description='"
+						+ project.getDescription()
+						+ "' WHERE id='"
+						+ projectId 
+						+ "';";
+				stmt.executeUpdate(sql);
+				c.commit();
+			}
+			catch (SQLException e) {
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				throw new IllegalArgumentException("ProjectID " + projectId + " does not exist in database");
+			}
+			catch (Exception e) {
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			} finally {
+				try {
+					stmt.close();
+					c.close();
+				} catch (SQLException e) {
+					System.err.println("Error closing connections in ProjectDB.update: " + e.getMessage());
 				}
 			}
 		}

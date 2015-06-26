@@ -60,7 +60,7 @@ public class EditProjectDialog extends JDialog
 	 private Properties p = new Properties();
 	 boolean refresh = false;
 	 private User user;
-	 private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+	 private String connectionString = DatabaseConstants.DEFAULT_DB;
 
   public EditProjectDialog(JFrame parent, String title, boolean modal, User currentUser)
   {
@@ -91,7 +91,7 @@ public class EditProjectDialog extends JDialog
 	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
 	  Vector<String> projectNames = new Vector<String>();
 	  for(Project project: projects){
-		  projectNames.add(project.getProjectName());
+		  projectNames.add(project.getName());
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
 	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project to Edit"));
@@ -158,11 +158,11 @@ public class EditProjectDialog extends JDialog
 	  panDescription.add(scrollPanDescription);
 	  
 	  //Set Content to project selection
-	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
-	  projectName.setText(currentProject.getProjectName());
-	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getProjectId());
+	  projectName.setText(currentProject.getName());
+	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getId());
 	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
 	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  managerBox.setSelectedIndex(selectedIndex);
@@ -171,11 +171,11 @@ public class EditProjectDialog extends JDialog
 	  //On change of project Set Content to project selection
 	  projectBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
-	    	  projectName.setText(currentProject.getProjectName());
-	    	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getProjectId());
+	    	  projectName.setText(currentProject.getName());
+	    	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getId());
 	    	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
 	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
 	    	  projectDescription.setText(currentProject.getDescription());
@@ -188,13 +188,13 @@ public class EditProjectDialog extends JDialog
 	  JButton okButton = new JButton("Edit Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  boolean exists = false;
 	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
 	    	  
 	    	  //Checks if the project already exists
     		  for(Project project:projects){
-	    		  if(projectName.getText().equals(project.getProjectName()) && !projectName.getText().equals(currentProject.getProjectName()))
+	    		  if(projectName.getText().equals(project.getName()) && !projectName.getText().equals(currentProject.getName()))
 	    				  { exists = true; break; } else{exists = false;}
     		  }
 	    	  
@@ -212,30 +212,30 @@ public class EditProjectDialog extends JDialog
 	    		  JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Check if related activities have no conflict with new start date
-	    	  else if(!checkStartDate(currentProject.getProjectId(), (Date)startDatePicker.getModel().getValue())){
+	    	  else if(!checkStartDate(currentProject.getId(), (Date)startDatePicker.getModel().getValue())){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities start dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  //Check if related activities have no conflict with new due date
-	    	  else if(!checkDueDate(currentProject.getProjectId(), (Date)dueDatePicker.getModel().getValue())){
+	    	  else if(!checkDueDate(currentProject.getId(), (Date)dueDatePicker.getModel().getValue())){
 	    		  JOptionPane.showMessageDialog(content,"Please ensure there is no conflict with activities due dates.", "Cannot Edit Project", JOptionPane.ERROR_MESSAGE);
 	    	  }
 	    	  else{
 	    		  
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to edit the following Project: \n"
-	    						  + "\nProject Name: " + currentProject.getProjectName()
+	    						  + "\nProject Name: " + currentProject.getName()
 	    						  + "\nStart Date: "+ dateFormat.format(currentProject.getStartDate())
 	    						  + "\nDue Date: "+ dateFormat.format(currentProject.getDueDate())
 	    						  +  "\n\nWith the following modifications: \n"
 	    						  + "\nProject Name: " + projectName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
-	    						  "Confirm "+currentProject.getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    						  "Confirm "+currentProject.getName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given project
-	    			  ProjectDB.editProjectById(DatabaseConstants.PROJECT_MANAGEMENT_DB,
-	    					  currentProject.getProjectId(),
+	    			  ProjectDB.editProjectById(DatabaseConstants.DEFAULT_DB,
+	    					  currentProject.getId(),
 	    					  projectName.getText(),
 	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
 	    					  dateFormat.format(dueDatePicker.getModel().getValue()),
@@ -257,14 +257,14 @@ public class EditProjectDialog extends JDialog
 	  JButton deleteButton = new JButton("Delete Project");
 	  deleteButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	    	  int response = JOptionPane.showConfirmDialog(content,
     				  "Are you sure you want to DELETE the following Project: \n"
-    						  + "\nProject Name: " + currentProject.getProjectName(),
-    						  "Confirm "+currentProject.getProjectName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    						  + "\nProject Name: " + currentProject.getName(),
+    						  "Confirm "+currentProject.getName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
     		  if(response == JOptionPane.YES_OPTION){
     			  //Call the editing Method of a given project
-    			  ProjectDB.deleteProject(connectionString, currentProject.getProjectId());
+    			  ProjectDB.deleteProject(connectionString, currentProject.getId());
     			  setVisible(false);
     			  refresh = true;
     		  }
@@ -295,7 +295,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkStartDate(int projectId, Date newStartDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectId);
+			  DatabaseConstants.DEFAULT_DB, projectId);
 	  
 	  for(Activity a : activities)
 	  {
@@ -314,7 +314,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkDueDate(int projectId, Date newDueDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.PROJECT_MANAGEMENT_DB, projectId);
+			  DatabaseConstants.DEFAULT_DB, projectId);
 	  
 	  for(Activity a : activities)
 	  {

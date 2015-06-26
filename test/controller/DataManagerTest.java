@@ -41,7 +41,7 @@ public class DataManagerTest {
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
 		UserDB.createUserTable(CONNECTION);
 		ActivityDB.createActivityTable(CONNECTION);
-		ProjectDB.createProjectTable(CONNECTION);
+		ProjectDB.createTable();
 		PredecessorDB.createPredecessorTable(CONNECTION);
 		UserRolesDB.createUserRolesTable(CONNECTION); 	
 		UserRolesDictDB.createUserRolesDictTable(CONNECTION);

@@ -58,7 +58,7 @@ public class ActivityView extends JPanel
 		activityPanel.add(activityStatusLabel);
 		labels.add(activityStatusLabel);
 		
-		JLabel parentProjectLabel = new JLabel("Parent project of activity: " + parentProject.getProjectName());
+		JLabel parentProjectLabel = new JLabel("Parent project of activity: " + parentProject.getName());
 		activityPanel.add(parentProjectLabel);
 		labels.add(parentProjectLabel);
 		

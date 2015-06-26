@@ -65,7 +65,7 @@ public class AddActivityDialog extends JDialog
   Properties p = new Properties();
   private User user;
   private boolean refresh = false;
-  private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+  private String connectionString = DatabaseConstants.DEFAULT_DB;
   private final ImageIcon deleteIcon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
   final JPanel panDependArea = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
@@ -100,7 +100,7 @@ public class AddActivityDialog extends JDialog
 	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
 	  Vector<String> projectNames = new Vector<String>();
 	  for(Project project: projects){
-		  projectNames.add(project.getProjectName());
+		  projectNames.add(project.getName());
 	  }
 	  projectBox = new JComboBox<String>(projectNames);
 	  panProjectName.setBorder(BorderFactory.createTitledBorder("Project"));
@@ -188,7 +188,7 @@ public class AddActivityDialog extends JDialog
 	    	  String activityNameEntered = activityName.getText();
 	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  int projectId = projects.get(projectBox.getSelectedIndex()).getProjectId();
+	    	  int projectId = projects.get(projectBox.getSelectedIndex()).getId();
 	    	  int projectIdIndex = projectBox.getSelectedIndex();
 	    	  Activity activityToInsert = new Activity(projectId, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
 	    	  Project selectedProject = ProjectDB.getProjectById(connectionString, projectId);
@@ -205,7 +205,7 @@ public class AddActivityDialog extends JDialog
 	    	 
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to create the following Activity for "
-	    						  + selectedProject.getProjectName() +"?\n"
+	    						  + selectedProject.getName() +"?\n"
 	    						  + "\nActivity Name: "+activityName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
 	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
@@ -266,7 +266,7 @@ public class AddActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getProjectId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
 		  activitiesNames.add(activity.getActivityName());

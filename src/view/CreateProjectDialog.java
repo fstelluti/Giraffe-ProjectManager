@@ -60,7 +60,7 @@ public class CreateProjectDialog extends JDialog
  private Properties p = new Properties();
  boolean exists;
  boolean refresh = false;
- private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+ private String connectionString = DatabaseConstants.DEFAULT_DB;
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal, User user)
   {
@@ -151,7 +151,7 @@ public class CreateProjectDialog extends JDialog
 	    	  //Checks if the project already exists
 	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
     		  for(Project project:projects){
-	    		  if(projectName.getText().equals(project.getProjectName())){ exists = true; break; } else{exists = false;}
+	    		  if(projectName.getText().equals(project.getName())){ exists = true; break; } else{exists = false;}
     		  }
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
@@ -175,9 +175,8 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  ProjectDB.insertProjectIntoTable(connectionString,
-			    				 projectName.getText(), 
-			    				 dateFormat.format(startDatePicker.getModel().getValue()),
+	    			  ProjectDB.insertProjectIntoTable(projectName.getText(),
+			    				 dateFormat.format(startDatePicker.getModel().getValue()), 
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
 			    				 projectDescription.getText()
 	    					  );
@@ -189,7 +188,7 @@ public class CreateProjectDialog extends JDialog
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
 		    		  UserRolesDB.insertUserRoleIntoTable(connectionString,
-		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getProjectId(), 1);
+		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getId(), 1);
 		    		  refresh = true;
 			    		  setVisible(false); 
 			    		  

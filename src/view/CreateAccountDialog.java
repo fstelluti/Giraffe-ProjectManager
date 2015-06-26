@@ -166,7 +166,7 @@ public class CreateAccountDialog extends JDialog
 									email.getText(), firstName.getText(),
 									lastName.getText());
 							
-							UserDB.insertUserIntoTable(DatabaseConstants.PROJECT_MANAGEMENT_DB, user);
+							UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
 							setVisible(false);
 							break;
 					}
@@ -216,7 +216,7 @@ public class CreateAccountDialog extends JDialog
 	 * @return boolean
 	 */ 
 	private boolean isInputValid() {
-		List<User> users = UserDB.getAllUsers(DatabaseConstants.PROJECT_MANAGEMENT_DB);
+		List<User> users = UserDB.getAllUsers(DatabaseConstants.DEFAULT_DB);
 		for (User user : users) {
 			//Checks to see that all fields have input
 			if(email.getText().hashCode() == 0 || 

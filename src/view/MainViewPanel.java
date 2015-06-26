@@ -47,7 +47,7 @@ public class MainViewPanel extends JPanel
 	public User user;
 	private GreetingLabel greetingLabel;
 	private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
-	private String connectionString = DatabaseConstants.PROJECT_MANAGEMENT_DB;
+	private String connectionString = DatabaseConstants.DEFAULT_DB;
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
 
@@ -253,7 +253,7 @@ public class MainViewPanel extends JPanel
 
 			};
 			treePanel = new TreePanel(ProjectDB.getUserProjects(
-					DatabaseConstants.PROJECT_MANAGEMENT_DB, this.user.getId()));
+					DatabaseConstants.DEFAULT_DB, this.user.getId()));
 			treeView = treePanel.getTreeView();
 			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
@@ -281,7 +281,7 @@ public class MainViewPanel extends JPanel
 	public void refresh()
 	{
 		treePanel = new TreePanel(ProjectDB.getUserProjects(
-				DatabaseConstants.PROJECT_MANAGEMENT_DB, this.user.getId()));
+				DatabaseConstants.DEFAULT_DB, this.user.getId()));
 		treeView = treePanel.getTreeView();
 		getSplitPanel().setLeftComponent(treeView);
 		getSplitPanel().setDividerLocation(200);
