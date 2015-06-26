@@ -42,6 +42,7 @@ public class CreateAccountDialog extends JDialog
 	private JButton openFileButton;
 	private JLabel fileChooserLabel, imageLabel;
 	private JPanel imagePanel;
+	private ImageIcon mImageIcon;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public CreateAccountDialog(JFrame parent, String title, boolean modal) {
@@ -95,7 +96,8 @@ public class CreateAccountDialog extends JDialog
 				if (choice == JFileChooser.APPROVE_OPTION) {
 					File file = userPicChooser.getSelectedFile();
 					String sname = file.getAbsolutePath();
-					imageLabel = new JLabel("", new ImageIcon(sname),
+					mImageIcon = new ImageIcon(sname);
+					imageLabel = new JLabel("", new ImageIcon(mImageIcon.getImage().getScaledInstance(130, 130, SOMEBITS)),
 							JLabel.CENTER);
 					imagePanel.add(imageLabel, BorderLayout.CENTER);
 					imagePanel.revalidate();
