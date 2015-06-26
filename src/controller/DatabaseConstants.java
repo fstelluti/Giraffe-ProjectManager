@@ -35,10 +35,10 @@ public class DatabaseConstants
 	}
 	
 	public static String getUserDatabase() {
-		return "jdbc:sqlite:" + userDatabase + ".db";
+		return userDatabase;
 	}
 	public static void setUserDatabase(String userDatabase) {
-		DatabaseConstants.userDatabase = userDatabase;
+		DatabaseConstants.userDatabase = "jdbc:sqlite:" + userDatabase + ".db";
 	}
 	public static boolean isTesting() {
 		return testing;
