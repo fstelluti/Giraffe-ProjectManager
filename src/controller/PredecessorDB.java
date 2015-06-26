@@ -13,7 +13,7 @@ import model.Activity;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Zachary Bergeron, Anne-Marie Dube
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -33,7 +33,7 @@ public class PredecessorDB extends DataManager
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE PREDECESSORS "
+			String sql = "CREATE TABLE IF NOT EXISTS PREDECESSORS "
 					+ "(ACTIVITYID		INTEGER,"
 					+ " PREDECESSORID 	INTEGER,"
 					+ " PRIMARY KEY(ACTIVITYID,PREDECESSORID),"

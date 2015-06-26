@@ -16,7 +16,7 @@ import controller.ViewManager;
 /**
  * This class defined the main application window and displays the Login Panel
  * @author Andrey Uspenskiy
- * @modifiedBy Lukas Cardot-Goyette, Zachary Bergeron, Francois Stelluti
+ * @modifiedBy Lukas Cardot-Goyette, Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
  */
 
 @SuppressWarnings("serial")

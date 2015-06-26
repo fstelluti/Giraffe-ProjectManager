@@ -25,7 +25,7 @@ public class UserRolesDictDB extends DataManager
 			c = getConnection(connectionString);
 			
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE USERROLESDICT " + "(ROLEID  	INTEGER,"
+			String sql = "CREATE TABLE IF NOT EXISTS USERROLESDICT " + "(ROLEID  	INTEGER,"
 					+ " ROLENAME	TEXT," + " PRIMARY KEY(ROLEID)); "
 					+ "INSERT INTO USERROLESDICT (roleid, rolename) "
 					+ "VALUES (1, 'projectManager')" + ", (2, 'regularUser')" + ", (3, 'admin')";

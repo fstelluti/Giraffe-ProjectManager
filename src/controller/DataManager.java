@@ -15,11 +15,12 @@ import java.text.SimpleDateFormat;
  * For DML and DDL statements executeUpdate method is used; for queries - executeQuery is used
  * ResultSet iterates over collection and retrieves DDB values by field name
  * 
- * @modifiedBy Zachary Bergeron, Anne-Marie Dube
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube, Francois Stelluti
  */
 public abstract class DataManager
 {
 	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	//private static boolean isCreated;	//Flag to check if tables have already been created
 
 	/**
 	 * Method creates the connection between the application and the DB
@@ -50,21 +51,18 @@ public abstract class DataManager
 		}
 	}
 	
-	
 	/**
-	 * Method creates the tables upon startup
+	 * Method creates the tables upon startup. Checking if a table already exists is done directly in SQL
 	 * 
 	 * @param connectionString as a String
 	 * @throws SQLException
 	 */
 	public static void createTables(String connectionString) throws SQLException{
-		if(UserDB.getAllUsers(connectionString).isEmpty()){
 			UserDB.createUserTable(connectionString);
 			ProjectDB.createTable();
 			ActivityDB.createActivityTable(connectionString);
 			PredecessorDB.createPredecessorTable(connectionString);
 			UserRolesDB.createUserRolesTable(connectionString);
 			UserRolesDictDB.createUserRolesDictTable(connectionString);
-		}
 	}
 }

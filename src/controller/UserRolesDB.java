@@ -8,7 +8,7 @@ import java.sql.Statement;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -29,7 +29,7 @@ public class UserRolesDB extends DataManager
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE USERROLES " + "(USERID 		INTEGER,"
+			String sql = "CREATE TABLE IF NOT EXISTS USERROLES " + "(USERID 		INTEGER,"
 					+ " PROJECTID 	INTEGER," + " ROLEID  	INTEGER,"
 					+ " PRIMARY KEY(USERID,PROJECTID),"
 					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"

@@ -33,7 +33,7 @@ public class ProjectDB extends DataManager
 			c = getConnection(DatabaseConstants.getDb());
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE PROJECTS "
+			String sql = "CREATE TABLE IF NOT EXISTS PROJECTS "
 					+ "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " name TEXT NOT NULL, startDate DATE, "
 					+ " dueDate DATE,"

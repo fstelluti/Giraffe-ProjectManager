@@ -13,7 +13,7 @@ import model.Activity;
 /**
  * 
  * @author Zachary Bergeron
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -35,7 +35,7 @@ public class ActivityDB extends DataManager
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE ACTIVITIES "
+			String sql = "CREATE TABLE IF NOT EXISTS ACTIVITIES "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " PROJECTID       INTEGER    NOT NULL, "
 					+ " NAME       TEXT     NOT NULL, " 

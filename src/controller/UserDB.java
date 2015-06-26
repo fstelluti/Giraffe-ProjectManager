@@ -12,7 +12,7 @@ import model.User;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -32,7 +32,7 @@ public class UserDB extends DataManager {
 			c = getConnection(connectionString);
 
 			stmt = c.createStatement();
-			String sql = "CREATE TABLE USERS "
+			String sql = "CREATE TABLE IF NOT EXISTS USERS "
 					+ "(ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 					+ " USERNAME       TEXT    NOT NULL, "
 					+ " PASSWORD       TEXT     NOT NULL, "

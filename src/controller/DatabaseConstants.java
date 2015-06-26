@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Matthew Mongrain
+ * @modifiedBy Matthew Mongrain, Francois Stelluti
  */
 
 public class DatabaseConstants
