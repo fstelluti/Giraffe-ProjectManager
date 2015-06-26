@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import controller.DataManager;
 import controller.DatabaseConstants;
+import controller.UserDB;
 import controller.ViewManager;
 
 /**
@@ -23,6 +24,7 @@ public class ApplicationPanel extends JFrame
 {
 	private List<JPanel> cardPanels = new ArrayList<JPanel>();
 	private JPanel cardsHolder;
+	private SetupPanel setupPanel = SetupPanel.getSetupPanelInstance();
 	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
@@ -60,8 +62,17 @@ public class ApplicationPanel extends JFrame
 	}
 	
 	public void buildCardsPanel() {
-		addCardPanel(getLoginPanel(), "LoginPanel");
-		cardLayout.show(cardsHolder, "LoginPanel");
+		if(UserDB.getAllUsers(DatabaseConstants.getDb()).isEmpty() == true)
+		{
+			addCardPanel(getSetupPanel(), "SetupPanel");
+			cardLayout.show(cardsHolder, "SetupPanel");
+		}
+		else
+		{
+			addCardPanel(getLoginPanel(), "LoginPanel");
+			cardLayout.show(cardsHolder, "LoginPanel");
+		}
+			
 	}
 	
 	public void addCardPanel(JPanel panelToAdd, String cardPanelName) {
@@ -92,5 +103,19 @@ public class ApplicationPanel extends JFrame
 		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
 		
 		return loginPanel;
+	}
+	
+	/**
+	 * Gets the SetupPanel and sets it up properly
+	 * @return SetupPanel
+	 */	
+	public SetupPanel getSetupPanel() {
+		//Sets the Login Panel button
+		this.getRootPane().setDefaultButton(setupPanel.getNewAccountButton());
+		
+		//Sets the proper size
+		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
+		
+		return setupPanel;
 	}
 }
