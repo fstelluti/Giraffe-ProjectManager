@@ -16,9 +16,9 @@ import javax.swing.border.TitledBorder;
 import controller.ViewManager;
 
 /**
+ * This class loads the Setup Panel if the User DB is empty, and will create an Admin account
  * 
- * @author Andrey Uspenskiy
- * @modifiedBy Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
+ * @author Anne-Marie Dube
  */
 
 @SuppressWarnings("serial")
