@@ -1,7 +1,9 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import controller.ActivityDB;
 import controller.DatabaseConstants;
 import controller.ProjectDB;
 
@@ -23,11 +25,31 @@ public class Project
 	private String description;
 	private int estimatedBudget;
 	private int actualBudget;
-	
+	private ArrayList<Activity> activities;
 	
 	public Project(){}
 	
-	//Will probably have more arguments
+	/**
+	 * @param id The id to load from the database
+	 * This constructor loads the project from the database, populating all its fields.
+	 * Project.refresh() can be called to reload all members from the db.
+	 */
+	public Project(int id) {
+		Project projectFromDb = ProjectDB.getProjectById(id);
+		// If the project exists, copy its member here, otherwise throw exception
+		if (projectFromDb == null) {
+			throw new IllegalArgumentException("No Project with that ID in database");
+		} else {
+			this.id = id;
+			this.actualBudget = projectFromDb.getActualBudget();
+			this.description = projectFromDb.getDescription();
+			this.dueDate = projectFromDb.getDueDate();
+			this.estimatedBudget = projectFromDb.getEstimatedBudget();
+			this.name = projectFromDb.getName();
+			this.activities = (ArrayList<Activity>) ActivityDB.getProjectActivities(id);
+		}
+	}
+	
 	public Project(int id, String name, Date startDate, Date dueDate, String description)
 	{
 		this.id = id;
@@ -45,15 +67,6 @@ public class Project
 		this.description = description;
 	}
 	
-	/**
-	 * Delete project
-	 */
-	public void deleteProject(Project project)
-	{
-		
-	}
-	
-	// Getters
 	public int getId() {
 		return id;
 	}
@@ -130,4 +143,19 @@ public class Project
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public ArrayList<Activity> getActivities() {
+		return activities;
+	}
+	
+	public void addActivity(Activity activity) {
+		if (activities.contains(activity)) {
+			activities.add(activity);
+		}
+	}
+	
+	public void removeActivity(Activity activity) {
+		activities.remove(activity);
+	}
+	
 }

@@ -190,14 +190,14 @@ public class ActivityDBTest {
 	// Tests ActivityDB.getProjectActivities()
 	@Test
 	public void returnedActivitiesShouldBeValid() {
-		List<Activity> activities = ActivityDB.getProjectActivities(CONNECTION, 1337);
+		List<Activity> activities = ActivityDB.getProjectActivities(1337);
 		int counter = 0;
 		for (Activity activity : activities) {
 			++counter;
 			int id = activity.getActivityId();
 			int projectId = activity.getAssociatedProjectId();
 			boolean validProjectId = (projectId == 1337);
-			boolean nameExists = activity.getActivityName() != null && !activity.getActivityName().isEmpty();
+			boolean nameExists = activity.getName() != null && !activity.getName().isEmpty();
 			boolean startDateExists = activity.getStartDate() != null;
 			boolean dueDateExists = activity.getDueDate() != null;
 			boolean statusExists = activity.getStatus() >= 0;

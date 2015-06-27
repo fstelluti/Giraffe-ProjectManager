@@ -192,7 +192,7 @@ public class ProjectDBTest {
 	// Tests DataManager.getProjectById()
 	@Test
 	public void returnedProjectByIdShouldMatch() {
-		Project project = ProjectDB.getProjectById(CONNECTION, 1);
+		Project project = ProjectDB.getProjectById(1);
 		int id = -1;
 		try {
 			id = project.getId();

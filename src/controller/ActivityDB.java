@@ -131,12 +131,11 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to get a project's activities
 	 * Called in ViewManager.java, used to see if an activity can be inserted and to generate the TreeView
-	 * 
-	 * @param connectionString as a String
 	 * @param projectId as an Int
+	 * 
 	 * @return
 	 */
-	public static List<Activity> getProjectActivities(String connectionString,	int projectId)
+	public static List<Activity> getProjectActivities(int projectId)
 	{
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
@@ -145,7 +144,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

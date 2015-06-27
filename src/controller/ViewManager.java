@@ -148,13 +148,11 @@ public class ViewManager
 			projectNode = new TreeNode(project.getName(), project);
 			root.add(projectNode);
 		  //Get a list of activities corresponding to a project
-			List<Activity> activities = ActivityDB.getProjectActivities(
-					DatabaseConstants.getDb(),
-					project.getId());
+			List<Activity> activities = ActivityDB.getProjectActivities(project.getId());
 			
 			//For each activity, add it to its project tree
 			for (Activity activity : activities) {
-				activityNode = new TreeNode(activity.getActivityName(), activity);
+				activityNode = new TreeNode(activity.getName(), activity);
 				projectNode.add(activityNode);
 			}
 		}
@@ -176,16 +174,16 @@ public class ViewManager
   	  Date projectStartDate = project.getStartDate();
   	  Date projectDueDate = project.getDueDate();
   	  String projectName = project.getName();
-  	  String activityName = activity.getActivityName();
+  	  String activityName = activity.getName();
   	  Date activityStartDate = activity.getStartDate();
   	  Date activityDueDate = activity.getDueDate();
   	  int projectId = project.getId();
 		boolean exists = false;
 		
 		//TODO: Factor this out into a method boolean ActivityDB.activityExists();
-		List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectId);
+		List<Activity> activities = ActivityDB.getProjectActivities(projectId);
 		for(Activity activitySelected:activities){
-			if(activityName.equals(activitySelected.getActivityName())) { 
+			if(activityName.equals(activitySelected.getName())) { 
 				exists = true; 
 				break; 
 			} else {
@@ -230,12 +228,12 @@ public class ViewManager
 	
 	public static int addActivity (Activity activity, Project project) {
 		ActivityDB.insertActivityIntoTable(connectionString, project.getId(), 
-				activity.getActivityName(), 
+				activity.getName(), 
 				dateFormat.format(activity.getStartDate()), 
 				dateFormat.format(activity.getDueDate()), 
 				activity.getStatus(), 
 				activity.getDescription());
-		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getActivityName(), project.getId());
+		Activity insertedActivity = ActivityDB.getActivityByNameAndProjectId(connectionString, activity.getName(), project.getId());
 		return insertedActivity.getActivityId();
 	}
 }

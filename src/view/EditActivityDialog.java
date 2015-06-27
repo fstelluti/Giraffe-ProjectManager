@@ -116,10 +116,10 @@ public class EditActivityDialog extends JDialog
 	  panActivitiesNames.setBackground(Color.white);
 	  panActivitiesNames.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
-		  activitiesNames.add(activity.getActivityName());
+		  activitiesNames.add(activity.getName());
 	  }
 	  activitiesBox = new JComboBox<String>(activitiesNames);
 	  panActivitiesNames.setBorder(BorderFactory.createTitledBorder("Activity to Edit"));
@@ -208,11 +208,11 @@ public class EditActivityDialog extends JDialog
 	  
 	  startModel.setValue(currentActivity.getStartDate());
 	  dueModel.setValue(currentActivity.getDueDate());
-	  activityName.setText(currentActivity.getActivityName());
+	  activityName.setText(currentActivity.getName());
 	  activityDescription.setText(currentActivity.getDescription());
 	  
 	  for (Activity dependent : dependents){
-		  int selectedIndex = activitiesNames.indexOf(dependent.getActivityName());
+		  int selectedIndex = activitiesNames.indexOf(dependent.getName());
 		  editDepend(selectedIndex);
 	  }
 	  
@@ -223,13 +223,13 @@ public class EditActivityDialog extends JDialog
 	  projectBox.addActionListener(new ActionListener(){
 		@SuppressWarnings("all")
 		public void actionPerformed(ActionEvent arg0) {
-			Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+			Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  
-			final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, currentProject.getId());
+			final List<Activity> activities = ActivityDB.getProjectActivities(currentProject.getId());
 			final Vector<String> activitiesNames = new Vector<String>();
 			
 			for(Activity activity: activities){
-				  activitiesNames.add(activity.getActivityName());
+				  activitiesNames.add(activity.getName());
 			  }
 			ComboBoxModel model = new DefaultComboBoxModel( activitiesNames );
 			activitiesBox.setModel(model);
@@ -239,11 +239,11 @@ public class EditActivityDialog extends JDialog
 			
 			startModel.setValue(currentActivity.getStartDate());
 			dueModel.setValue(currentActivity.getDueDate());
-			activityName.setText(currentActivity.getActivityName());
+			activityName.setText(currentActivity.getName());
 			activityDescription.setText(currentActivity.getDescription());
 			panDependArea.removeAll();
 			for (Activity dependent : dependents){
-	    		  int selectedIndex = activitiesNames.indexOf(dependent.getActivityName());
+	    		  int selectedIndex = activitiesNames.indexOf(dependent.getName());
 	    		  editDepend(selectedIndex);
 	    	  }
 			
@@ -255,21 +255,21 @@ public class EditActivityDialog extends JDialog
 	  //On change of activity set content
 	  activitiesBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  List<Activity> dependents = PredecessorDB.getPredecessors(connectionString, currentActivity.getActivityId());
 	    	  final Vector<String> activitiesNames = new Vector<String>();
 				
 	    	  for(Activity activity: activities){
-	    		  activitiesNames.add(activity.getActivityName());
+	    		  activitiesNames.add(activity.getName());
 	    	  }
 	    	  startModel.setValue(currentActivity.getStartDate());
 	    	  dueModel.setValue(currentActivity.getDueDate());
-	    	  activityName.setText(currentActivity.getActivityName());
+	    	  activityName.setText(currentActivity.getName());
 	    	  activityDescription.setText(currentActivity.getDescription());
 	    	  panDependArea.removeAll();
 	    	  for (Activity dependent : dependents){
-	    		  int selectedIndex = activitiesNames.indexOf(dependent.getActivityName());
+	    		  int selectedIndex = activitiesNames.indexOf(dependent.getName());
 	    		  editDepend(selectedIndex);
 	    	  }
 	    	  
@@ -293,13 +293,13 @@ public class EditActivityDialog extends JDialog
 	    	  Date projectDueDate = projects.get(projectBox.getSelectedIndex()).getDueDate();
 	    	  boolean activityExists = false;
 	    	  boolean dependsOnItself = false;
-	    	  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  Component[] dependAreaComponents = panDependArea.getComponents();
 	    	  
 	    	  //Checks if the activity already exists
     		  for(Activity activity:activities){
-	    		  if(activityName.getText().equals(activity.getActivityName()) && !activityName.getText().equals(currentActivity.getActivityName()))
+	    		  if(activityName.getText().equals(activity.getName()) && !activityName.getText().equals(currentActivity.getName()))
 	    		  { activityExists = true; break; } else{activityExists = false;}
     		  }
     		  
@@ -307,7 +307,7 @@ public class EditActivityDialog extends JDialog
     		  for (int i = 0; i < dependAreaComponents.length; i++){
     			  JPanel dependPanel = (JPanel) dependAreaComponents[i];
 	    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-	    		  if(dependBox.getSelectedItem().equals(currentActivity.getActivityName())){dependsOnItself = true; break; } else{dependsOnItself = false;}
+	    		  if(dependBox.getSelectedItem().equals(currentActivity.getName())){dependsOnItself = true; break; } else{dependsOnItself = false;}
     		  }
     		  
 	    	  //Verifies all text boxes are filled out, if not = error
@@ -353,14 +353,14 @@ public class EditActivityDialog extends JDialog
 	    		  
 	    		  int response = JOptionPane.showConfirmDialog(content,
 	    				  "Are you sure you want to edit the following Activity: \n"
-	    						  + "\nActivity Name: " + currentActivity.getActivityName()
+	    						  + "\nActivity Name: " + currentActivity.getName()
 	    						  + "\nStart Date: "+ dateFormat.format(currentActivity.getStartDate())
 	    						  + "\nDue Date: "+ dateFormat.format(currentActivity.getDueDate())
 	    						  +  "\n\nWith the following modifications: \n"
 	    						  + "\nActivity Name: " + activityName.getText()
 	    						  + "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
-	    						  "Confirm "+activities.get(activitiesBox.getSelectedIndex()).getActivityName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+	    						  "Confirm "+activities.get(activitiesBox.getSelectedIndex()).getName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given activity
@@ -380,7 +380,7 @@ public class EditActivityDialog extends JDialog
 		    		  for (int i = 0; i < dependAreaComponents.length; i++){
 		    			  JPanel dependPanel = (JPanel) dependAreaComponents[i];
 			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-			    		  if(!dependBox.getSelectedItem().equals(currentActivity.getActivityName())){
+			    		  if(!dependBox.getSelectedItem().equals(currentActivity.getName())){
 			    				  PredecessorDB.insertPredecessorIntoTable(connectionString, 
 			    						  currentActivity.getActivityId(), activities.get(dependBox.getSelectedIndex()).getActivityId());
 			    		  }
@@ -399,12 +399,12 @@ public class EditActivityDialog extends JDialog
 	  JButton deleteButton = new JButton("Delete Activity");
 	  deleteButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  Activity currentActivity = ActivityDB.getActivityById(connectionString, activities.get(activitiesBox.getSelectedIndex()).getActivityId());
 	    	  int response = JOptionPane.showConfirmDialog(content,
     				  "Are you sure you want to DELETE the following Activity: \n"
-    						  + "\nActivity Name: " + currentActivity.getActivityName(),
-    						  "Confirm "+currentActivity.getActivityName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+    						  + "\nActivity Name: " + currentActivity.getName(),
+    						  "Confirm "+currentActivity.getName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
     		  if(response == JOptionPane.YES_OPTION){
     			  //Call the editing Method of a given project
     			  ActivityDB.deleteActivity(connectionString, currentActivity.getActivityId());
@@ -445,10 +445,10 @@ public class EditActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
-		  activitiesNames.add(activity.getActivityName());
+		  activitiesNames.add(activity.getName());
 	  }
 	  dependBox = new JComboBox<String>(activitiesNames);
 	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));
@@ -493,11 +493,11 @@ public class EditActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	
 	  for(Activity activity: activities){
-		  activitiesNames.add(activity.getActivityName());
+		  activitiesNames.add(activity.getName());
 	  }
 	  dependBox = new JComboBox<String>(activitiesNames);
 	  dependBox.setSelectedIndex(selectedIndex);

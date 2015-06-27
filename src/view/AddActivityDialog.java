@@ -191,7 +191,7 @@ public class AddActivityDialog extends JDialog
 	    	  int projectId = projects.get(projectBox.getSelectedIndex()).getId();
 	    	  int projectIdIndex = projectBox.getSelectedIndex();
 	    	  Activity activityToInsert = new Activity(projectId, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
-	    	  Project selectedProject = ProjectDB.getProjectById(connectionString, projectId);
+	    	  Project selectedProject = ProjectDB.getProjectById(projectId);
 	    	  //Checks if the activity already exists
 	    	  
 	    	  boolean activityIsInsertable = false;
@@ -219,7 +219,7 @@ public class AddActivityDialog extends JDialog
 		    		  
 		    		  //Iterates through all dependents and adds them to the DB
 		    		  Component[] components = panDependArea.getComponents();
-		    		  List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projectId);
+		    		  List<Activity> activities = ActivityDB.getProjectActivities(projectId);
 
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
@@ -266,10 +266,10 @@ public class AddActivityDialog extends JDialog
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));
-	  final List<Activity> activities = ActivityDB.getProjectActivities(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	  final List<Activity> activities = ActivityDB.getProjectActivities(projects.get(projectBox.getSelectedIndex()).getId());
 	  final Vector<String> activitiesNames = new Vector<String>();
 	  for(Activity activity: activities){
-		  activitiesNames.add(activity.getActivityName());
+		  activitiesNames.add(activity.getName());
 	  }
 	  dependBox = new JComboBox<String>(activitiesNames);
 	  panDepend.setBorder(BorderFactory.createTitledBorder("Depends on..."));

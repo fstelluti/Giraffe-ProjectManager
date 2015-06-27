@@ -19,7 +19,6 @@ import model.Activity;
 import model.Project;
 import model.User;
 import controller.ActivityDB;
-import controller.DatabaseConstants;
 
 /**
  * 
@@ -69,7 +68,7 @@ public class ProjectView extends JPanel
 			panel.setBackground(Color.white);
 			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 			panel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Activity"));
-			panel.add(new JLabel("Activity name: " + activity.getActivityName()));
+			panel.add(new JLabel("Activity name: " + activity.getName()));
 			panel.add(new JLabel("Status: " + activity.getStatusName()));
 			panel.add(new JLabel("Started on: " + activity.getStartDate().toLocaleString()));
 			panel.add(new JLabel("Due date: " + activity.getDueDate().toLocaleString()));
@@ -164,7 +163,7 @@ public class ProjectView extends JPanel
 	
 	private List<Activity> getProjectActivities()
 	{
-		projectActivities.addAll(ActivityDB.getProjectActivities(DatabaseConstants.getDb(), project.getId()));
+		projectActivities.addAll(ActivityDB.getProjectActivities(project.getId()));
 		return projectActivities;
 	}
 }

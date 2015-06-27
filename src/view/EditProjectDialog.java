@@ -158,7 +158,7 @@ public class EditProjectDialog extends JDialog
 	  panDescription.add(scrollPanDescription);
 	  
 	  //Set Content to project selection
-	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
 	  projectName.setText(currentProject.getName());
@@ -171,7 +171,7 @@ public class EditProjectDialog extends JDialog
 	  //On change of project Set Content to project selection
 	  projectBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
 	    	  projectName.setText(currentProject.getName());
@@ -188,7 +188,7 @@ public class EditProjectDialog extends JDialog
 	  JButton okButton = new JButton("Edit Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  boolean exists = false;
 	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
 	    	  
@@ -257,7 +257,7 @@ public class EditProjectDialog extends JDialog
 	  JButton deleteButton = new JButton("Delete Project");
 	  deleteButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(connectionString, projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  int response = JOptionPane.showConfirmDialog(content,
     				  "Are you sure you want to DELETE the following Project: \n"
     						  + "\nProject Name: " + currentProject.getName(),
@@ -295,7 +295,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkStartDate(int projectId, Date newStartDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.getDb(), projectId);
+			  projectId);
 	  
 	  for(Activity a : activities)
 	  {
@@ -314,7 +314,7 @@ public class EditProjectDialog extends JDialog
   private static boolean checkDueDate(int projectId, Date newDueDate)
   {
 	  List<Activity> activities = ActivityDB.getProjectActivities(
-			  DatabaseConstants.getDb(), projectId);
+			  projectId);
 	  
 	  for(Activity a : activities)
 	  {

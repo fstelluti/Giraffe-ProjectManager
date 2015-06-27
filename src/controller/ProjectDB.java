@@ -227,11 +227,10 @@ public class ProjectDB extends DataManager
 	
 	/**
 	 * Method to get projects by project id
-	 * @param connectionString as a String
 	 * @param id as an Int
 	 * @return
 	 */
-	public static Project getProjectById(String connectionString, int id)
+	public static Project getProjectById(int id)
 	{
 		Project project = null;
 		Connection c = null;
@@ -239,7 +238,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

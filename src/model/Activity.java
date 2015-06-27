@@ -61,7 +61,7 @@ public class Activity
 		this.id = activityId;
 	}
 
-	public String getActivityName() {
+	public String getName() {
 		return name;
 	}
 

@@ -50,7 +50,7 @@ public class ActivityView extends JPanel
 		final JPanel activityPanel = new JPanel();
 		activityPanel.setLayout(new BoxLayout(activityPanel, BoxLayout.Y_AXIS));
 		activityPanel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Activity"));
-		JLabel activityNameLabel = new JLabel("Activity name: " + activity.getActivityName());
+		JLabel activityNameLabel = new JLabel("Activity name: " + activity.getName());
 		activityPanel.add(activityNameLabel);
 		labels.add(activityNameLabel);
 		

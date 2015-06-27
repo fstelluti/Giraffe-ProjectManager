@@ -1,2 +1,4 @@
 /bin/
 testing.*
+/tmp/
+.DS_STORE
