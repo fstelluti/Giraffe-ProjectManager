@@ -11,7 +11,7 @@ import view.MainViewPanel;
  * Possibility of editing it.
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti
  *
  */
 
@@ -25,6 +25,9 @@ public class User
 	private Date 	regDate;
 	private String firstName;
 	private String lastName;
+	private ImageIcon userPicture;
+	private int admin; //Use for the admin status (1=admin, 0=PM/Regular User)
+
 	@Override
 	public String toString()
 	{
@@ -33,9 +36,6 @@ public class User
 				+ ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", userPicture=" + userPicture + "]";
 	}
-
-	private ImageIcon userPicture;
-	
 	
 	public User(int id, String userName, String password, String email,	String firstName, String lastName)
 	{
@@ -47,6 +47,7 @@ public class User
 		this.setRegDate(new Date());//it creates today's date by default
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.admin = 0;	//Default is PM or Regular User
 		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
 	}
 	
@@ -59,6 +60,7 @@ public class User
 		this.setRegDate(new Date());
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.admin = 0;	//Default is PM or Regular User
 		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
 	}
 	
@@ -132,5 +134,17 @@ public class User
 	public void setUserPicture(ImageIcon userPicture)
 	{
 		this.userPicture = userPicture;
+	}
+	
+	public int getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(int admin) {
+		//Check that the admin value is either 0 or 1
+		if(admin != 0 && admin != 1) {
+			throw new IllegalArgumentException("admin flag must be 0 or 1");
+		}
+		this.admin = admin;
 	}
 }

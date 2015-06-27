@@ -38,7 +38,9 @@ public class UserDB extends DataManager {
 					+ " PASSWORD       TEXT     NOT NULL, "
 					+ " EMAIL        	CHAR(50), "
 					+ " REGDATE 		DATETIME DEFAULT CURRENT_TIMESTAMP, "
-					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT)";
+					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT, "
+					+ " ADMIN INTEGER, "
+					+ " IMAGEICON BLOB)";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
@@ -76,13 +78,14 @@ public class UserDB extends DataManager {
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) "
+			String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN) "
 					+ "VALUES (NULL, '"
 					+ user.getUserName()
 					+ "', '"
 					+ user.getPassword()
 					+ "', '"
-					+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() + "')";
+					+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
+					+ "', '" + user.getAdmin() + "')";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}
