@@ -97,7 +97,7 @@ public class AddActivityDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(user.getId());
 	  Vector<String> projectNames = new Vector<String>();
 	  for(Project project: projects){
 		  projectNames.add(project.getName());
@@ -191,7 +191,7 @@ public class AddActivityDialog extends JDialog
 	    	  int projectId = projects.get(projectBox.getSelectedIndex()).getId();
 	    	  int projectIdIndex = projectBox.getSelectedIndex();
 	    	  Activity activityToInsert = new Activity(projectId, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), activityDescription.getText());
-	    	  Project selectedProject = ProjectDB.getProjectById(projectId);
+	    	  Project selectedProject = ProjectDB.getById(projectId);
 	    	  //Checks if the activity already exists
 	    	  
 	    	  boolean activityIsInsertable = false;
@@ -224,8 +224,8 @@ public class AddActivityDialog extends JDialog
 		    		  for (int i = 0; i < components.length; i++){
 		    			  JPanel dependPanel = (JPanel) components[i];
 			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-			    		  PredecessorDB.insertPredecessorIntoTable(connectionString, 
-			    				  newActivityId, activities.get(dependBox.getSelectedIndex()).getActivityId());
+			    		  PredecessorDB.insert(newActivityId, 
+			    				  activities.get(dependBox.getSelectedIndex()).getActivityId());
 		    		  }
 		    		  setVisible(false); 
 	    		  }
@@ -262,7 +262,7 @@ public class AddActivityDialog extends JDialog
 	  
   }
   public void createDepend(){
-	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(user.getId());
 	  final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
 	  panDepend.setPreferredSize(new Dimension(310, 60));

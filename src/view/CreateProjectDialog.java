@@ -149,7 +149,7 @@ public class CreateProjectDialog extends JDialog
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	    	  //Checks if the project already exists
-	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
+	    	  List<Project> projects = ProjectDB.getAll();
     		  for(Project project:projects){
 	    		  if(projectName.getText().equals(project.getName())){ exists = true; break; } else{exists = false;}
     		  }
@@ -175,15 +175,15 @@ public class CreateProjectDialog extends JDialog
 	    						  + "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
 	    						  "Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  ProjectDB.insertProjectIntoTable(projectName.getText(),
+	    			  ProjectDB.insert(projectName.getText(),
 			    				 dateFormat.format(startDatePicker.getModel().getValue()), 
 			    				 dateFormat.format(dueDatePicker.getModel().getValue()),
 			    				 projectDescription.getText()
 	    					  );
 	    			  
 	    			  //Gets id of project just created
-		    		  Project project = ProjectDB.getProjectByName(
-		    				  connectionString, projectName.getText());
+		    		  Project project = ProjectDB.getByName(
+		    				  projectName.getText());
 		    		  
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project

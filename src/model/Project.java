@@ -35,7 +35,7 @@ public class Project
 	 * Project.refresh() can be called to reload all members from the db.
 	 */
 	public Project(int id) {
-		Project projectFromDb = ProjectDB.getProjectById(id);
+		Project projectFromDb = ProjectDB.getById(id);
 		// If the project exists, copy its member here, otherwise throw exception
 		if (projectFromDb == null) {
 			throw new IllegalArgumentException("No Project with that ID in database");
@@ -129,7 +129,7 @@ public class Project
 		if (this.id == 0) {
 			String startDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
 			String dueDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
-			ProjectDB.insertProjectIntoTable(name, startDate, dueDate, description);
+			ProjectDB.insert(name, startDate, dueDate, description);
 		}
 		else {
 			ProjectDB.update(this);

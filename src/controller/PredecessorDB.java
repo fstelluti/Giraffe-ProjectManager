@@ -13,7 +13,7 @@ import model.Activity;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Zachary Bergeron, Anne-Marie Dube, Francois Stelluti
+ * @modifiedBy Zachary Bergeron, Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -22,15 +22,14 @@ public class PredecessorDB extends DataManager
 {
 	/**
 	 * Method to create the table of predecessors
-	 * @param connectionString as String
 	 */
-	public static void createPredecessorTable(String connectionString)
+	public static void createTable()
 	{
 		Connection c = null;
 		Statement stmt = null;
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS PREDECESSORS "
@@ -61,16 +60,15 @@ public class PredecessorDB extends DataManager
 	
 	/**
 	 * Method to insert a Predecessor Activity into the Predecessor Table
-	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 * @param predecessorID as an Int
 	 */
-	public static void insertPredecessorIntoTable(String connectionString, int activityId, int predecessorId) {
+	public static void insert(int activityId, int predecessorId) {
 		Connection c = null;
 		Statement stmt = null;
 		
 		try {
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -99,11 +97,10 @@ public class PredecessorDB extends DataManager
 	
 	/**
 	 * Method to get all the Predecessors in the table
-	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 * @return
 	 */
-	public static List<Activity> getPredecessors(String connectionString, int activityId) {
+	public static List<Activity> getPredecessors(int activityId) {
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
 		Statement stmt = null;
@@ -112,7 +109,7 @@ public class PredecessorDB extends DataManager
 		ResultSet rs2 = null;
 		
 		try	{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -161,18 +158,17 @@ public class PredecessorDB extends DataManager
 	
 	/**
 	 * Method to delete an Activity's Predecessors
-	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 * @return
 	 */
-	public static void deleteActivityPredecessors(String connectionString, int activityId)
+	public static void deleteActivityPredecessors(int activityId)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

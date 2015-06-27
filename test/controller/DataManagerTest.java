@@ -40,9 +40,9 @@ public class DataManagerTest {
 		// Cheating, sort of, but correct output will be tested in other tests anyway so no big deal (?)
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
 		UserDB.createUserTable(CONNECTION);
-		ActivityDB.createActivityTable(CONNECTION);
+		ActivityDB.createTable();
 		ProjectDB.createTable();
-		PredecessorDB.createPredecessorTable(CONNECTION);
+		PredecessorDB.createTable();
 		UserRolesDB.createUserRolesTable(CONNECTION); 	
 		UserRolesDictDB.createUserRolesDictTable(CONNECTION);
 		

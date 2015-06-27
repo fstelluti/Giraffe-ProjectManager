@@ -135,7 +135,7 @@ public class ActivityDBTest {
 	// Tests DataManager.insertIntoTableActivities()
 	@Test
 	public void insertedActivityShouldMatchData() throws ParseException {
-		ActivityDB.insertActivityIntoTable(CONNECTION, 1337, "dummy activity", "1969-12-31", "1970-01-01", 42, "dummy description");
+		ActivityDB.insert(1337, "dummy activity", "1969-12-31", "1970-01-01", 42, "dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -214,7 +214,7 @@ public class ActivityDBTest {
 	// Tests ActivityDB.getById()
 	@Test
 	public void returnedActivityByIdShouldMatch() {
-		Activity activity = ActivityDB.getActivityById(CONNECTION, 1);
+		Activity activity = ActivityDB.getById(1);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
@@ -223,7 +223,7 @@ public class ActivityDBTest {
 	// Tests ActivityDB.getByNameAndProjectId()
 	@Test
 	public void returnedActivityByNameAndProjectIdShouldMatch() {
-		Activity activity = ActivityDB.getActivityByNameAndProjectId(CONNECTION, "activity1", 1337);
+		Activity activity = ActivityDB.getByNameAndProjectId("activity1", 1337);
 		int id = activity.getActivityId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);

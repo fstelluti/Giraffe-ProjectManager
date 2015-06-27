@@ -97,8 +97,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editProject)
 				{
-					if (ProjectDB.getUserProjects(connectionString,
-							user.getId()).isEmpty())
+					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -128,8 +127,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == addActivity)
 				{
-					if (ProjectDB.getUserProjects(connectionString,
-							user.getId()).isEmpty())
+					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -159,8 +157,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editActivity)
 				{
-					if (ProjectDB.getUserProjects(connectionString,
-							user.getId()).isEmpty())
+					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -169,7 +166,7 @@ public class MainViewPanel extends JPanel
 												+ "\nPlease create a project before attempting to edit an activity.",
 										"No Projects Available to Edit an Activity",
 										JOptionPane.ERROR_MESSAGE);
-					} else if (ActivityDB.getAllActivities(connectionString)
+					} else if (ActivityDB.getAll()
 							.isEmpty())
 					{
 						JOptionPane
@@ -253,7 +250,7 @@ public class MainViewPanel extends JPanel
 
 			};
 			treePanel = new TreePanel(ProjectDB.getUserProjects(
-					DatabaseConstants.getDb(), this.user.getId()));
+					this.user.getId()));
 			treeView = treePanel.getTreeView();
 			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
@@ -281,7 +278,7 @@ public class MainViewPanel extends JPanel
 	public void refresh()
 	{
 		treePanel = new TreePanel(ProjectDB.getUserProjects(
-				DatabaseConstants.getDb(), this.user.getId()));
+				this.user.getId()));
 		treeView = treePanel.getTreeView();
 		getSplitPanel().setLeftComponent(treeView);
 		getSplitPanel().setDividerLocation(200);

@@ -88,7 +88,7 @@ public class EditProjectDialog extends JDialog
 	  panProjectName.setBackground(Color.white);
 	  panProjectName.setPreferredSize(new Dimension(465, 60));
 	  
-	  final List<Project> projects = ProjectDB.getUserProjects(connectionString, user.getId());
+	  final List<Project> projects = ProjectDB.getUserProjects(user.getId());
 	  Vector<String> projectNames = new Vector<String>();
 	  for(Project project: projects){
 		  projectNames.add(project.getName());
@@ -158,7 +158,7 @@ public class EditProjectDialog extends JDialog
 	  panDescription.add(scrollPanDescription);
 	  
 	  //Set Content to project selection
-	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
+	  Project currentProject = ProjectDB.getById(projects.get(projectBox.getSelectedIndex()).getId());
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
 	  projectName.setText(currentProject.getName());
@@ -171,7 +171,7 @@ public class EditProjectDialog extends JDialog
 	  //On change of project Set Content to project selection
 	  projectBox.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
 	    	  projectName.setText(currentProject.getName());
@@ -188,9 +188,9 @@ public class EditProjectDialog extends JDialog
 	  JButton okButton = new JButton("Edit Project");
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  boolean exists = false;
-	    	  List<Project> projects = ProjectDB.getAllProjects(connectionString);
+	    	  List<Project> projects = ProjectDB.getAll();
 	    	  
 	    	  //Checks if the project already exists
     		  for(Project project:projects){
@@ -234,11 +234,10 @@ public class EditProjectDialog extends JDialog
 	    		  if(response == JOptionPane.YES_OPTION){
 	    			  
 	    			  //Call the editing Method of a given project
-	    			  ProjectDB.editProjectById(DatabaseConstants.getDb(),
-	    					  currentProject.getId(),
+	    			  ProjectDB.update(currentProject.getId(),
 	    					  projectName.getText(),
-	    					  dateFormat.format(startDatePicker.getModel().getValue()), 
-	    					  dateFormat.format(dueDatePicker.getModel().getValue()),
+	    					  dateFormat.format(startDatePicker.getModel().getValue()),
+	    					  dateFormat.format(dueDatePicker.getModel().getValue()), 
 	    					  projectDescription.getText(),
 	    					  projectManagers.get(managerBox.getSelectedIndex()).getId());
 	    			  setVisible(false);
@@ -257,14 +256,14 @@ public class EditProjectDialog extends JDialog
 	  JButton deleteButton = new JButton("Delete Project");
 	  deleteButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
-	    	  Project currentProject = ProjectDB.getProjectById(projects.get(projectBox.getSelectedIndex()).getId());
+	    	  Project currentProject = ProjectDB.getById(projects.get(projectBox.getSelectedIndex()).getId());
 	    	  int response = JOptionPane.showConfirmDialog(content,
     				  "Are you sure you want to DELETE the following Project: \n"
     						  + "\nProject Name: " + currentProject.getName(),
     						  "Confirm "+currentProject.getName()+" edit", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
     		  if(response == JOptionPane.YES_OPTION){
     			  //Call the editing Method of a given project
-    			  ProjectDB.deleteProject(connectionString, currentProject.getId());
+    			  ProjectDB.delete(currentProject.getId());
     			  setVisible(false);
     			  refresh = true;
     		  }

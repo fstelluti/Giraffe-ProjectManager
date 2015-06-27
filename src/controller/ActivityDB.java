@@ -13,7 +13,7 @@ import model.Activity;
 /**
  * 
  * @author Zachary Bergeron
- * @modifiedBy Anne-Marie Dube, Francois Stelluti
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -23,16 +23,15 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to create Activity Table in the DB
 	 * Gets called in DataManager.java
-	 * @param connectionString as a String
 	 */
-	public static void createActivityTable(String connectionString)
+	public static void createTable()
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS ACTIVITIES "
@@ -72,8 +71,6 @@ public class ActivityDB extends DataManager
     /**
      * Method to insert an activity into the table
      * Gets called in ViewManager.java when an activity is added
-     * 
-     * @param connectionString as a String
      * @param associatedProjectId as an Int
      * @param activityName as a String
      * @param startDate as a String
@@ -81,8 +78,8 @@ public class ActivityDB extends DataManager
      * @param status as an Int
      * @param description as a String
      */
-    public static void insertActivityIntoTable(String connectionString, int associatedProjectId, String activityName, String startDate,
-            String dueDate, int status, String description)
+    public static void insert(int associatedProjectId, String activityName, String startDate, String dueDate,
+            int status, String description)
     {
 		// startDate and dueDate are String variables in a format "yyyy-MM-dd"
 		Connection c = null;
@@ -90,7 +87,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
 			String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) "
@@ -193,10 +190,9 @@ public class ActivityDB extends DataManager
 	 * Method to get all activities in the table
 	 * Called in MainViewPanel.java to generate the view for the user
 	 * 
-	 * @param connectionString as a String
 	 * @return
 	 */
-	public static List<Activity> getAllActivities(String connectionString)
+	public static List<Activity> getAll()
 	{
 		List<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
@@ -205,7 +201,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -254,12 +250,11 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to get an activity by searching through the table with the activity id
 	 * Called by EditActivityDialog.java
-	 * 
-	 * @param connectionString as a String
 	 * @param id as an Int
+	 * 
 	 * @return
 	 */
-	public static Activity getActivityById(String connectionString, int id)
+	public static Activity getById(int id)
 	{
 		Activity activity = null;
 		Connection c = null;
@@ -268,7 +263,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -314,14 +309,12 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to get an activity by searching through the table with the activityName and the projectID
 	 * Both parameters are necessary as an activityName on its own is not unique
-	 * Called in ViewManager.java by addActivity() to insert an activity into a project
-	 * 
-	 * @param connectionString as a String
 	 * @param activityName as a String
 	 * @param projectId as an Int
+	 * 
 	 * @return
 	 */
-	public static Activity getActivityByNameAndProjectId(String connectionString, String activityName, int projectId)
+	public static Activity getByNameAndProjectId(String activityName, int projectId)
 	{
 		Activity activity = null;
 		Connection c = null;
@@ -330,7 +323,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -377,9 +370,6 @@ public class ActivityDB extends DataManager
 	
 	/**
 	 * Method to edit an Activity by searching for it with its ID
-	 * Called by EditActivityDialog.java
-	 * 
-	 * @param connectionString as a String
 	 * @param id as an Int
 	 * @param activityName as a String
 	 * @param startDate as a String
@@ -387,15 +377,15 @@ public class ActivityDB extends DataManager
 	 * @param status as an Int
 	 * @param description as a String
 	 */
-	public static void editActivityById(String connectionString, int id, String activityName, String startDate,
-			String dueDate, int status, String description)
+	public static void update(int id, String activityName, String startDate, String dueDate,
+			int status, String description)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -429,18 +419,16 @@ public class ActivityDB extends DataManager
 	/**
 	 * Method to delete an Activity from the application
 	 * Called by EditActivityDialog.java
-	 * 
-	 * @param connectionString as a String
 	 * @param activityId as an Int
 	 */
-	public static void deleteActivity(String connectionString, int activityId)
+	public static void delete(int activityId)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -463,25 +451,23 @@ public class ActivityDB extends DataManager
 				System.err.println("Error closing connections in ActivityDB.deleteActivity: " + e.getMessage());
 			}
 		}
-		deleteActivityPredecessors(connectionString, activityId);
+		deletePredecessors(activityId);
 	}
 	
 	
 	/**
 	 * Method to delete the Predecessors associated to an Activity
-	 * Called by ActivityDB.java and deleteActivity()
-	 * 
-	 * @param connectionString as a String
+	 * Called by ActivityDB.java and delete()
 	 * @param activityId as an Int
 	 */
-	public static void deleteActivityPredecessors(String connectionString, int activityId)
+	public static void deletePredecessors(int activityId)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

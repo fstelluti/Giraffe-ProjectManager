@@ -119,7 +119,7 @@ public class ProjectDBTest {
 	// Tests DataManager.insertIntoTableProjects()
 	@Test
 	public void insertedProjectShouldMatchData() throws ParseException {
-		ProjectDB.insertProjectIntoTable("testProject", "1969-12-31", "1970-01-01", "dummy description");
+		ProjectDB.insert("testProject", "1969-12-31", "1970-01-01", "dummy description");
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -173,7 +173,7 @@ public class ProjectDBTest {
 	// Tests DataManager.getProjects()
 	@Test
 	public void returnedProjectsShouldBeValid() {
-		List<Project> projects = ProjectDB.getAllProjects(CONNECTION);
+		List<Project> projects = ProjectDB.getAll();
 		int counter = 0;
 		for (Project project : projects) {
 			++counter;
@@ -192,7 +192,7 @@ public class ProjectDBTest {
 	// Tests DataManager.getProjectById()
 	@Test
 	public void returnedProjectByIdShouldMatch() {
-		Project project = ProjectDB.getProjectById(1);
+		Project project = ProjectDB.getById(1);
 		int id = -1;
 		try {
 			id = project.getId();

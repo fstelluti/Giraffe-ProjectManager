@@ -60,8 +60,8 @@ public abstract class DataManager
 	public static void createTables(String connectionString) throws SQLException{
 			UserDB.createUserTable(connectionString);
 			ProjectDB.createTable();
-			ActivityDB.createActivityTable(connectionString);
-			PredecessorDB.createPredecessorTable(connectionString);
+			ActivityDB.createTable();
+			PredecessorDB.createTable();
 			UserRolesDB.createUserRolesTable(connectionString);
 			UserRolesDictDB.createUserRolesDictTable(connectionString);
 	}

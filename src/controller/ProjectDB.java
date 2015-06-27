@@ -67,7 +67,7 @@ public class ProjectDB extends DataManager
      * @param name as a String
      * @return
      */
-    public static void insertProjectIntoTable(String projectName, String startDate, String dueDate, String description)
+    public static void insert(String projectName, String startDate, String dueDate, String description)
     {
 
 		Connection c = null;
@@ -104,10 +104,9 @@ public class ProjectDB extends DataManager
 	
 	/**
 	 * Method to get all of the projects in the table
-	 * @param connectionString as a String
 	 * @return
 	 */
-	public static List<Project> getAllProjects(String connectionString)
+	public static List<Project> getAll()
 	{
 		List<Project> projects = new ArrayList<Project>();
 		Connection c = null;
@@ -115,7 +114,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -165,11 +164,10 @@ public class ProjectDB extends DataManager
 	
 	/**
 	 * Method to get projects of a particular user
-	 * @param connectionString as a String
 	 * @param userId as an Int
 	 * @return
 	 */
-	public static List<Project> getUserProjects(String connectionString, int userId)
+	public static List<Project> getUserProjects(int userId)
 	{
 		List<Project> projects = new ArrayList<Project>();
 		Connection c = null;
@@ -177,7 +175,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -230,7 +228,7 @@ public class ProjectDB extends DataManager
 	 * @param id as an Int
 	 * @return
 	 */
-	public static Project getProjectById(int id)
+	public static Project getById(int id)
 	{
 		Project project = null;
 		Connection c = null;
@@ -281,11 +279,10 @@ public class ProjectDB extends DataManager
 	
 	/**
 	 * Method to get projects by their name
-	 * @param connectionString as a String
 	 * @param projectName as a String
 	 * @return
 	 */
-	public static Project getProjectByName(String connectionString, String projectName)
+	public static Project getByName(String projectName)
 	{
 		Project project = null;
 		Connection c = null;
@@ -294,7 +291,7 @@ public class ProjectDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection(DatabaseConstants.getDb());
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -341,18 +338,17 @@ public class ProjectDB extends DataManager
 	
 		/**
 		 * Method to edit a project's name
-		 * @param connectionString as a String
 		 * @param projectId as an int
 		 * @param newProjectName as a String
 		 */
-		public static void editProjectName(String connectionString,	int projectId, String newProjectName)
+		public static void editName(int projectId, String newProjectName)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -385,7 +381,6 @@ public class ProjectDB extends DataManager
 
 		/**
 		 * Method to get edit a project's properties by looking up the project id
-		 * @param connectionString as a String
 		 * @param id as an Int
 		 * @param name as a String
 		 * @param startDate as a String
@@ -393,15 +388,15 @@ public class ProjectDB extends DataManager
 		 * @param description as a String
 		 * @param projectManagerId as an Int
 		 */
-		public static void editProjectById(String connectionString, int id,
-				String name, String startDate, String dueDate, String description, int projectManagerId)
+		public static void update(int id, String name,
+				String startDate, String dueDate, String description, int projectManagerId)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -436,18 +431,17 @@ public class ProjectDB extends DataManager
 		
 		/**
 		 * Method to edit a project's start date
-		 * @param connectionString as a String
 		 * @param projectId as an Int
 		 * @param newStartDate as a String
 		 */
-		public static void editProjectStartDate(String connectionString, int projectId, String newStartDate)
+		public static void editProjectStartDate(int projectId, String newStartDate)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -480,18 +474,17 @@ public class ProjectDB extends DataManager
 		
 		/**
 		 * Method to edit a project's due date
-		 * @param connectionString as a String
 		 * @param projectId as an Int
 		 * @param newDueDate as a String
 		 */
-		public static void editProjectDueDate(String connectionString, int projectId, String newDueDate)
+		public static void editProjectDueDate(int projectId, String newDueDate)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -538,7 +531,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -571,17 +564,16 @@ public class ProjectDB extends DataManager
 		
 		/**
 		 * Method to delete a Project from the table & application
-		 * @param connectionString as a String
 		 * @param projectId as an Int
 		 */
-		public static void deleteProject(String connectionString, int projectId)
+		public static void delete(int projectId)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -605,23 +597,22 @@ public class ProjectDB extends DataManager
 				}
 			}
 			
-			deleteProjectActivities(connectionString, projectId);
-			deleteProjectPMRelation(connectionString, projectId);
+			deleteProjectActivities(projectId);
+			deleteProjectManager(projectId);
 		}
 		
 		/**
 		 * Method to delete a Project's Activities
-		 * @param connectionString as a String
 		 * @param projectId as an Int
 		 */
-		public static void deleteProjectActivities(String connectionString,	int projectId)
+		public static void deleteProjectActivities(int projectId)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -648,17 +639,16 @@ public class ProjectDB extends DataManager
 		
 		/**
 		 * Method to delete the relation between a Project and a Project Manager
-		 * @param connectionString as a String
 		 * @param projectId as an Int
 		 */
-		public static void deleteProjectPMRelation(String connectionString,	int projectId)
+		public static void deleteProjectManager(int projectId)
 		{
 			Connection c = null;
 			Statement stmt = null;
 			
 			try
 			{
-				c = getConnection(connectionString);
+				c = getConnection(DatabaseConstants.getDb());
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();

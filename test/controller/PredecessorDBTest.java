@@ -105,7 +105,7 @@ public class PredecessorDBTest {
 	// Tests PredecessorDB.insert()
 	@Test
 	public void insertedPredecessorShouldMatchData() {
-		PredecessorDB.insertPredecessorIntoTable(CONNECTION, 42, 1337);
+		PredecessorDB.insert(42, 1337);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -152,7 +152,7 @@ public class PredecessorDBTest {
 	public void returnedPredecessorsShouldBeValid() {
 		int counter = 0;
 		int id = 1;
-		List<Activity> activities = PredecessorDB.getPredecessors(CONNECTION, id);
+		List<Activity> activities = PredecessorDB.getPredecessors(id);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
