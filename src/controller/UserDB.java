@@ -40,7 +40,7 @@ public class UserDB extends DataManager {
 					+ " REGDATE 		DATETIME DEFAULT CURRENT_TIMESTAMP, "
 					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT, "
 					+ " ADMIN INTEGER, "
-					+ " IMAGEICON BLOB)";
+					+ " IMAGEICON BLOB);";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
@@ -85,7 +85,8 @@ public class UserDB extends DataManager {
 					+ user.getPassword()
 					+ "', '"
 					+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
-					+ "', '" + user.getAdmin() + "')";
+					+ "', " 
+					+ user.getAdmin() + ")";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}
@@ -134,7 +135,9 @@ public class UserDB extends DataManager {
 				String email = rs.getString("email");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
+				int adminFlag = rs.getInt("admin");
 				user = new User(id, userName, password, email, firstName, lastName);
+				user.setAdmin(adminFlag);
 				users.add(user);
 			}
 		}
@@ -194,7 +197,9 @@ public class UserDB extends DataManager {
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
 
+				int adminFlag = rs.getInt("admin");
 				user = new User(id, userName, password, email, firstName, lastName);
+				user.setAdmin(adminFlag);
 			}
 		}
 		catch (SQLException e)
@@ -250,8 +255,9 @@ public class UserDB extends DataManager {
 				String email = rs.getString("email");
 				String firstName = rs.getString("firstname");
 				String lastName = rs.getString("lastname");
-
+				int adminFlag = rs.getInt("admin");
 				user = new User(id, userName, password, email, firstName, lastName);
+				user.setAdmin(adminFlag);
 			}
 		}
 		catch (SQLException e)
