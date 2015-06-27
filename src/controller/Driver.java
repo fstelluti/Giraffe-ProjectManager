@@ -6,7 +6,8 @@ public class Driver
 {
 	public static void main(String[] args)
 	{
-		/*DataManager.insertIntoTableUsers("j_pickle", "pickle",
+		/*
+		 * DataManager.insertIntoTableUsers("j_pickle", "pickle",
 		"j_pickle@gmail.com", "Joe", "Pickle");
 		DataManager.insertIntoTableUsers("s_tansy", "tansy",
 		"s_tansy@gmail.com", "Sorrel", "Tansy");
