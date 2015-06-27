@@ -163,12 +163,26 @@ public class CreateAccountDialog extends JDialog
 							resetForm();
 							return;
 						case JOptionPane.YES_OPTION:
+							
 							User user = new User(userName.getText().trim(),
 									getAccountPassword(userPassword.getPassword()),
 									email.getText(), firstName.getText(),
 									lastName.getText());
 							
-							UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
+							// This if-statement checks to see if the DB is empty
+							// If it is empty, create the first user as an Admin
+							// If not empty, create a regular user
+							if(UserDB.getAllUsers(DatabaseConstants.getDb()).isEmpty() == true)
+							{
+								user.setAdmin(1);
+								UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
+							}
+							else
+							{
+								user.setAdmin(0);
+								UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
+							}
+							
 							setVisible(false);
 							break;
 					}
