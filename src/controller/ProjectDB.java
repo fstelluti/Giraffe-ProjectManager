@@ -30,7 +30,7 @@ public class ProjectDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS PROJECTS "
@@ -75,7 +75,7 @@ public class ProjectDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -114,7 +114,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -175,7 +175,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -236,7 +236,7 @@ public class ProjectDB extends DataManager
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -291,7 +291,7 @@ public class ProjectDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -348,7 +348,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -396,7 +396,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -441,7 +441,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -484,7 +484,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -531,7 +531,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -573,7 +573,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -612,7 +612,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -648,7 +648,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
@@ -686,7 +686,7 @@ public class ProjectDB extends DataManager
 			
 			try
 			{
-				c = getConnection(DatabaseConstants.getDb());
+				c = getConnection();
 				c.setAutoCommit(false);
 
 				stmt = c.createStatement();

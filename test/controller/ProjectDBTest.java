@@ -60,7 +60,7 @@ public class ProjectDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			stmt = c.createStatement();
 			// PRAGMA table_info returns the set of columns with metadata, one per row
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
@@ -124,7 +124,7 @@ public class ProjectDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

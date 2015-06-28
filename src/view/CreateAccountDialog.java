@@ -23,7 +23,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.User;
-import controller.DatabaseConstants;
 import controller.UserDB;
 import controller.ViewManager;
 
@@ -172,15 +171,15 @@ public class CreateAccountDialog extends JDialog
 							// This if-statement checks to see if the DB is empty
 							// If it is empty, create the first user as an Admin
 							// If not empty, create a regular user
-							if(UserDB.getAllUsers(DatabaseConstants.getDb()).isEmpty() == true)
+							if(UserDB.getAll().isEmpty() == true)
 							{
 								user.setAdmin(1);
-								UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
+								UserDB.insert(user);
 							}
 							else
 							{
 								user.setAdmin(0);
-								UserDB.insertUserIntoTable(DatabaseConstants.DEFAULT_DB, user);
+								UserDB.insert(user);
 							}
 							
 							setVisible(false);
@@ -232,7 +231,7 @@ public class CreateAccountDialog extends JDialog
 	 * @return boolean
 	 */ 
 	private boolean isInputValid() {
-		List<User> users = UserDB.getAllUsers(DatabaseConstants.DEFAULT_DB);
+		List<User> users = UserDB.getAll();
 		//Checks that all fields have input
 		if(email.getText().hashCode() == 0 || 
 				userName.getText().hashCode() == 0 || 

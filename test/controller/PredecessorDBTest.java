@@ -58,7 +58,7 @@ public class PredecessorDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			stmt = c.createStatement();
 			// PRAGMA table_info returns the set of columns with metadata, one per row
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
@@ -110,7 +110,7 @@ public class PredecessorDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -160,8 +160,8 @@ public class PredecessorDBTest {
 			try {
 				// Need to check to see if the activities are in fact associated
 				// Get the ID of the returned predecessor
-				int predecessorId = activity.getActivityId();
-				c = DataManager.getConnection(CONNECTION);
+				int predecessorId = activity.getId();
+				c = DataManager.getConnection();
 				c.setAutoCommit(false);
 				stmt = c.createStatement();
 				rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID=1 AND PREDECESSORID=" + predecessorId + ";");

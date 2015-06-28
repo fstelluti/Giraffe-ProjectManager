@@ -31,7 +31,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS ACTIVITIES "
@@ -87,7 +87,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 			stmt = c.createStatement();
 			String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) "
@@ -141,7 +141,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -201,7 +201,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -263,7 +263,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -323,7 +323,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -385,7 +385,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -428,7 +428,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -467,7 +467,7 @@ public class ActivityDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

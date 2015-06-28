@@ -44,7 +44,7 @@ public class GridProjects extends JPanel
 		ResultSet rs = null;
 		try
 		{
-			c = DataManager.getConnection(connectionString);
+			c = DataManager.getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

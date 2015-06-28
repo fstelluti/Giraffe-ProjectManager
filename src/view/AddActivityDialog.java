@@ -38,15 +38,13 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import controller.ActivityDB;
-import controller.DatabaseConstants;
 import controller.PredecessorDB;
 import controller.ProjectDB;
-import controller.ViewManager;
 
 /**
  * 
  * @author Zachary Bergeron, Lukas Cardot-Goyette
- * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube
+ * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube, Matthew Mongrain
  *
  */
 
@@ -65,7 +63,6 @@ public class AddActivityDialog extends JDialog
   Properties p = new Properties();
   private User user;
   private boolean refresh = false;
-  private String connectionString = DatabaseConstants.getDb();
   private final ImageIcon deleteIcon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
   final JPanel panDependArea = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
@@ -182,7 +179,6 @@ public class AddActivityDialog extends JDialog
 	  
 	  //Creates action
 	  okButton.addActionListener(new ActionListener(){
-	      @SuppressWarnings("deprecation")
 		public void actionPerformed(ActionEvent arg0) {
 	    	  //Sets variables to simplify verifications
 	    	  String activityNameEntered = activityName.getText();
@@ -196,7 +192,7 @@ public class AddActivityDialog extends JDialog
 	    	  
 	    	  boolean activityIsInsertable = false;
 	    	  try {
-	    		 activityIsInsertable =  ViewManager.activityIsInsertable(activityToInsert, selectedProject);
+	    		 activityIsInsertable =  activityToInsert.isInsertable(selectedProject);
 	    	  } catch (Exception e) {
 	    		  JOptionPane.showMessageDialog(content, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 	    	  }
@@ -213,21 +209,19 @@ public class AddActivityDialog extends JDialog
 //	    						  + "\nDescription: "+activityDescription.getText().substring(0, 100) + "...",
 	    						  "Confirm " + activityName.getText() + " creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    			  int newActivityId = ViewManager.addActivity(activityToInsert, selectedProject);
-		    		  refresh = true;
-		    		  
-		    		  
-		    		  //Iterates through all dependents and adds them to the DB
-		    		  Component[] components = panDependArea.getComponents();
-		    		  List<Activity> activities = ActivityDB.getProjectActivities(projectId);
+	    		      activityToInsert.setAssociatedProjectId(selectedProject.getId());
+	    		      Component[] components = panDependArea.getComponents();
+	    		      List<Activity> activities = ActivityDB.getProjectActivities(projectId);
 
-		    		  for (int i = 0; i < components.length; i++){
-		    			  JPanel dependPanel = (JPanel) components[i];
-			    		  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-			    		  PredecessorDB.insert(newActivityId, 
-			    				  activities.get(dependBox.getSelectedIndex()).getActivityId());
-		    		  }
-		    		  setVisible(false); 
+	    		      for (int i = 0; i < components.length; i++){
+		    		  JPanel dependPanel = (JPanel) components[i];
+			    	  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
+			    	  activityToInsert.addDependent(activities.get(dependBox.getSelectedIndex()).getId());
+	    		      }
+	    		      
+	    		      activityToInsert.persist();
+	    		      refresh = true;
+	    		      setVisible(false); 
 	    		  }
 	    	  }
 	      }      
@@ -261,6 +255,7 @@ public class AddActivityDialog extends JDialog
 	  return refresh;
 	  
   }
+  
   public void createDepend(){
 	  final List<Project> projects = ProjectDB.getUserProjects(user.getId());
 	  final JPanel panDepend = new JPanel();

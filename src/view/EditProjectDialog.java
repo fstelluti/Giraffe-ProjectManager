@@ -114,7 +114,7 @@ public class EditProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(220, 60));
 	  
-	  final List<User> projectManagers = UserDB.getAllUsers(connectionString);
+	  final List<User> projectManagers = UserDB.getAll();
 	  Vector<String> projectManagerNames = new Vector<String>();
 	  for(User projectManager : projectManagers){
 		  projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
@@ -162,8 +162,8 @@ public class EditProjectDialog extends JDialog
 	  startModel.setValue(currentProject.getStartDate());
 	  dueModel.setValue(currentProject.getDueDate());
 	  projectName.setText(currentProject.getName());
-	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getId());
-	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
+	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(currentProject.getId());
+	  User projectManager = UserDB.getById(projectManagerId);
 	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  managerBox.setSelectedIndex(selectedIndex);
 	  projectDescription.setText(currentProject.getDescription());
@@ -175,8 +175,8 @@ public class EditProjectDialog extends JDialog
 	    	  startModel.setValue(currentProject.getStartDate());
 	    	  dueModel.setValue(currentProject.getDueDate());
 	    	  projectName.setText(currentProject.getName());
-	    	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(connectionString, currentProject.getId());
-	    	  User projectManager = UserDB.getUserById(connectionString, projectManagerId);
+	    	  int projectManagerId = UserRolesDB.getProjectManagerIdByProjectId(currentProject.getId());
+	    	  User projectManager = UserDB.getById(projectManagerId);
 	    	  managerBox.setSelectedItem(projectManager.getFirstName() + " " + projectManager.getLastName());
 	    	  projectDescription.setText(currentProject.getDescription());
 	    	  content.repaint();

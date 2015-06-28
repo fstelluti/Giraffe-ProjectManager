@@ -56,7 +56,7 @@ public class UserDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			stmt = c.createStatement();
 			// PRAGMA table_info returns the set of columns with metadata, one per row
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
@@ -131,12 +131,12 @@ public class UserDBTest {
 	@Test
 	public void insertedUserShouldMatchData() {
 		User userTest = new User("testDummy", "trustno1", "test@dummy.com", "Test", "Dummy");
-		UserDB.insertUserIntoTable(CONNECTION, userTest);
+		UserDB.insert(userTest);
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -195,7 +195,7 @@ public class UserDBTest {
 	// Tests UserDB.getAll()
 	@Test
 	public void returnedUsersShouldBeValid() {
-		List<User> users = UserDB.getAllUsers(CONNECTION);
+		List<User> users = UserDB.getAll();
 		for (User user : users) {
 			int id = user.getId();
 			boolean usernameExists = user.getUserName() != null && !user.getUserName().isEmpty();
@@ -214,7 +214,7 @@ public class UserDBTest {
 	// Tests UserDB.getById()
 	@Test
 	public void returnedUserByIdShouldMatch() {
-		User user = UserDB.getUserById(CONNECTION, 1);
+		User user = UserDB.getById(1);
 		int id = user.getId();
 		boolean condition = (id == 1);
 		assertTrue("The returned user ID does not match requested user ID!", condition);
@@ -223,7 +223,7 @@ public class UserDBTest {
 	// Tests UserDB.getByName()
 	@Test
 	public void returnedUserByNameShouldMatch() {
-		User user = UserDB.getUserByName(CONNECTION, "testUser1");
+		User user = UserDB.getByName("testUser1");
 		String username = user.getUserName().trim();
 		boolean condition = username.equals("testUser1");
 		assertTrue("The returned username does not match the requested username!", condition);
@@ -233,10 +233,10 @@ public class UserDBTest {
 	@Test
 	public void checkedLoginShouldBeValid() {
 		// Test four conditions
-		boolean validUserPass = UserDB.checkLogin(CONNECTION, "testUser1", "password1".toCharArray());
-		boolean validUser = UserDB.checkLogin(CONNECTION, "testUser1", "assword1".toCharArray());
-		boolean validPass = UserDB.checkLogin(CONNECTION, "pestUser1", "password1".toCharArray());
-		boolean invalidUserPass = UserDB.checkLogin(CONNECTION, "pestUser1", "assword1".toCharArray());
+		boolean validUserPass = UserDB.checkLogin("testUser1", "password1".toCharArray());
+		boolean validUser = UserDB.checkLogin("testUser1", "assword1".toCharArray());
+		boolean validPass = UserDB.checkLogin("pestUser1", "password1".toCharArray());
+		boolean invalidUserPass = UserDB.checkLogin("pestUser1", "assword1".toCharArray());
 		
 		// Assert 'em
 		assertTrue("Valid user/pass failed!", validUserPass);

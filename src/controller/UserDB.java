@@ -12,7 +12,7 @@ import model.User;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -20,16 +20,15 @@ public class UserDB extends DataManager {
 	
 	/**
 	 * Method creates the User Table in the DB
-	 * @param connectionString as a String
 	 */
-	public static void createUserTable(String connectionString)
+	public static void createTable()
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS USERS "
@@ -63,18 +62,17 @@ public class UserDB extends DataManager {
 	
 	/**
 	 * Method inserts a new User into the User Table
-	 * @param connectionString as a String
 	 * @param user as a User from User.java
 	 * @return
 	 */
-	public static void insertUserIntoTable(String connectionString, User user)
+	public static void insert(User user)
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -109,10 +107,9 @@ public class UserDB extends DataManager {
 	
 	/**
 	 * Method returns all users in the User Table
-	 * @param connectionString as a String
 	 * @return
 	 */
-	public static List<User> getAllUsers(String connectionString)
+	public static List<User> getAll()
 	{
 		List<User> users = new ArrayList<User>();
 		Connection c = null;
@@ -121,7 +118,7 @@ public class UserDB extends DataManager {
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -168,14 +165,13 @@ public class UserDB extends DataManager {
 	}
 	
 	/**
-	 * Method searches for a user in DB (connectionString) by id
+	 * Method searches for a user in DB by id
 	 * precondition id is valid
 	 * When method is called check if it returns null in which case a user with a given id doesn't exist
-	 * @param connectionString as String
 	 * @param id as Int
 	 * @return
 	 */
-	public static User getUserById(String connectionString, int id)
+	public static User getById(int id)
 	{
 		User user = null;
 		Connection c = null;
@@ -184,7 +180,7 @@ public class UserDB extends DataManager {
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -231,11 +227,10 @@ public class UserDB extends DataManager {
 	 * Method searches for a user in DB (connectionString) by userName
 	 * Precondition: userName is valid
 	 * When method is called check if it returns null in which case a user with a given userName doesn't exist
-	 * @param connectionString as String
 	 * @param userName as String
 	 * @return
 	 */
-	public static User getUserByName(String connectionString, String userName)
+	public static User getByName(String userName)
 	{
 		User user = null;
 		Connection c = null;
@@ -243,7 +238,7 @@ public class UserDB extends DataManager {
 		ResultSet rs = null;
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -288,12 +283,11 @@ public class UserDB extends DataManager {
 	
 	/**
 	 * Method checks to see if a user is successfully logged into the application
-	 * @param connectionString as a String
 	 * @param userName as a String
 	 * @param password as a Char
 	 * @return
 	 */
-	public static boolean checkLogin(String connectionString, String userName, char[] password)
+	public static boolean checkLogin(String userName, char[] password)
 	{
 		boolean result = false;
 		String passwordString = new String(password);
@@ -303,7 +297,7 @@ public class UserDB extends DataManager {
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

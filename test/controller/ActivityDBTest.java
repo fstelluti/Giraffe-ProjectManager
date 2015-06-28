@@ -64,7 +64,7 @@ public class ActivityDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			stmt = c.createStatement();
 			// PRAGMA table_info returns the set of columns with metadata, one per row
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");
@@ -140,7 +140,7 @@ public class ActivityDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -194,7 +194,7 @@ public class ActivityDBTest {
 		int counter = 0;
 		for (Activity activity : activities) {
 			++counter;
-			int id = activity.getActivityId();
+			int id = activity.getId();
 			int projectId = activity.getAssociatedProjectId();
 			boolean validProjectId = (projectId == 1337);
 			boolean nameExists = activity.getName() != null && !activity.getName().isEmpty();
@@ -215,7 +215,7 @@ public class ActivityDBTest {
 	@Test
 	public void returnedActivityByIdShouldMatch() {
 		Activity activity = ActivityDB.getById(1);
-		int id = activity.getActivityId();
+		int id = activity.getId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
 	}
@@ -224,7 +224,7 @@ public class ActivityDBTest {
 	@Test
 	public void returnedActivityByNameAndProjectIdShouldMatch() {
 		Activity activity = ActivityDB.getByNameAndProjectId("activity1", 1337);
-		int id = activity.getActivityId();
+		int id = activity.getId();
 		boolean condition = (id == 1);
 		assertTrue("The returned activity ID (" + id + ") does not match requested activity ID (1)!", condition);
 	}
@@ -240,7 +240,7 @@ public class ActivityDBTest {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			c = DataManager.getConnection(CONNECTION);
+			c = DataManager.getConnection();
 			stmt = c.createStatement();
 			// PRAGMA table_info returns the set of columns with metadata, one per row
 			rs = stmt.executeQuery("PRAGMA table_info(" + tableName + ");");

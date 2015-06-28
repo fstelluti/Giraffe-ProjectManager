@@ -98,7 +98,7 @@ public class CreateProjectDialog extends JDialog
 	  panManager.setBackground(Color.white);
 	  panManager.setPreferredSize(new Dimension(230, 60));
 	  
-	  final List<User> projectManagers = UserDB.getAllUsers(connectionString);
+	  final List<User> projectManagers = UserDB.getAll();
 	  Vector<String> projectManagerNames = new Vector<String>();
 	  for(User projectManager : projectManagers){
 		  projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
@@ -106,7 +106,7 @@ public class CreateProjectDialog extends JDialog
 	  managerBox = new JComboBox<String>(projectManagerNames);
 	  panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
 	  panManager.add(managerBox);
-	  User projectManager = UserDB.getUserById(connectionString, user.getId());
+	  User projectManager = UserDB.getById(user.getId());
 	  int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
 	  managerBox.setSelectedIndex(selectedIndex);
 	  
@@ -187,8 +187,8 @@ public class CreateProjectDialog extends JDialog
 		    		  
 		    		  // TODO change ROLEID (last parameter of the call)
 		    		  //Sets initial project manager for project
-		    		  UserRolesDB.insertUserRoleIntoTable(connectionString,
-		    				  projectManagers.get(managerBox.getSelectedIndex()).getId(), project.getId(), 1);
+		    		  UserRolesDB.insert(projectManagers.get(managerBox.getSelectedIndex()).getId(),
+		    				  project.getId(), 1);
 		    		  refresh = true;
 			    		  setVisible(false); 
 			    		  

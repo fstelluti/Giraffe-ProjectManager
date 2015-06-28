@@ -16,7 +16,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import model.User;
-import controller.DatabaseConstants;
 import controller.UserDB;
 import controller.ViewManager;
 
@@ -150,9 +149,9 @@ public class LoginPanel extends JPanel implements ActionListener
 		if(e.getSource() == loginButton) {
 			char[] passChar = passwordTextField.getPassword();
 			String uName = loginTextField.getText();
-			boolean checkResult = UserDB.checkLogin(DatabaseConstants.getDb(), loginTextField.getText(), passChar);
+			boolean checkResult = UserDB.checkLogin(loginTextField.getText(), passChar);
 			if (checkResult) {
-				User user = UserDB.getUserByName(DatabaseConstants.getDb(), uName);
+				User user = UserDB.getByName(uName);
 				ViewManager.createMainViewPanel(user);
 				
 				//Resets text fields so that when logged out, the fields are empty

@@ -29,7 +29,7 @@ public class PredecessorDB extends DataManager
 		Statement stmt = null;
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS PREDECESSORS "
@@ -68,7 +68,7 @@ public class PredecessorDB extends DataManager
 		Statement stmt = null;
 		
 		try {
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -109,7 +109,7 @@ public class PredecessorDB extends DataManager
 		ResultSet rs2 = null;
 		
 		try	{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
@@ -168,7 +168,7 @@ public class PredecessorDB extends DataManager
 		
 		try
 		{
-			c = getConnection(DatabaseConstants.getDb());
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

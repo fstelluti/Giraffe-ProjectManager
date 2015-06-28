@@ -1,30 +1,39 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import controller.ActivityDB;
+import controller.DatabaseConstants;
+import controller.PredecessorDB;
 
 /**
  * 
  * @author Zachary Bergeron
- * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube
+ * @modifiedBy Andrey Uspenskiy, Anne-Marie Dube, Matthew Mongrain
  *
  */
 
 public class Activity
 {
-	private int 	id;
-	private int 	projectId;
-	private int		pessimisticDuration;
-	private int 	optimisticDuration;
-	private int		mostLikelyDuration;
-	private double 	duration;
-	private int		estimatedCost;
-	private int		actualCost;
-	private String 	name;
-	private Date 	startDate;
-	private Date 	dueDate;
-	private String	description;
-	private int 	status = 1;
+	private int id;
+	private int projectId;
+	private int pessimisticDuration;
+	private int optimisticDuration;
+	private int mostLikelyDuration;
+	private double duration;
+	private int estimatedCost;
+	private int actualCost;
+	private String name;
+	private Date startDate;
+	private Date dueDate;
+	private String description;
+	private int status = 1;
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
+	private Set<Integer> dependents;
 	
 	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description)
 	{
@@ -36,6 +45,7 @@ public class Activity
 		this.dueDate = dueDate;
 		this.status = status;
 		this.description = description;
+		dependents = new HashSet<Integer>();
 	}
 	
 	public Activity(int projectId, String name, Date startDate, Date dueDate, int status, String description)
@@ -47,13 +57,14 @@ public class Activity
 		this.dueDate = dueDate;
 		this.status = status;
 		this.description = description;
+		dependents = new HashSet<Integer>();
 	}
 	
 	public String getStatusName() {
 		return statusArray[status];
 	}
 
-	public int getActivityId() {
+	public int getId() {
 		return id;
 	}
 
@@ -162,4 +173,99 @@ public class Activity
 		this.actualCost = actualCost;
 	}
 
+	/**
+	 * Checks to see if an activity can be inserted.
+	 * 
+	 * @author Matthew Mongrain
+	 * @param activity
+	 * @param project
+	 * @return True if the activity is insertable, false otherwise.
+	 * @throws Exception
+	 */
+	public boolean isInsertable(Project project) throws Exception {
+	    int projectId = project.getId();
+	    Date projectStartDate = project.getStartDate();
+	    Date projectDueDate = project.getDueDate();
+	    String activityName = this.getName();
+	    Date activityStartDate = this.getStartDate();
+	    Date activityDueDate = this.getDueDate();
+	    boolean exists = false;
+	    List<Activity> activities = ActivityDB.getProjectActivities(projectId);
+	    
+	    for(Activity activitySelected:activities){
+		if(activityName.equals(activitySelected.getName())) { 
+		    exists = true; 
+		    break; 
+		} else {
+		    exists = false;
+		}
+	    }
+		  
+	    //Verifies all text boxes are filled out, if not = error
+	    if (activityName.hashCode() == 0 || activityStartDate == null || activityDueDate == null) {
+		throw new Exception("Please fill out all fields");
+	    }
+ 
+	    //Provides error if activity name exists
+	    if (exists) {
+		throw new Exception("Activity with this name already exists");
+	    }
+	   	
+	    //Checks that due date not before start date
+	    if (activityDueDate.before(activityStartDate)) {
+		throw new Exception("Please ensure due date is not before start date");
+	    }
+	   	  
+	    //Checks if activity start date falls in project date constraints	   	 
+	    if(activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) {
+		throw new Exception("Please ensure due date is within project dates : " + DatabaseConstants.DATE_FORMAT.format(projectStartDate) + " to " + DatabaseConstants.DATE_FORMAT.format(projectDueDate));
+	    }
+	   	  
+	    return true;
+	}
+	
+	/**
+	 * Persists an Activity object in the database.
+	 * If the Activity has an id of 0, it is assumed not to exist in the database, and is created there.
+	 * Otherwise it is updated in the database.
+	 * @author Matthew Mongrain
+	 */
+	public void persist() {
+	    if (this.id == 0) {
+		ActivityDB.insert(
+			this.getAssociatedProjectId(), 
+			this.getName(), 
+			DatabaseConstants.DATE_FORMAT.format(this.getStartDate()), 
+			DatabaseConstants.DATE_FORMAT.format(this.getDueDate()), 
+			this.getStatus(), 
+			this.getDescription()
+		);
+		Activity insertedActivity = ActivityDB.getByNameAndProjectId(this.getName(), this.getAssociatedProjectId());
+		this.id = insertedActivity.getId();
+	    } else {
+		ActivityDB.update(
+			this.id, 
+			this.name, 
+			DatabaseConstants.DATE_FORMAT.format(this.startDate), 
+			DatabaseConstants.DATE_FORMAT.format(this.dueDate), 
+			this.status, 
+			this.description
+		);
+	    }
+	    for (Integer dependent : dependents) {
+		PredecessorDB.insert(this.id, dependent);
+	    }
+	}
+
+	public ArrayList<Integer> getDependents() {
+	    return new ArrayList<Integer>(dependents);
+	}
+
+	public void addDependent(int dependent) {
+	    dependents.add(dependent);
+	}
+	
+	public void removeDependent(int dependent) {
+	    dependents.remove(dependent);
+	}
 }

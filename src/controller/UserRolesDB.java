@@ -8,7 +8,7 @@ import java.sql.Statement;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -17,16 +17,15 @@ public class UserRolesDB extends DataManager
 {
 	/**
 	 * Method to create User Roles Table in the DB
-	 * @param connectionString as a String
 	 */
-	public static void createUserRolesTable(String connectionString)
+	public static void createTable()
 	{
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS USERROLES " + "(USERID 		INTEGER,"
@@ -57,18 +56,17 @@ public class UserRolesDB extends DataManager
 	
 	/**
 	 * Method to insert a User Role into the Table
-	 * @param connectionString as a String
 	 * @param userId as an Int
 	 * @param projectId as an Int
 	 * @param roleId as an Int
 	 */
-	public static void insertUserRoleIntoTable(String connectionString, int userId, int projectId, int roleId) {
+	public static void insert(int userId, int projectId, int roleId) {
 		Connection c = null;
 		Statement stmt = null;
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			// roleId 1: projectManager
@@ -106,11 +104,10 @@ public class UserRolesDB extends DataManager
 	
 	/**
 	 * Method to get the Project Manager associated to a Project
-	 * @param connectionString as a String
 	 * @param id as an Int
 	 * @return
 	 */
-	public static int getProjectManagerIdByProjectId(String connectionString, int id)
+	public static int getProjectManagerIdByProjectId(int id)
 	{
 		int projectManagerId = 0;
 		Connection c = null;
@@ -119,7 +116,7 @@ public class UserRolesDB extends DataManager
 		
 		try
 		{
-			c = getConnection(connectionString);
+			c = getConnection();
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();

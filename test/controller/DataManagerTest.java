@@ -39,12 +39,11 @@ public class DataManagerTest {
 		// Create database using create methods in DataManager
 		// Cheating, sort of, but correct output will be tested in other tests anyway so no big deal (?)
 		// If you can think of a less coupled way to test this please implement it :) --Matthew
-		UserDB.createUserTable(CONNECTION);
+		UserDB.createTable();
 		ActivityDB.createTable();
 		ProjectDB.createTable();
 		PredecessorDB.createTable();
-		UserRolesDB.createUserRolesTable(CONNECTION); 	
-		UserRolesDictDB.createUserRolesDictTable(CONNECTION);
+		UserRolesDB.createTable(); 	
 		
 		// Create fixtures
 		String userFixtureQuery = "INSERT INTO USERS (USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME) VALUES ('testUser1', 'password1', 'test1@email.com', 'Test1', 'User1');"
@@ -104,7 +103,7 @@ public class DataManagerTest {
 	// Tests DataManager.getConnection()
 	@Test
 	public void connectionReturnedShouldBeValid() {
-		Connection connection = DataManager.getConnection(CONNECTION);
+		Connection connection = DataManager.getConnection();
 		assertNotNull("The returned database connection is null!", connection);
 		boolean isValid = true;
 		try {

@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class ApplicationPanelTest {
 	//Get the ApplicationPanel Singleton Object
-	private static ApplicationPanel applicationPanel = ApplicationPanel.getApplicationPanelInstance();
+	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
 	
 	//Tests getLoginPanel()
 	@Test

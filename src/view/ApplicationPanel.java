@@ -1,22 +1,19 @@
 package view;
 
 import java.awt.CardLayout;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import controller.DataManager;
-import controller.DatabaseConstants;
 import controller.UserDB;
 import controller.ViewManager;
 
 /**
  * This class defined the main application window and displays the Login Panel
  * @author Andrey Uspenskiy
- * @modifiedBy Lukas Cardot-Goyette, Zachary Bergeron, Francois Stelluti, Anne-Marie Dube
+ * @modifiedBy Lukas Cardot-Goyette, Zachary Bergeron, Francois Stelluti, Anne-Marie Dube, Matthew Mongrain
  */
 
 @SuppressWarnings("serial")
@@ -28,15 +25,10 @@ public class ApplicationPanel extends JFrame
 	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
-	private static final ApplicationPanel APPLICATIONPANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
+	private static final ApplicationPanel APPLICATION_PANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
 	
 	private ApplicationPanel() {	//private constructor for Singleton pattern
-		//First tests to see if the Database tables have been created
-		try {
-			DataManager.createTables(DatabaseConstants.getDb());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+
 			
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		cardsHolder = new JPanel();
@@ -57,12 +49,12 @@ public class ApplicationPanel extends JFrame
 	 * Returns singleton class instance
 	 * @return LOGINPANEL
 	 */ 
-	public static ApplicationPanel getApplicationPanelInstance() {
-		return APPLICATIONPANEL;
+	public static ApplicationPanel instance() {
+		return APPLICATION_PANEL;
 	}
 	
 	public void buildCardsPanel() {
-		if(UserDB.getAllUsers(DatabaseConstants.getDb()).isEmpty() == true)
+		if(UserDB.getAll().isEmpty() == true)
 		{
 			addCardPanel(getSetupPanel(), "SetupPanel");
 			cardLayout.show(cardsHolder, "SetupPanel");

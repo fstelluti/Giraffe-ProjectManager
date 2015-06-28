@@ -23,7 +23,7 @@ public class ViewManagerTest {
 		
 	  //Need to run the startApplication method before testing if the main view panel was created
 	  //This avoids a Null pointer exception
-	  ViewManager.startApplication();
+	  ViewManager.openApplicationWindow();
 		
 	  //Create a JPanel and simply test if it is not null at the end
     JPanel mainViewPanel = ViewManager.createMainViewPanel(user1);
