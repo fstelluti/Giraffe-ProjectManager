@@ -44,7 +44,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	public JButton loginButton, exitButton;
 	public JButton newAccountButton;
 	
-	private static final LoginPanel LOGINPANEL = new LoginPanel();	//Singleton LoginPanel object
+	private static final LoginPanel LOGIN_PANEL = new LoginPanel();	//Singleton LoginPanel object
 	
 	private LoginPanel() {	//private constructor for Singleton pattern
 		loginPanel = new JPanel();
@@ -64,7 +64,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	 * @return LOGINPANEL
 	 */ 
 	public static LoginPanel getLoginPanelInstance() {
-		return LOGINPANEL;
+		return LOGIN_PANEL;
 	}
 	
 	private JPanel createLogoPanel(){
