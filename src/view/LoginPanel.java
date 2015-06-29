@@ -34,15 +34,15 @@ public class LoginPanel extends JPanel implements ActionListener
 	private JPanel buttonsSubPanel;
 	private JPanel logoPanel;
 	
-	public JPanel newAccountLabelPanel;
+	private JPanel newAccountLabelPanel;
 	
-	public JLabel loginLabel;
-	public JLabel passwordLabel;
+	private JLabel loginLabel;
+	private JLabel passwordLabel;
 	
-	public JTextField loginTextField;
-	public JPasswordField passwordTextField;
-	public JButton loginButton, exitButton;
-	public JButton newAccountButton;
+	private JTextField loginTextField;
+	private JPasswordField passwordTextField;
+	private JButton loginButton, exitButton;
+	private JButton newAccountButton;
 	
 	private static final LoginPanel LOGIN_PANEL = new LoginPanel();	//Singleton LoginPanel object
 	

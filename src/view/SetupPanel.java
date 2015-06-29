@@ -29,11 +29,11 @@ public class SetupPanel extends JPanel implements ActionListener
 
 	private JPanel logoPanel;
 	
-	public JPanel newAccountLabelPanel;
-	public JLabel welcomeLabel;
+	private JPanel newAccountLabelPanel;
+	private JLabel welcomeLabel;
 
-	public JButton newAccountButton;
-	public JButton exitButton;
+	private JButton newAccountButton;
+	private JButton exitButton;
 	
 	private static final SetupPanel SETUP_PANEL = new SetupPanel();	//Singleton LoginPanel object
 	
