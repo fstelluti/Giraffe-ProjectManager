@@ -63,7 +63,7 @@ public class LoginPanel extends JPanel implements ActionListener
 	 * Returns singleton class instance
 	 * @return LOGINPANEL
 	 */ 
-	public static LoginPanel getLoginPanelInstance() {
+	public static LoginPanel instance() {
 		return LOGIN_PANEL;
 	}
 	

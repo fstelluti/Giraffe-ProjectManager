@@ -34,7 +34,7 @@ public class SetupPanel extends JPanel implements ActionListener
 
 	public JButton newAccountButton;
 	
-	private static final SetupPanel SETUPPANEL = new SetupPanel();	//Singleton LoginPanel object
+	private static final SetupPanel SETUP_PANEL = new SetupPanel();	//Singleton LoginPanel object
 	
 	private SetupPanel() {	//private constructor for Singleton pattern
 		setupPanel = new JPanel();
@@ -51,8 +51,8 @@ public class SetupPanel extends JPanel implements ActionListener
 	 * Returns singleton class instance
 	 * @return LOGINPANEL
 	 */ 
-	public static SetupPanel getSetupPanelInstance() {
-		return SETUPPANEL;
+	public static SetupPanel instance() {
+		return SETUP_PANEL;
 	}
 	
 	private JPanel createLogoPanel(){

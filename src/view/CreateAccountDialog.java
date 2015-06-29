@@ -175,6 +175,7 @@ public class CreateAccountDialog extends JDialog
 							{
 								user.setAdmin(1);
 								UserDB.insert(user);
+								ViewManager.logout(); //Switch to the tLoginPanel
 							}
 							else
 							{

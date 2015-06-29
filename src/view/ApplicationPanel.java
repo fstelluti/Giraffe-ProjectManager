@@ -21,8 +21,8 @@ public class ApplicationPanel extends JFrame
 {
 	private List<JPanel> cardPanels = new ArrayList<JPanel>();
 	private JPanel cardsHolder;
-	private SetupPanel setupPanel = SetupPanel.getSetupPanelInstance();
-	private LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();	//get the LoginPanel
+	private SetupPanel setupPanel = SetupPanel.instance();
+	private LoginPanel loginPanel = LoginPanel.instance();	//get the LoginPanel
 	private static CardLayout cardLayout;
 
 	private static final ApplicationPanel APPLICATION_PANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
@@ -54,14 +54,16 @@ public class ApplicationPanel extends JFrame
 	}
 	
 	public void buildCardsPanel() {
+		//Add both startup panels
+		addCardPanel(getSetupPanel(), "SetupPanel");
+		addCardPanel(getLoginPanel(), "LoginPanel");
+		//If the DB is empty, use the Setup Panel first
 		if(UserDB.getAll().isEmpty() == true)
 		{
-			addCardPanel(getSetupPanel(), "SetupPanel");
 			cardLayout.show(cardsHolder, "SetupPanel");
 		}
 		else
 		{
-			addCardPanel(getLoginPanel(), "LoginPanel");
 			cardLayout.show(cardsHolder, "LoginPanel");
 		}
 			

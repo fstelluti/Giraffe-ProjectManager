@@ -26,7 +26,7 @@ public class ViewManager
 {
 	private static JPanel mainViewPanel;
 	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
-	private static LoginPanel loginPanel = LoginPanel.getLoginPanelInstance();
+	private static LoginPanel loginPanel = LoginPanel.instance();
 	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
 	
 	//Constants for the size of the Panels
