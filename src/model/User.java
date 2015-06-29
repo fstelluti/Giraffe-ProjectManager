@@ -12,7 +12,7 @@ import view.MainViewPanel;
  * Possibility of editing it.
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -35,7 +35,7 @@ public class User
 		return "User [id=" + id + ", userName=" + userName + ", password="
 				+ "*****" + ", email=" + email + ", regDate=" + regDate
 				+ ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", userPicture=" + userPicture + "]";
+				+ ", userPicture=" + userPicture.getDescription() + "]";
 	}
 	
 	public User(int id, String userName, String password, String email,	String firstName, String lastName)
@@ -49,7 +49,6 @@ public class User
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.admin = 0;	//Default is PM or Regular User
-		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
 	}
 	
 	public User(String userName, String password, String email, String firstName, String lastName)
@@ -62,7 +61,6 @@ public class User
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.admin = 0;	//Default is PM or Regular User
-		userPicture = new ImageIcon(MainViewPanel.class.getResource("images/Open16.gif"));
 	}
 	
 	public String getUserName()

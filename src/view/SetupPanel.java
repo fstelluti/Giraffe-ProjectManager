@@ -29,12 +29,13 @@ public class SetupPanel extends JPanel implements ActionListener
 
 	private JPanel logoPanel;
 	
-	public JPanel newAccountLabelPanel;
-	public JLabel welcomeLabel;
+	private JPanel newAccountLabelPanel;
+	private JLabel welcomeLabel;
 
-	public JButton newAccountButton;
+	private JButton newAccountButton;
+	private JButton exitButton;
 	
-	private static final SetupPanel SETUPPANEL = new SetupPanel();	//Singleton LoginPanel object
+	private static final SetupPanel SETUP_PANEL = new SetupPanel();	//Singleton LoginPanel object
 	
 	private SetupPanel() {	//private constructor for Singleton pattern
 		setupPanel = new JPanel();
@@ -51,8 +52,8 @@ public class SetupPanel extends JPanel implements ActionListener
 	 * Returns singleton class instance
 	 * @return LOGINPANEL
 	 */ 
-	public static SetupPanel getSetupPanelInstance() {
-		return SETUPPANEL;
+	public static SetupPanel instance() {
+		return SETUP_PANEL;
 	}
 	
 	private JPanel createLogoPanel(){
@@ -81,8 +82,9 @@ public class SetupPanel extends JPanel implements ActionListener
 		if(newAccountLabelPanel == null) {
 			newAccountLabelPanel = new JPanel();
 			newAccountButton = new JButton("Create Administrator Account");
+			exitButton = new JButton("Exit");
 			newAccountLabelPanel.add(newAccountButton);
-			
+			newAccountLabelPanel.add(exitButton);
 			
 			newAccountButton.addActionListener(new ActionListener() {	
 				@Override
@@ -91,6 +93,17 @@ public class SetupPanel extends JPanel implements ActionListener
 					if(e.getSource() == newAccountButton)
 					{
 						ViewManager.createAccountDialog();
+					}
+					
+				}
+			});
+			
+			exitButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					if(e.getSource() == exitButton) {
+						ViewManager.exitApplication();
 					}
 					
 				}
