@@ -33,6 +33,7 @@ public class SetupPanel extends JPanel implements ActionListener
 	public JLabel welcomeLabel;
 
 	public JButton newAccountButton;
+	public JButton exitButton;
 	
 	private static final SetupPanel SETUP_PANEL = new SetupPanel();	//Singleton LoginPanel object
 	
@@ -81,8 +82,9 @@ public class SetupPanel extends JPanel implements ActionListener
 		if(newAccountLabelPanel == null) {
 			newAccountLabelPanel = new JPanel();
 			newAccountButton = new JButton("Create Administrator Account");
+			exitButton = new JButton("Exit");
 			newAccountLabelPanel.add(newAccountButton);
-			
+			newAccountLabelPanel.add(exitButton);
 			
 			newAccountButton.addActionListener(new ActionListener() {	
 				@Override
@@ -91,6 +93,17 @@ public class SetupPanel extends JPanel implements ActionListener
 					if(e.getSource() == newAccountButton)
 					{
 						ViewManager.createAccountDialog();
+					}
+					
+				}
+			});
+			
+			exitButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e)
+				{
+					if(e.getSource() == exitButton) {
+						ViewManager.exitApplication();
 					}
 					
 				}
