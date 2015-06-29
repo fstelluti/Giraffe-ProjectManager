@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.swing.ImageIcon;
 
+import controller.UserDB;
 import view.MainViewPanel;
 
 /**
@@ -146,5 +147,19 @@ public class User
 			throw new IllegalArgumentException("admin flag must be 0 or 1");
 		}
 		this.admin = admin;
+	}
+	
+	/**
+	 * Persists the User object in the database.
+	 * If id = 0, user is assumed not to have been created yet and an attempt
+	 * to create it is made.
+	 * @author Matthew Mongrain
+	 */
+	public void persist() {
+	    if (this.id == 0) {
+		UserDB.insert(this);
+	    } else {
+		UserDB.update(this);
+	    }
 	}
 }

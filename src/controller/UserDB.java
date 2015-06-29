@@ -61,48 +61,66 @@ public class UserDB extends DataManager {
 	
 	
 	/**
+	 * Inserts a User object into the Users table
+	 * @param user as a User from User.java
+	 * @author Andrey Uspenskiy, Matthew Mongrain
+	 */
+	public static void insert(User user) {
+	    Connection c = null;
+	    Statement stmt = null;
+
+	    try {
+		c = getConnection();
+
+		stmt = c.createStatement();
+		String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN) "
+			+ "VALUES (NULL, '"
+			+ user.getUserName()
+			+ "', '"
+			+ user.getPassword()
+			+ "', '"
+			+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
+			+ "', " 
+			+ user.getAdmin() + ")";
+		stmt.executeUpdate(sql);
+	    }
+	    catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } finally {
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
+	}
+	
+	/**
 	 * Method inserts a new User into the User Table
 	 * @param user as a User from User.java
-	 * @return
+	 * @author Matthew Mongrain
 	 */
-	public static void insert(User user)
-	{
-		Connection c = null;
-		Statement stmt = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static void update(User user) {
+	    Connection c = null;
+	    Statement stmt = null;
 
-			stmt = c.createStatement();
-			String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN) "
-					+ "VALUES (NULL, '"
-					+ user.getUserName()
-					+ "', '"
-					+ user.getPassword()
-					+ "', '"
-					+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
-					+ "', " 
-					+ user.getAdmin() + ")";
-			stmt.executeUpdate(sql);
-			c.commit();
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in UserDB.insertUserIntoTable: " + e.getMessage());
-			}
-		}
+	    try {
+		c = getConnection();
+
+		stmt = c.createStatement();
+		String sql = "UPDATE USERS SET " 
+			+ "USERNAME='" + user.getUserName() + "',"
+			+ "PASSWORD='" + user.getPassword() + "',"
+			+ "EMAIL='" + user.getEmail() + "',"
+			+ "FIRSTNAME='" + user.getFirstName() + "',"
+			+ "LASTNAME='" + user.getLastName() + "',"
+			+ "ADMIN='" + user.getAdmin() + "',"
+			+ "WHERE ID=" + user.getId() + ";";
+		stmt.executeUpdate(sql);
+	    }
+	    catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } finally {
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
 	}
 	
 	/**

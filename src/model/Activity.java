@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import controller.ActivityDB;
 import controller.DatabaseConstants;
@@ -24,7 +23,6 @@ public class Activity
 	private int pessimisticDuration;
 	private int optimisticDuration;
 	private int mostLikelyDuration;
-	private double duration;
 	private int estimatedCost;
 	private int actualCost;
 	private String name;
@@ -33,7 +31,9 @@ public class Activity
 	private String description;
 	private int status = 1;
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
-	private Set<Integer> dependents;
+	private HashSet<Integer> dependents;
+	
+	public Activity() {}
 	
 	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description)
 	{
@@ -149,14 +149,6 @@ public class Activity
 		this.mostLikelyDuration = mostLikelyDuration;
 	}
 
-	public double getDuration() {
-		return duration;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
-
 	public int getEstimatedCost() {
 		return estimatedCost;
 	}
@@ -217,7 +209,7 @@ public class Activity
 	    }
 	   	  
 	    //Checks if activity start date falls in project date constraints	   	 
-	    if(activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) {
+	    if (activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) {
 		throw new Exception("Please ensure due date is within project dates : " + DatabaseConstants.DATE_FORMAT.format(projectStartDate) + " to " + DatabaseConstants.DATE_FORMAT.format(projectDueDate));
 	    }
 	   	  
@@ -232,26 +224,14 @@ public class Activity
 	 */
 	public void persist() {
 	    if (this.id == 0) {
-		ActivityDB.insert(
-			this.getAssociatedProjectId(), 
-			this.getName(), 
-			DatabaseConstants.DATE_FORMAT.format(this.getStartDate()), 
-			DatabaseConstants.DATE_FORMAT.format(this.getDueDate()), 
-			this.getStatus(), 
-			this.getDescription()
-		);
+		ActivityDB.insert(this);
 		Activity insertedActivity = ActivityDB.getByNameAndProjectId(this.getName(), this.getAssociatedProjectId());
 		this.id = insertedActivity.getId();
 	    } else {
-		ActivityDB.update(
-			this.id, 
-			this.name, 
-			DatabaseConstants.DATE_FORMAT.format(this.startDate), 
-			DatabaseConstants.DATE_FORMAT.format(this.dueDate), 
-			this.status, 
-			this.description
-		);
+		ActivityDB.update(this);
 	    }
+	    
+	    // Insert all dependents, too
 	    for (Integer dependent : dependents) {
 		PredecessorDB.insert(this.id, dependent);
 	    }
@@ -267,5 +247,21 @@ public class Activity
 	
 	public void removeDependent(int dependent) {
 	    dependents.remove(dependent);
+	}
+
+	public int getProjectId() {
+	    return projectId;
+	}
+
+	public void setProjectId(int projectId) {
+	    this.projectId = projectId;
+	}
+
+	public void setId(int id) {
+	    this.id = id;
+	}
+
+	public void setName(String name) {
+	    this.name = name;
 	}
 }

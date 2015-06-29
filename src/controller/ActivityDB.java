@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,11 +43,11 @@ public class ActivityDB extends DataManager
 					+ " DUEDATE 		DATE, " 
 					+ " STATUS		INTEGER 	NOT NULL,"
 					+ " DESCRIPTION       TEXT,"
-					+ " PESSIMISTIC_DURATION INTEGER,"
-					+ " OPTIMISTIC_DURATION INTEGER,"
-					+ " MOST_LIKELY_DURATION INTEGER,"
-					+ " ESTIMATED_COST INTEGER,"
-					+ " ACTUAL_COST INTEGER,"
+					+ " PESSIMISTICDURATION INTEGER,"
+					+ " OPTIMISTICDURATION INTEGER,"
+					+ " MOSTLIKELYDURATION INTEGER,"
+					+ " ESTIMATEDCOST INTEGER,"
+					+ " ACTUALCOST INTEGER,"
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 		}
@@ -68,6 +69,42 @@ public class ActivityDB extends DataManager
 	}
 	
 	
+	/**
+	 * Inserts an Activity object into the database.
+	 * @author Matthew Mongrain
+	 */
+	public static void insert(Activity activity) {
+	    Connection c = null;
+	    Statement stmt = null;
+
+	    try {
+		c = getConnection();
+		c.setAutoCommit(false);
+		stmt = c.createStatement();
+		String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) "
+			+ "VALUES (NULL, + '" 
+			+ activity.getProjectId() + "',"
+			+ activity.getName() + "',"
+			+ DatabaseConstants.DATE_FORMAT.format(activity.getStartDate()) + "',"
+			+ DatabaseConstants.DATE_FORMAT.format(activity.getDueDate()) + "',"
+			+ activity.getStatus() + ","
+			+ activity.getDescription() + "',"
+			+ activity.getOptimisticDuration() + ","
+			+ activity.getPessimisticDuration() + ","
+			+ activity.getMostLikelyDuration() + ","
+			+ activity.getEstimatedCost() + ","
+			+ activity.getActualCost() + "')";
+		stmt.executeUpdate(sql);
+	    }
+
+	    catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+
+	    } finally {
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
+	}
     /**
      * Method to insert an activity into the table
      * Gets called in ViewManager.java when an activity is added
@@ -248,62 +285,58 @@ public class ActivityDB extends DataManager
 	}
 	
 	/**
-	 * Method to get an activity by searching through the table with the activity id
-	 * Called by EditActivityDialog.java
-	 * @param id as an Int
-	 * 
-	 * @return
+	 * Returns a fully-constructed Activity object from a given Activity ID.
+	 * Returns null if the activityId does not exist in the database.
+	 * @author Matthew Mongrain
+	 * @param id The Activity ID.
 	 */
-	public static Activity getById(int id)
-	{
-		Activity activity = null;
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static Activity getById(int id) {
+	    Activity activity = new Activity();
+	    Connection c = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + id + ";");
-			
-			while (rs.next())
-			{
-				int projectId = rs.getInt("projectid");
-				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				int status = rs.getInt("status");
-				String description = rs.getString("description");
-				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
-			}
-		}
+	    try {
+		c = getConnection();
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + id + ";");
+		rs.next();
 		
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		// Set simple fields
+		activity.setId(id);
+		activity.setProjectId(rs.getInt("projectid"));
+		activity.setName(rs.getString("name"));
+		activity.setStartDate(DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate")));
+		activity.setDueDate(DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate")));
+		activity.setStatus(rs.getInt("status"));
+		activity.setDescription(rs.getString("description"));
+		activity.setOptimisticDuration(rs.getInt("optimisticDuration"));
+		activity.setPessimisticDuration(rs.getInt("pessimisticDuration"));
+		activity.setMostLikelyDuration(rs.getInt("mostLikelyDuration"));
+		activity.setEstimatedCost(rs.getInt("estimatedCost"));
+		activity.setActualCost(rs.getInt("actualCost"));
+		
+		stmt.close();
+		rs.close();
+
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID='" + id + "';");
+		// Add dependents
+		while (rs.next()) {
+		    activity.addDependent(rs.getInt("predecessorId"));
 		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt!= null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ActivityDB.getByID: " + e.getMessage());
-			}
-		}
-		return activity;
+
+	    } catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } catch (ParseException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } finally {
+		// Attempt to close all open database objects
+		if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
+	    return activity;
 	}
 	
 	/**
@@ -368,6 +401,39 @@ public class ActivityDB extends DataManager
 		return activity;
 	}
 	
+	/**
+	 * Updates a given Activity in the database.
+	 * @author Matthew Mongrain
+	 * @param activity
+	 */
+	public static void update(Activity activity) {
+	    Connection c = null;
+	    Statement stmt = null;
+
+	    try {
+		c = getConnection();
+		stmt = c.createStatement();
+		String sql = "UPDATE ACTIVITIES SET "
+			+ "name = '"+ activity.getName() +"',"
+			+ "startdate = '" + DatabaseConstants.DATE_FORMAT.format(activity.getStartDate()) + "',"
+			+ "duedate = '" + DatabaseConstants.DATE_FORMAT.format(activity.getDueDate()) + "',"
+			+ "status = " + activity.getStatus() + ","
+			+ "description = '" + activity.getDescription() + "',"
+			+ "optimisticDuration = " + activity.getOptimisticDuration() + ","
+			+ "pessimisticDuration = " + activity.getPessimisticDuration() + ","
+			+ "mostLikelyDuration = " + activity.getMostLikelyDuration() + ","
+			+ "estimatedCost = " + activity.getEstimatedCost() + ","
+			+ "actualCost = " + activity.getActualCost() + " "
+			+ "WHERE id = " + activity.getId() + ";";
+		stmt.executeUpdate(sql);
+	    } catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } finally {
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
+	}
+
 	/**
 	 * Method to edit an Activity by searching for it with its ID
 	 * @param id as an Int

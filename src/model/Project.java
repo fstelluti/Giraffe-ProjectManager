@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import controller.ActivityDB;
-import controller.DatabaseConstants;
 import controller.ProjectDB;
 
 /**
@@ -125,15 +124,18 @@ public class Project
 		this.actualBudget = actualBudget;
 	}
 	
+	/**
+	 * Persists a Project object in the database.
+	 * If the Project has an id of 0, it is assumed not to exist in the database, and is created there.
+	 * Otherwise it is updated in the database.
+	 * @author Matthew Mongrain
+	 */
 	public void persist() {
-		if (this.id == 0) {
-			String startDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
-			String dueDate = DatabaseConstants.DATE_FORMAT.format(this.startDate);
-			ProjectDB.insert(name, startDate, dueDate, description);
-		}
-		else {
-			ProjectDB.update(this);
-		}
+	    if (this.id == 0) {
+		ProjectDB.insert(this);
+	    } else {
+		ProjectDB.update(this);
+	    }
 	}
 
 	public void setId(int id) {

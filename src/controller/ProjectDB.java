@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import model.Activity;
 import model.Project;
 
 /**
@@ -57,6 +59,36 @@ public class ProjectDB extends DataManager
 				System.err.println("Error closing connections in ProjectDB.createProjectTable: " + e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Inserts a Project object into the database.
+	 * @author Matthew Mongrain
+	 */
+	public static void insert(Project project) {
+	    Connection c = null;
+	    Statement stmt = null;
+
+	    try {
+		c = getConnection();
+		c.setAutoCommit(false);
+
+		stmt = c.createStatement();
+		String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ACTUALBUDGET, ESTIMATEDBUDGET) "
+			+ "VALUES (NULL, '" 
+			+ project.getName() + "', '" 
+			+ DatabaseConstants.DATE_FORMAT.format(project.getStartDate()) + "', '"
+			+ DatabaseConstants.DATE_FORMAT.format(project.getDueDate()) + "', '" 
+			+ project.getDescription() + ",' '"
+			+ project.getActualBudget() + ",' '"
+			+ project.getEstimatedBudget() + "')";
+		stmt.executeUpdate(sql);
+	    } catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    } finally {
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
 	}
 	
     /**
@@ -228,53 +260,53 @@ public class ProjectDB extends DataManager
 	 * @param id as an Int
 	 * @return
 	 */
-	public static Project getById(int id)
-	{
-		Project project = null;
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static Project getById(int id) {
+	    Project project = null;
+	    Connection c = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
+	    
+	    try {
+		c = getConnection();
+		c.setAutoCommit(false);
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id + ";");
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id + ";");
-			
-			while (rs.next())
-			{
-				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
-				String description = rs.getString("description");
-				project = new Project(id, name, startDate, dueDate, description);
-			}
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}  finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt != null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ProjectDB.getProjectById: " + e.getMessage());
-			}
+		while (rs.next()) {
+		    String name = rs.getString("name");
+		    Date startDate = null;
+		    Date dueDate = null;
+		    try {
+			startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+			dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+		    } catch (ParseException ignore) {}
+		    String description = rs.getString("description");
+		    project = new Project(id, name, startDate, dueDate, description);
 		}
 		
-		return project;
+		stmt.close();
+		rs.close();
+
+		// Now iterate thru the activities and add them to the object that will be returned
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID='" + project.getId() + "';");
+		
+		while (rs.next()) {
+		    int activityId = rs.getInt("id");
+		    Activity child = ActivityDB.getById(activityId);
+		    project.addActivity(child);
+		}
+		
+	    } catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	    }
+	    
+	    // Close the connections
+	    if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+	    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+	    if (c != null) try { c.close(); } catch (SQLException ignore) {}
+
+	    return project;
 	}
 	
 	/**
