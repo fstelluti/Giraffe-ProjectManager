@@ -105,8 +105,10 @@ public class ApplicationPanel extends JFrame
 	 */	
 	public SetupPanel getSetupPanel() {
 		//Sets the Login Panel button
-		this.getRootPane().setDefaultButton(setupPanel.getNewAccountButton());
-		
+		if(UserDB.getAll().isEmpty() == true)
+		{
+			this.getRootPane().setDefaultButton(setupPanel.getNewAccountButton());
+		}
 		//Sets the proper size
 		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
 		
