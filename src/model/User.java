@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.ImageIcon;
@@ -25,7 +26,7 @@ public class User
 	private Date 	regDate;
 	private String firstName;
 	private String lastName;
-	private ImageIcon userPicture;
+	private byte[] userPicture;
 	private int admin; //Use for the admin status (1=admin, 0=PM/Regular User)
 
 	@Override
@@ -33,8 +34,7 @@ public class User
 	{
 		return "User [id=" + id + ", userName=" + userName + ", password="
 				+ "*****" + ", email=" + email + ", regDate=" + regDate
-				+ ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", userPicture=" + userPicture.getDescription() + "]";
+				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 	
 	public User(int id, String userName, String password, String email,	String firstName, String lastName)
@@ -48,6 +48,7 @@ public class User
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.admin = 0;	//Default is PM or Regular User
+		this.userPicture = "".getBytes();
 	}
 	
 	public User(String userName, String password, String email, String firstName, String lastName)
@@ -60,6 +61,7 @@ public class User
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.admin = 0;	//Default is PM or Regular User
+		this.userPicture = "".getBytes();
 	}
 	
 	public String getUserName()
@@ -124,13 +126,12 @@ public class User
 		this.regDate = regDate;
 	}
 
-	public ImageIcon getUserPicture()
-	{
-		return userPicture;
+	public byte[] getUserPicture() {
+		return Arrays.copyOf(userPicture, userPicture.length);	//Returns a deep copy of the array
+		//return userPicture;
 	}
 
-	public void setUserPicture(ImageIcon userPicture)
-	{
+	public void setUserPicture(byte[] userPicture) {
 		this.userPicture = userPicture;
 	}
 	

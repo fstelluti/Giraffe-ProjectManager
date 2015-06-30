@@ -73,7 +73,7 @@ public class UserDB extends DataManager {
 		c = getConnection();
 
 		stmt = c.createStatement();
-		String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN) "
+		String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN, IMAGEICON) "
 			+ "VALUES (NULL, '"
 			+ user.getUserName()
 			+ "', '"
@@ -81,7 +81,7 @@ public class UserDB extends DataManager {
 			+ "', '"
 			+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
 			+ "', " 
-			+ user.getAdmin() + ")";
+			+ user.getAdmin() + ", '" + user.getUserPicture() + "')";
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
@@ -112,6 +112,7 @@ public class UserDB extends DataManager {
 			+ "FIRSTNAME='" + user.getFirstName() + "',"
 			+ "LASTNAME='" + user.getLastName() + "',"
 			+ "ADMIN='" + user.getAdmin() + "',"
+			+ "IMAGEICON='" + user.getUserPicture() + "';."
 			+ "WHERE ID=" + user.getId() + ";";
 		stmt.executeUpdate(sql);
 	    }
