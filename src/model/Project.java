@@ -13,6 +13,7 @@ import controller.ProjectDB;
  * @author Lukas Cardot-Goyette
  * @modifiedBy Anne-Marie Dube
  * @modifiedBy Matthew Mongrain
+ * @modifiedBy Andrey Uspenskiy
  *
  */
 
@@ -49,6 +50,7 @@ public class Project
 		}
 	}
 	
+	///should be modified to reflect new DB schema!!!
 	public Project(int id, String name, Date startDate, Date dueDate, String description)
 	{
 		this.id = id;
@@ -58,6 +60,7 @@ public class Project
 		this.description = description;
 	}
 	
+	///should be modified to reflect new DB schema!!!
 	public Project(String name, Date startDate, Date dueDate, String description)
 	{
 		this.name = name;
@@ -106,7 +109,7 @@ public class Project
 		return estimatedBudget;
 	}
 
-	public void setEstimatedBudget(int estimatedBudget) {
+	public void setEstimatedBudget(double estimatedBudget) {
 		if (estimatedBudget < this.estimatedBudget) {
 			throw new IllegalArgumentException("estimatedBudget cannot be negative");
 		}
@@ -117,7 +120,7 @@ public class Project
 		return actualBudget;
 	}
 
-	public void setActualBudget(int actualBudget) {
+	public void setActualBudget(double actualBudget) {
 		if (actualBudget < this.actualBudget) {
 			throw new IllegalArgumentException("actualBudget cannot be negative");
 		}
@@ -150,8 +153,9 @@ public class Project
 		return activities;
 	}
 	
+	//modified: checks if activities list doesn't contain activity (! was missing)
 	public void addActivity(Activity activity) {
-		if (activities.contains(activity)) {
+		if (!activities.contains(activity)) {
 			activities.add(activity);
 		}
 	}

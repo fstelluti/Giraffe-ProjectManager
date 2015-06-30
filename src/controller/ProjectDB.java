@@ -15,7 +15,7 @@ import model.Project;
 /**
  * 
  * @author Zachary Bergeron
- * @modifiedBy: Francois Stelluti, Anne-Marie Dube, Matthew Mongrain
+ * @modifiedBy: Francois Stelluti, Anne-Marie Dube, Matthew Mongrain, Andrey Uspenskiy
  *
  */
 
@@ -261,7 +261,7 @@ public class ProjectDB extends DataManager
 	 * @return
 	 */
 	public static Project getById(int id) {
-	    Project project = null;
+	    Project project = new Project();
 	    Connection c = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
@@ -272,16 +272,31 @@ public class ProjectDB extends DataManager
 		stmt = c.createStatement();
 		rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id + ";");
 
-		while (rs.next()) {
+		while (rs.next())
+		{
 		    String name = rs.getString("name");
 		    Date startDate = null;
 		    Date dueDate = null;
-		    try {
-			startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-			dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
-		    } catch (ParseException ignore) {}
+		    try
+		    {
+		    	startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+		    	dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+		    }
+		    catch (ParseException ignore)
+		    {
+		    	
+		    }
 		    String description = rs.getString("description");
-		    project = new Project(id, name, startDate, dueDate, description);
+		    double actualBudget = rs.getDouble("ACTUALBUDGET");
+		    double estimatedBudget = rs.getDouble("ESTIMATEDBUDGET");
+		    
+		    project.setId(id);
+		    project.setName(name);
+		    project.setStartDate(startDate);
+		    project.setDueDate(dueDate);
+		    project.setDescription(description);
+		    project.setActualBudget(actualBudget);
+		    project.setEstimatedBudget(estimatedBudget);
 		}
 		
 		stmt.close();
