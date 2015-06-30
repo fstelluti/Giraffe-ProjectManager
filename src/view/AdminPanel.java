@@ -45,7 +45,7 @@ public class AdminPanel extends JPanel {
 		public JSplitPane splitPanel;
 		public User user;
 		private GreetingLabel greetingLabel;
-		private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
+		private JButton viewAllProjects, editProject, editActivity, userSettings, logoutActivity;
 
 		private List<JButton> toolbarButtons = new ArrayList<JButton>();
 
@@ -58,35 +58,30 @@ public class AdminPanel extends JPanel {
 			this.add(getNorthPanel(), BorderLayout.NORTH);
 			this.add(getSplitPanel(), BorderLayout.CENTER);
 			
-			ViewManager.getRootPane().setDefaultButton(editProject);	//Set the default button to editProject
+			ViewManager.getRootPane().setDefaultButton(viewAllProjects);	//Set the default button to viewAllProjects
 		}
 
 		private void createToolBarButtons()
 		{
-			createProject = new JButton("larobaejdad");
-			editProject = new JButton("Edit a project");
-			addActivity = new JButton("Add activity");
-			editActivity = new JButton("Edit activity");
+			viewAllProjects = new JButton("View all Projects");
+			editProject = new JButton("Edit a Project");
+			editActivity = new JButton("Edit Activity");
+			userSettings = new JButton("Edit User Settings");
 			logoutActivity = new JButton("Logout");
 
 			// Open "Create Project" Dialog
-			createProject.addActionListener(new ActionListener() {
+			viewAllProjects.addActionListener(new ActionListener() {
 
+				//TODO create a view all panel, will call ViewAllProjects.java
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					if (e.getSource() == createProject)
-					{
-						CreateProjectDialog test = new CreateProjectDialog(null,"Create a Project", true, user);
-						if (test.isRefresh())
-						{
-							refresh();
-						}
-					}
+					
 				}
 			});
 
 			// Open "Edit Project" Dialog
+			//TODO get all projects regardless of userID
 			editProject.addActionListener(new ActionListener() {
 
 				@Override
@@ -96,8 +91,7 @@ public class AdminPanel extends JPanel {
 					{
 						if (ProjectDB.getUserProjects(user.getId()).isEmpty())
 						{
-							JOptionPane
-									.showMessageDialog(
+							JOptionPane.showMessageDialog(
 											null,
 											"User has no projects to edit."
 													+ "\nPlease create a project before attempting to edit.",
@@ -105,9 +99,8 @@ public class AdminPanel extends JPanel {
 											JOptionPane.ERROR_MESSAGE);
 						} else
 						{
-							EditProjectDialog test = new EditProjectDialog(null,
-									"Edit a Project", true, user);
-							if (test.isRefresh())
+							EditProjectDialog editProject = new EditProjectDialog(null, "Edit a Project", true, user);
+							if (editProject.isRefresh())
 							{
 								refresh();
 							}
@@ -116,37 +109,9 @@ public class AdminPanel extends JPanel {
 				}
 			});
 
-			// Open "Create Activity" Dialog
-			addActivity.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					if (e.getSource() == addActivity)
-					{
-						if (ProjectDB.getUserProjects(user.getId()).isEmpty())
-						{
-							JOptionPane
-									.showMessageDialog(
-											null,
-											"User has no projects to add activity to."
-													+ "\nPlease create a project before attempting to add an activity.",
-											"No Projects Available to Add Activity",
-											JOptionPane.ERROR_MESSAGE);
-						} else
-						{
-							AddActivityDialog test = new AddActivityDialog(null,
-									"Add an activity", true, user);
-							if (test.isRefresh())
-							{
-								refresh();
-							}
-						}
-					}
-				}
-			});
-
+			
 			// Open "Edit Activity" Dialog
+			//TODO fix so that it works regardless of ID
 			editActivity.addActionListener(new ActionListener() {
 
 				@Override
@@ -154,34 +119,12 @@ public class AdminPanel extends JPanel {
 				{
 					if (e.getSource() == editActivity)
 					{
-						if (ProjectDB.getUserProjects(user.getId()).isEmpty())
+						EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
+						if (editActivity.isRefresh())
 						{
-							JOptionPane
-									.showMessageDialog(
-											null,
-											"User has no projects to edit an activity."
-													+ "\nPlease create a project before attempting to edit an activity.",
-											"No Projects Available to Edit an Activity",
-											JOptionPane.ERROR_MESSAGE);
-						} else if (ActivityDB.getAll()
-								.isEmpty())
-						{
-							JOptionPane
-									.showMessageDialog(
-											null,
-											"User has no activities to edit."
-													+ "\nPlease create a activity before attempting to edit.",
-											"No Activites Available",
-											JOptionPane.ERROR_MESSAGE);
-						} else
-						{
-							EditActivityDialog test = new EditActivityDialog(null,
-									"Edit an Activity", true, user);
-							if (test.isRefresh())
-							{
-								refresh();
-							}
+							refresh();
 						}
+					
 					}
 				}
 			});
@@ -200,10 +143,10 @@ public class AdminPanel extends JPanel {
 				
 			});
 
-			addToolbarButton(createProject);
+			addToolbarButton(viewAllProjects);
 			addToolbarButton(editProject);
-			addToolbarButton(addActivity);
 			addToolbarButton(editActivity);
+			addToolbarButton(userSettings);
 			addToolbarButton(logoutActivity);
 		}
 

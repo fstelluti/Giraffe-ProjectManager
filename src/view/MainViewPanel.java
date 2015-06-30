@@ -63,10 +63,10 @@ public class MainViewPanel extends JPanel
 
 	private void createToolBarButtons()
 	{
-		createProject = new JButton("Create new project");
-		editProject = new JButton("Edit a project");
-		addActivity = new JButton("Add activity");
-		editActivity = new JButton("Edit activity");
+		createProject = new JButton("Create New Project");
+		editProject = new JButton("Edit a Project");
+		addActivity = new JButton("Add Activity");
+		editActivity = new JButton("Edit Activity");
 		logoutActivity = new JButton("Logout");
 
 		// Open "Create Project" Dialog
@@ -77,9 +77,8 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == createProject)
 				{
-					CreateProjectDialog test = new CreateProjectDialog(null,
-							"Create a Project", true, user);
-					if (test.isRefresh())
+					CreateProjectDialog newProject = new CreateProjectDialog(null, "Create a Project", true, user);
+					if (newProject.isRefresh())
 					{
 						refresh();
 					}
@@ -106,9 +105,8 @@ public class MainViewPanel extends JPanel
 										JOptionPane.ERROR_MESSAGE);
 					} else
 					{
-						EditProjectDialog test = new EditProjectDialog(null,
-								"Edit a Project", true, user);
-						if (test.isRefresh())
+						EditProjectDialog editProject = new EditProjectDialog(null, "Edit a Project", true, user);
+						if (editProject.isRefresh())
 						{
 							refresh();
 						}
@@ -136,9 +134,8 @@ public class MainViewPanel extends JPanel
 										JOptionPane.ERROR_MESSAGE);
 					} else
 					{
-						AddActivityDialog test = new AddActivityDialog(null,
-								"Add an activity", true, user);
-						if (test.isRefresh())
+						AddActivityDialog addActivity = new AddActivityDialog(null, "Add an activity", true, user);
+						if (addActivity.isRefresh())
 						{
 							refresh();
 						}
@@ -176,9 +173,8 @@ public class MainViewPanel extends JPanel
 										JOptionPane.ERROR_MESSAGE);
 					} else
 					{
-						EditActivityDialog test = new EditActivityDialog(null,
-								"Edit an Activity", true, user);
-						if (test.isRefresh())
+						EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
+						if (editActivity.isRefresh())
 						{
 							refresh();
 						}
