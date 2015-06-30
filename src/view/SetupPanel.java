@@ -121,6 +121,7 @@ public class SetupPanel extends JPanel implements ActionListener
 		return newAccountButton;
 	}
 
+	//Appease the compiler
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

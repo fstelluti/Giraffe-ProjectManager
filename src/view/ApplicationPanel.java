@@ -55,8 +55,8 @@ public class ApplicationPanel extends JFrame
 	
 	public void buildCardsPanel() {
 		//Add both startup panels
-		addCardPanel(getSetupPanel(), "SetupPanel");
 		addCardPanel(getLoginPanel(), "LoginPanel");
+		addCardPanel(getSetupPanel(), "SetupPanel");
 		//If the DB is empty, use the Setup Panel first
 		if(UserDB.getAll().isEmpty() == true)
 		{

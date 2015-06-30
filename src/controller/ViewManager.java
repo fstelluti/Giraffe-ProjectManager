@@ -10,6 +10,7 @@ import javax.swing.JRootPane;
 import model.Activity;
 import model.Project;
 import model.User;
+import view.AdminPanel;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
 import view.LoginPanel;
@@ -25,6 +26,7 @@ import view.TreeNode;
 public class ViewManager
 {
 	private static JPanel mainViewPanel;
+	private static JPanel adminPanel; 
 	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
 	private static LoginPanel loginPanel = LoginPanel.instance();
 	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
@@ -36,6 +38,26 @@ public class ViewManager
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
 
+	/**
+	 * Creates the Admin Panel when the admin User has logged in
+	 * @return JPanel
+	 */
+	public static JPanel createAdminPanel(User user) {
+		if (adminPanel == null) {
+			adminPanel = new AdminPanel(user);
+			applicationPanel.setLocationRelativeTo(null);
+			applicationPanel.addCardPanel(adminPanel, "AdminPanel");
+			adminPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
+			applicationPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
+			applicationPanel.setLocationRelativeTo(null);
+		}
+		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
+		//and another user wants to login
+		applicationPanel.setCardLayout("AdminPanel", APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
+		
+		return adminPanel;
+	}
+	
 	/**
 	 * Creates the Main View Panel when User has logged in
 	 * @return JPanel
@@ -156,5 +178,20 @@ public class ViewManager
 		return LOGINPANEL_SIZE_Y;
 	}
 	
+	/**
+	 * Checks the login result in DB
+	 * @return boolean
+	 */
+	public static boolean checkLoginResult(String userName ,char[] passChar) {
+		return UserDB.checkLogin(userName, passChar);
+	}
+	
+	/**
+	 * Gets the User by user name in the DB
+	 * @return User
+	 */
+	public static User getUserByName(String userName) {
+		return UserDB.getByName(userName);
+	}
 
 }

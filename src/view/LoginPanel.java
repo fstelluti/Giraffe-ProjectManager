@@ -16,7 +16,6 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import model.User;
-import controller.UserDB;
 import controller.ViewManager;
 
 /**
@@ -148,11 +147,18 @@ public class LoginPanel extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == loginButton) {
 			char[] passChar = passwordTextField.getPassword();
-			String uName = loginTextField.getText();
-			boolean checkResult = UserDB.checkLogin(loginTextField.getText(), passChar);
+			String userName = loginTextField.getText();
+			boolean checkResult = ViewManager.checkLoginResult(userName, passChar);
 			if (checkResult) {
-				User user = UserDB.getByName(uName);
-				ViewManager.createMainViewPanel(user);
+				User user = ViewManager.getUserByName(userName);
+				//Check to see what type of User is loggin in
+				if(user.getAdmin() == 1) {  //User is an Admin
+					ViewManager.createAdminPanel(user);
+				}
+				else {
+					//Call for other users
+					ViewManager.createMainViewPanel(user);
+				}
 				
 				//Resets text fields so that when logged out, the fields are empty
 				loginTextField.setText("");
