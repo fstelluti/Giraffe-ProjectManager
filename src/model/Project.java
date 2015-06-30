@@ -22,8 +22,8 @@ public class Project
 	private String name;
 	private Date startDate, dueDate;
 	private String description;
-	private int estimatedBudget;
-	private int actualBudget;
+	private double estimatedBudget;
+	private double actualBudget;
 	private ArrayList<Activity> activities;
 	
 	public Project(){}
@@ -102,7 +102,7 @@ public class Project
 		this.description = description;
 	}
 
-	public int getEstimatedBudget() {
+	public double getEstimatedBudget() {
 		return estimatedBudget;
 	}
 
@@ -113,7 +113,7 @@ public class Project
 		this.estimatedBudget = estimatedBudget;
 	}
 
-	public int getActualBudget() {
+	public double getActualBudget() {
 		return actualBudget;
 	}
 
