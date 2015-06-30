@@ -19,35 +19,6 @@ import controller.UserDB;
 
 public class User
 {
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		result = prime * result
-				+ ((userName == null) ? 0 : userName.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (id != other.id)
-			return false;
-		if (userName == null) {
-			if (other.userName != null)
-				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
-		return true;
-	}
-
 	private int id;
 	private String userName;
 	private String password;
@@ -57,14 +28,6 @@ public class User
 	private String lastName;
 	private byte[] userPicture;
 	private int admin; //Use for the admin status (1=admin, 0=PM/Regular User)
-
-	@Override
-	public String toString()
-	{
-		return "User [id=" + id + ", userName=" + userName + ", password="
-				+ "*****" + ", email=" + email + ", regDate=" + regDate
-				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
-	}
 	
 	public User(int id, String userName, String password, String email,	String firstName, String lastName)
 	{
@@ -157,7 +120,6 @@ public class User
 
 	public byte[] getUserPicture() {
 		return Arrays.copyOf(userPicture, userPicture.length);	//Returns a deep copy of the array
-		//return userPicture;
 	}
 
 	public void setUserPicture(byte[] userPicture) {
@@ -188,5 +150,42 @@ public class User
 	    } else {
 		UserDB.update(this);
 	    }
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		result = prime * result
+				+ ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (id != other.id)
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "User [id=" + id + ", userName=" + userName + ", password="
+				+ "*****" + ", email=" + email + ", regDate=" + regDate
+				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 }
