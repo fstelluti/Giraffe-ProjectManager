@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -45,7 +46,7 @@ public class AdminPanel extends JPanel
 		private JPanel southPanel;
 		public JSplitPane splitPanel;
 		public User user;
-		private GreetingLabel greetingLabel;
+		private JLabel greetingLabel;
 		private JButton viewAllProjects, editProject, editActivity, userSettings, logoutActivity;
 
 		private List<JButton> toolbarButtons = new ArrayList<JButton>();
@@ -185,7 +186,7 @@ public class AdminPanel extends JPanel
 			if (northPanel == null) {
 				northPanel = new JPanel();
 				northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-				greetingLabel = new GreetingLabel(this.user, SwingConstants.LEFT);
+				greetingLabel = new JLabel("Hello " + user.getFirstName() + " " + user.getLastName());
 				northPanel.add(greetingLabel);
 				for (JButton element : toolbarButtons) {
 					northPanel.add(element);
