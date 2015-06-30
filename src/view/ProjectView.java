@@ -35,6 +35,8 @@ public class ProjectView extends JPanel
 	private List<JPanel> activityPanels = new ArrayList<JPanel>();
 	private User user;
 	private MainViewPanel mainViewPanel;
+	private AdminPanel adminPanel;
+	
 	public ProjectView(Project project, User user, MainViewPanel mainViewPanel)
 	{
 		this.project = project;
@@ -46,11 +48,23 @@ public class ProjectView extends JPanel
 		addActivityPanels();
 	}
 	
+	public ProjectView(Project project, User user, AdminPanel adminPanel)
+	{
+		this.project = project;
+		this.user = user;
+		this.adminPanel = adminPanel;
+		initComponent();
+		createProjectPanel();
+		createActivityPanels();
+		addActivityPanels();
+	}
+	
+	
 	private void initComponent()
 	{
 		this.setFont(new Font("Arial", Font.ITALIC, 26));
 		//DOESNT COMPILE INTO JAR WITH AWT
-//		this.setLayout(new VerticalBagLayout());
+		//this.setLayout(new VerticalBagLayout());
 	}
 	
 	private void setLabelFonts(Font font)
