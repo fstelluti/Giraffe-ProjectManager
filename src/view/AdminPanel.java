@@ -36,7 +36,8 @@ import controller.ViewManager;
 
 
 @SuppressWarnings("serial")
-public class AdminPanel extends JPanel {
+public class AdminPanel extends JPanel 
+{
 	
 		private JPanel northPanel;
 		private JScrollPane treeView;
@@ -49,8 +50,7 @@ public class AdminPanel extends JPanel {
 
 		private List<JButton> toolbarButtons = new ArrayList<JButton>();
 
-		public AdminPanel(User currentUser)
-		{
+		public AdminPanel(User currentUser)	{
 			super();
 			this.user = currentUser;
 			createToolBarButtons();
@@ -61,8 +61,8 @@ public class AdminPanel extends JPanel {
 			ViewManager.getRootPane().setDefaultButton(viewAllProjects);	//Set the default button to viewAllProjects
 		}
 
-		private void createToolBarButtons()
-		{
+		private void createToolBarButtons() {
+			
 			viewAllProjects = new JButton("View all Projects");
 			editProject = new JButton("Edit a Project");
 			editActivity = new JButton("Edit Activity");
@@ -74,8 +74,7 @@ public class AdminPanel extends JPanel {
 
 				//TODO create a view all panel, will call ViewAllProjects.java
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
+				public void actionPerformed(ActionEvent e) {
 					
 				}
 			});
@@ -87,21 +86,18 @@ public class AdminPanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e)
 				{
-					if (e.getSource() == editProject)
-					{
-						if (ProjectDB.getUserProjects(user.getId()).isEmpty())
-						{
+					if (e.getSource() == editProject) {
+						if (ViewManager.checkIfProjectsExist(user))	{
+							
 							JOptionPane.showMessageDialog(
 											null,
 											"User has no projects to edit."
 													+ "\nPlease create a project before attempting to edit.",
 											"No Projects Available to Edit",
 											JOptionPane.ERROR_MESSAGE);
-						} else
-						{
+						} else {
 							EditProjectDialog editProject = new EditProjectDialog(null, "Edit a Project", true, user);
-							if (editProject.isRefresh())
-							{
+							if (editProject.isRefresh()) {
 								refresh();
 							}
 						}
@@ -115,13 +111,10 @@ public class AdminPanel extends JPanel {
 			editActivity.addActionListener(new ActionListener() {
 
 				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					if (e.getSource() == editActivity)
-					{
+				public void actionPerformed(ActionEvent e) {
+					if (e.getSource() == editActivity) {
 						EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
-						if (editActivity.isRefresh())
-						{
+						if (editActivity.isRefresh()) {
 							refresh();
 						}
 					
@@ -133,10 +126,8 @@ public class AdminPanel extends JPanel {
 			logoutActivity.addActionListener(new ActionListener() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) 
-				{
-					if(e.getSource() == logoutActivity) 
-					{
+				public void actionPerformed(ActionEvent e) {
+					if(e.getSource() == logoutActivity) {
 						ViewManager.logout();		
 					}
 				}
@@ -150,41 +141,33 @@ public class AdminPanel extends JPanel {
 			addToolbarButton(logoutActivity);
 		}
 
-		public void addToolbarButton(JButton button)
-		{
+		public void addToolbarButton(JButton button) {
 			toolbarButtons.add(button);
 		}
 
-		public JPanel getSouthPanel()
-		{
-			if (southPanel == null)
-			{
+		public JPanel getSouthPanel() {
+			if (southPanel == null) {
 				southPanel = new JPanel();
 				southPanel.setBackground(Color.green);
 			}
 			return southPanel;
 		}
 
-		public JSplitPane getSplitPanel()
-		{
-			if (splitPanel == null)
-			{
+		public JSplitPane getSplitPanel() {
+			if (splitPanel == null) {
 				splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT) {
 
-					private final int location = 200;
-					{
+					private final int location = 200; {
 						setDividerLocation(location);
 					}
 
 					@Override
-					public int getDividerLocation()
-					{
+					public int getDividerLocation()	{
 						return location;
 					}
 
 					@Override
-					public int getLastDividerLocation()
-					{
+					public int getLastDividerLocation()	{
 						return location;
 					}
 
@@ -198,26 +181,21 @@ public class AdminPanel extends JPanel {
 			return splitPanel;
 		}
 
-		public JPanel getNorthPanel()
-		{
-			if (northPanel == null)
-			{
+		public JPanel getNorthPanel() {
+			if (northPanel == null) {
 				northPanel = new JPanel();
 				northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 				greetingLabel = new GreetingLabel(this.user, SwingConstants.LEFT);
 				northPanel.add(greetingLabel);
-				for (JButton element : toolbarButtons)
-				{
+				for (JButton element : toolbarButtons) {
 					northPanel.add(element);
 				}
 			}
 			return northPanel;
 		}
 
-		public void refresh()
-		{
-			treePanel = new TreePanel(ProjectDB.getUserProjects(
-					this.user.getId()));
+		public void refresh() {
+			treePanel = new TreePanel(ViewManager.getAllProjects());
 			treeView = treePanel.getTreeView();
 			getSplitPanel().setLeftComponent(treeView);
 			getSplitPanel().setDividerLocation(200);
@@ -225,41 +203,36 @@ public class AdminPanel extends JPanel {
 			addTreeSelectionListener();
 		}
 
-		public void addTreeSelectionListener()
-		{
+		public void addTreeSelectionListener() {
 			final JTree tree = treePanel.getTree();
 			final AdminPanel adminPanel = this;
-			tree.getSelectionModel().setSelectionMode(
-					TreeSelectionModel.SINGLE_TREE_SELECTION);
+			tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 			tree.addTreeSelectionListener(new TreeSelectionListener() {
 
 				@Override
-				public void valueChanged(TreeSelectionEvent e)
-				{
+				public void valueChanged(TreeSelectionEvent e) {
 					TreeNode node = (TreeNode) tree.getLastSelectedPathComponent();
 
-					if (node == null)
-					{
+					if (node == null) {
 						return;
 					}
 
 					Object object = node.getUserObject();
 
-					if (node.isLeaf() && node.getLevel() > 1)
-					{
+					if (node.isLeaf() && node.getLevel() > 1) {
+						
 						Activity activity = (Activity) object;
 						TreeNode parentNode = (TreeNode)node.getParent();
 						JScrollPane scroll = new JScrollPane(new ActivityView(activity, parentNode.getUserObject(), user, adminPanel));
 						scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 						getSplitPanel().setRightComponent(scroll);
-					} else
-					{
-						if (node.isRoot())
-						{
+						
+					} else {
+						if (node.isRoot()) {
 							getSplitPanel().setRightComponent(new GridProjects(user));
-						} else
-						{
+							
+						} else {
 							Project project = (Project) object;
 							JScrollPane scroll = new JScrollPane(new ProjectView(project, user, adminPanel));
 							scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -271,8 +244,7 @@ public class AdminPanel extends JPanel {
 			});
 		}
 
-		public User getCurrentUser()
-		{
+		public User getCurrentUser() {
 			return user;
 		}
 	

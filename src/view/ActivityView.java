@@ -26,17 +26,18 @@ import model.Project;
 import model.User;
 
 @SuppressWarnings("serial")
-public class ActivityView extends JPanel
+public class ActivityView extends JPanel 
 {
+	
 	private Activity activity;
 	private List<JLabel> labels = new ArrayList<JLabel>();
 	private Project parentProject;
 	private MainViewPanel mainViewPanel;
 	private AdminPanel adminPanel;
+	private ViewAllProjectsPanel viewAllProjectsPanel;
 	private User user;
 	
-	public ActivityView(Activity activity, Object parent, User user, MainViewPanel mainViewPanel)
-	{
+	public ActivityView(Activity activity, Object parent, User user, MainViewPanel mainViewPanel) {
 		this.activity = activity;
 		this.parentProject = (Project)parent;
 		this.mainViewPanel = mainViewPanel;
@@ -44,8 +45,7 @@ public class ActivityView extends JPanel
 		initComponent();
 	}
 	
-	public ActivityView(Activity activity, Object parent, User user, AdminPanel adminPanel)
-	{
+	public ActivityView(Activity activity, Object parent, User user, AdminPanel adminPanel) {
 		this.activity = activity;
 		this.parentProject = (Project)parent;
 		this.adminPanel = adminPanel;
@@ -53,9 +53,17 @@ public class ActivityView extends JPanel
 		initComponent();
 	}
 
+	public ActivityView(Activity activity, Object parent, User user, ViewAllProjectsPanel viewAllProjectsPanel) {
+		this.activity = activity;
+		this.parentProject = (Project)parent;
+		this.viewAllProjectsPanel = viewAllProjectsPanel;
+		this.user = user;
+		initComponent();
+	}
+	
 	@SuppressWarnings("deprecation")
-	private void initComponent()
-	{
+	private void initComponent() {
+		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));
 		final JPanel activityPanel = new JPanel();
 		activityPanel.setLayout(new BoxLayout(activityPanel, BoxLayout.Y_AXIS));
@@ -89,9 +97,8 @@ public class ActivityView extends JPanel
 		activityPanel.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
-		    	EditActivityDialog test = new EditActivityDialog(null,
-						"Edit an Activity", true, user);
-				if (test.isRefresh())
+		    	EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
+				if (editActivity.isRefresh())
 				{
 					mainViewPanel.refresh();
 				}
@@ -109,8 +116,7 @@ public class ActivityView extends JPanel
 		});
 	}
 	
-	private void setLabelFonts(Font font)
-	{
+	private void setLabelFonts(Font font) {
 		for (JLabel label : labels)
 		{
 			label.setFont(font);

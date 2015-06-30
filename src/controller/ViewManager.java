@@ -25,6 +25,7 @@ import view.TreeNode;
 
 public class ViewManager
 {
+	
 	private static JPanel mainViewPanel;
 	private static JPanel adminPanel; 
 	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
@@ -193,5 +194,46 @@ public class ViewManager
 	public static User getUserByName(String userName) {
 		return UserDB.getByName(userName);
 	}
-
+	
+	/**
+	 * Checks to see if there are projects in the DB
+	 * @return boolean
+	*/
+	public static Boolean checkIfProjectsExist(User user) {
+		return ProjectDB.getUserProjects(user.getId()).isEmpty();
+	}
+	
+	/**
+	 * Checks to see if there are activities in a project
+	 * @return boolean
+	 */
+	public static Boolean checkIfActivitiesExist(User user) {
+		return ActivityDB.getProjectActivities(user.getId()).isEmpty();
+	}
+	
+	/**
+	 * Gets all the projects in the DB
+	 * @return projects
+	 */
+	public static List<Project> getAllProjects() {
+		return ProjectDB.getAll();
+	}
+	
+	/**
+	 * Gets a user's projects by their id
+	 * @param user
+	 * @return projects
+	 */
+	public static List<Project> getUserProjects(User user) {
+		return ProjectDB.getUserProjects(user.getId());
+	}
+	
+	/**
+	 * Gets a projects activities
+	 * @param project
+	 * @return activities
+	 */
+	public static List<Activity> getProjectActivities(Project project) {
+		return ActivityDB.getProjectActivities(project.getId());
+	}
 }

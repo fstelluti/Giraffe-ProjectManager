@@ -94,7 +94,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editProject)
 				{
-					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
+					if (ViewManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -123,7 +123,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == addActivity)
 				{
-					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
+					if (ViewManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -152,7 +152,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editActivity)
 				{
-					if (ProjectDB.getUserProjects(user.getId()).isEmpty())
+					if (ViewManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -161,21 +161,18 @@ public class MainViewPanel extends JPanel
 												+ "\nPlease create a project before attempting to edit an activity.",
 										"No Projects Available to Edit an Activity",
 										JOptionPane.ERROR_MESSAGE);
-					} else if (ActivityDB.getAll()
-							.isEmpty())
-					{
+						//TODO get rid of this
+					} else if (ViewManager.checkIfActivitiesExist(user))	{
 						JOptionPane
 								.showMessageDialog(
 										null,
 										"User has no activities to edit."
 												+ "\nPlease create a activity before attempting to edit.",
-										"No Activites Available",
+										"No Activities Available",
 										JOptionPane.ERROR_MESSAGE);
-					} else
-					{
+					} else	{
 						EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
-						if (editActivity.isRefresh())
-						{
+						if (editActivity.isRefresh()) {
 							refresh();
 						}
 					}
@@ -187,10 +184,8 @@ public class MainViewPanel extends JPanel
 		logoutActivity.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent e) 
-			{
-				if(e.getSource() == logoutActivity) 
-				{
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == logoutActivity) {
 					ViewManager.logout();		
 				}
 			}
@@ -204,25 +199,20 @@ public class MainViewPanel extends JPanel
 		addToolbarButton(logoutActivity);
 	}
 
-	public void addToolbarButton(JButton button)
-	{
+	public void addToolbarButton(JButton button) {
 		toolbarButtons.add(button);
 	}
 
-	public JPanel getSouthPanel()
-	{
-		if (southPanel == null)
-		{
+	public JPanel getSouthPanel() {
+		if (southPanel == null)	{
 			southPanel = new JPanel();
 			southPanel.setBackground(Color.green);
 		}
 		return southPanel;
 	}
 
-	public JSplitPane getSplitPanel()
-	{
-		if (splitPanel == null)
-		{
+	public JSplitPane getSplitPanel() {
+		if (splitPanel == null) {
 			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT) {
 
 				private final int location = 200;
@@ -231,20 +221,17 @@ public class MainViewPanel extends JPanel
 				}
 
 				@Override
-				public int getDividerLocation()
-				{
+				public int getDividerLocation()	{
 					return location;
 				}
 
 				@Override
-				public int getLastDividerLocation()
-				{
+				public int getLastDividerLocation() {
 					return location;
 				}
 
 			};
-			treePanel = new TreePanel(ProjectDB.getUserProjects(
-					this.user.getId()));
+			treePanel = new TreePanel(ViewManager.getUserProjects(user));
 			treeView = treePanel.getTreeView();
 			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
@@ -253,26 +240,21 @@ public class MainViewPanel extends JPanel
 		return splitPanel;
 	}
 
-	public JPanel getNorthPanel()
-	{
-		if (northPanel == null)
-		{
+	public JPanel getNorthPanel() {
+		if (northPanel == null) {
 			northPanel = new JPanel();
 			northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			greetingLabel = new GreetingLabel(this.user, SwingConstants.LEFT);
 			northPanel.add(greetingLabel);
-			for (JButton element : toolbarButtons)
-			{
+			for (JButton element : toolbarButtons) {
 				northPanel.add(element);
 			}
 		}
 		return northPanel;
 	}
 
-	public void refresh()
-	{
-		treePanel = new TreePanel(ProjectDB.getUserProjects(
-				this.user.getId()));
+	public void refresh() {
+		treePanel = new TreePanel(ProjectDB.getUserProjects(this.user.getId()));
 		treeView = treePanel.getTreeView();
 		getSplitPanel().setLeftComponent(treeView);
 		getSplitPanel().setDividerLocation(200);
@@ -280,41 +262,33 @@ public class MainViewPanel extends JPanel
 		addTreeSelectionListener();
 	}
 
-	public void addTreeSelectionListener()
-	{
+	public void addTreeSelectionListener() {
 		final JTree tree = treePanel.getTree();
 		final MainViewPanel mainViewPanel = this;
-		tree.getSelectionModel().setSelectionMode(
-				TreeSelectionModel.SINGLE_TREE_SELECTION);
+		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 
 			@Override
-			public void valueChanged(TreeSelectionEvent e)
-			{
+			public void valueChanged(TreeSelectionEvent e) {
 				TreeNode node = (TreeNode) tree.getLastSelectedPathComponent();
 
-				if (node == null)
-				{
+				if (node == null) {
 					return;
 				}
 
 				Object object = node.getUserObject();
 
-				if (node.isLeaf() && node.getLevel() > 1)
-				{
+				if (node.isLeaf() && node.getLevel() > 1) {
 					Activity activity = (Activity) object;
 					TreeNode parentNode = (TreeNode)node.getParent();
 					JScrollPane scroll = new JScrollPane(new ActivityView(activity, parentNode.getUserObject(), user, mainViewPanel));
 					scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 					getSplitPanel().setRightComponent(scroll);
-				} else
-				{
-					if (node.isRoot())
-					{
+				} else	{
+					if (node.isRoot()) {
 						getSplitPanel().setRightComponent(new GridProjects(user));
-					} else
-					{
+					} else {
 						Project project = (Project) object;
 						JScrollPane scroll = new JScrollPane(new ProjectView(project, user, mainViewPanel));
 						scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -326,8 +300,7 @@ public class MainViewPanel extends JPanel
 		});
 	}
 
-	public User getCurrentUser()
-	{
+	public User getCurrentUser() {
 		return user;
 	}
 }
