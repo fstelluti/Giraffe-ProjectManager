@@ -41,7 +41,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import controller.ActivityDB;
-import controller.DatabaseConstants;
 import controller.PredecessorDB;
 import controller.ProjectDB;
 
@@ -67,7 +66,6 @@ public class EditActivityDialog extends JDialog
   Properties p = new Properties();
   private User user;
   private boolean refresh = false;
-  private String connectionString = DatabaseConstants.getDb();
   private final ImageIcon deleteIcon = new ImageIcon(MainViewPanel.class.getResource("images/x.png"));
   final JPanel panDependArea = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();

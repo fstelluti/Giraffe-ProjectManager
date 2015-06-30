@@ -33,7 +33,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import controller.DatabaseConstants;
 import controller.ProjectDB;
 import controller.UserDB;
 import controller.UserRolesDB;
@@ -60,7 +59,6 @@ public class CreateProjectDialog extends JDialog
  private Properties p = new Properties();
  boolean exists;
  boolean refresh = false;
- private String connectionString = DatabaseConstants.getDb();
 
   public CreateProjectDialog(JFrame parent, String title, boolean modal, User user)
   {

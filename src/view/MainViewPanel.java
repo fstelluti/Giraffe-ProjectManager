@@ -24,7 +24,6 @@ import model.Activity;
 import model.Project;
 import model.User;
 import controller.ActivityDB;
-import controller.DatabaseConstants;
 import controller.ProjectDB;
 import controller.ViewManager;
 
@@ -47,7 +46,6 @@ public class MainViewPanel extends JPanel
 	public User user;
 	private GreetingLabel greetingLabel;
 	private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
-	private String connectionString = DatabaseConstants.getDb();
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
 

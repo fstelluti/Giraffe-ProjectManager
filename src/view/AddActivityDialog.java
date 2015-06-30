@@ -38,7 +38,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import controller.ActivityDB;
-import controller.PredecessorDB;
 import controller.ProjectDB;
 
 /**

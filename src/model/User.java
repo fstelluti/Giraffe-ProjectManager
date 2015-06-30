@@ -5,7 +5,6 @@ import java.util.Date;
 import javax.swing.ImageIcon;
 
 import controller.UserDB;
-import view.MainViewPanel;
 
 /**
  * Create a user.

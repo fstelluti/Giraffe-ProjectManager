@@ -6,9 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,7 +15,6 @@ import org.junit.Test;
 import controller.DataManagerTest;
 
 import java.util.List;
-import java.util.Date;
 
 import model.Project;
 
