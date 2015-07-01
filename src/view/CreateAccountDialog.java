@@ -171,11 +171,13 @@ public class CreateAccountDialog extends JDialog
 							// This if-statement checks to see if the DB is empty
 							// If it is empty, create the first user as an Admin
 							// If not empty, create a regular user
+							
+							//TODO fix this so that it reloads StartupPanel, has to do with logout
 							if(UserDB.getAll().isEmpty() == true)
 							{
 								user.setAdmin(1);
 								UserDB.insert(user);
-								ViewManager.logout(); //Switch to the tLoginPanel
+								ViewManager.logout(); //Switch to the LoginPanel
 							}
 							else
 							{

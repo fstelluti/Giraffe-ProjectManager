@@ -13,8 +13,8 @@ import model.User;
 import view.AdminPanel;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
-import view.LoginPanel;
 import view.MainViewPanel;
+import view.StartupPanel;
 import view.TreeNode;
 
 /**
@@ -29,12 +29,12 @@ public class ViewManager
 	private static JPanel mainViewPanel;
 	private static JPanel adminPanel; 
 	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
-	private static LoginPanel loginPanel = LoginPanel.instance();
+	private static StartupPanel startupPanel = StartupPanel.instance();
 	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
 	
 	//Constants for the size of the Panels
-	private static final int LOGINPANEL_SIZE_X = 500;
-	private static final int LOGINPANEL_SIZE_Y = 730;
+	private static final int STARTUPPANEL_SIZE_X = 500;
+	private static final int STARTUPPANEL_SIZE_Y = 730;
 	private static final int APPLICATION_PANEL_SIZE_X = 1200;
 	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
@@ -95,11 +95,11 @@ public class ViewManager
 	}
 	
 	/**
-	 * Logs the User out of the current session and returns them to the login screen
+	 * Logs the User out of the current session and returns them to the startup screen
 	 */
 	public static void logout() {
-		applicationPanel.setCardLayout("LoginPanel", LOGINPANEL_SIZE_X, LOGINPANEL_SIZE_Y);
-		rootPane.setDefaultButton(loginPanel.getLoginButton());		//Set the Default button back to Login
+		applicationPanel.setCardLayout("StartupPanel", STARTUPPANEL_SIZE_X, STARTUPPANEL_SIZE_Y);
+		rootPane.setDefaultButton(startupPanel.getDefaultButton());		//Set the Default button back to Login
 		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
 	}
 	
@@ -172,11 +172,11 @@ public class ViewManager
 	 * @return Panel Size X or Y
 	 */
 	public static int getLoginPanelSizeX() {
-		return LOGINPANEL_SIZE_X;
+		return STARTUPPANEL_SIZE_X;
 	}
 	
 	public static int getLoginPanelSizeY() {
-		return LOGINPANEL_SIZE_Y;
+		return STARTUPPANEL_SIZE_Y;
 	}
 	
 	/**
