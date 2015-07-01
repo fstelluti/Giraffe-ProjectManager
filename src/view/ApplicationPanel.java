@@ -21,8 +21,7 @@ public class ApplicationPanel extends JFrame
 {
 	private List<JPanel> cardPanels = new ArrayList<JPanel>();
 	private JPanel cardsHolder;
-	private SetupPanel setupPanel = SetupPanel.instance();
-	private LoginPanel loginPanel = LoginPanel.instance();	//get the LoginPanel
+	private StartupPanel startupPanel = StartupPanel.instance();
 	private static CardLayout cardLayout;
 
 	private static final ApplicationPanel APPLICATION_PANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
@@ -55,17 +54,9 @@ public class ApplicationPanel extends JFrame
 	
 	public void buildCardsPanel() {
 		//Add both startup panels
-		addCardPanel(getLoginPanel(), "LoginPanel");
-		addCardPanel(getSetupPanel(), "SetupPanel");
-		//If the DB is empty, use the Setup Panel first
-		if(UserDB.getAll().isEmpty() == true)
-		{
-			cardLayout.show(cardsHolder, "SetupPanel");
-		}
-		else
-		{
-			cardLayout.show(cardsHolder, "LoginPanel");
-		}
+		addCardPanel(getStartupPanel(), "StartupPanel");
+		
+		cardLayout.show(cardsHolder, "StartupPanel");
 			
 	}
 	
@@ -86,32 +77,17 @@ public class ApplicationPanel extends JFrame
 	}
 	
 	/**
-	 * Gets the LoginPanel and sets it up properly
-	 * @return LoginPanel
+	 * Gets the StartupPanel and sets it up properly
+	 * @return StartupPanel
 	 */	
-	public LoginPanel getLoginPanel() {
+	public StartupPanel getStartupPanel() {
 		//Sets the Login Panel button
-		this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
+		this.getRootPane().setDefaultButton(startupPanel.getDefaultButton());
 		
 		//Sets the proper size
 		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
 		
-		return loginPanel;
+		return startupPanel;
 	}
 	
-	/**
-	 * Gets the SetupPanel and sets it up properly
-	 * @return SetupPanel
-	 */	
-	public SetupPanel getSetupPanel() {
-		//Sets the Login Panel button
-		if(UserDB.getAll().isEmpty() == true)
-		{
-			this.getRootPane().setDefaultButton(setupPanel.getNewAccountButton());
-		}
-		//Sets the proper size
-		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
-		
-		return setupPanel;
-	}
 }
