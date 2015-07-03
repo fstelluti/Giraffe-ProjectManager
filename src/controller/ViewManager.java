@@ -13,8 +13,8 @@ import model.User;
 import view.AdminPanel;
 import view.ApplicationPanel;
 import view.CreateAccountDialog;
+import view.LoginPanel;
 import view.MainViewPanel;
-import view.StartupPanel;
 import view.TreeNode;
 
 /**
@@ -29,7 +29,7 @@ public class ViewManager
 	private static JPanel mainViewPanel;
 	private static JPanel adminPanel; 
 	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
-	private static StartupPanel startupPanel = StartupPanel.instance();
+	private static LoginPanel loginPanel = ApplicationPanel.getLoginPanel();
 	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
 	
 	//Constants for the size of the Panels
@@ -98,8 +98,8 @@ public class ViewManager
 	 * Logs the User out of the current session and returns them to the startup screen
 	 */
 	public static void logout() {
-		applicationPanel.setCardLayout("StartupPanel", STARTUPPANEL_SIZE_X, STARTUPPANEL_SIZE_Y);
-		rootPane.setDefaultButton(startupPanel.getDefaultButton());		//Set the Default button back to Login
+		applicationPanel.setCardLayout("LoginPanel", STARTUPPANEL_SIZE_X, STARTUPPANEL_SIZE_Y);
+		rootPane.setDefaultButton(loginPanel.getDefaultButton());		//Set the Default button back to Login
 		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
 	}
 	
@@ -171,11 +171,11 @@ public class ViewManager
 	 * Getter methods for the various Panel size constants
 	 * @return Panel Size X or Y
 	 */
-	public static int getLoginPanelSizeX() {
+	public static int getStartupPanelSizeX() {
 		return STARTUPPANEL_SIZE_X;
 	}
 	
-	public static int getLoginPanelSizeY() {
+	public static int getStartupPanelSizeY() {
 		return STARTUPPANEL_SIZE_Y;
 	}
 	
@@ -236,4 +236,14 @@ public class ViewManager
 	public static List<Activity> getProjectActivities(Project project) {
 		return ActivityDB.getProjectActivities(project.getId());
 	}
+	
+	/**
+	 * Gets a projects activities
+	 * @param project
+	 * @return activities
+	 */
+	public static Boolean checkIfUserTableIsEmpty() {
+		return UserDB.getAll().isEmpty();
+	}
+	
 }

@@ -34,7 +34,7 @@ public class ActivityView extends JPanel
 	private Project parentProject;
 	private MainViewPanel mainViewPanel;
 	private AdminPanel adminPanel;
-	private ViewAllProjectsPanel viewAllProjectsPanel;
+	//private ViewAllProjectsPanel viewAllProjectsPanel;
 	private User user;
 	
 	public ActivityView(Activity activity, Object parent, User user, MainViewPanel mainViewPanel) {
@@ -53,10 +53,10 @@ public class ActivityView extends JPanel
 		initComponent();
 	}
 
-	public ActivityView(Activity activity, Object parent, User user, ViewAllProjectsPanel viewAllProjectsPanel) {
+	public ActivityView(Activity activity, Object parent, User user) { //Add: ViewAllProjectsPanel viewAllProjectsPanel
 		this.activity = activity;
 		this.parentProject = (Project)parent;
-		this.viewAllProjectsPanel = viewAllProjectsPanel;
+		//this.viewAllProjectsPanel = viewAllProjectsPanel;
 		this.user = user;
 		initComponent();
 	}

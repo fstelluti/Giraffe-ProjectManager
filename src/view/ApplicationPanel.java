@@ -21,7 +21,8 @@ public class ApplicationPanel extends JFrame
 {
 	private List<JPanel> cardPanels = new ArrayList<JPanel>();
 	private JPanel cardsHolder;
-	private StartupPanel startupPanel = StartupPanel.instance();
+	private static LoginPanel loginPanel = new LoginPanel(); //TODO: Create somewhere else?
+	private static SetupPanel setupPanel = new SetupPanel(); 
 	private static CardLayout cardLayout;
 
 	private static final ApplicationPanel APPLICATION_PANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
@@ -46,18 +47,40 @@ public class ApplicationPanel extends JFrame
 	
 	/**
 	 * Returns singleton class instance
-	 * @return LOGINPANEL
+	 * @return ApplicationPanel
 	 */ 
 	public static ApplicationPanel instance() {
 		return APPLICATION_PANEL;
 	}
 	
+	//Needed to pass to logout() method in Viewmanager
+	public static LoginPanel getLoginPanel() {
+		return loginPanel;
+	}
+	
 	public void buildCardsPanel() {
 		//Add both startup panels
-		addCardPanel(getStartupPanel(), "StartupPanel");
+		addCardPanel(setupPanel, "SetupPanel");
+		addCardPanel(loginPanel, "LoginPanel");
 		
-		cardLayout.show(cardsHolder, "StartupPanel");
+		getStartPanelType();
 			
+	}
+
+	/**
+	 * Displays layout depending on if the Users table has at least one user or not
+	 */
+	private void getStartPanelType() {
+		if(ViewManager.checkIfUserTableIsEmpty()) {
+			cardLayout.show(cardsHolder, "SetupPanel");
+			this.getRootPane().setDefaultButton(setupPanel.getDefaultButton());  //Sets the default button
+		}
+		else {
+			cardLayout.show(cardsHolder, "LoginPanel");
+			this.getRootPane().setDefaultButton(loginPanel.getDefaultButton());  //Sets the default button
+		}
+		//Sets the proper size
+		this.setSize(ViewManager.getStartupPanelSizeX(), ViewManager.getStartupPanelSizeY());
 	}
 	
 	public void addCardPanel(JPanel panelToAdd, String cardPanelName) {
@@ -75,19 +98,5 @@ public class ApplicationPanel extends JFrame
 		this.setSize(sizeX, sizeY);
 		this.setLocationRelativeTo(null);
 	}
-	
-	/**
-	 * Gets the StartupPanel and sets it up properly
-	 * @return StartupPanel
-	 */	
-	public StartupPanel getStartupPanel() {
-		//Sets the Login Panel button
-		this.getRootPane().setDefaultButton(startupPanel.getDefaultButton());
-		
-		//Sets the proper size
-		this.setSize(ViewManager.getLoginPanelSizeX(), ViewManager.getLoginPanelSizeY());
-		
-		return startupPanel;
-	}
-	
+
 }
