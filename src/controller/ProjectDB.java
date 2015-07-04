@@ -161,8 +161,8 @@ public class ProjectDB extends DataManager
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
-				Date startDate = dateFormat.parse(rs.getString(3));
-				Date dueDate = dateFormat.parse(rs.getString(4));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(3));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(4));
 				String description = rs.getString(5);
 				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
@@ -222,8 +222,8 @@ public class ProjectDB extends DataManager
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
-				Date startDate = dateFormat.parse(rs.getString(3));
-				Date dueDate = dateFormat.parse(rs.getString(4));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(3));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(4));
 				String description = rs.getString(5);
 				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
@@ -348,8 +348,8 @@ public class ProjectDB extends DataManager
 			{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
 				String description = rs.getString("description");
 				project = new Project(id, name, startDate, dueDate, description);
 			}

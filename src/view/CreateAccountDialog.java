@@ -23,6 +23,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.User;
+import controller.DataManager;
 import controller.UserDB;
 import controller.ViewManager;
 
@@ -172,7 +173,7 @@ public class CreateAccountDialog extends JDialog
 							// If it is empty, create the first user as an Admin
 							// If not empty, create a regular user
 							
-							if(ViewManager.checkIfUserTableIsEmpty())
+							if(DataManager.userTableIsEmpty())
 							{
 								user.setAdmin(1);
 								user.persist();

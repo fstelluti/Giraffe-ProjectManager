@@ -17,17 +17,24 @@ import javax.swing.border.TitledBorder;
 
 public abstract class StartupPanel extends JPanel {	
 
+	/**
+     * 
+     */
+    	private static final long serialVersionUID = 1L;
 	//Protected attributes that will be accessed in subclasses
 	protected JPanel startupPanel;
 	protected JPanel logoPanel;
+	//Constants for the size of the Panels
+	public static final int SIZE_X = 500;
+	public static final int SIZE_Y = 730;
 	
 	public StartupPanel() {	
 		startupPanel = new JPanel();
 		startupPanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Welcome"));
 		startupPanel.setLayout(new BoxLayout(startupPanel, BoxLayout.Y_AXIS));
 		startupPanel.add(createLogoPanel());
-
 		this.add(startupPanel);
+		this.setSize(SIZE_X, SIZE_Y);
 	}
 	
 	/**
@@ -36,7 +43,7 @@ public abstract class StartupPanel extends JPanel {
 	 */
 	private JPanel createLogoPanel(){
 		logoPanel = new JPanel();
-		ImageIcon icon = new ImageIcon(MainViewPanel.class.getResource("images/giraffe.png"));
+		ImageIcon icon = new ImageIcon(MainPanel.class.getResource("images/giraffe.png"));
 		JLabel label = new JLabel(icon);
 		logoPanel.add(label);
 		

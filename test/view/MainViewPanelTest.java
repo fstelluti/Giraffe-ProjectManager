@@ -31,7 +31,7 @@ public class MainViewPanelTest {
 	public void shouldCreateMainViewPanel() {
 		
 		//Create a MainViewPanel object
-		MainViewPanel mainView1 = new MainViewPanel(user);
+		MainPanel mainView1 = new MainPanel(user);
 		
 		assertNotNull("MainViewPanel object is null", mainView1);
 	}
@@ -41,7 +41,7 @@ public class MainViewPanelTest {
 	public void shouldGetSouthPanel() {
 		
 		//Create a MainViewPanel object
-		MainViewPanel mainView1 = new MainViewPanel(user);
+		MainPanel mainView1 = new MainPanel(user);
 		
 		//Test the method
 		JPanel jPanel = mainView1.getSouthPanel();
@@ -53,7 +53,7 @@ public class MainViewPanelTest {
 	public void shouldGetNorthPanel() {
 		
 		//Create a MainViewPanel object
-		MainViewPanel mainView1 = new MainViewPanel(user);
+		MainPanel mainView1 = new MainPanel(user);
 		
 		//Test the method
 		JPanel jPanel = mainView1.getNorthPanel();
@@ -65,7 +65,7 @@ public class MainViewPanelTest {
 	public void shouldGetSplitPanel() {
 		
 		//Create a MainViewPanel object
-		MainViewPanel mainView1 = new MainViewPanel(user);
+		MainPanel mainView1 = new MainPanel(user);
 		
 		//Test the method
 		JSplitPane jSplitPane = mainView1.getSplitPanel();

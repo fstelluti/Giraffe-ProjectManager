@@ -188,8 +188,8 @@ public class ActivityDB extends DataManager
 				Activity activity = null;
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
@@ -229,6 +229,7 @@ public class ActivityDB extends DataManager
 	 * 
 	 * @return
 	 */
+	// XXX Unused method
 	public static List<Activity> getAll()
 	{
 		List<Activity> activities = new ArrayList<Activity>();
@@ -250,8 +251,8 @@ public class ActivityDB extends DataManager
 				int id = rs.getInt("id");
 				int projectId = rs.getInt("projectId");
 				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
@@ -368,8 +369,8 @@ public class ActivityDB extends DataManager
 			{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = dateFormat.parse(rs.getString("startDate"));
-				Date dueDate = dateFormat.parse(rs.getString("dueDate"));
+				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);

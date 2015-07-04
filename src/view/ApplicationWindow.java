@@ -7,8 +7,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import controller.UserDB;
-import controller.ViewManager;
+import controller.DataManager;
 
 /**
  * This class defined the main application window and displays the Login Panel
@@ -17,29 +16,26 @@ import controller.ViewManager;
  */
 
 @SuppressWarnings("serial")
-public class ApplicationPanel extends JFrame
-{
-	private List<JPanel> cardPanels = new ArrayList<JPanel>();
-	private JPanel cardsHolder;
+public class ApplicationWindow extends JFrame {
+    
+	private List<JPanel> panels = new ArrayList<JPanel>();
+	private JPanel currentCard;
+	private static CardLayout cardLayout;
 	private static LoginPanel loginPanel = new LoginPanel(); //TODO: Create somewhere else?
 	private static SetupPanel setupPanel = new SetupPanel(); 
-	private static CardLayout cardLayout;
-
-	private static final ApplicationPanel APPLICATION_PANEL = new ApplicationPanel();	//Singleton ApplicationPanel object
+	private static final ApplicationWindow WINDOW = new ApplicationWindow(); //Singleton ApplicationPanel object
 	
-	private ApplicationPanel() {	//private constructor for Singleton pattern
-
-			
+	private ApplicationWindow() {	//private constructor for Singleton pattern
 		JFrame.setDefaultLookAndFeelDecorated(true);
-		cardsHolder = new JPanel();
+		currentCard = new JPanel();
 		setTitle("Giraffe Manager by Giraffe Inc.");
 		cardLayout = new CardLayout();
-		cardsHolder.setLayout(cardLayout);
+		currentCard.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(true);
 		this.setVisible(true);
 		buildCardsPanel();
-		getContentPane().add(cardsHolder);
+		getContentPane().add(currentCard);
 		setDefaultLookAndFeelDecorated(true);
 		setLocationRelativeTo(null);
 		setVisible(true);
@@ -47,10 +43,10 @@ public class ApplicationPanel extends JFrame
 	
 	/**
 	 * Returns singleton class instance
-	 * @return ApplicationPanel
+	 * @return ApplicationWindow
 	 */ 
-	public static ApplicationPanel instance() {
-		return APPLICATION_PANEL;
+	public static ApplicationWindow instance() {
+		return WINDOW;
 	}
 	
 	//Needed to pass to logout() method in Viewmanager
@@ -60,39 +56,30 @@ public class ApplicationPanel extends JFrame
 	
 	public void buildCardsPanel() {
 		//Add both startup panels
-		addCardPanel(setupPanel, "SetupPanel");
-		addCardPanel(loginPanel, "LoginPanel");
+		addCard(setupPanel, "SetupPanel");
+		addCard(loginPanel, "LoginPanel");
 		
-		getStartPanelType();
-			
-	}
-
-	/**
-	 * Displays layout depending on if the Users table has at least one user or not
-	 */
-	private void getStartPanelType() {
-		if(ViewManager.checkIfUserTableIsEmpty()) {
-			cardLayout.show(cardsHolder, "SetupPanel");
+		if(DataManager.userTableIsEmpty()) {
+			cardLayout.show(currentCard, "SetupPanel");
 			this.getRootPane().setDefaultButton(setupPanel.getDefaultButton());  //Sets the default button
-		}
-		else {
-			cardLayout.show(cardsHolder, "LoginPanel");
+		} else {
+			cardLayout.show(currentCard, "LoginPanel");
 			this.getRootPane().setDefaultButton(loginPanel.getDefaultButton());  //Sets the default button
 		}
 		//Sets the proper size
-		this.setSize(ViewManager.getStartupPanelSizeX(), ViewManager.getStartupPanelSizeY());
+		this.setSize(StartupPanel.SIZE_X, StartupPanel.SIZE_Y);		
 	}
-	
-	public void addCardPanel(JPanel panelToAdd, String cardPanelName) {
-		cardPanels.add(panelToAdd);
-		cardsHolder.add(panelToAdd, cardPanelName);
+
+	public void addCard(JPanel panelToAdd, String cardPanelName) {
+		panels.add(panelToAdd);
+		currentCard.add(panelToAdd, cardPanelName);
 	}
 	
 	/**
 	 * Switch to the card with the given name and sets the correct size
 	 */	
-	public void setCardLayout(String cardLayoutName, int sizeX, int sizeY) {
-		ApplicationPanel.cardLayout.show(cardsHolder, cardLayoutName);
+	public void setCard(String cardLayoutName, int sizeX, int sizeY) {
+		ApplicationWindow.cardLayout.show(currentCard, cardLayoutName);
 		
 		//Sets the correct size
 		this.setSize(sizeX, sizeY);

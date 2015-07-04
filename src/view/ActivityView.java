@@ -32,12 +32,11 @@ public class ActivityView extends JPanel
 	private Activity activity;
 	private List<JLabel> labels = new ArrayList<JLabel>();
 	private Project parentProject;
-	private MainViewPanel mainViewPanel;
-	private AdminPanel adminPanel;
+	private MainPanel mainViewPanel;
 	//private ViewAllProjectsPanel viewAllProjectsPanel;
 	private User user;
 	
-	public ActivityView(Activity activity, Object parent, User user, MainViewPanel mainViewPanel) {
+	public ActivityView(Activity activity, Object parent, User user, MainPanel mainViewPanel) {
 		this.activity = activity;
 		this.parentProject = (Project)parent;
 		this.mainViewPanel = mainViewPanel;
@@ -45,13 +44,6 @@ public class ActivityView extends JPanel
 		initComponent();
 	}
 	
-	public ActivityView(Activity activity, Object parent, User user, AdminPanel adminPanel) {
-		this.activity = activity;
-		this.parentProject = (Project)parent;
-		this.adminPanel = adminPanel;
-		this.user = user;
-		initComponent();
-	}
 
 	public ActivityView(Activity activity, Object parent, User user) { //Add: ViewAllProjectsPanel viewAllProjectsPanel
 		this.activity = activity;

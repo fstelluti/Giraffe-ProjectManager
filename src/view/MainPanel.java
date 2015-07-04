@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeSelectionModel;
@@ -24,7 +23,7 @@ import javax.swing.tree.TreeSelectionModel;
 import model.Activity;
 import model.Project;
 import model.User;
-import controller.ActivityDB;
+import controller.DataManager;
 import controller.ProjectDB;
 import controller.ViewManager;
 
@@ -37,10 +36,11 @@ import controller.ViewManager;
 
 
 @SuppressWarnings("serial")
-public class MainViewPanel extends JPanel
+public class MainPanel extends JPanel
 {
 	private JPanel northPanel;
 	private JScrollPane treeView;
+	private TabPanel tabView;
 	private TreePanel treePanel;
 	private JPanel southPanel;
 	public JSplitPane splitPanel;
@@ -49,8 +49,10 @@ public class MainViewPanel extends JPanel
 	private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
 
 	private List<JButton> toolbarButtons = new ArrayList<JButton>();
+	public static final int SIZE_Y = 800;
+	public static final int SIZE_X = 1200;
 
-	public MainViewPanel(User currentUser)
+	public MainPanel(User currentUser)
 	{
 		super();
 		this.user = currentUser;
@@ -95,7 +97,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editProject)
 				{
-					if (ViewManager.checkIfProjectsExist(user))
+					if (DataManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -124,7 +126,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == addActivity)
 				{
-					if (ViewManager.checkIfProjectsExist(user))
+					if (DataManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -153,7 +155,7 @@ public class MainViewPanel extends JPanel
 			{
 				if (e.getSource() == editActivity)
 				{
-					if (ViewManager.checkIfProjectsExist(user))
+					if (DataManager.checkIfProjectsExist(user))
 					{
 						JOptionPane
 								.showMessageDialog(
@@ -163,7 +165,7 @@ public class MainViewPanel extends JPanel
 										"No Projects Available to Edit an Activity",
 										JOptionPane.ERROR_MESSAGE);
 						//TODO get rid of this
-					} else if (ViewManager.checkIfActivitiesExist(user))	{
+					} else if (DataManager.checkIfActivitiesExist(user))	{
 						JOptionPane
 								.showMessageDialog(
 										null,
@@ -232,7 +234,7 @@ public class MainViewPanel extends JPanel
 				}
 
 			};
-			treePanel = new TreePanel(ViewManager.getUserProjects(user));
+			treePanel = new TreePanel(DataManager.getUserProjects(user));
 			treeView = treePanel.getTreeView();
 			splitPanel.setLeftComponent(treeView);
 			splitPanel.setRightComponent(new GridProjects(this.user));
@@ -265,7 +267,7 @@ public class MainViewPanel extends JPanel
 
 	public void addTreeSelectionListener() {
 		final JTree tree = treePanel.getTree();
-		final MainViewPanel mainViewPanel = this;
+		final MainPanel mainViewPanel = this;
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {

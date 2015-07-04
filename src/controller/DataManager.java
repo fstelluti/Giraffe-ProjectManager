@@ -3,8 +3,10 @@ package controller;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.util.List;
+
+import model.Project;
+import model.User;
 
 /**
  * 
@@ -19,61 +21,82 @@ import java.text.SimpleDateFormat;
  */
 public abstract class DataManager
 {
-	static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
 	/**
 	 * Method creates the connection between the application and the DB
 	 * @return
 	 */
-	@SuppressWarnings("finally")
-	public static Connection getConnection()
-	{
+	public static Connection getConnection() {
 		Connection c = null;
-		try
-		{
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection(DatabaseConstants.getDb());
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		finally
-		{
-			return c;
-		}
-	}
-	
-	/**
-	 * Initializes the databases at first startup via the helper method createTables.
-	 * @author Matthew Mongrain
-	 */
-	public static void initialize() {
 		try {
-			DataManager.createTables(DatabaseConstants.getDb());
+			c = DriverManager.getConnection(DatabaseConstants.getDb());
 		} catch (SQLException e) {
-			System.err.println(e.getStackTrace());
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
+		return c;
 	}
 	
 	/**
-	 * Method creates the tables upon startup. Checking if a table already exists is done directly in SQL
+	 * Creates the tables upon startup. Checking if a table already exists is done directly in SQL
 	 * 
-	 * @param connectionString as a String
 	 * @throws SQLException
 	 */
-	public static void createTables(String connectionString) throws SQLException{
+	public static void initialize() {
 	    	// Create the tables
 		UserDB.createTable();
 		ProjectDB.createTable();
 		ActivityDB.createTable();
 		PredecessorDB.createTable();
 		UserRolesDB.createTable();
+	}
+
+	/**
+	 * Checks the login result in DB
+	 * @return boolean
+	 */
+	public static boolean checkLoginResult(String userName ,char[] passChar) {
+		return UserDB.checkLogin(userName, passChar);
+	}
+
+	/**
+	 * Gets the User by user name in the DB
+	 * @return User
+	 */
+	public static User getUserByName(String userName) {
+		return UserDB.getByName(userName);
+	}
+
+	/**
+	 * Checks to see if there are projects in the DB
+	 * @return boolean
+	*/
+	public static Boolean checkIfProjectsExist(User user) {
+		return ProjectDB.getUserProjects(user.getId()).isEmpty();
+	}
+
+	/**
+	 * Checks to see if there are activities in a project
+	 * @return boolean
+	 */
+	public static Boolean checkIfActivitiesExist(User user) {
+		return ActivityDB.getProjectActivities(user.getId()).isEmpty();
+	}
+
+	/**
+	 * Gets a user's projects by their id
+	 * @param user
+	 * @return projects
+	 */
+	public static List<Project> getUserProjects(User user) {
+		return ProjectDB.getUserProjects(user.getId());
+	}
+
+	/**
+	 * Gets a projects activities
+	 * @param project
+	 * @return activities
+	 */
+	public static Boolean userTableIsEmpty() {
+		return UserDB.getAll().isEmpty();
 	}
 	
 	

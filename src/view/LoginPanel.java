@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import controller.DataManager;
 import controller.ViewManager;
 import model.User;
 
@@ -19,7 +20,9 @@ import model.User;
  */
 public class LoginPanel extends StartupPanel implements ActionListener {
 
-	private JButton newAccountButton, exitButton, loginButton;
+    	private static final long serialVersionUID = 1L;
+
+	private JButton newAccountButton, loginButton;
 	
 	private JPanel loginSubPanel;
 	private JPanel passwordSubPanel;
@@ -49,7 +52,7 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 		if (loginSubPanel == null) {
 			loginSubPanel = new JPanel();
 			loginSubPanel.setLayout(new FlowLayout());
-			loginLabel = new JLabel("Please enter user name: ", JLabel.RIGHT);
+			loginLabel = new JLabel("Username: ", JLabel.RIGHT);
 			loginTextField = new JTextField(10);
 			loginSubPanel.add(loginLabel);
 			loginSubPanel.add(loginTextField);
@@ -65,7 +68,7 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 		if (passwordSubPanel == null) {
 			passwordSubPanel = new JPanel();
 			passwordSubPanel.setLayout(new FlowLayout());
-			passwordLabel = new JLabel("Please enter password: ", JLabel.RIGHT);
+			passwordLabel = new JLabel("Password: ", JLabel.RIGHT);
 			passwordTextField = new JPasswordField(10);
 			passwordSubPanel.add(passwordLabel);
 			passwordSubPanel.add(passwordTextField);
@@ -81,14 +84,12 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 		if(createButtonsPanel == null) {
 			createButtonsPanel = new JPanel();
 			newAccountButton = new JButton("Create Account");
-			exitButton = new JButton("Exit");
 			
 			loginButton = new JButton("Login");
 			loginButton.addActionListener(this);
 			
-			createButtonsPanel.add(loginButton);
 			createButtonsPanel.add(newAccountButton);
-			createButtonsPanel.add(exitButton);
+			createButtonsPanel.add(loginButton);
 			
 		newAccountButton.addActionListener(new ActionListener() {	
 			@Override
@@ -102,16 +103,6 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 			}
 		});
 		
-		exitButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				if(e.getSource() == exitButton) {
-					ViewManager.exitApplication();
-				}
-				
-			}
-		});
 			
 		}
 		return createButtonsPanel;
@@ -123,23 +114,15 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 		if(e.getSource() == loginButton) {
 			char[] passChar = passwordTextField.getPassword();
 			String userName = loginTextField.getText();
-			boolean checkResult = ViewManager.checkLoginResult(userName, passChar);
+			boolean checkResult = DataManager.checkLoginResult(userName, passChar);
 			if (checkResult) {
-				User user = ViewManager.getUserByName(userName);
-				//Check to see what type of User is loggin in
-				if(user.getAdmin() == 1) {  //User is an Admin
-					ViewManager.createAdminPanel(user);
-				}
-				else {
-					//Call for other users
-					ViewManager.createMainViewPanel(user);
-				}
-				
+				User user = DataManager.getUserByName(userName);
+				ViewManager.createMainViewPanel(user);
+
 				//Resets text fields so that when logged out, the fields are empty
 				loginTextField.setText("");
 				passwordTextField.setText("");
-			}
-			else {
+			} else {
 				ViewManager.failedLogin();
 			}
 			//Clear password field

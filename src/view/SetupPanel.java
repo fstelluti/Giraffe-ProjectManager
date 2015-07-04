@@ -17,7 +17,9 @@ import controller.ViewManager;
  */
 public class SetupPanel extends StartupPanel implements ActionListener {
 
-	private JButton newAccountButton, exitButton;
+    	private static final long serialVersionUID = 7394044337349714622L;
+
+	private JButton newAccountButton;
 	
 	private JPanel createButtonsPanel;
 	private JPanel welcomeSubPanel;
@@ -58,10 +60,8 @@ public class SetupPanel extends StartupPanel implements ActionListener {
 		if(createButtonsPanel == null) {
 			createButtonsPanel = new JPanel();
 			newAccountButton = new JButton("Create Account");
-			exitButton = new JButton("Exit");
 			
 			createButtonsPanel.add(newAccountButton);
-			createButtonsPanel.add(exitButton);
 			createButtonsPanel.setLayout(new FlowLayout());
 
 			newAccountButton.addActionListener(new ActionListener() {	
@@ -75,19 +75,6 @@ public class SetupPanel extends StartupPanel implements ActionListener {
 					
 				}
 			});
-			
-			exitButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e)
-				{
-					if(e.getSource() == exitButton) {
-						ViewManager.exitApplication();
-					}
-					
-				}
-			});
-			
-			
 		}
 		return createButtonsPanel;
 	}

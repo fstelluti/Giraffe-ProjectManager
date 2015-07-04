@@ -10,11 +10,11 @@ import javax.swing.JRootPane;
 import model.Activity;
 import model.Project;
 import model.User;
-import view.AdminPanel;
-import view.ApplicationPanel;
+import view.ApplicationWindow;
 import view.CreateAccountDialog;
 import view.LoginPanel;
-import view.MainViewPanel;
+import view.MainPanel;
+import view.StartupPanel;
 import view.TreeNode;
 
 /**
@@ -23,41 +23,14 @@ import view.TreeNode;
  * @modifiedBy Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
  */
 
-public class ViewManager
-{
+public class ViewManager {
 	
 	private static JPanel mainViewPanel;
-	private static JPanel adminPanel; 
-	private static ApplicationPanel applicationPanel = ApplicationPanel.instance();
-	private static LoginPanel loginPanel = ApplicationPanel.getLoginPanel();
-	private static JRootPane rootPane = applicationPanel.getRootPane();	//Needed to get default buttons for each Panel
+	private static ApplicationWindow applicationWindow = ApplicationWindow.instance();
+	private static LoginPanel loginPanel = ApplicationWindow.getLoginPanel();
+	private static JRootPane rootPane = applicationWindow.getRootPane();	//Needed to get default buttons for each Panel
 	
-	//Constants for the size of the Panels
-	private static final int STARTUPPANEL_SIZE_X = 500;
-	private static final int STARTUPPANEL_SIZE_Y = 730;
-	private static final int APPLICATION_PANEL_SIZE_X = 1200;
-	private static final int APPLICATION_PANEL_SIZE_Y = 800;
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
-
-	/**
-	 * Creates the Admin Panel when the admin User has logged in
-	 * @return JPanel
-	 */
-	public static JPanel createAdminPanel(User user) {
-		if (adminPanel == null) {
-			adminPanel = new AdminPanel(user);
-			applicationPanel.setLocationRelativeTo(null);
-			applicationPanel.addCardPanel(adminPanel, "AdminPanel");
-			adminPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
-			applicationPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
-			applicationPanel.setLocationRelativeTo(null);
-		}
-		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
-		//and another user wants to login
-		applicationPanel.setCardLayout("AdminPanel", APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
-		
-		return adminPanel;
-	}
 	
 	/**
 	 * Creates the Main View Panel when User has logged in
@@ -65,16 +38,16 @@ public class ViewManager
 	 */
 	public static JPanel createMainViewPanel(User user) {
 		if (mainViewPanel == null) {
-			mainViewPanel = new MainViewPanel(user);
-			applicationPanel.setLocationRelativeTo(null);
-			applicationPanel.addCardPanel(mainViewPanel, "MainViewPanel");
-			mainViewPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
-			applicationPanel.setSize(APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
-			applicationPanel.setLocationRelativeTo(null);
+			mainViewPanel = new MainPanel(user);
+			applicationWindow.setLocationRelativeTo(null);
+			applicationWindow.addCard(mainViewPanel, "MainViewPanel");
+			mainViewPanel.setSize(MainPanel.SIZE_X, MainPanel.SIZE_Y);
+			applicationWindow.setSize(MainPanel.SIZE_X, MainPanel.SIZE_Y);
+			applicationWindow.setLocationRelativeTo(null);
 		}
 		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
 		//and another user wants to login
-		applicationPanel.setCardLayout("MainViewPanel", APPLICATION_PANEL_SIZE_X, APPLICATION_PANEL_SIZE_Y);
+		applicationWindow.setCard("MainViewPanel", MainPanel.SIZE_X, MainPanel.SIZE_Y);
 		
 		return mainViewPanel;
 	}
@@ -98,32 +71,22 @@ public class ViewManager
 	 * Logs the User out of the current session and returns them to the startup screen
 	 */
 	public static void logout() {
-		applicationPanel.setCardLayout("LoginPanel", STARTUPPANEL_SIZE_X, STARTUPPANEL_SIZE_Y);
+		applicationWindow.setCard("LoginPanel", StartupPanel.SIZE_X, StartupPanel.SIZE_Y);
 		rootPane.setDefaultButton(loginPanel.getDefaultButton());		//Set the Default button back to Login
 		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
-	}
-	
-	/**
-	 * Exits the Program/Application
-	 */
-	public static void exitApplication() {
-		//Simply hide and close the Application
-		applicationPanel.setVisible(false);
-		applicationPanel.dispose();
-		System.exit(1);		//Make sure that the program terminates
 	}
 	
 	/**
 	 * method used to start the application
 	 * @return applicationPanel
 	 */
-	public static ApplicationPanel openApplicationWindow () {
-		return applicationPanel;
+	public static ApplicationWindow openApplicationWindow () {
+		return applicationWindow;
 	}
 	
-	@SuppressWarnings("unused")	//Needed??
+	@SuppressWarnings("unused")
 	public static void createAccountDialog() {
-		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationPanel, "Create account dialog", true);
+		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationWindow, "Create account dialog", true);
 	}
 	
 	/**
@@ -165,85 +128,6 @@ public class ViewManager
 				projectNode.add(activityNode);
 			}
 		}
-	}
-	
-	/**
-	 * Getter methods for the various Panel size constants
-	 * @return Panel Size X or Y
-	 */
-	public static int getStartupPanelSizeX() {
-		return STARTUPPANEL_SIZE_X;
-	}
-	
-	public static int getStartupPanelSizeY() {
-		return STARTUPPANEL_SIZE_Y;
-	}
-	
-	/**
-	 * Checks the login result in DB
-	 * @return boolean
-	 */
-	public static boolean checkLoginResult(String userName ,char[] passChar) {
-		return UserDB.checkLogin(userName, passChar);
-	}
-	
-	/**
-	 * Gets the User by user name in the DB
-	 * @return User
-	 */
-	public static User getUserByName(String userName) {
-		return UserDB.getByName(userName);
-	}
-	
-	/**
-	 * Checks to see if there are projects in the DB
-	 * @return boolean
-	*/
-	public static Boolean checkIfProjectsExist(User user) {
-		return ProjectDB.getUserProjects(user.getId()).isEmpty();
-	}
-	
-	/**
-	 * Checks to see if there are activities in a project
-	 * @return boolean
-	 */
-	public static Boolean checkIfActivitiesExist(User user) {
-		return ActivityDB.getProjectActivities(user.getId()).isEmpty();
-	}
-	
-	/**
-	 * Gets all the projects in the DB
-	 * @return projects
-	 */
-	public static List<Project> getAllProjects() {
-		return ProjectDB.getAll();
-	}
-	
-	/**
-	 * Gets a user's projects by their id
-	 * @param user
-	 * @return projects
-	 */
-	public static List<Project> getUserProjects(User user) {
-		return ProjectDB.getUserProjects(user.getId());
-	}
-	
-	/**
-	 * Gets a projects activities
-	 * @param project
-	 * @return activities
-	 */
-	public static List<Activity> getProjectActivities(Project project) {
-		return ActivityDB.getProjectActivities(project.getId());
-	}
-	
-	/**
-	 * Gets a projects activities
-	 * @param project
-	 * @return activities
-	 */
-	public static Boolean checkIfUserTableIsEmpty() {
-		return UserDB.getAll().isEmpty();
 	}
 	
 }

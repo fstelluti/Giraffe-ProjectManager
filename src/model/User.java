@@ -3,8 +3,6 @@ package model;
 import java.util.Arrays;
 import java.util.Date;
 
-import javax.swing.ImageIcon;
-
 import controller.UserDB;
 
 /**
