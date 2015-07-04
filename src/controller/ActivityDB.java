@@ -85,8 +85,8 @@ public class ActivityDB extends DataManager
 			+ "VALUES (NULL, + '" 
 			+ activity.getProjectId() + "',"
 			+ activity.getName() + "',"
-			+ DatabaseConstants.DATE_FORMAT.format(activity.getStartDate()) + "',"
-			+ DatabaseConstants.DATE_FORMAT.format(activity.getDueDate()) + "',"
+			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "',"
+			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "',"
 			+ activity.getStatus() + ","
 			+ activity.getDescription() + "',"
 			+ activity.getOptimisticDuration() + ","
@@ -188,8 +188,8 @@ public class ActivityDB extends DataManager
 				Activity activity = null;
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
@@ -251,8 +251,8 @@ public class ActivityDB extends DataManager
 				int id = rs.getInt("id");
 				int projectId = rs.getInt("projectId");
 				String name = rs.getString("name");
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
@@ -307,8 +307,8 @@ public class ActivityDB extends DataManager
 		activity.setId(id);
 		activity.setProjectId(rs.getInt("projectid"));
 		activity.setName(rs.getString("name"));
-		activity.setStartDate(DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate")));
-		activity.setDueDate(DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate")));
+		activity.setStartDate(DataManager.DATE_FORMAT.parse(rs.getString("startDate")));
+		activity.setDueDate(DataManager.DATE_FORMAT.parse(rs.getString("dueDate")));
 		activity.setStatus(rs.getInt("status"));
 		activity.setDescription(rs.getString("description"));
 		activity.setOptimisticDuration(rs.getInt("optimisticDuration"));
@@ -369,8 +369,8 @@ public class ActivityDB extends DataManager
 			{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
 				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
@@ -416,8 +416,8 @@ public class ActivityDB extends DataManager
 		stmt = c.createStatement();
 		String sql = "UPDATE ACTIVITIES SET "
 			+ "name = '"+ activity.getName() +"',"
-			+ "startdate = '" + DatabaseConstants.DATE_FORMAT.format(activity.getStartDate()) + "',"
-			+ "duedate = '" + DatabaseConstants.DATE_FORMAT.format(activity.getDueDate()) + "',"
+			+ "startdate = '" + DataManager.DATE_FORMAT.format(activity.getStartDate()) + "',"
+			+ "duedate = '" + DataManager.DATE_FORMAT.format(activity.getDueDate()) + "',"
 			+ "status = " + activity.getStatus() + ","
 			+ "description = '" + activity.getDescription() + "',"
 			+ "optimisticDuration = " + activity.getOptimisticDuration() + ","

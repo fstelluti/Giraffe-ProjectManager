@@ -13,22 +13,22 @@ public class DatabaseConstantsTest {
 
 	@Before
 	public void setUp(){
-		DatabaseConstants.userDatabase = null;
+		DataManager.userDatabase = null;
 	}
 	
 	@Test
 	public void getDbTest(){
-		DatabaseConstants.setTesting(true);
-		assertEquals(DatabaseConstants.getDb(),"jdbc:sqlite:testing.db");
-		DatabaseConstants.setTesting(false);
-		assertEquals(DatabaseConstants.getDb(),"jdbc:sqlite:projectManagement.db");
-		DatabaseConstants.userDatabase = "jdbc:sqlite:randomDB.db";
-		assertEquals(DatabaseConstants.getDb(), "jdbc:sqlite:randomDB.db");
+		DataManager.setTesting(true);
+		assertEquals(DataManager.getDb(),"jdbc:sqlite:testing.db");
+		DataManager.setTesting(false);
+		assertEquals(DataManager.getDb(),"jdbc:sqlite:projectManagement.db");
+		DataManager.userDatabase = "jdbc:sqlite:randomDB.db";
+		assertEquals(DataManager.getDb(), "jdbc:sqlite:randomDB.db");
 	}
 	
 	@Test
 	public void setUserDatabaseTest(){
-		DatabaseConstants.setUserDatabase("randomDB");
-		assertEquals(DatabaseConstants.userDatabase, "jdbc:sqlite:randomDB.db");
+		DataManager.setUserDatabase("randomDB");
+		assertEquals(DataManager.userDatabase, "jdbc:sqlite:randomDB.db");
 	}
 }

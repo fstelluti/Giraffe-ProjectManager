@@ -23,17 +23,15 @@ import javax.swing.table.DefaultTableModel;
 
 import model.User;
 import controller.DataManager;
-import controller.DatabaseConstants;
 import controller.ProjectDB;
 
 //NOT FINISHED
 @SuppressWarnings("all")
-public class GridProjects extends JPanel
-{
+public class GridProjects extends JPanel {
 	private JTable grid;
 	private User user;
 	private JPanel content;
-	private String connectionString = DatabaseConstants.getDb();
+	private String connectionString = DataManager.getDb();
 	
 	public GridProjects(User user)
 	{

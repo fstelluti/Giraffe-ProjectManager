@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import controller.ActivityDB;
-import controller.DatabaseConstants;
+import controller.DataManager;
 import controller.PredecessorDB;
 
 /**
@@ -210,7 +210,7 @@ public class Activity
 	   	  
 	    //Checks if activity start date falls in project date constraints	   	 
 	    if (activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) {
-		throw new Exception("Please ensure due date is within project dates : " + DatabaseConstants.DATE_FORMAT.format(projectStartDate) + " to " + DatabaseConstants.DATE_FORMAT.format(projectDueDate));
+		throw new Exception("Please ensure due date is within project dates : " + DataManager.DATE_FORMAT.format(projectStartDate) + " to " + DataManager.DATE_FORMAT.format(projectDueDate));
 	    }
 	   	  
 	    return true;

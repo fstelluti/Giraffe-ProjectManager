@@ -19,7 +19,7 @@ import model.Activity;
 import model.Project;
 import model.User;
 import controller.ActivityDB;
-import controller.DatabaseConstants;
+import controller.DataManager;
 
 /**
  * 
@@ -72,8 +72,8 @@ public class ProjectView extends JPanel
 			panel.setBorder(new TitledBorder(new LineBorder(Color.DARK_GRAY, 3, true), "Activity"));
 			panel.add(new JLabel("Activity name: " + activity.getName()));
 			panel.add(new JLabel("Status: " + activity.getStatusName()));
-			panel.add(new JLabel("Started on: " + DatabaseConstants.DATE_FORMAT.format(activity.getStartDate())));
-			panel.add(new JLabel("Due date: " + DatabaseConstants.DATE_FORMAT.format(activity.getDueDate())));
+			panel.add(new JLabel("Started on: " + DataManager.DATE_FORMAT.format(activity.getStartDate())));
+			panel.add(new JLabel("Due date: " + DataManager.DATE_FORMAT.format(activity.getDueDate())));
 			panel.add(new JLabel("Description: " + activity.getDescription()));
 			activityPanels.add(panel);
 			panel.addMouseListener(new MouseAdapter() {
@@ -112,11 +112,11 @@ public class ProjectView extends JPanel
 		labels.add(projectNameLabel);
 		projectPanel.add(projectNameLabel);
 		
-		JLabel startDateLabel = new JLabel("Start date: " + DatabaseConstants.DATE_FORMAT.format(project.getStartDate()));
+		JLabel startDateLabel = new JLabel("Start date: " + DataManager.DATE_FORMAT.format(project.getStartDate()));
 		labels.add(startDateLabel);
 		projectPanel.add(startDateLabel);
 		
-		JLabel dueDateLabel = new JLabel("Due date: " + DatabaseConstants.DATE_FORMAT.format(project.getDueDate()));
+		JLabel dueDateLabel = new JLabel("Due date: " + DataManager.DATE_FORMAT.format(project.getDueDate()));
 		labels.add(dueDateLabel);
 		projectPanel.add(dueDateLabel);
 

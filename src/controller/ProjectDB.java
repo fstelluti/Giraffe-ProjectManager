@@ -77,8 +77,8 @@ public class ProjectDB extends DataManager
 		String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ACTUALBUDGET, ESTIMATEDBUDGET) "
 			+ "VALUES (NULL, '" 
 			+ project.getName() + "', '" 
-			+ DatabaseConstants.DATE_FORMAT.format(project.getStartDate()) + "', '"
-			+ DatabaseConstants.DATE_FORMAT.format(project.getDueDate()) + "', '" 
+			+ DataManager.DATE_FORMAT.format(project.getStartDate()) + "', '"
+			+ DataManager.DATE_FORMAT.format(project.getDueDate()) + "', '" 
 			+ project.getDescription() + ",' '"
 			+ project.getActualBudget() + ",' '"
 			+ project.getEstimatedBudget() + "')";
@@ -150,10 +150,9 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt
-					.executeQuery("SELECT DISTINCT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
-							+ " FROM PROJECTS p, USERS u, USERROLES ur, USERROLESDICT"
-							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND USERROLESDICT.roleName = \"projectManager\";");
+			rs = stmt.executeQuery("SELECT DISTINCT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
+							+ " FROM PROJECTS p, USERS u, USERROLES ur"
+							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
 			while (rs.next())
 			{
 				Project project = null;
@@ -161,8 +160,8 @@ public class ProjectDB extends DataManager
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(3));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(4));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString(3));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString(4));
 				String description = rs.getString(5);
 				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
@@ -222,8 +221,8 @@ public class ProjectDB extends DataManager
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				String name = rs.getString(2);
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(3));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString(4));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString(3));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString(4));
 				String description = rs.getString(5);
 				project = new Project(id, name, startDate, dueDate, description);
 				projects.add(project);
@@ -279,8 +278,8 @@ public class ProjectDB extends DataManager
 		    Date dueDate = null;
 		    try
 		    {
-		    	startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-		    	dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+		    	startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+		    	dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 		    }
 		    catch (ParseException ignore)
 		    {
@@ -348,8 +347,8 @@ public class ProjectDB extends DataManager
 			{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DatabaseConstants.DATE_FORMAT.parse(rs.getString("dueDate"));
+				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 				String description = rs.getString("description");
 				project = new Project(id, name, startDate, dueDate, description);
 			}
@@ -739,9 +738,9 @@ public class ProjectDB extends DataManager
 				stmt = c.createStatement();
 				String sql = "UPDATE PROJECTS "
 						+ "SET dueDate='"
-						+ DatabaseConstants.DATE_FORMAT.format(project.getDueDate())  
+						+ DataManager.DATE_FORMAT.format(project.getDueDate())  
 						+ "', startDate='"
-						+ DatabaseConstants.DATE_FORMAT.format(project.getStartDate())
+						+ DataManager.DATE_FORMAT.format(project.getStartDate())
 						+ "', name='"
 						+ project.getName()
 						+ "', estimatedBudget='"

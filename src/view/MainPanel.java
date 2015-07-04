@@ -42,7 +42,6 @@ public class MainPanel extends JPanel
 	private JScrollPane treeView;
 	private TabPanel tabView;
 	private TreePanel treePanel;
-	private JPanel southPanel;
 	public JSplitPane splitPanel;
 	public User user;
 	private JLabel greetingLabel;
@@ -206,14 +205,6 @@ public class MainPanel extends JPanel
 		toolbarButtons.add(button);
 	}
 
-	public JPanel getSouthPanel() {
-		if (southPanel == null)	{
-			southPanel = new JPanel();
-			southPanel.setBackground(Color.green);
-		}
-		return southPanel;
-	}
-
 	public JSplitPane getSplitPanel() {
 		if (splitPanel == null) {
 			splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT) {
@@ -232,7 +223,7 @@ public class MainPanel extends JPanel
 				public int getLastDividerLocation() {
 					return location;
 				}
-
+				
 			};
 			treePanel = new TreePanel(DataManager.getUserProjects(user));
 			treeView = treePanel.getTreeView();
