@@ -74,14 +74,14 @@ public class ProjectDB extends DataManager
 		c.setAutoCommit(false);
 
 		stmt = c.createStatement();
-		String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ACTUALBUDGET, ESTIMATEDBUDGET) "
+		String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
 			+ "VALUES (NULL, '" 
 			+ project.getName() + "', '" 
 			+ DataManager.DATE_FORMAT.format(project.getStartDate()) + "', '"
 			+ DataManager.DATE_FORMAT.format(project.getDueDate()) + "', '" 
 			+ project.getDescription() + ",' '"
-			+ project.getActualBudget() + ",' '"
-			+ project.getEstimatedBudget() + "')";
+			+ project.getEstimatedBudget() + ",' '"
+			+ project.getActualBudget() + "')";
 		stmt.executeUpdate(sql);
 	    } catch (SQLException e) {
 		System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -99,7 +99,8 @@ public class ProjectDB extends DataManager
      * @param name as a String
      * @return
      */
-    public static void insert(String projectName, String startDate, String dueDate, String description)
+    public static void insert(String projectName, String startDate, String dueDate, 
+    		String description, String estimatedBudget, String actualBudget)
     {
 
 		Connection c = null;
@@ -111,9 +112,9 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION) "
+			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
 					+ "VALUES (NULL, '" + projectName + "', '" + startDate + "', '"
-					+ dueDate + "', '" + description + "')";
+					+ dueDate + "', '" + description + "', '" + estimatedBudget + "', '" + actualBudget + "')";
 			stmt.executeUpdate(sql);
 			c.commit();
 		}

@@ -113,20 +113,11 @@ public class ViewManager {
 	public static void createProjectTree(TreeNode root, List<Project> projects) {
 		
 		TreeNode projectNode = null;	//Node for a Project
-		TreeNode activityNode = null;			//Node for an Activity
 
 		//For each project, add it to its Tree
 		for (Project project : projects) {
 			projectNode = new TreeNode(project.getName(), project);
 			root.add(projectNode);
-		  //Get a list of activities corresponding to a project
-			List<Activity> activities = ActivityDB.getProjectActivities(project.getId());
-			
-			//For each activity, add it to its project tree
-			for (Activity activity : activities) {
-				activityNode = new TreeNode(activity.getName(), activity);
-				projectNode.add(activityNode);
-			}
 		}
 	}
 	

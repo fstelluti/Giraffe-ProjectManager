@@ -90,12 +90,14 @@ public abstract class DataManager
 	public static List<Project> getUserProjects(User user) {
 		return ProjectDB.getUserProjects(user.getId());
 	}
-
-	/**
-	 * Gets a projects activities
-	 * @param project
-	 * @return activities
+	
+	/** Gets all projects in the DB
+	 * @return projects
 	 */
+	public static List<Project> getAllProjects() {
+		return ProjectDB.getAll();
+	}
+
 	public static Boolean userTableIsEmpty() {
 		return UserDB.getAll().isEmpty();
 	}
@@ -105,7 +107,8 @@ public abstract class DataManager
 	public static final String TEST_DB = "jdbc:sqlite:testing.db";
 	public static String userDatabase = null;
 	public static boolean testing = false;
-	/*
+	
+	/**
 	 * Returns the current connection string.
 	 * If the user DB is set, returns the user DB; if testing is set, returns testing;
 	 * otherwise returns default db.

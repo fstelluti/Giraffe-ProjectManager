@@ -32,8 +32,7 @@ public class UserRolesDB extends DataManager
 					+ " PROJECTID 	INTEGER," + " ROLEID  	INTEGER,"
 					+ " PRIMARY KEY(USERID,PROJECTID),"
 					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"
-					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID),"
-					+ " FOREIGN KEY(ROLEID) REFERENCES USERSROLESDICT(ROLEID))";
+					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID))";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
