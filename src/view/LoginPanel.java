@@ -16,7 +16,8 @@ import model.User;
 
 /**
  * This class displays the standard Login panel for any user type
- * @author Francois Stelluti
+ * @author Andrey Uspenskiy
+ * @modifiedBy Francois Stelluti
  */
 public class LoginPanel extends StartupPanel implements ActionListener {
 

@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.BorderLayout;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -28,6 +30,7 @@ public class TabPanel extends JPanel {
     
     public TabPanel (User user) {
 	JTabbedPane tabPane = new JTabbedPane();
+	this.setLayout(new BorderLayout());	//Needed to fill the Panel properly
 	JComponent activitiesTab = new GridProjects(user);
 	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
 	// JComponent reportsTab = new ReportsTab(project, user);
