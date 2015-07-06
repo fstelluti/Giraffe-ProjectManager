@@ -151,30 +151,23 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT DISTINCT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
-							+ " FROM PROJECTS p, USERS u, USERROLES ur"
-							+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
+			rs = stmt.executeQuery("SELECT DISTINCT p.id"
+				+ " FROM PROJECTS p, USERS u, USERROLES ur"
+				+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
 			while (rs.next())
 			{
 				Project project = null;
 
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
-				String name = rs.getString(2);
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString(3));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString(4));
-				String description = rs.getString(5);
-				project = new Project(id, name, startDate, dueDate, description);
-				projects.add(project);
+				projects.add(getById(id));
 			}
 		}
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		// } catch (Exception e) {
+		// 	System.err.println(e.getClass().getName() + " in ProjectDB.getAll(): " + e.getMessage());
 		} finally {
 			try {
 				if (rs != null) {
@@ -211,7 +204,7 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT p.id, p.name, p.startDate, p.dueDate, p.description, u.id"
+			rs = stmt.executeQuery("SELECT p.id"
 					+ " FROM PROJECTS p, USERS u, USERROLES ur"
 					+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userId + ";");
 			
@@ -221,12 +214,7 @@ public class ProjectDB extends DataManager
 
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
-				String name = rs.getString(2);
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString(3));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString(4));
-				String description = rs.getString(5);
-				project = new Project(id, name, startDate, dueDate, description);
-				projects.add(project);
+				projects.add(getById(id));
 			}
 		}
 		catch (SQLException e)
@@ -272,20 +260,21 @@ public class ProjectDB extends DataManager
 		stmt = c.createStatement();
 		rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id + ";");
 
-		while (rs.next())
-		{
+		while (rs.next()) {
 		    String name = rs.getString("name");
+		    
 		    Date startDate = null;
+		    String startDateFromDb = rs.getString("startDate");
+		    if (startDateFromDb != null) try { 
+			startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+		    } catch (ParseException ignore) {}
+		    
 		    Date dueDate = null;
-		    try
-		    {
-		    	startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
-		    	dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
-		    }
-		    catch (ParseException ignore)
-		    {
-		    	
-		    }
+		    String dueDateFromDb = rs.getString("dueDate");
+		    if (dueDateFromDb != null) try { 
+			dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
+		    } catch (ParseException ignore) {}
+		    
 		    String description = rs.getString("description");
 		    double actualBudget = rs.getDouble("ACTUALBUDGET");
 		    double estimatedBudget = rs.getDouble("ESTIMATEDBUDGET");

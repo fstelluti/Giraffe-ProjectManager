@@ -15,7 +15,6 @@ import view.CreateAccountDialog;
 import view.LoginPanel;
 import view.MainPanel;
 import view.StartupPanel;
-import view.TreeNode;
 
 /**
  * 
@@ -106,19 +105,7 @@ public class ViewManager {
 		}
 	}
 	
-	/**
-	 * Creates a TreeNode based on the list of current projects and activities
-	 * @param root, projects
-	 */
-	public static void createProjectTree(TreeNode root, List<Project> projects) {
-		
-		TreeNode projectNode = null;	//Node for a Project
-
-		//For each project, add it to its Tree
-		for (Project project : projects) {
-			projectNode = new TreeNode(project.getName(), project);
-			root.add(projectNode);
-		}
+	public static void updateTabPanel (Project project) {
+	    
 	}
-	
 }

@@ -192,9 +192,9 @@ public class Project
 	}
 
 	@Override
+	// Used to generate the list view of projects, returns only name
 	public String toString() {
-		return "Project [id=" + id + ", name=" + name + ", description="
-				+ description + ", estimatedBudget=" + estimatedBudget + "]";
+		return name;
 	}
 	
 }

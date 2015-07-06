@@ -27,13 +27,13 @@ import controller.ProjectDB;
 
 //NOT FINISHED
 @SuppressWarnings("all")
-public class GridProjects extends JPanel {
+public class ActivitiesTab extends JPanel {
 	private JTable grid;
 	private User user;
 	private JPanel content;
 	private String connectionString = DataManager.getDb();
 	
-	public GridProjects(User user)
+	public ActivitiesTab(User user)
 	{
 		this.user = user;
 		this.setLayout(new BorderLayout());

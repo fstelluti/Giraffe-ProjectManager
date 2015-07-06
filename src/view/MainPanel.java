@@ -1,5 +1,6 @@
 package view;
 
+import java.util.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -23,11 +24,11 @@ import controller.ViewManager;
  */
 
 @SuppressWarnings("serial")
-public class MainPanel extends JPanel {
+public class MainPanel extends JPanel  {
 	private JPanel northPanel, userSubPanel;
-	private JScrollPane treeView;
+	private JScrollPane listView;
 	private TabPanel tabView;
-	private TreePanel treePanel;
+	private ProjectListPanel projectListPanel;
 	//private JPanel southPanel;
 	private JSplitPane splitPanel;
 	private User user;
@@ -67,10 +68,8 @@ public class MainPanel extends JPanel {
 			splitPanel.setDividerLocation(DIVIDER_LOCATION);
 		}
 		//Set the left component to display the list of Projects, depending on user status 
-		this.setTreePanelProjects();
-		
-		treeView = treePanel.getTreeView();
-		splitPanel.setLeftComponent(treeView);
+		projectListPanel = new ProjectListPanel(this.user);
+		splitPanel.setLeftComponent(projectListPanel);
 		//Set the right component, the various tabs
 		tabView = new TabPanel(this.user);
 		splitPanel.setRightComponent(tabView);
@@ -79,17 +78,6 @@ public class MainPanel extends JPanel {
 		splitPanel.setContinuousLayout(true); //TODO: Needed??
 		
 		return splitPanel;
-	}
-
-	/**
-	 * Sets the TreePanel attribute to include Projects, depending on user status 
-	 */
-	private void setTreePanelProjects() {
-		if(user.getAdmin() == 1) {
-			treePanel = new TreePanel(DataManager.getAllProjects()); 
-		} else {
-			treePanel = new TreePanel(DataManager.getUserProjects(user));
-		}
 	}
 	
 	/**
@@ -148,10 +136,8 @@ public class MainPanel extends JPanel {
 	 * Refreshes the Main View Panel. 
 	 */
 	public void refresh() {
-		this.setTreePanelProjects();
-		treeView = treePanel.getTreeView();
-		splitPanel.setLeftComponent(treeView);
-		splitPanel.setDividerLocation(DIVIDER_LOCATION);
+		projectListPanel = new ProjectListPanel(this.user);
+		splitPanel.setLeftComponent(projectListPanel);
 		splitPanel.setRightComponent(tabView);
 		//TODO: Other properties (see above)?
 		//addTreeSelectionListener();
