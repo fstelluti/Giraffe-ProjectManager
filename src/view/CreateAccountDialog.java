@@ -30,7 +30,7 @@ import controller.ViewManager;
 /**
  * This class is responsible for displaying a dialog when creating a new account
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti, Zachary Bergeron
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Zachary Bergeron, Ningge Hu
  */
 
 @SuppressWarnings("serial")
