@@ -41,7 +41,7 @@ public class CreateProjectDialog extends JDialog
 	public CreateProjectDialog(User user)
 	{
 		super(ApplicationWindow.instance(), "Create a New Project", true);
-		this.setSize(500, 500);
+		this.setSize(300, 150);
 		this.user = user;
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -81,26 +81,26 @@ public class CreateProjectDialog extends JDialog
 					JOptionPane.showMessageDialog(content,"Project with this name already exists", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 				}
 				else{
-					int response = JOptionPane.showConfirmDialog(content,
-							"Are you sure you want to create the following Project?\n"
-									+ "\nProject Name: "+projectName.getText()
-									+ "Confirm "+projectName.getText()+" creation");
-					if(response == JOptionPane.YES_OPTION){
-						ProjectDB.insert(projectName.getText());
+				    int response = JOptionPane.showConfirmDialog(content,
+					    "Are you sure you want to create the following Project?\n"
+						    + "\nProject Name: " + projectName.getText());
+				    if(response == JOptionPane.YES_OPTION){
+					Project project = new Project();
+					project.setName(projectName.getText());
+					project.persist();
 
-						//Gets id of project just created
-						Project project = ProjectDB.getByName(projectName.getText());
-						
-						// TODO change ROLEID (last parameter of the call)
-						//Sets initial project manager for project
-						UserRolesDB.insert(user.getId(), project.getId(), 1);
+					//Gets id of project just created
 
-						setVisible(false);
-						ViewManager.setCurrentProject(project);
-						ViewManager.getCurrentUser().setCurrentProject(project);
-						ViewManager.refresh();
+					// TODO change ROLEID (last parameter of the call)
+					//Sets initial project manager for project
+					UserRolesDB.insert(user.getId(), project.getId(), 1);
 
-					}
+					setVisible(false);
+					ViewManager.setCurrentProject(project);
+					ViewManager.getCurrentUser().setCurrentProject(project);
+					ViewManager.refresh();
+
+				    }
 				}
 			}     
 		});

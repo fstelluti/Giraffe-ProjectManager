@@ -47,7 +47,6 @@ public class TabPanel extends JPanel {
 	tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
 	// tabPane.addTab("Details", detailsIcon, detailsTab);
 	this.add(tabPane);
-	System.out.println(user);
 	this.revalidate();
     }
 }

@@ -102,7 +102,6 @@ public class ViewManager {
 	}
 	
 	public static void refresh() {
-	    System.out.println("REFRESH");
 	    User user = getCurrentUser();
 	    projectListPanel.refresh(user);
 	    tabPanel.refresh(user);

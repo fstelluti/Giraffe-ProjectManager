@@ -135,6 +135,8 @@ public class Project
 	public void persist() {
 	    if (this.id == 0) {
 		ProjectDB.insert(this);
+		Project temp = ProjectDB.getByName(this.name);
+		this.id = temp.id;
 	    } else {
 		ProjectDB.update(this);
 	    }

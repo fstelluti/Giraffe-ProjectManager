@@ -60,38 +60,7 @@ public class ProjectDB extends DataManager
 		}
 	}
 	
-	public static void insert(String projectName) {
-		Connection c = null;
-		Statement stmt = null;
 		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
-					+ "VALUES (NULL, '" + projectName + "')";
-			stmt.executeUpdate(sql);
-			c.commit();
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ProjectDB.insertProjectIntoTable: " + e.getMessage());
-			}
-		}
-	}
-	
 	/**
 	 * Inserts a Project object into the database.
 	 * @author Matthew Mongrain
@@ -102,17 +71,10 @@ public class ProjectDB extends DataManager
 
 	    try {
 		c = getConnection();
-		c.setAutoCommit(false);
-
 		stmt = c.createStatement();
-		String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
+		String sql = "INSERT INTO PROJECTS (ID, NAME) "
 			+ "VALUES (NULL, '" 
-			+ project.getName() + "', '" 
-			+ DataManager.DATE_FORMAT.format(project.getStartDate()) + "', '"
-			+ DataManager.DATE_FORMAT.format(project.getDueDate()) + "', '" 
-			+ project.getDescription() + ",' '"
-			+ project.getEstimatedBudget() + ",' '"
-			+ project.getActualBudget() + "')";
+			+ project.getName() + "');";
 		stmt.executeUpdate(sql);
 	    } catch (SQLException e) {
 		System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -356,13 +318,18 @@ public class ProjectDB extends DataManager
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE NAME = '" + projectName + "'" + ";");
-			
 			while (rs.next())
 			{
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
+				Date startDate = null;
+				Date dueDate = null;
+				if (rs.getString("startDate") != null) {
+				    startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
+				}
+				if (rs.getString("dueDate") != null) {
+				    dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
+				}
 				String description = rs.getString("description");
 				project = new Project(id, name, startDate, dueDate, description);
 			}
