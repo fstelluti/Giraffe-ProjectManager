@@ -61,6 +61,38 @@ public class ProjectDB extends DataManager
 		}
 	}
 	
+	public static void insert(String projectName) {
+		Connection c = null;
+		Statement stmt = null;
+		
+		try
+		{
+			c = getConnection();
+			c.setAutoCommit(false);
+
+			stmt = c.createStatement();
+			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
+					+ "VALUES (NULL, '" + projectName + "')";
+			stmt.executeUpdate(sql);
+			c.commit();
+		}
+		catch (SQLException e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		catch (Exception e)
+		{
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+			try {
+				stmt.close();
+				c.close();
+			} catch (SQLException e) {
+				System.err.println("Error closing connections in ProjectDB.insertProjectIntoTable: " + e.getMessage());
+			}
+		}
+	}
+	
 	/**
 	 * Inserts a Project object into the database.
 	 * @author Matthew Mongrain

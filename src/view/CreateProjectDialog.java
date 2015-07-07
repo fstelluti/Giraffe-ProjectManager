@@ -1,69 +1,39 @@
 package view;
 
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.text.NumberFormatter;
 
-import model.DateLabelFormatter;
 import model.Project;
 import model.User;
-
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-
 import controller.ProjectDB;
-import controller.UserDB;
 import controller.UserRolesDB;
 
 /**
  * Create a Dialog window, where the user can create a project.
  *
- * @author Lukas Cardot-Goyette
- * @modifiedBy Zachary Bergeron, Anne-Marie Dube
+ * @author Anne-Marie Dube, Lukas Cardot-Goyette, Zachary Bergeron
  */
 
 @SuppressWarnings("serial")
 public class CreateProjectDialog extends JDialog 
 {
 
-	private NumberFormat format = NumberFormat.getInstance();
-	private NumberFormatter formatter = new NumberFormatter(format);
+
 	private JTextField projectName;
-	private JFormattedTextField projectEstBudget;
-	private JFormattedTextField projectActBudget;
-	private JTextArea projectDescription;
-	private JScrollPane scrollPanDescription;
-	private JComboBox<?> managerBox;
+
 	private User user;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	private UtilDateModel startModel = new UtilDateModel();
-	private UtilDateModel dueModel = new UtilDateModel();
-	private Properties p = new Properties();
 	boolean exists;
 	boolean refresh = false;
 
@@ -82,34 +52,6 @@ public class CreateProjectDialog extends JDialog
 	{
 		final JPanel content = new JPanel();
 
-		//These set the properties for date picker
-		p.put("text.today", "Today");
-		p.put("text.month", "Month");
-		p.put("text.year", "Year");
-
-		//Formatter for Budget
-		formatter.setValueClass(Integer.class);
-		formatter.setMinimum(0);
-		projectEstBudget = new JFormattedTextField(formatter);
-		projectActBudget = new JFormattedTextField(formatter);
-		
-		//Estimated Budget
-		JPanel panEstBudget = new JPanel();
-		panEstBudget.setBackground(Color.white);
-		panEstBudget.setPreferredSize(new Dimension(230, 60));
-		panEstBudget.setBorder(BorderFactory.createTitledBorder("Estimated Project Budget"));
-		projectEstBudget.setPreferredSize(new Dimension(200,30));
-		panEstBudget.add(projectEstBudget);
-		
-		//Actual Budget
-		JPanel panActBudget = new JPanel();
-		panActBudget.setBackground(Color.white);
-		panActBudget.setPreferredSize(new Dimension(230, 60));
-		panActBudget.setBorder(BorderFactory.createTitledBorder("Actual Project Budget"));
-		projectActBudget.setPreferredSize(new Dimension(200,30));
-		panActBudget.add(projectActBudget);
-		
-		
 		//Project Name
 		JPanel panName = new JPanel();
 		panName.setBackground(Color.white);
@@ -120,57 +62,6 @@ public class CreateProjectDialog extends JDialog
 		projectName.setPreferredSize(new Dimension(200,30));
 		panName.add(projectName);
 
-		//Project Manager
-		JPanel panManager = new JPanel();
-		panManager.setBackground(Color.white);
-		panManager.setPreferredSize(new Dimension(230, 60));
-
-		final List<User> projectManagers = UserDB.getAll();
-		Vector<String> projectManagerNames = new Vector<String>();
-		for(User projectManager : projectManagers){
-			projectManagerNames.add(projectManager.getFirstName() + " " + projectManager.getLastName());
-		}
-		managerBox = new JComboBox<String>(projectManagerNames);
-		panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
-		panManager.add(managerBox);
-		User projectManager = UserDB.getById(user.getId());
-		int selectedIndex = projectManagerNames.indexOf(projectManager.getFirstName() + " " + projectManager.getLastName());
-		managerBox.setSelectedIndex(selectedIndex);
-
-		//Start Date
-		JPanel panStartDate = new JPanel();
-		panStartDate.setBackground(Color.white);
-		panStartDate.setPreferredSize(new Dimension(230, 60));
-		panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
-		startModel.setSelected(true);
-		JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
-		final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
-		panStartDate.add(startDatePicker);
-
-		//Due date
-		JPanel panDueDate = new JPanel();
-		panDueDate.setBackground(Color.white);
-		panDueDate.setPreferredSize(new Dimension(230, 60));
-		panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
-		dueModel.setSelected(false);
-		JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
-		final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
-		panDueDate.add(dueDatePicker);
-
-		//Project Description
-		JPanel panDescription = new JPanel();
-		panDescription.setBackground(Color.white);
-		panDescription.setPreferredSize(new Dimension(465, 120));
-		projectDescription = new JTextArea();
-		panDescription.setBorder(BorderFactory.createTitledBorder("Description (optional)"));
-		projectDescription.setBorder( new JTextField().getBorder() );
-		projectDescription.setLineWrap(true);
-		projectDescription.setWrapStyleWord(true);
-		scrollPanDescription = new JScrollPane(projectDescription, 
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPanDescription.setPreferredSize(new Dimension(445,85));
-		panDescription.add(scrollPanDescription);
-
 		JPanel control = new JPanel();
 		JButton okButton = new JButton("Create Project");
 		okButton.addActionListener(new ActionListener(){
@@ -178,46 +69,29 @@ public class CreateProjectDialog extends JDialog
 				//Checks if the project already exists
 				List<Project> projects = ProjectDB.getAll();
 				for(Project project:projects){
-					if(projectName.getText().equals(project.getName())){ exists = true; break; } else{exists = false;}
-				}
-
-				//Verifies all text boxes are filled out, if not = error
-				if(projectName.getText().hashCode() == 0 || startDatePicker.getModel().getValue() == null
-						|| dueDatePicker.getModel().getValue() == null){
-					JOptionPane.showMessageDialog(content,"Please fill out all fields", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
+					if(projectName.getText().equals(project.getName())) { 
+						exists = true; break; 
+					} else {
+						exists = false;
+					}
 				}
 				//Provides error if project name exists
-				else if(exists){
+				if(exists){
 					JOptionPane.showMessageDialog(content,"Project with this name already exists", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
-				}
-				//Checks that due date not before start date
-				else if(((Date)dueDatePicker.getModel().getValue()).before(((Date)startDatePicker.getModel().getValue()))){
-					JOptionPane.showMessageDialog(content,"Please ensure due date is not before start date", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 				}
 				else{
 					int response = JOptionPane.showConfirmDialog(content,
 							"Are you sure you want to create the following Project?\n"
 									+ "\nProject Name: "+projectName.getText()
-									+ "\nProject Budget: "+projectEstBudget.getText()
-									+ "\nStart Date: "+dateFormat.format(startDatePicker.getModel().getValue())
-									+ "\nDue Date: "+dateFormat.format(dueDatePicker.getModel().getValue()),
-									"Confirm "+projectName.getText()+" creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+									+ "Confirm "+projectName.getText()+" creation");
 					if(response == JOptionPane.YES_OPTION){
-						ProjectDB.insert(projectName.getText(),
-								dateFormat.format(startDatePicker.getModel().getValue()), 
-								dateFormat.format(dueDatePicker.getModel().getValue()),
-								projectDescription.getText(),
-								projectEstBudget.getText(),
-								projectActBudget.getText()
-								);
+						ProjectDB.insert(projectName.getText());
 
 						//Gets id of project just created
 						Project project = ProjectDB.getByName(projectName.getText());
 
-						// TODO change ROLEID (last parameter of the call)
 						//Sets initial project manager for project
-						UserRolesDB.insert(projectManagers.get(managerBox.getSelectedIndex()).getId(),
-								project.getId(), 1);
+						UserRolesDB.insert(user.getId(), project.getId(), 0);
 						refresh = true;
 						setVisible(false); 
 
@@ -236,12 +110,6 @@ public class CreateProjectDialog extends JDialog
 
 		content.setBackground(Color.white);
 		content.add(panName);
-		content.add(panManager);
-		content.add(panStartDate);
-		content.add(panDueDate);
-		content.add(panEstBudget);
-		content.add(panActBudget);
-		content.add(panDescription);
 
 		this.getContentPane().add(content, BorderLayout.CENTER);
 		this.getContentPane().add(control, BorderLayout.SOUTH);
