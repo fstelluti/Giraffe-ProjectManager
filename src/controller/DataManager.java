@@ -4,8 +4,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+import javax.swing.table.DefaultTableModel;
+
+import model.Activity;
 import model.Project;
 import model.User;
 
@@ -139,6 +144,32 @@ public abstract class DataManager
 
 	public static void setTesting(boolean testing) {
 		DataManager.testing = testing;
+	}
+
+	public static DefaultTableModel buildActivityTableModel(Project project) {
+	    // names of columns
+	    Vector<String> columnNames = new Vector<String>();
+	    columnNames.add("Name");
+	    columnNames.add("Start Date");
+	    columnNames.add("Due Date");
+	    columnNames.add("Description");
+	
+	    // data of the table
+	    Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+	    ArrayList<Activity> activities = project.getActivities();
+	    if (activities != null) {
+		for (Activity activity : activities) {
+		    Vector<Object> activityVector = new Vector<Object>();
+		    activityVector.add(activity.getName());
+		    activityVector.add(DATE_FORMAT.format(activity.getStartDate()));
+		    activityVector.add(DATE_FORMAT.format(activity.getDueDate()));
+		    activityVector.add(activity.getDescription());
+		    data.add(activityVector);
+		}
+	    }
+	    
+	    return new DefaultTableModel(data, columnNames);
+	
 	}
 	
 	

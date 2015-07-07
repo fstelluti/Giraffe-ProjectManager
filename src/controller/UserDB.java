@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.User;
@@ -71,8 +73,8 @@ public class UserDB extends DataManager {
 
 	    try {
 		c = getConnection();
-
 		stmt = c.createStatement();
+		int adminInt = user.isAdmin() ? 1 : 0;
 		String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN, IMAGEICON) "
 			+ "VALUES (NULL, '"
 			+ user.getUserName()
@@ -81,7 +83,10 @@ public class UserDB extends DataManager {
 			+ "', '"
 			+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
 			+ "', " 
-			+ user.getAdmin() + ", '" + user.getUserPicture() + "')";
+			+ adminInt 
+			+ ", '" 
+			+ user.getUserPicture() 
+			+ "')";
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
@@ -105,13 +110,14 @@ public class UserDB extends DataManager {
 		c = getConnection();
 
 		stmt = c.createStatement();
+		int adminInt = user.isAdmin() ? 1 : 0;
 		String sql = "UPDATE USERS SET " 
 			+ "USERNAME='" + user.getUserName() + "',"
 			+ "PASSWORD='" + user.getPassword() + "',"
 			+ "EMAIL='" + user.getEmail() + "',"
 			+ "FIRSTNAME='" + user.getFirstName() + "',"
 			+ "LASTNAME='" + user.getLastName() + "',"
-			+ "ADMIN='" + user.getAdmin() + "',"
+			+ "ADMIN='" + adminInt + "',"
 			+ "IMAGEICON='" + user.getUserPicture() + "';."
 			+ "WHERE ID=" + user.getId() + ";";
 		stmt.executeUpdate(sql);
@@ -128,118 +134,85 @@ public class UserDB extends DataManager {
 	 * Method returns all users in the User Table
 	 * @return
 	 */
-	public static List<User> getAll()
-	{
-		List<User> users = new ArrayList<User>();
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static List<User> getAll() {
+	    List<User> users = new ArrayList<User>();
+	    Connection c = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM USERS;");
-			while (rs.next())
-			{
-				User user = null;
-				int id = rs.getInt("id");
-				String userName = rs.getString("username");
-				String password = rs.getString("password");
-				String email = rs.getString("email");
-				String firstName = rs.getString("firstname");
-				String lastName = rs.getString("lastname");
-				int adminFlag = rs.getInt("admin");
-				user = new User(id, userName, password, email, firstName, lastName);
-				user.setAdmin(adminFlag);
-				users.add(user);
-			}
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt != null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in UserDB.getAllUsers: " + e.getMessage());
-			}
+	    try {
+		c = getConnection();
+		c.setAutoCommit(false);
+
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM USERS;");
+		while (rs.next()) {
+		    User user = null;
+		    int id = rs.getInt("id");
+		    // A little less efficient, as this means a new DB query for each user,
+		    // but worth it in avoided code duplication imho --Matthew
+		    user = getById(id);
+		    users.add(user);
 		}
 		
-		return users;
+	    } catch (SQLException e) {
+		System.err.println(e.getClass().getName() + ": " + e.getStackTrace());
+	    } finally {
+		if (rs != null) try { rs.close(); } catch (SQLException ignore) {} 
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {} 
+		if (c != null) try { c.close(); } catch (SQLException ignore) {} 
+	    }
+
+	    return users;
 	}
 	
 	/**
 	 * Method searches for a user in DB by id
 	 * precondition id is valid
 	 * When method is called check if it returns null in which case a user with a given id doesn't exist
+	 * Throws IllegalArgumentException if id exists in duplicate in DB
+	 * 
+	 * @author Matthew Mongrain
 	 * @param id as Int
 	 * @return
 	 */
-	public static User getById(int id)
-	{
-		User user = null;
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static User getById(int id) {
+	    User user = null;
+	    Connection c = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM USERS WHERE ID = " + id + ";");
-			while (rs.next())
-			{
-				String userName = rs.getString("username");
-				String password = rs.getString("password");
-				String email = rs.getString("email");
-				String firstName = rs.getString("firstname");
-				String lastName = rs.getString("lastname");
+	    try {
+		c = getConnection();
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM USERS WHERE ID = " + id + ";");
+		rs.next();
+		String userName = rs.getString("username");
+		String password = rs.getString("password");
+		String email = rs.getString("email");
+		String firstName = rs.getString("firstname");
+		String lastName = rs.getString("lastname");
+		int adminInt = rs.getInt("admin");
+		boolean adminFlag = (adminInt == 1) ? true : false;
+		user = new User(id, userName, password, email, firstName, lastName);
+		user.setAdmin(adminFlag);
+		user.setId(id);
+		String regDateString = rs.getString("regDate");
+		Date regDate = null;
+		try { regDate = DataManager.DATE_FORMAT.parse(regDateString); } catch (ParseException ignore) {}
+		user.setRegDate(regDate);
+		if (rs.next()) {
+		    throw new IllegalArgumentException("User.getById(int id): User ID " + id + " is not unique");
+		}
 
-				int adminFlag = rs.getInt("admin");
-				user = new User(id, userName, password, email, firstName, lastName);
-				user.setAdmin(adminFlag);
-			}
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt != null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in UserDB.getUserById: " + e.getMessage());
-			}
-		}	
-		return user;
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    } finally {
+		if (rs != null) try { rs.close(); } catch (SQLException ignore) {} 
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {} 
+		if (c != null) try { c.close(); } catch (SQLException ignore) {} 
+	    }
+	    return user;
 	}
 
 	/**
@@ -265,22 +238,12 @@ public class UserDB extends DataManager {
 			while (rs.next())
 			{
 				int id = rs.getInt("id");
-				String password = rs.getString("password");
-				String email = rs.getString("email");
-				String firstName = rs.getString("firstname");
-				String lastName = rs.getString("lastname");
-				int adminFlag = rs.getInt("admin");
-				user = new User(id, userName, password, email, firstName, lastName);
-				user.setAdmin(adminFlag);
+				user = getById(id);
+				int adminFlagInt = rs.getInt("admin");
+				user.setAdmin((adminFlagInt == 1) ? true : false);
 			}
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} catch (SQLException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -292,9 +255,7 @@ public class UserDB extends DataManager {
 				rs.close();
 				stmt.close();
 				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in UserDB.getUserByName: " + e.getMessage());
-			}
+			} catch (SQLException ignore) {}
 		}	
 		return user;
 	}

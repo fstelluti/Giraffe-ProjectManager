@@ -175,13 +175,13 @@ public class CreateAccountDialog extends JDialog
 							
 							if(DataManager.userTableIsEmpty())
 							{
-								user.setAdmin(1);
+								user.setAdmin(true);
 								user.persist();
 								ViewManager.logout(); //Switch to the LoginPanel
 							}
 							else
 							{
-								user.setAdmin(0);
+								user.setAdmin(false);
 								user.persist();
 							}
 							

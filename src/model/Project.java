@@ -149,7 +149,7 @@ public class Project
 	}
 
 	public ArrayList<Activity> getActivities() {
-		return activities;
+	    return activities;
 	}
 	
 	//modified: checks if activities list doesn't contain activity (! was missing)

@@ -169,9 +169,9 @@ public class ActivityDB extends DataManager
 	 * 
 	 * @return
 	 */
-	public static List<Activity> getProjectActivities(int projectId)
+	public static ArrayList<Activity> getProjectActivities(int projectId)
 	{
-		List<Activity> activities = new ArrayList<Activity>();
+		ArrayList<Activity> activities = new ArrayList<Activity>();
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs = null;

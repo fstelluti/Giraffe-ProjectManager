@@ -156,8 +156,6 @@ public class ProjectDB extends DataManager
 				+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID;");
 			while (rs.next())
 			{
-				Project project = null;
-
 				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				projects.add(getById(id));
@@ -201,18 +199,14 @@ public class ProjectDB extends DataManager
 		try
 		{
 			c = getConnection();
-			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT p.id"
 					+ " FROM PROJECTS p, USERS u, USERROLES ur"
 					+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userId + ";");
-			
 			while (rs.next())
 			{
-				Project project = null;
 
-				//Attributes from the Query can be accessed by position, instead of by name (ex: p.id)
 				int id = rs.getInt(1);
 				projects.add(getById(id));
 			}

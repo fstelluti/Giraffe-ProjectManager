@@ -2,15 +2,15 @@ package model;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import controller.UserDB;
 
 /**
- * Create a user.
- * Possibility of editing it.
+ * Describes the User class, which stores a User object and allows it to interact
+ * with its representation in the database via the controller/UserDB helper class.
  * 
- * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
+ * @authors Andrey Uspenskiy, Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -21,39 +21,68 @@ public class User
 	private String userName;
 	private String password;
 	private String email;
-	private Date 	regDate;
+	private Date regDate;
 	private String firstName;
 	private String lastName;
 	private byte[] userPicture;
-	private int admin; //Use for the admin status (1=admin, 0=PM/Regular User)
-	
-	public User(int id, String userName, String password, String email,	String firstName, String lastName)
-	{
-		super();
-		this.id = id;
+	private boolean admin; //Use for the admin status (1=admin, 0=PM/Regular User)
+	private Project currentProject;
+		
+	/**
+	 * The minimum constructor for a valid User object.
+	 * @param userName
+	 * @param password
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 */
+	public User(String userName, String password, String email, String firstName, String lastName) {
 		this.userName = userName;
 		this.password = password;
 		this.email = email;
-		this.setRegDate(new Date());//it creates today's date by default
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.admin = 0;	//Default is PM or Regular User
+		this.admin = false;	//Default is PM or Regular User
 		this.userPicture = "".getBytes();
+		List<Project> projects = UserDB.getUserProjects(this);
+		if (projects.size() > 0) {
+		    setCurrentProject(projects.get(0));
+		}
 	}
 	
-	public User(String userName, String password, String email, String firstName, String lastName)
-	{
-		super();
-		this.userName = userName;
-		this.password = password;
-		this.email = email;
-		this.setRegDate(new Date());
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.admin = 0;	//Default is PM or Regular User
-		this.userPicture = "".getBytes();
+	/**
+	 * Constructor for testing and DB methods. Try to avoid using elsewhere, preferring User(int) or User().
+	 * 
+	 * @param id
+	 * @param userName
+	 * @param password
+	 * @param email
+	 * @param firstName
+	 * @param lastName
+	 */
+	public User(int id, String userName, String password, String email, String firstName, String lastName) {
+	    this(userName, password, email, firstName, lastName);
+	    this.id = id;
 	}
 	
+	/**
+	 * Constructor that builds a user from an ID alone by fetching the relevant user from the database.
+	 * Throws IllegalArgumentException if the id does not exist in the database.
+	 * @param id
+	 */
+	public User(int id) {
+	    User user = UserDB.getById(id);
+	    if (user == null) {
+		throw new IllegalArgumentException("User.User(int id): User ID " + id + " does not exist in DB");
+	    }
+	    this.id = user.getId();
+	    this.userName = user.getUserName();
+	    this.password = user.getPassword();
+	    this.regDate = user.getRegDate();
+	    this.email = user.getEmail();
+	    
+	    
+	}
 	public String getUserName()
 	{
 		return userName;
@@ -124,15 +153,11 @@ public class User
 		this.userPicture = userPicture;
 	}
 	
-	public int getAdmin() {
+	public boolean isAdmin() {
 		return admin;
 	}
 
-	public void setAdmin(int admin) {
-		//Check that the admin value is either 0 or 1
-		if(admin != 0 && admin != 1) {
-			throw new IllegalArgumentException("admin flag must be 0 or 1");
-		}
+	public void setAdmin(boolean admin) {
 		this.admin = admin;
 	}
 	
@@ -185,5 +210,17 @@ public class User
 		return "User [id=" + id + ", userName=" + userName + ", password="
 				+ "*****" + ", email=" + email + ", regDate=" + regDate
 				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+
+	public Project getCurrentProject() {
+	    List<Project> projects = UserDB.getUserProjects(this);
+	    if (projects.size() > 0) {
+		setCurrentProject(projects.get(0));
+	    }
+	    return currentProject;
+	}
+
+	public void setCurrentProject(Project currentProject) {
+	    this.currentProject = currentProject;
 	}
 }

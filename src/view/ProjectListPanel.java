@@ -23,17 +23,16 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
     private JList<Project> projectsList;
     private DefaultListModel<Project> listModel;
     private User user;
-    ;
+    
     public ProjectListPanel(User user) {
 	super(new BorderLayout());
 	this.user = user;
 	
-	if (this.user.getAdmin() == 1) {
+	if (this.user.isAdmin()) {
 	    this.projects = DataManager.getAllProjects();
 	} else {
 	    this.projects = DataManager.getUserProjects(this.user);
 	}
-	System.out.println("WOW " + this.projects.size());
 	
 	listModel = new DefaultListModel<Project>();
 	

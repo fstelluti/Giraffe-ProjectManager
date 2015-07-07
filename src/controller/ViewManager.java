@@ -1,13 +1,10 @@
 package controller;
 
-import java.util.List;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
-import model.Activity;
 import model.Project;
 import model.User;
 import view.ApplicationWindow;
@@ -17,9 +14,7 @@ import view.MainPanel;
 import view.StartupPanel;
 
 /**
- * 
- * @author Andrey Uspenskiy
- * @modifiedBy Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
+ * @author Andrey Uspenskiy, Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
  */
 
 public class ViewManager {

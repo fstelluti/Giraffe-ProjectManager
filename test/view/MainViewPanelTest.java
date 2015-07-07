@@ -68,7 +68,7 @@ public class MainViewPanelTest {
 		MainPanel mainView1 = new MainPanel(user);
 		
 		//Test the method
-		JSplitPane jSplitPane = mainView1.getSplitPanel();
+		JSplitPane jSplitPane = mainView1.buildSplitPanel();
 		assertNotNull("SplitViewPanel object is null", jSplitPane);
 	}
 
