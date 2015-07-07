@@ -20,7 +20,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -39,6 +38,7 @@ import org.jdatepicker.impl.UtilDateModel;
 import controller.ProjectDB;
 import controller.UserDB;
 import controller.UserRolesDB;
+import controller.ViewManager;
 
 /**
  * Create a Dialog window, where the user can create a project.
@@ -67,9 +67,9 @@ public class CreateProjectDialog extends JDialog
 	boolean exists;
 	boolean refresh = false;
 
-	public CreateProjectDialog(JFrame parent, String title, boolean modal, User user)
+	public CreateProjectDialog(User user)
 	{
-		super(parent, title, modal);
+		super(ApplicationWindow.instance(), "Create a New Project", true);
 		this.setSize(500, 500);
 		this.user = user;
 		this.setLocationRelativeTo(null);
@@ -213,13 +213,15 @@ public class CreateProjectDialog extends JDialog
 
 						//Gets id of project just created
 						Project project = ProjectDB.getByName(projectName.getText());
-
+						
 						// TODO change ROLEID (last parameter of the call)
 						//Sets initial project manager for project
 						UserRolesDB.insert(projectManagers.get(managerBox.getSelectedIndex()).getId(),
 								project.getId(), 1);
-						refresh = true;
-						setVisible(false); 
+						setVisible(false);
+						ViewManager.setCurrentProject(project);
+						ViewManager.getCurrentUser().setCurrentProject(project);
+						ViewManager.refresh();
 
 					}
 				}

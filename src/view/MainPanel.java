@@ -37,9 +37,9 @@ public class MainPanel extends JPanel  {
 	//private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
 
 	//private List<JButton> toolbarButtons = new ArrayList<JButton>();
-	public static final int SIZE_Y = 800;
-	public static final int SIZE_X = 1200;
-	private final int DIVIDER_LOCATION = 150;
+	public static final int SIZE_Y = 700;
+	public static final int SIZE_X = 1000;
+	private final int DIVIDER_LOCATION = 200;
 	private final int TOP_PANEL_HEIGHT = 30;
 
 	public MainPanel(User currentUser) {
@@ -70,12 +70,14 @@ public class MainPanel extends JPanel  {
 		
 		//Set the left component to display the list of Projects
 		projectListPanel = new ProjectListPanel(this.user);
+		ViewManager.setProjectListPanel(projectListPanel); // registers component with view manager
 		listView = new JScrollPane(projectListPanel);
 		listView.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		splitPanel.setLeftComponent(listView);
 		
 		//Set the right component, the various tabs
 		tabView = new TabPanel(this.user);
+		ViewManager.setTabPanel(tabView); // registers component with view manager
 		splitPanel.setRightComponent(tabView);
 		//Enable the ability to click the divider to minimize it
 		splitPanel.setOneTouchExpandable(true);	

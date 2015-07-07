@@ -2,7 +2,6 @@ package controller;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JRootPane;
 
 import model.Project;
@@ -10,41 +9,23 @@ import model.User;
 import view.ApplicationWindow;
 import view.CreateAccountDialog;
 import view.LoginPanel;
-import view.MainPanel;
+import view.ProjectListPanel;
 import view.StartupPanel;
+import view.TabPanel;
 
 /**
- * @author Andrey Uspenskiy, Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
+ * @authors Andrey Uspenskiy, Francois Stelluti, Matthew Mongrain, Anne-Marie Dube
  */
 
 public class ViewManager {
 	
-	private static JPanel mainViewPanel;
 	private static ApplicationWindow applicationWindow = ApplicationWindow.instance();
-	private static LoginPanel loginPanel = ApplicationWindow.getLoginPanel();
+	private static LoginPanel loginPanel = applicationWindow.getLoginPanel();
 	private static JRootPane rootPane = applicationWindow.getRootPane();	//Needed to get default buttons for each Panel
+	private static TabPanel tabPanel;
+	private static ProjectListPanel projectListPanel;
 	
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
-	
-	/**
-	 * Creates the Main View Panel when User has logged in
-	 * @return JPanel
-	 */
-	public static JPanel createMainViewPanel(User user) {
-		if (mainViewPanel == null) {
-			mainViewPanel = new MainPanel(user);
-			applicationWindow.setLocationRelativeTo(null);
-			applicationWindow.addCard(mainViewPanel, "MainViewPanel");
-			mainViewPanel.setSize(MainPanel.SIZE_X, MainPanel.SIZE_Y);
-			applicationWindow.setSize(MainPanel.SIZE_X, MainPanel.SIZE_Y);
-			applicationWindow.setLocationRelativeTo(null);
-		}
-		//Switches to the MainViewPanel even if it is not null, as this is needed when a user has logged out
-		//and another user wants to login
-		applicationWindow.setCard("MainViewPanel", MainPanel.SIZE_X, MainPanel.SIZE_Y);
-		
-		return mainViewPanel;
-	}
 
 	/**
 	 * Returns the main JRootPane from ApplicationPanel, needed to set default buttons
@@ -67,11 +48,11 @@ public class ViewManager {
 	public static void logout() {
 		applicationWindow.setCard("LoginPanel", StartupPanel.SIZE_X, StartupPanel.SIZE_Y);
 		rootPane.setDefaultButton(loginPanel.getDefaultButton());		//Set the Default button back to Login
-		mainViewPanel = null;		//Clears the MainViewPanel so that the next user that logs-in is not the same as the last one
+		applicationWindow.clearMainPanel();
 	}
 	
 	/**
-	 * method used to start the application
+	 * Opens the application window.
 	 * @return applicationPanel
 	 */
 	public static ApplicationWindow openApplicationWindow () {
@@ -102,5 +83,51 @@ public class ViewManager {
 	
 	public static void updateTabPanel (Project project) {
 	    
+	}
+
+	public static TabPanel getTabPanel() {
+	    return tabPanel;
+	}
+
+	public static void setTabPanel(TabPanel tabPanel) {
+	    ViewManager.tabPanel = tabPanel;
+	}
+
+	public static ProjectListPanel getProjectListPanel() {
+	    return projectListPanel;
+	}
+
+	public static void setProjectListPanel(ProjectListPanel projectListPanel) {
+	    ViewManager.projectListPanel = projectListPanel;
+	}
+	
+	public static void refresh() {
+	    System.out.println("REFRESH");
+	    User user = getCurrentUser();
+	    projectListPanel.refresh(user);
+	    tabPanel.refresh(user);
+	}
+	
+	public static User getCurrentUser() {
+	    return applicationWindow.getCurrentUser();
+	}
+
+	public static void setCurrentUser(User currentUser) {
+	    applicationWindow.setCurrentUser(currentUser);
+	}
+
+	public static Project getCurrentProject() {
+	    return applicationWindow.getCurrentProject();
+	}
+
+	public static void setCurrentProject(Project currentProject) {
+	    applicationWindow.setCurrentProject(currentProject);
+	}
+
+	public static void initialize (User user) {
+	    applicationWindow.setCurrentUser(user);
+	    Project currentProject = user.getCurrentProject();
+	    applicationWindow.setCurrentProject(currentProject);
+
 	}
 }

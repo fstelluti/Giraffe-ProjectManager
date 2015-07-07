@@ -118,8 +118,8 @@ public class LoginPanel extends StartupPanel implements ActionListener {
 			boolean checkResult = DataManager.checkLoginResult(userName, passChar);
 			if (checkResult) {
 				User user = DataManager.getUserByName(userName);
-				ViewManager.createMainViewPanel(user);
-
+				ViewManager.initialize(user); // sets ViewManager's currentUser, among other thing
+				ApplicationWindow.instance().createMainViewPanel(ViewManager.getCurrentUser());
 				//Resets text fields so that when logged out, the fields are empty
 				loginTextField.setText("");
 				passwordTextField.setText("");

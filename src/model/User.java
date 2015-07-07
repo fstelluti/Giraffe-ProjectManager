@@ -209,7 +209,7 @@ public class User
 	{
 		return "User [id=" + id + ", userName=" + userName + ", password="
 				+ "*****" + ", email=" + email + ", regDate=" + regDate
-				+ ", firstName=" + firstName + ", lastName=" + lastName + "]";
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", currentProject=" + currentProject + "]";
 	}
 
 	public Project getCurrentProject() {

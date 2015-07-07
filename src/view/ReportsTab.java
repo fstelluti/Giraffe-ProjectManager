@@ -5,7 +5,9 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import controller.ViewManager;
 import model.Project;
+import model.User;
 
 public class ReportsTab extends JPanel {
 
@@ -14,8 +16,8 @@ public class ReportsTab extends JPanel {
     private GanttPanel ganttPanel;
     private Project project;
     
-    public ReportsTab (Project project) {
-	this.project = project;
+    public ReportsTab (User user) {
+	this.project = ViewManager.getCurrentProject();
 	JTabbedPane tabPane = new JTabbedPane();
 	this.ganttPanel = new GanttPanel(this.project);
 	tabPane.addTab("Gantt Chart", null, this.ganttPanel, "View Gantt chart for the currently selected project");

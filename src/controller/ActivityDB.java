@@ -307,8 +307,14 @@ public class ActivityDB extends DataManager
 		activity.setId(id);
 		activity.setProjectId(rs.getInt("projectid"));
 		activity.setName(rs.getString("name"));
-		activity.setStartDate(DataManager.DATE_FORMAT.parse(rs.getString("startDate")));
-		activity.setDueDate(DataManager.DATE_FORMAT.parse(rs.getString("dueDate")));
+		String startDateString = rs.getString("startDate");
+		if (startDateString != null) { 
+		    activity.setStartDate(DataManager.DATE_FORMAT.parse(startDateString));
+		}
+		String dueDateString = rs.getString("dueDate");
+		if (startDateString != null) { 
+		    activity.setDueDate(DataManager.DATE_FORMAT.parse(dueDateString));
+		}		
 		activity.setStatus(rs.getInt("status"));
 		activity.setDescription(rs.getString("description"));
 		activity.setOptimisticDuration(rs.getInt("optimisticDuration"));

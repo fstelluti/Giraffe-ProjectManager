@@ -149,14 +149,19 @@ public class Project
 	}
 
 	public ArrayList<Activity> getActivities() {
+	    if (activities == null) {
+		activities = ActivityDB.getProjectActivities(this.id);
+	    }
 	    return activities;
 	}
 	
-	//modified: checks if activities list doesn't contain activity (! was missing)
 	public void addActivity(Activity activity) {
-		if (!activities.contains(activity)) {
-			activities.add(activity);
-		}
+	    if (activities == null) {
+		activities = new ArrayList<Activity>();
+	    }
+	    if (!activities.contains(activity)) {
+		activities.add(activity);
+	    }
 	}
 	
 	public void removeActivity(Activity activity) {

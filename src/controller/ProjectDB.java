@@ -14,8 +14,7 @@ import model.Project;
 
 /**
  * 
- * @author Zachary Bergeron
- * @modifiedBy: Francois Stelluti, Anne-Marie Dube, Matthew Mongrain, Andrey Uspenskiy
+ * @authors Zachary Bergeron, Francois Stelluti, Anne-Marie Dube, Matthew Mongrain, Andrey Uspenskiy
  *
  */
 
@@ -206,7 +205,6 @@ public class ProjectDB extends DataManager
 					+ " WHERE ur.PROJECTID = p.id AND ur.USERID = u.ID AND ur.USERID = " + userId + ";");
 			while (rs.next())
 			{
-
 				int id = rs.getInt(1);
 				projects.add(getById(id));
 			}

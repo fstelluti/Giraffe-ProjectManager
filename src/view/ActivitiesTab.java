@@ -10,6 +10,7 @@ import javax.swing.JTable;
 
 import model.User;
 import controller.DataManager;
+import controller.ViewManager;
 
 public class ActivitiesTab extends JPanel {
 
@@ -19,7 +20,7 @@ public class ActivitiesTab extends JPanel {
 
     public ActivitiesTab(User user) {
 	this.setLayout(new BorderLayout());
-	grid = new JTable(DataManager.buildActivityTableModel(user.getCurrentProject()));
+	grid = new JTable(DataManager.buildActivityTableModel(ViewManager.getCurrentProject()));
 	Font dataFont = new Font(null, 0, 12);
 	Font headerFont = new Font(null, 0, 12);
 	grid.setGridColor(Color.LIGHT_GRAY);

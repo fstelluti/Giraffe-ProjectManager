@@ -72,14 +72,6 @@ public abstract class DataManager
 	}
 
 	/**
-	 * Checks to see if there are projects in the DB
-	 * @return boolean
-	*/
-	public static Boolean checkIfProjectsExist(User user) {
-		return ProjectDB.getUserProjects(user.getId()).isEmpty();
-	}
-
-	/**
 	 * Checks to see if there are activities in a project
 	 * @return boolean
 	 */
@@ -146,6 +138,13 @@ public abstract class DataManager
 		DataManager.testing = testing;
 	}
 
+	/**
+	 * Creates a dataset to be displayed in the Activity table view.
+	 * 
+	 * @param project
+	 * @return
+	 * @author Matthew Mongrain
+	 */
 	public static DefaultTableModel buildActivityTableModel(Project project) {
 	    // names of columns
 	    Vector<String> columnNames = new Vector<String>();
@@ -161,8 +160,16 @@ public abstract class DataManager
 		for (Activity activity : activities) {
 		    Vector<Object> activityVector = new Vector<Object>();
 		    activityVector.add(activity.getName());
-		    activityVector.add(DATE_FORMAT.format(activity.getStartDate()));
-		    activityVector.add(DATE_FORMAT.format(activity.getDueDate()));
+		    if (activity.getStartDate() != null) {
+			activityVector.add(DATE_FORMAT.format(activity.getStartDate()));
+		    } else { 
+			activityVector.add("No date"); 
+		    }
+		    if (activity.getDueDate() != null) {
+			activityVector.add(DATE_FORMAT.format(activity.getDueDate()));
+		    } else { 
+			activityVector.add("No date"); 
+		    }
 		    activityVector.add(activity.getDescription());
 		    data.add(activityVector);
 		}
