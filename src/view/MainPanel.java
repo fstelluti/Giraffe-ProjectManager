@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +19,7 @@ import controller.ViewManager;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Zachary Bergeron, Francois Stelluti
+ * @modifiedBy Zachary Bergeron, Francois Stelluti, Ningge Hu
  * 
  */
 
@@ -31,7 +32,7 @@ public class MainPanel extends JPanel  {
 	//private JPanel southPanel;	
 	private JSplitPane splitPanel;
 	private User user;
-	private JLabel userLabel, titleLabel; //TODO: Remove + other bullshit code
+	private JLabel userLabel, imageLabel, titleLabel; //TODO: Remove + other bullshit code
 	private JButton logoutActivity;
 	//private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
 
@@ -94,6 +95,7 @@ public class MainPanel extends JPanel  {
 		  northPanel.setLayout(new BorderLayout());
 
 			userLabel = new JLabel("Hello " + user.getFirstName() + " " + user.getLastName() + "  ");
+			imageLabel = new JLabel("pic:"+user.getUserPicture().length,  new ImageIcon(user.getUserPicture()), JLabel.CENTER);
 			titleLabel = new JLabel("Giraffe Manager");
 			titleLabel.setHorizontalAlignment(JLabel.CENTER);	//Forces the middle panel to be centered
 			//Sets the padding of the top bar, but only for the height
@@ -101,6 +103,7 @@ public class MainPanel extends JPanel  {
 			
 			//Adds the labels and logout button to the left side
 			userSubPanel.add(userLabel);
+			userSubPanel.add(imageLabel);
 			userSubPanel.add(logoutActivity);
 			//Add everything to the northPanel
 			northPanel.add(userSubPanel, BorderLayout.EAST);
