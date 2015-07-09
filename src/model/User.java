@@ -80,7 +80,7 @@ public class User
 	    this.password = user.getPassword();
 	    this.regDate = user.getRegDate();
 	    this.email = user.getEmail();
-	    
+	    this.userPicture = user.getUserPicture(); //TODO need?
 	    
 	}
 	public String getUserName()
@@ -146,6 +146,7 @@ public class User
 	}
 
 	public byte[] getUserPicture() {
+		
 		return Arrays.copyOf(userPicture, userPicture.length);	//Returns a deep copy of the array
 	}
 

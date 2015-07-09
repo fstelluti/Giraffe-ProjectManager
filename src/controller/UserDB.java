@@ -198,6 +198,8 @@ public class UserDB extends DataManager {
 		user.setAdmin(adminFlag);
 		user.setId(id);
 		String regDateString = rs.getString("regDate");
+		byte[] userPic = rs.getBytes("imageicon");
+		user.setUserPicture(userPic);
 		Date regDate = null;
 		try { regDate = DataManager.DATE_FORMAT.parse(regDateString); } catch (ParseException ignore) {}
 		user.setRegDate(regDate);

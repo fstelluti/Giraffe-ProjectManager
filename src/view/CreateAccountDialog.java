@@ -5,11 +5,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -43,6 +48,7 @@ public class CreateAccountDialog extends JDialog
 	private JLabel fileChooserLabel, imageLabel;
 	private JPanel imagePanel;
 	private ImageIcon mImageIcon;
+	private String sname;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public CreateAccountDialog(JFrame parent, String title, boolean modal) {
@@ -95,10 +101,11 @@ public class CreateAccountDialog extends JDialog
 				int choice = userPicChooser.showOpenDialog(null);
 				if (choice == JFileChooser.APPROVE_OPTION) {
 					File file = userPicChooser.getSelectedFile();
-					String sname = file.getAbsolutePath();
+					sname = file.getAbsolutePath();
 					mImageIcon = new ImageIcon(sname);
 					imageLabel = new JLabel("", new ImageIcon(mImageIcon.getImage().getScaledInstance(130, 130, SOMEBITS)),
 							JLabel.CENTER);
+					imagePanel.removeAll();
 					imagePanel.add(imageLabel, BorderLayout.CENTER);
 					imagePanel.revalidate();
 					imagePanel.repaint();
@@ -163,17 +170,44 @@ public class CreateAccountDialog extends JDialog
 							resetForm();
 							return;
 						case JOptionPane.YES_OPTION:
-							
+							//Create the User
 							User user = new User(userName.getText().trim(),
 									getAccountPassword(userPassword.getPassword()),
 									email.getText(), firstName.getText(),
 									lastName.getText());
 							
-							// This if-statement checks to see if the DB is empty
-							// If it is empty, create the first user as an Admin
-							// If not empty, create a regular user
+							//Save User image in the DB
+							try{
+								File imgPath = new File(sname);
+								BufferedImage bufferedImage = ImageIO.read(imgPath);
+								//TODO Probably something around here is not converting the image correctly
+								WritableRaster raster = bufferedImage.getRaster();	
+								DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+								user.setUserPicture(data.getData());
+								System.out.println("length: " + data.getData().length);
+							}catch(IOException e){
+								//Print message + stack trace (others?) //TODO Fix this
+							}finally{
+
+								// This if-statement checks to see if the DB is empty
+								// If it is empty, create the first user as an Admin
+								// If not empty, create a regular user
+								if(DataManager.userTableIsEmpty())
+								{
+									user.setAdmin(true);
+									user.persist();
+									ViewManager.logout(); //Switch to the LoginPanel
+								}
+								else
+								{
+									user.setAdmin(false);
+									user.persist();
+								}
+
+								
+							}
 							
-							if(DataManager.userTableIsEmpty())
+							/*if(DataManager.userTableIsEmpty())
 							{
 								user.setAdmin(true);
 								user.persist();
@@ -183,7 +217,7 @@ public class CreateAccountDialog extends JDialog
 							{
 								user.setAdmin(false);
 								user.persist();
-							}
+							}*/
 							
 							setVisible(false);
 							break;
