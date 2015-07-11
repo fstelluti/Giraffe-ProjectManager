@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -184,10 +186,13 @@ public class CreateAccountDialog extends JDialog
 								WritableRaster raster = bufferedImage.getRaster();	
 								DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
 								user.setUserPicture(data.getData());
-								System.out.println("length: " + data.getData().length);
-							}catch(IOException e){
+							}
+							catch(IOException e)
+							{
 								//Print message + stack trace (others?) //TODO Fix this
-							}finally{
+							}
+							finally
+							{
 
 								// This if-statement checks to see if the DB is empty
 								// If it is empty, create the first user as an Admin
@@ -267,8 +272,19 @@ public class CreateAccountDialog extends JDialog
 	 * Method checks to see if all inputs are valid
 	 * @return boolean
 	 */ 
-	private boolean isInputValid() {
+	private boolean isInputValid() 
+	{
 		List<User> users = UserDB.getAll();
+		Pattern p = Pattern.compile("[\\w\\.]+@[\\w\\.]+\\.\\w{2,3}\\b");
+		Matcher m = p.matcher(email.getText());
+		boolean b = m.matches();
+		
+		if (b == false)
+		{
+			JOptionPane.showMessageDialog(null,"Invalid Email, Please Enter A Valid Email", "Error", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+		
 		//Checks that all fields have input
 		if(email.getText().hashCode() == 0 || 
 				userName.getText().hashCode() == 0 || 
