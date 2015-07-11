@@ -1,5 +1,6 @@
 package controller;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
@@ -128,5 +129,19 @@ public class ViewManager {
 	    Project currentProject = user.getCurrentProject();
 	    applicationWindow.setCurrentProject(currentProject);
 
+	}
+	
+	/**
+	 * Updates the Source and Remove lists for the activity dependencies
+	 * @param Object selected[], DefaultListModel<String> Activities1, DefaultListModel<String> Activities2
+	 */
+	//TODO: Check for activity cycles and save in DB (Predecessors table?) use dependents HashSet in Activity
+	public static void setActivityDependLists(Object selected[], DefaultListModel<String> Activities1, 
+			DefaultListModel<String> Activities2) {
+		for(int i=0; i< selected.length; i++) {
+  		//Add the dependant to the destination list and removes it from the source list, and vise-versa
+  		Activities1.addElement((String)selected[i]);
+  		Activities2.removeElement((String)selected[i]);
+  	}
 	}
 }

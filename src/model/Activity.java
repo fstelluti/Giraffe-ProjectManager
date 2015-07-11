@@ -48,7 +48,8 @@ public class Activity
 		dependents = new HashSet<Integer>();
 	}
 	
-	public Activity(int projectId, String name, Date startDate, Date dueDate, int status, String description)
+	public Activity(int projectId, String name, Date startDate, Date dueDate, int status, String description, int estimatedCost, int pessimisticDuration,
+			int optimisticDuration, int mostLikelyDuration)
 	{
 		super();
 		this.projectId = projectId;
@@ -57,6 +58,31 @@ public class Activity
 		this.dueDate = dueDate;
 		this.status = status;
 		this.description = description;
+		this.pessimisticDuration = pessimisticDuration;
+		this.optimisticDuration = optimisticDuration;
+		this.mostLikelyDuration = mostLikelyDuration;
+		this.estimatedCost = estimatedCost;
+		this.actualCost = 0;
+		dependents = new HashSet<Integer>();
+	}
+	
+	//TODO: Used Temp constuctor needed for: getByNameAndProjectId
+	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description, int estimatedCost, int pessimisticDuration,
+			int optimisticDuration, int mostLikelyDuration)
+	{
+		super();
+		this.id = id;
+		this.projectId = projectId;
+		this.name = name;
+		this.startDate = startDate;
+		this.dueDate = dueDate;
+		this.status = status;
+		this.description = description;
+		this.pessimisticDuration = pessimisticDuration;
+		this.optimisticDuration = optimisticDuration;
+		this.mostLikelyDuration = mostLikelyDuration;
+		this.estimatedCost = estimatedCost;
+		this.actualCost = 0;
 		dependents = new HashSet<Integer>();
 	}
 	
@@ -184,7 +210,7 @@ public class Activity
 	    boolean exists = false;
 	    List<Activity> activities = ActivityDB.getProjectActivities(projectId);
 	    
-	    for(Activity activitySelected:activities){
+	    for(Activity activitySelected:activities){ //TODO bug: need to account for a project with, initially, no activities
 		if(activityName.equals(activitySelected.getName())) { 
 		    exists = true; 
 		    break; 
@@ -195,7 +221,7 @@ public class Activity
 		  
 	    //Verifies all text boxes are filled out, if not = error
 	    if (activityName.hashCode() == 0 || activityStartDate == null || activityDueDate == null) {
-		throw new Exception("Please fill out all fields");
+		throw new Exception("Please fill out all applicable fields");
 	    }
  
 	    //Provides error if activity name exists

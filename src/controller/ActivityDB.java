@@ -82,18 +82,18 @@ public class ActivityDB extends DataManager
 		c.setAutoCommit(false);
 		stmt = c.createStatement();
 		String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) "
-			+ "VALUES (NULL, + '" 
-			+ activity.getProjectId() + "',"
-			+ activity.getName() + "',"
-			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "',"
-			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "',"
-			+ activity.getStatus() + ","
+			+ "VALUES (NULL, + " 
+			+ activity.getProjectId() + ", '"
+			+ activity.getName() + "', '"
+			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "', '"
+			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', "
+			+ activity.getStatus() + ",'"
 			+ activity.getDescription() + "',"
 			+ activity.getOptimisticDuration() + ","
 			+ activity.getPessimisticDuration() + ","
 			+ activity.getMostLikelyDuration() + ","
 			+ activity.getEstimatedCost() + ","
-			+ activity.getActualCost() + "')";
+			+ activity.getActualCost() + ")";
 		stmt.executeUpdate(sql);
 	    }
 
@@ -379,7 +379,12 @@ public class ActivityDB extends DataManager
 				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
 				int status = rs.getInt("status");
 				String description = rs.getString("description");
-				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
+				int estimatedCost = rs.getInt("pessimisticduration");
+				int pessimisticDuration = rs.getInt("pessimisticduration");
+				int optimisticDuration = rs.getInt("optimisticduration");
+				int mostLikelyDuration = rs.getInt("mostlikelyduration");
+				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description, estimatedCost, 
+						pessimisticDuration, optimisticDuration, mostLikelyDuration);
 			}
 		}
 		catch (SQLException e)
