@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -21,8 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -41,8 +37,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import controller.ActivityDB;
-import controller.ProjectDB;
 import controller.ViewManager;
 
 /**
@@ -63,14 +57,12 @@ public class AddActivityDialog extends JDialog
   UtilDateModel startModel = new UtilDateModel();
   UtilDateModel dueModel = new UtilDateModel();
   Properties prop = new Properties();
-  private User user;
   final JPanel panDependArea = new JPanel(); 
   final JPanel activityPanel = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
   private boolean refresh = false;
   
   private Project currentProject;
-  private User currentUser;
   private JButton addDependantButton, removeDependantButton, addCommentButton, okButton;
   private JPanel dependSubPanel, panActivityStatus, panEstimatedCost, subDepButtons; 
   private JPanel panActivity, panActivityStartDate, panActivityDueDate, panButtons, panDescription;
@@ -90,9 +82,8 @@ public class AddActivityDialog extends JDialog
   private NumberFormatter formatter = new NumberFormatter(format);
   private JFormattedTextField activityEstimatedBudget, pessimisticDur, optimisticDur, mostLikelyDur;
   
-  public AddActivityDialog(JFrame parent, String title, boolean modal, User currentUser) {
-    super(parent, title, modal);
-    this.user = currentUser;
+  public AddActivityDialog() {
+    super(ApplicationWindow.instance(), "Add Activity", true);
     this.setSize(500, 650);
     this.setLocationRelativeTo(null);
     this.setResizable(false);

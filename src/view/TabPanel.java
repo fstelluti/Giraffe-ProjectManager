@@ -37,7 +37,7 @@ public class TabPanel extends JPanel {
 	this.removeAll();
 	this.user = user;
 	JTabbedPane tabPane = new JTabbedPane();
-	JComponent activitiesTab = new ActivitiesTab(this.user);
+	JComponent activitiesTab = new ActivitiesTab();
 	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
 	JComponent reportsTab = new ReportsTab(this.user);
 	ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");

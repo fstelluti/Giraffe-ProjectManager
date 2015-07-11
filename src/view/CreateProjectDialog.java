@@ -48,7 +48,7 @@ public class CreateProjectDialog extends JDialog
 		this.initComponent();
 		this.setVisible(true);
 
-	}
+	}	
 	private void initComponent()
 	{
 		final JPanel content = new JPanel();
