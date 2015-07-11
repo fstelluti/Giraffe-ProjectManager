@@ -43,7 +43,7 @@ public class ActivitiesTab extends JPanel {
     }
     
     public void refresh() {
-	this.removeAll();
+	if (this.grid != null) { this.remove(this.grid); }
 	this.grid = new JTable(buildActivityTableModel());
 	Font dataFont = new Font(null, 0, 12);
 	Font headerFont = new Font(null, 0, 12);
