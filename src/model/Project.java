@@ -227,7 +227,7 @@ public class Project
 				dg.addEdge(a, b);
 			}
 		}
-		return !cy.detectCycles();
+		return cy.detectCycles();
 	}
 	
 	@Override
