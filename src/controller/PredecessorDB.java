@@ -119,14 +119,7 @@ public class PredecessorDB extends DataManager
 				stmt2 = c.createStatement();
 				int predecessorId = rs.getInt("predecessorId");
 				rs2 = stmt2.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + predecessorId + ";");
-				Activity activity = null;
-				int projectId = rs2.getInt("projectId");
-				String name = rs2.getString("name");
-				Date startDate = DataManager.DATE_FORMAT.parse(rs2.getString("startDate"));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs2.getString("dueDate"));
-				int status = rs2.getInt("status");
-				String description = rs2.getString("description");
-				activity = new Activity(predecessorId, projectId, name, startDate, dueDate, status, description);
+				Activity activity = ActivityDB.getById(rs2.getInt("id"));
 				activities.add(activity);
 			}
 		}

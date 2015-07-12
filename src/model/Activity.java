@@ -32,58 +32,26 @@ public class Activity
 	private int status = 1;
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
 	private HashSet<Integer> dependents;
-	
-	public Activity() {}
-	
-	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description)
-	{
-		super();
-		this.id = id;
-		this.projectId = projectId;
-		this.name = name;
-		this.startDate = startDate;
-		this.dueDate = dueDate;
-		this.status = status;
-		this.description = description;
-		dependents = new HashSet<Integer>();
+		
+	/**
+	 * Minimum constructor for Activity objects. Use setters to initialize other fields.
+	 * Please don't create convenience constructors and use this one instead!
+	 * @param projectId
+	 * @param name
+	 */
+	public Activity(int projectId, String name) {
+	    this.projectId = projectId;
+	    this.name = name;
 	}
-	
-	public Activity(int projectId, String name, Date startDate, Date dueDate, int status, String description, int estimatedCost, int pessimisticDuration,
-			int optimisticDuration, int mostLikelyDuration)
-	{
-		super();
-		this.projectId = projectId;
-		this.name = name;
-		this.startDate = startDate;
-		this.dueDate = dueDate;
-		this.status = status;
-		this.description = description;
-		this.pessimisticDuration = pessimisticDuration;
-		this.optimisticDuration = optimisticDuration;
-		this.mostLikelyDuration = mostLikelyDuration;
-		this.estimatedCost = estimatedCost;
-		this.actualCost = 0;
-		dependents = new HashSet<Integer>();
-	}
-	
-	//TODO: Used Temp constuctor needed for: getByNameAndProjectId
-	public Activity(int id, int projectId, String name, Date startDate, Date dueDate, int status, String description, int estimatedCost, int pessimisticDuration,
-			int optimisticDuration, int mostLikelyDuration)
-	{
-		super();
-		this.id = id;
-		this.projectId = projectId;
-		this.name = name;
-		this.startDate = startDate;
-		this.dueDate = dueDate;
-		this.status = status;
-		this.description = description;
-		this.pessimisticDuration = pessimisticDuration;
-		this.optimisticDuration = optimisticDuration;
-		this.mostLikelyDuration = mostLikelyDuration;
-		this.estimatedCost = estimatedCost;
-		this.actualCost = 0;
-		dependents = new HashSet<Integer>();
+
+	private void loadDependents() {
+	    this.dependents = new HashSet<Integer>();
+	    List<Activity> dependentsFromDb = PredecessorDB.getPredecessors(this.id);
+	    if (dependents != null) {
+		for (Activity dependent : dependentsFromDb) {
+		    this.dependents.add(dependent.getId());
+		}
+	    }
 	}
 	
 	public String getStatusName() {
@@ -258,8 +226,10 @@ public class Activity
 	    }
 	    
 	    // Insert all dependents, too
-	    for (Integer dependent : dependents) {
-		PredecessorDB.insert(this.id, dependent);
+	    if (dependents != null) {
+		for (Integer dependent : dependents) {
+		    PredecessorDB.insert(this.id, dependent);
+		}
 	    }
 	}
 

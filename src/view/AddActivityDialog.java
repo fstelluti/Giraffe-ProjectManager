@@ -41,8 +41,7 @@ import controller.ViewManager;
 
 /**
  * 
- * @author Zachary Bergeron, Lukas Cardot-Goyette, Andrey Uspenskiy, Anne-Marie Dube, 
- * Matthew Mongrain, Francois Stelluti
+ * @author Zachary Bergeron, Lukas Cardot-Goyette, Andrey Uspenskiy, Anne-Marie Dube, Matthew Mongrain, Francois Stelluti
  *
  */
 
@@ -173,19 +172,25 @@ public class AddActivityDialog extends JDialog
 	  //Checks and Creates the Activity
 	  okButton.addActionListener(new ActionListener(){
 		public void actionPerformed(ActionEvent arg0) {
-	    	  //Sets variables to simplify verifications
+		  int projectId = currentProject.getId();
 	    	  String activityNameEntered = activityName.getText();
+		  Activity activityToInsert = new Activity(projectId, activityNameEntered);
+		  
+	    	  //Sets variables to simplify verifications
 	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  int activityEstCost = 0;//Integer.parseInt(activityEstimatedBudget.getText());
-	    	  int activityPessDur = 0;//Integer.parseInt(pessimisticDur.getText());
-	    	  int activityOptiDur = 0;//Integer.parseInt(optimisticDur.getText());
-	    	  int activityMostLikelyDur = 0;//Integer.parseInt(mostLikelyDur.getText());
+	    	  int activityEstimatedCost = Integer.parseInt(activityEstimatedBudget.getText());
+	    	  int activityPessimisticDuration = Integer.parseInt(pessimisticDur.getText());
+	    	  int activityOptimisticDuration = Integer.parseInt(optimisticDur.getText());
+	    	  int activityMostLikelyDuration = Integer.parseInt(mostLikelyDur.getText());
 	    	  
-	    	  int projectId = currentProject.getId();
-	    	  Activity activityToInsert = new Activity(projectId, activityNameEntered, activityStartDate, activityDueDate, statusBox.getSelectedIndex(), 
-	    	  		activityDescription.getText(), activityEstCost, activityPessDur, activityOptiDur, activityMostLikelyDur);
-	    	 
+	    	  activityToInsert.setStartDate(activityStartDate);
+	    	  activityToInsert.setDueDate(activityDueDate);
+	    	  activityToInsert.setEstimatedCost(activityEstimatedCost);
+	    	  activityToInsert.setPessimisticDuration(activityPessimisticDuration);
+	    	  activityToInsert.setOptimisticDuration(activityOptimisticDuration);
+	    	  activityToInsert.setMostLikelyDuration(activityMostLikelyDuration);
+	    	  
 	    	  //Checks if the activity already exists
 	    	  boolean activityIsInsertable = false;
 	    	  try {
@@ -203,13 +208,12 @@ public class AddActivityDialog extends JDialog
 	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
 	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
 	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()]
-  	    						+ "\nEstimated Cost: " + activityEstCost
-  	    						+ "\nPessimistic Duration: " + activityPessDur
-  	    						+ "\nOptimistic Duration: " + activityOptiDur
-  	    						+ "\nMost Likely Duration: " + activityMostLikelyDur, 
+  	    						+ "\nEstimated Cost: " + activityEstimatedCost
+  	    						+ "\nPessimistic Duration: " + activityPessimisticDuration
+  	    						+ "\nOptimistic Duration: " + activityOptimisticDuration
+  	    						+ "\nMost Likely Duration: " + activityMostLikelyDuration, 
 	    						  "Confirm " + activityName.getText() + " creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 	    		  if(response == JOptionPane.YES_OPTION){
-	    		  		//TODO is this needed?
 	    		      /*activityToInsert.setAssociatedProjectId(projectId);
 	    		      Component[] components = panDependArea.getComponents();
 	    		      List<Activity> activities = ActivityDB.getProjectActivities(projectId); //TODO Remove, not needed
@@ -220,7 +224,7 @@ public class AddActivityDialog extends JDialog
 					    	  activityToInsert.addDependent(activities.get(dependBox.getSelectedIndex()).getId());
 	    		      }*/
 	    		      activityToInsert.persist();
-	    		      refresh = true;
+	    		      ViewManager.refresh();
 	    		      setVisible(false); 
 	    		  }
 	    	  }

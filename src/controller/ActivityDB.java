@@ -79,15 +79,14 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-		c.setAutoCommit(false);
 		stmt = c.createStatement();
 		String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) "
 			+ "VALUES (NULL, + " 
 			+ activity.getProjectId() + ", '"
 			+ activity.getName() + "', '"
 			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "', '"
-			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', "
-			+ activity.getStatus() + ",'"
+			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', '"
+			+ activity.getStatus() + "', '"
 			+ activity.getDescription() + "',"
 			+ activity.getOptimisticDuration() + ","
 			+ activity.getPessimisticDuration() + ","
@@ -98,8 +97,7 @@ public class ActivityDB extends DataManager
 	    }
 
 	    catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
-
+		e.printStackTrace();
 	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
@@ -183,16 +181,8 @@ public class ActivityDB extends DataManager
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID = "	+ projectId + ";");
-			while (rs.next())
-			{
-				Activity activity = null;
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
-				int status = rs.getInt("status");
-				String description = rs.getString("description");
-				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
+			while (rs.next()) {
+				Activity activity = getById(rs.getInt("id"));
 				activities.add(activity);
 			}
 		}
@@ -245,17 +235,8 @@ public class ActivityDB extends DataManager
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES;");
 			
-			while (rs.next())
-			{
-				Activity activity = null;
-				int id = rs.getInt("id");
-				int projectId = rs.getInt("projectId");
-				String name = rs.getString("name");
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
-				int status = rs.getInt("status");
-				String description = rs.getString("description");
-				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description);
+			while (rs.next()) {
+				Activity activity = getById(rs.getInt("id"));
 				activities.add(activity);
 			}
 		}
@@ -292,7 +273,7 @@ public class ActivityDB extends DataManager
 	 * @param id The Activity ID.
 	 */
 	public static Activity getById(int id) {
-	    Activity activity = new Activity();
+	    Activity activity = null;
 	    Connection c = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
@@ -303,10 +284,10 @@ public class ActivityDB extends DataManager
 		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE ID = " + id + ";");
 		rs.next();
 		
+		activity = new Activity(rs.getInt("projectid"), rs.getString("name"));
+		
 		// Set simple fields
 		activity.setId(id);
-		activity.setProjectId(rs.getInt("projectid"));
-		activity.setName(rs.getString("name"));
 		String startDateString = rs.getString("startDate");
 		if (startDateString != null) { 
 		    activity.setStartDate(DataManager.DATE_FORMAT.parse(startDateString));
@@ -354,63 +335,33 @@ public class ActivityDB extends DataManager
 	 * 
 	 * @return
 	 */
-	public static Activity getByNameAndProjectId(String activityName, int projectId)
-	{
-		Activity activity = null;
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
+	public static Activity getByNameAndProjectId(String activityName, int projectId) {
+	    Activity activity = null;
+	    Connection c = null;
+	    Statement stmt = null;
+	    ResultSet rs = null;
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
-					+ activityName + "' AND PROJECTID = " + projectId
-					+ ";");
-			
-			while (rs.next())
-			{
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				Date startDate = DataManager.DATE_FORMAT.parse(rs.getString("startDate"));
-				Date dueDate = DataManager.DATE_FORMAT.parse(rs.getString("dueDate"));
-				int status = rs.getInt("status");
-				String description = rs.getString("description");
-				int estimatedCost = rs.getInt("pessimisticduration");
-				int pessimisticDuration = rs.getInt("pessimisticduration");
-				int optimisticDuration = rs.getInt("optimisticduration");
-				int mostLikelyDuration = rs.getInt("mostlikelyduration");
-				activity = new Activity(id, projectId, name, startDate,	dueDate, status, description, estimatedCost, 
-						pessimisticDuration, optimisticDuration, mostLikelyDuration);
-			}
+	    try {
+		c = getConnection();
+
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
+			+ activityName + "' AND PROJECTID = " + projectId + ";");
+
+		while (rs.next()) {
+		    int id = rs.getInt("id");
+		    activity = getById(id);
+		    System.out.println(id);
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt!= null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ActivityDB.getActivityByNameAndProjectId: " + e.getMessage());
-			}
-		}
-		
-		return activity;
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    } finally {
+		if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
+
+	    return activity;
 	}
 	
 	/**
