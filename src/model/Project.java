@@ -2,8 +2,15 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import org.jgrapht.*;
+import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.graph.ClassBasedEdgeFactory;
+import org.jgrapht.graph.DefaultDirectedGraph;
 
 import controller.ActivityDB;
+import controller.PredecessorDB;
 import controller.ProjectDB;
 
 /**
@@ -198,6 +205,31 @@ public class Project
 		return true;
 	}
 
+	private class Edge implements EdgeFactory<Activity, Edge>
+	{
+		@Override
+		public Edge createEdge(Activity sourceVertex, Activity targetVertex) 
+		{
+			return null;
+		}
+	}
+	
+	public boolean checkIfValidCycle()
+	{		
+		ClassBasedEdgeFactory<Activity,Edge> cbef = new ClassBasedEdgeFactory<Activity,Edge>(null);
+		DefaultDirectedGraph<Activity,Edge> dg = new DefaultDirectedGraph<Activity,Edge>(cbef);
+		CycleDetector<Activity, Edge> cy = new CycleDetector<Activity, Edge>(dg);
+		for (Activity a : activities)
+		{
+			List<Activity> predecessorActivities = PredecessorDB.getPredecessors(a.getId());
+			for (Activity b : predecessorActivities)
+			{
+				dg.addEdge(a, b);
+			}
+		}
+		return !cy.detectCycles();
+	}
+	
 	@Override
 	// Used to generate the list view of projects, returns only name
 	public String toString() {
