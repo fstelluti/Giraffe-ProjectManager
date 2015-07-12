@@ -88,13 +88,8 @@ public class ActivityView extends JPanel
 		
 		activityPanel.addMouseListener(new MouseAdapter() {
 		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		    	EditActivityDialog editActivity = new EditActivityDialog(null, "Edit an Activity", true, user);
-				if (editActivity.isRefresh())
-				{
-					mainViewPanel.refresh();
-				}
-		    }
+		    public void mouseClicked(MouseEvent e) {}
+		    
 		    
 		    @Override
 		    public void mouseEntered(MouseEvent e) {
