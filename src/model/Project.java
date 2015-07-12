@@ -216,15 +216,15 @@ public class Project
 	
 	public boolean checkIfValidCycle()
 	{		
-		ClassBasedEdgeFactory<Activity,Edge> cbef = new ClassBasedEdgeFactory<Activity,Edge>(null);
-		DefaultDirectedGraph<Activity,Edge> dg = new DefaultDirectedGraph<Activity,Edge>(cbef);
-		CycleDetector<Activity, Edge> cy = new CycleDetector<Activity, Edge>(dg);
+		ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
+		DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
+		CycleDetector<Activity, Edge> cy = new CycleDetector<Activity, Edge>(diGraph);
 		for (Activity a : activities)
 		{
 			List<Activity> predecessorActivities = PredecessorDB.getPredecessors(a.getId());
 			for (Activity b : predecessorActivities)
 			{
-				dg.addEdge(a, b);
+				diGraph.addEdge(a, b);
 			}
 		}
 		return cy.detectCycles();
