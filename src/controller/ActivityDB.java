@@ -52,11 +52,11 @@ public class ActivityDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -143,11 +143,11 @@ public class ActivityDB extends DataManager
 		
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -188,11 +188,11 @@ public class ActivityDB extends DataManager
 		
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -241,11 +241,11 @@ public class ActivityDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -276,7 +276,6 @@ public class ActivityDB extends DataManager
 	    Connection c = null;
 	    Statement stmt = null;
 	    ResultSet rs = null;
-
 	    try {
 		c = getConnection();
 		stmt = c.createStatement();
@@ -314,9 +313,9 @@ public class ActivityDB extends DataManager
 		}
 
 	    } catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		e.printStackTrace();
 	    } catch (ParseException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		e.printStackTrace();
 	    } finally {
 		// Attempt to close all open database objects
 		if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
@@ -388,7 +387,7 @@ public class ActivityDB extends DataManager
 			+ "WHERE id = " + activity.getId() + ";";
 		stmt.executeUpdate(sql);
 	    } catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		e.printStackTrace();
 	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
@@ -428,11 +427,11 @@ public class ActivityDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -465,11 +464,11 @@ public class ActivityDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -504,11 +503,11 @@ public class ActivityDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();

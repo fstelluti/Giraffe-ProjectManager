@@ -23,8 +23,8 @@ public class Activity
 	private int pessimisticDuration;
 	private int optimisticDuration;
 	private int mostLikelyDuration;
-	private int estimatedCost;
-	private int actualCost;
+	private long estimatedCost;
+	private long actualCost;
 	private String name;
 	private Date startDate;
 	private Date dueDate;
@@ -42,6 +42,26 @@ public class Activity
 	public Activity(int projectId, String name) {
 	    this.projectId = projectId;
 	    this.name = name;
+	    this.dependents = new HashSet<Integer>();
+	}
+	
+	public Activity(int id) {
+	    Activity existingActivity = ActivityDB.getById(id);
+	    this.id = existingActivity.getId();
+	    this.projectId = existingActivity.getProjectId();
+	    this.pessimisticDuration = existingActivity.getPessimisticDuration();
+	    this.optimisticDuration = existingActivity.getOptimisticDuration();
+	    this.mostLikelyDuration = existingActivity.getMostLikelyDuration();
+	    this.estimatedCost = existingActivity.getEstimatedCost();
+	    this.actualCost = existingActivity.getActualCost();
+	    this.name = existingActivity.getName();
+	    this.startDate = existingActivity.getStartDate();
+	    this.dueDate = existingActivity.getDueDate();
+	    this.description = existingActivity.getDescription();
+	    this.status = existingActivity.getStatus();
+	    if (existingActivity.getDependents() != null) {
+		this.dependents = new HashSet<Integer>(existingActivity.getDependents());
+	    }
 	}
 
 	private void loadDependents() {
@@ -119,7 +139,7 @@ public class Activity
 		this.description = description;
 	}
 
-	public double getPessimisticDuration() {
+	public int getPessimisticDuration() {
 		return pessimisticDuration;
 	}
 
@@ -127,7 +147,7 @@ public class Activity
 		this.pessimisticDuration = pessimisticDuration;
 	}
 
-	public double getOptimisticDuration() {
+	public int getOptimisticDuration() {
 		return optimisticDuration;
 	}
 
@@ -135,7 +155,7 @@ public class Activity
 		this.optimisticDuration = optimisticDuration;
 	}
 
-	public double getMostLikelyDuration() {
+	public int getMostLikelyDuration() {
 		return mostLikelyDuration;
 	}
 
@@ -143,7 +163,7 @@ public class Activity
 		this.mostLikelyDuration = mostLikelyDuration;
 	}
 
-	public int getEstimatedCost() {
+	public long getEstimatedCost() {
 		return estimatedCost;
 	}
 
@@ -151,7 +171,7 @@ public class Activity
 		this.estimatedCost = cost;
 	}
 
-	public int getActualCost() {
+	public long getActualCost() {
 		return actualCost;
 	}
 
@@ -203,7 +223,8 @@ public class Activity
 	    }
 	   	  
 	    //Checks if activity start date falls in project date constraints	   	 
-	    if (activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) {
+	    if ((activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) &&
+		    activityDueDate != projectDueDate) {
 		throw new Exception("Please ensure due date is within project dates : " + DataManager.DATE_FORMAT.format(projectStartDate) + " to " + DataManager.DATE_FORMAT.format(projectDueDate));
 	    }
 	   	  
@@ -280,8 +301,8 @@ public class Activity
 		if (getClass() != obj.getClass())
 			return false;
 		Activity other = (Activity) obj;
-		if (id != other.id)
-			return false;
+		if (id == other.id)
+			return true;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -294,9 +315,11 @@ public class Activity
 
 	@Override
 	public String toString() {
-		return "Activity [id=" + id + ", estimatedCost=" + estimatedCost
-				+ ", name=" + name + ", startDate=" + startDate + ", dueDate="
-				+ dueDate + ", description=" + description + ", status="
-				+ status + "]";
+		return name;
+	}
+	
+	public void delete () {
+	    PredecessorDB.deleteActivityPredecessors(this.id);
+	    ActivityDB.delete(this.id);
 	}
 }

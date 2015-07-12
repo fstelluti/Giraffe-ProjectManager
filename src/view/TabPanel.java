@@ -34,17 +34,7 @@ public class TabPanel extends JPanel {
 	    
 	} else {
 	    this.user = user;
-		this.tabPane = new JTabbedPane();
-		this.activitiesTab = new ActivitiesTab();
-		ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
-		this.reportsTab = new ReportsTab(this.user);
-		ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
-		// JComponent detailsTab = new DetailsTab(project, user);
-		// ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
-		this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
-		this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
-		// tabPane.addTab("Details", detailsIcon, detailsTab);
-		this.add(tabPane);
+	    reload();
 	}
     }
     
@@ -54,7 +44,18 @@ public class TabPanel extends JPanel {
     }
     
     public void reload() {
-	reportsTab.refresh();
-	activitiesTab.refresh();
+	this.removeAll();
+	this.revalidate();
+	this.tabPane = new JTabbedPane();
+	this.activitiesTab = new ActivitiesTab();
+	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
+	this.reportsTab = new ReportsTab(this.user);
+	ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
+	// JComponent detailsTab = new DetailsTab(project, user);
+	// ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
+	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
+	this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
+	// tabPane.addTab("Details", detailsIcon, detailsTab);
+	this.add(tabPane);
     }
 }

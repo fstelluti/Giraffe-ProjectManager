@@ -32,7 +32,6 @@ import javax.swing.text.NumberFormatter;
 import model.Activity;
 import model.DateLabelFormatter;
 import model.Project;
-import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -46,7 +45,7 @@ import controller.ViewManager;
  *
  */
 
-public class AddActivityDialog extends JDialog
+public class ActivityDialog extends JDialog
 {
 	private static final long serialVersionUID = 1L;
 	private JTextField activityName;
@@ -60,7 +59,6 @@ public class AddActivityDialog extends JDialog
   final JPanel panDependArea = new JPanel(); 
   final JPanel activityPanel = new JPanel();
   final List<JPanel> dependList = new ArrayList<JPanel>();
-  private boolean refresh = false;
   
   private Project currentProject;
   private JButton addDependantButton, removeDependantButton, addCommentButton, okButton;
@@ -71,10 +69,10 @@ public class AddActivityDialog extends JDialog
   private ArrayList<String> activityComments;
   
   private List<Activity> sourceActivities;
-  private JList<String> activitiesSourceList;
-  private JList<String> activitiesDestList;
-  private DefaultListModel<String> availableActivities;
-  private DefaultListModel<String> dependantActivities;
+  private JList<Activity> activitiesSourceList;
+  private JList<Activity> activitiesDestList;
+  private DefaultListModel<Activity> availableActivities;
+  private DefaultListModel<Activity> dependantActivities;
   private JScrollPane scrollSourceActivities;
   private JScrollPane scrollDestActivities;
   
@@ -82,9 +80,12 @@ public class AddActivityDialog extends JDialog
   private NumberFormatter numberFormatter = new NumberFormatter(numberFormat);
   private JFormattedTextField activityEstimatedBudget, pessimisticDur, optimisticDur, mostLikelyDur;
   
-  private Activity result;
+  private Activity activity;
   
-  public AddActivityDialog() {
+  /**
+   * The "Add Activity" dialog constructor
+   */
+  public ActivityDialog() {
     super(ApplicationWindow.instance(), "Add Activity", true);
     this.setSize(500, 650);
     this.setLocationRelativeTo(null);
@@ -92,9 +93,22 @@ public class AddActivityDialog extends JDialog
     this.initComponent();
   }
   
+  /**
+   * The "Edit Activity" dialog constructor
+   * @param activity
+   */
+  public ActivityDialog(Activity activity) {
+      super(ApplicationWindow.instance(), "Edit Activity", true);
+      this.setSize(500, 650);
+      this.setLocationRelativeTo(null);
+      this.setResizable(false);
+      this.activity = activity;
+      this.initComponent();
+  }
+  
   public Activity showDialog() {
       this.setVisible(true);
-      return result;
+      return activity;
   }
   
   private void initComponent() {
@@ -162,8 +176,9 @@ public class AddActivityDialog extends JDialog
 	  scrollPanDependArea.setPreferredSize(new Dimension(350, 88));
 	  
 	  //Bottom buttons
-	  panButtons = new JPanel(); 
-	  okButton = new JButton("Add Activity");
+	  panButtons = new JPanel();
+	  String okButtonString = (this.activity == null) ? "Add Activity" : "Edit Activity";
+	  okButton = new JButton(okButtonString);
 	  
 	  //Create Add button for the comment
 	  addCommentButton = new JButton("Add");
@@ -178,72 +193,66 @@ public class AddActivityDialog extends JDialog
 
 	  //Checks and Creates the Activity
 	  okButton.addActionListener(new ActionListener(){
-		public void actionPerformed(ActionEvent arg0) {
+	      public void actionPerformed(ActionEvent arg0) {
 		  int projectId = currentProject.getId();
-	    	  String activityNameEntered = activityName.getText();
-		  Activity activityToInsert = new Activity(projectId, activityNameEntered);
-		  
-	    	  //Sets variables to simplify verifications
-	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
-	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  int activityEstimatedCost = 0;
-	    	  try {
-	    	      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
-	    	  } catch (ParseException e) {
-	    	      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  int activityPessimisticDuration = Integer.parseInt(pessimisticDur.getText());
-	    	  int activityOptimisticDuration = Integer.parseInt(optimisticDur.getText());
-	    	  int activityMostLikelyDuration = Integer.parseInt(mostLikelyDur.getText());
-	    	  String activityDescriptionString = activityDescription.getText();
-	    	  
-	    	  activityToInsert.setStartDate(activityStartDate);
-	    	  activityToInsert.setDueDate(activityDueDate);
-	    	  activityToInsert.setEstimatedCost(activityEstimatedCost);
-	    	  activityToInsert.setPessimisticDuration(activityPessimisticDuration);
-	    	  activityToInsert.setOptimisticDuration(activityOptimisticDuration);
-	    	  activityToInsert.setMostLikelyDuration(activityMostLikelyDuration);
-	    	  activityToInsert.setDescription(activityDescriptionString);
-	    	  
-	    	  //Checks if the activity already exists
-	    	  boolean activityIsInsertable = false;
-	    	  try {
-	    		 activityIsInsertable =  activityToInsert.isInsertable(currentProject);
-	    	  } catch (Exception e) {
-	    		  JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
-	    	  }
-	    	  
-	    	  if (activityIsInsertable && projectId >= 0) {
-	    	 
-	    		  int response = JOptionPane.showConfirmDialog(activityPanel,
-	    				  "Are you sure you want to create the following Activity for "
-	    						  + currentProject.getName() +"?\n"
-	    						  + "\nActivity Name: "+activityName.getText()
-	    						  + "\nStart Date: "+dateFormat.format(activityStartDate)
-	    						  + "\nDue Date: "+dateFormat.format(activityDueDate)
-	    						  + "\nStatus: "+statusArray[statusBox.getSelectedIndex()]
-  	    						+ "\nEstimated Cost: " + activityEstimatedCost
-  	    						+ "\nPessimistic Duration: " + activityPessimisticDuration
-  	    						+ "\nOptimistic Duration: " + activityOptimisticDuration
-  	    						+ "\nMost Likely Duration: " + activityMostLikelyDuration, 
-	    						  "Confirm " + activityName.getText() + " creation", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-	    		  if(response == JOptionPane.YES_OPTION){
-	    		      /*activityToInsert.setAssociatedProjectId(projectId);
-	    		      Component[] components = panDependArea.getComponents();
-	    		      List<Activity> activities = ActivityDB.getProjectActivities(projectId); //TODO Remove, not needed
+		  String activityNameEntered = activityName.getText();
+		  boolean edit = false;
+		  if (activity == null) { 
+		      activity = new Activity(projectId, activityNameEntered);
+		  } else {
+		      edit = true;
+		      activity.setName(activityNameEntered);
+		  }
 
-	    		      for (int i = 0; i < components.length; i++){
-				    		  JPanel dependPanel = (JPanel) components[i];
-					    	  JComboBox<?> dependBox = (JComboBox<?>) dependPanel.getComponents()[1];
-					    	  activityToInsert.addDependent(activities.get(dependBox.getSelectedIndex()).getId());
-	    		      }*/
-	    		      activityToInsert.persist();
-	    		      result = activityToInsert;
-	    		      setVisible(false); 
-	    		  }
-	    	  }
+		  //Gets variables to simplify verifications
+		  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
+		  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
+		  int activityEstimatedCost = 0;
+		  try {
+		      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
+		  } catch (ParseException e) {
+		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+		  }
+		  int activityPessimisticDuration = Integer.parseInt(pessimisticDur.getText());
+		  int activityOptimisticDuration = Integer.parseInt(optimisticDur.getText());
+		  int activityMostLikelyDuration = Integer.parseInt(mostLikelyDur.getText());
+		  String activityDescriptionString = activityDescription.getText();
+		  
+		  // Builds the Activity object
+		  activity.setStartDate(activityStartDate);
+		  activity.setDueDate(activityDueDate);
+		  activity.setEstimatedCost(activityEstimatedCost);
+		  activity.setPessimisticDuration(activityPessimisticDuration);
+		  activity.setOptimisticDuration(activityOptimisticDuration);
+		  activity.setMostLikelyDuration(activityMostLikelyDuration);
+		  activity.setDescription(activityDescriptionString);
+		  
+		  for (int i = 0; i < availableActivities.getSize(); i++) {
+		      activity.removeDependent(availableActivities.getElementAt(i).getId());
+		  }
+		  
+		  for (int i = 0; i < dependantActivities.getSize(); i++) {
+		      activity.addDependent(dependantActivities.getElementAt(i).getId());
+		  }
+
+		  //Checks if an activity with that name already exists or is otherwise invalid
+		  boolean activityIsInsertable = false;
+		  if (!edit) try {
+		      activityIsInsertable =  activity.isInsertable(currentProject);
+		  } catch (Exception e) {
+		      JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+		  } else {
+		      activityIsInsertable = true;
+		  }
+		  
+		  if (activityIsInsertable && projectId >= 0) {
+		      activity.persist();
+		      setVisible(false); 
+		  } else {
+		      JOptionPane.showMessageDialog(activityPanel, "An error occurred when adding the activity: associated ProjectID is invalid", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+		  }
 	      }      
-	    });
+	  });
 	  //Cancels the dialog
 	  JButton cancelButton = new JButton("Cancel");
 	  cancelButton.addActionListener(new ActionListener(){
@@ -299,6 +308,9 @@ public class AddActivityDialog extends JDialog
 		panDescription.setBorder(BorderFactory.createTitledBorder("Description/Resources (optional)"));
 		panDescription.setPreferredSize(new Dimension(465, 120));
 		activityDescription = new JTextArea();
+		if (this.activity != null) {
+		    activityDescription.setText(this.activity.getDescription());
+		}
 		activityDescription.setBorder( new JTextField().getBorder() );
 		activityDescription.setLineWrap(true);
 		activityDescription.setWrapStyleWord(true);
@@ -317,6 +329,9 @@ public class AddActivityDialog extends JDialog
 		panMostLikelyDur.setPreferredSize(new Dimension(120, 60));
 		
 		mostLikelyDur = new JFormattedTextField(numberFormatter);
+		if (this.activity != null) {
+		    mostLikelyDur.setValue(this.activity.getMostLikelyDuration());
+		}
 		panMostLikelyDur.setBorder(BorderFactory.createTitledBorder("Most Likely"));
 		mostLikelyDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		mostLikelyDur.setPreferredSize(new Dimension(100,30));
@@ -332,6 +347,9 @@ public class AddActivityDialog extends JDialog
 		panOptimisticDur.setPreferredSize(new Dimension(120, 60));
 		
 		optimisticDur = new JFormattedTextField(numberFormatter);
+		if (this.activity != null) {
+		    optimisticDur.setValue(this.activity.getOptimisticDuration());
+		}
 		panOptimisticDur.setBorder(BorderFactory.createTitledBorder("Optimistic"));
 		optimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		optimisticDur.setPreferredSize(new Dimension(100,30));
@@ -347,6 +365,9 @@ public class AddActivityDialog extends JDialog
 		panPessimisticDur.setPreferredSize(new Dimension(120, 60));
 		
 		pessimisticDur = new JFormattedTextField(numberFormatter);
+		if (this.activity != null) {
+		    pessimisticDur.setValue(this.activity.getPessimisticDuration());
+		}
 		panPessimisticDur.setBorder(BorderFactory.createTitledBorder("Pessimistic"));
 		pessimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		pessimisticDur.setPreferredSize(new Dimension(100,30));
@@ -362,6 +383,9 @@ public class AddActivityDialog extends JDialog
 		panEstimatedCost.setPreferredSize(new Dimension(230, 60));
 		
 		activityEstimatedBudget = new JFormattedTextField(numberFormatter);
+		if (this.activity != null) {
+		    activityEstimatedBudget.setValue(this.activity.getEstimatedCost());
+		}
 		panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
 		activityEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
 		activityEstimatedBudget.setPreferredSize(new Dimension(200,30));
@@ -379,6 +403,9 @@ public class AddActivityDialog extends JDialog
 		final String[] statusArray = new String[]{"To do", "In Progress", "Completed"};
 		statusBox = new JComboBox<String>(statusArray);
 		statusBox.setSelectedIndex(0);
+		if (this.activity != null) {
+		    statusBox.setSelectedIndex(this.activity.getStatus());
+		}
 		panActivityStatus.setBorder(BorderFactory.createTitledBorder("Status"));
 		panActivityStatus.add(statusBox);
 		return statusArray;
@@ -396,6 +423,9 @@ public class AddActivityDialog extends JDialog
 		dueModel.setSelected(false);
 		JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, prop);
 		final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
+		if (this.activity != null) {
+		    dueModel.setValue(this.activity.getDueDate());
+		}
 		panActivityDueDate.add(dueDatePicker);
 		return dueDatePicker;
 	}
@@ -412,6 +442,9 @@ public class AddActivityDialog extends JDialog
 		startModel.setSelected(true);
 		JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, prop);
 		final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
+		if (this.activity != null) {
+		    dueModel.setValue(this.activity.getStartDate());
+		}
 		panActivityStartDate.add(startDatePicker);
 		return startDatePicker;
 	}
@@ -424,6 +457,9 @@ public class AddActivityDialog extends JDialog
 		panActivity.setBackground(Color.white);
 		panActivity.setPreferredSize(new Dimension(230, 60));
 		activityName = new JTextField();
+		if (this.activity != null) {
+		    activityName.setText(this.activity.getName());
+		}
 		panActivity.setBorder(BorderFactory.createTitledBorder("Activity Name"));
 		activityName.setHorizontalAlignment(JTextField.CENTER);
 		activityName.setPreferredSize(new Dimension(200,30));
@@ -437,8 +473,8 @@ public class AddActivityDialog extends JDialog
 	 */
   private void createActivityDependents() {
   	//Initialize both lists
-  	availableActivities = new DefaultListModel<String>();
-  	dependantActivities = new DefaultListModel<String>();
+  	availableActivities = new DefaultListModel<Activity>();
+  	dependantActivities = new DefaultListModel<Activity>();
   	//Create panel for the available dependents 
   	final JPanel panDepend = new JPanel();
 	  panDepend.setBackground(Color.white);
@@ -446,11 +482,26 @@ public class AddActivityDialog extends JDialog
 	  sourceActivities = currentProject.getActivities();
 	  //Iterate over all activities, and add them to activitiesList
 	  for(Activity activity: sourceActivities){
-	  	availableActivities.addElement(activity.getName());
+	  	if (this.activity != activity) {
+	  	    availableActivities.addElement(activity);
+	  	}
+	  }
+	  
+	  // If we are editing an activity, pre-populate the dependents list
+	  if (this.activity != null) {
+	      List<Activity> existingDependents = new ArrayList<Activity>();
+	      List<Integer> activityDependents = this.activity.getDependents();
+	      for (Integer activityDependent : activityDependents) {
+		  existingDependents.add(new Activity(activityDependent));
+	      }
+	      for (Activity existingDependent : existingDependents) {
+		  availableActivities.removeElement(existingDependent);
+		  dependantActivities.addElement(existingDependent);
+	      }
 	  }
 	  
 	  //Create scrollable source activity list
-	  activitiesSourceList = new JList<String>(availableActivities);
+	  activitiesSourceList = new JList<Activity>(availableActivities);
 	  scrollSourceActivities = new JScrollPane(activitiesSourceList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
 	  		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	  scrollSourceActivities.setPreferredSize(new Dimension(145, 110));
@@ -461,8 +512,11 @@ public class AddActivityDialog extends JDialog
 	      public void actionPerformed(ActionEvent arg0) {
 	      	//Add activities to destination list, remove from source list
 	      	//First get all selected activities
-	      	Object selectedSource[] = activitiesSourceList.getSelectedValuesList().toArray();
-	      	ViewManager.setActivityDependLists(selectedSource, dependantActivities, availableActivities);
+	      	List<Activity> selectedActivities = activitiesSourceList.getSelectedValuesList();
+	      	for (Activity selectedActivity : selectedActivities) {
+	      	    availableActivities.removeElement(selectedActivity);
+	      	    dependantActivities.addElement(selectedActivity);
+	      	}
 	      }      
 	  });
 	  
@@ -472,13 +526,16 @@ public class AddActivityDialog extends JDialog
 	      public void actionPerformed(ActionEvent arg0) {
 	      	//Remove activities from destination list, add to source list
 	      	//First get all selected activities
-	      	Object selectedDest[] = activitiesDestList.getSelectedValuesList().toArray();
-	      	ViewManager.setActivityDependLists(selectedDest, availableActivities, dependantActivities);
+		List<Activity> selectedActivities = activitiesDestList.getSelectedValuesList();
+		for (Activity selectedActivity : selectedActivities) {
+		    dependantActivities.removeElement(selectedActivity);
+		    availableActivities.addElement(selectedActivity);
+		}
 	      }      
 	  });
 	  
 	  //Create scrollable destination activity list
-	  activitiesDestList = new JList<String>(dependantActivities);
+	  activitiesDestList = new JList<Activity>(dependantActivities);
 	  scrollDestActivities = new JScrollPane(activitiesDestList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
 	  		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 	  scrollDestActivities.setPreferredSize(new Dimension(145, 110));
@@ -502,12 +559,8 @@ public class AddActivityDialog extends JDialog
 	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Dependants"));
 	  dependSubPanel.add(panDepend, BorderLayout.CENTER); 
   }
-  
-  public boolean isRefresh() {
-  	return refresh;
-  }
 
 public Activity getResult() {
-    return result;
+    return activity;
 }
 }

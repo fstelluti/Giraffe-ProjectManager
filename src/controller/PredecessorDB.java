@@ -66,7 +66,15 @@ public class PredecessorDB extends DataManager
 	public static void insert(int activityId, int predecessorId) {
 		Connection c = null;
 		Statement stmt = null;
-		
+		if (activityId <= 0 || predecessorId <= 0) {
+		    throw new IllegalArgumentException("Error inserting predecessor: activityId=" + activityId + "&predecessorId=" + predecessorId);
+		}
+		List<Activity> existingPredecessors = getPredecessors(activityId);
+		for (Activity predecessor : existingPredecessors) {
+		    if (predecessor.getId() == predecessorId) {
+			return;
+		    }
+		}
 		try {
 			c = getConnection();
 			c.setAutoCommit(false);

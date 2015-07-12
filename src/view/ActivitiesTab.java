@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -66,12 +67,49 @@ public class ActivitiesTab extends JPanel {
     private void buildDeleteActivityButton() {
 	this.deleteActivityButton = new JButton();
 	this.deleteActivityButton.setText("Delete Selected Activity");
+	this.deleteActivityButton.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		Activity activityToDelete = (Activity) grid.getValueAt(grid.getSelectedRow(), 1);
+		int response = JOptionPane.showConfirmDialog(
+			null, 
+			"Are you sure you want to delete \"" + activityToDelete + "\"?", 
+			"Confirm activity deletion", 
+			JOptionPane.YES_NO_OPTION, 
+			JOptionPane.QUESTION_MESSAGE);
+		if (response == JOptionPane.YES_OPTION) {
+		    ViewManager.getCurrentProject().removeActivity(activityToDelete);
+		    activityToDelete.delete();
+		    tableModel.removeRow(grid.getSelectedRow());
+		    ViewManager.refresh();
+		}
+		
+	    }
+	    
+	});
     }
     
     // TODO
     private void buildEditActivityButton() {
 	this.editActivityButton = new JButton();
 	this.editActivityButton.setText("Edit Selected Activity");
+	this.editActivityButton.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		int selectedRow = grid.getSelectedRow();
+		Activity selectedActivity = (Activity)grid.getValueAt(selectedRow, 1);
+		ActivityDialog editActivityDialog = new ActivityDialog(selectedActivity);
+		Activity result = editActivityDialog.showDialog();
+		tableModel.setValueAt(result.getId(), selectedRow, 0);
+		tableModel.setValueAt(result, selectedRow, 1);
+		tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getStartDate()), selectedRow, 2);
+		tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getDueDate()), selectedRow, 3);
+		tableModel.setValueAt(result.getDescription(), selectedRow, 4);
+		ViewManager.refresh();
+	    }
+	    
+	});
     }
 
     private void buildAddActivityButton() {
@@ -80,12 +118,12 @@ public class ActivitiesTab extends JPanel {
 	this.addActivityButton.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		AddActivityDialog addActivityDialog = new AddActivityDialog();
+		ActivityDialog addActivityDialog = new ActivityDialog();
 		Activity result = addActivityDialog.showDialog();
 		ViewManager.getCurrentProject().addActivity(result);
-		Vector<String> newRow = new Vector<String>();
+		Vector<Object> newRow = new Vector<Object>();
 		newRow.add(Integer.toString(result.getId()));
-		newRow.add(result.getName());
+		newRow.add(result);
 		newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate()));
 		newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
 		newRow.add(result.getDescription());
@@ -105,6 +143,7 @@ public class ActivitiesTab extends JPanel {
     private void buildActivityTableModel() {
         // names of columns
 	Project project = ViewManager.getCurrentProject();
+	System.out.println(project);
         Vector<String> columnNames = new Vector<String>();
         columnNames.add("ID");
         columnNames.add("Name");
@@ -119,7 +158,7 @@ public class ActivitiesTab extends JPanel {
     	for (Activity activity : activities) {
     	    Vector<Object> activityVector = new Vector<Object>();
     	    activityVector.add(activity.getId());
-    	    activityVector.add(activity.getName());
+    	    activityVector.add(activity);
     	    if (activity.getStartDate() != null) {
     		activityVector.add(DataManager.DATE_FORMAT.format(activity.getStartDate()));
     	    } else { 
@@ -140,6 +179,5 @@ public class ActivitiesTab extends JPanel {
         }
         
         this.tableModel = new DefaultTableModel(data, columnNames);
-    
     }
 }
