@@ -28,6 +28,7 @@ public class ActivitiesTab extends JPanel {
     private JButton addActivityButton;
     private JButton editActivityButton;
     private JButton deleteActivityButton;
+    private DefaultTableModel tableModel;
 
     public ActivitiesTab() {
 	this.setLayout(new BorderLayout());
@@ -44,14 +45,21 @@ public class ActivitiesTab extends JPanel {
     
     public void refresh() {
 	if (this.grid != null) { this.remove(this.grid); }
-	this.grid = new JTable(buildActivityTableModel());
+	buildActivityTableModel();
+	this.grid = new JTable(tableModel);
 	Font dataFont = new Font(null, 0, 12);
 	Font headerFont = new Font(null, 0, 12);
 	this.grid.setGridColor(Color.LIGHT_GRAY);
 	this.grid.setRowHeight(25);
 	this.grid.setFont(dataFont);
 	this.grid.getTableHeader().setFont(headerFont);
+	this.grid.getColumnModel().getColumn(0).setPreferredWidth(1);
+	this.grid.getColumnModel().getColumn(1).setPreferredWidth(200);
+	this.grid.getColumnModel().getColumn(2).setPreferredWidth(50);
+	this.grid.getColumnModel().getColumn(3).setPreferredWidth(50);
+	this.grid.getColumnModel().getColumn(4).setPreferredWidth(200);
 	this.add(new JScrollPane(grid), BorderLayout.CENTER);
+	this.revalidate();
     }
     
     // TODO
@@ -72,8 +80,17 @@ public class ActivitiesTab extends JPanel {
 	this.addActivityButton.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-		@SuppressWarnings("unused")
 		AddActivityDialog addActivityDialog = new AddActivityDialog();
+		Activity result = addActivityDialog.showDialog();
+		ViewManager.getCurrentProject().addActivity(result);
+		Vector<String> newRow = new Vector<String>();
+		newRow.add(Integer.toString(result.getId()));
+		newRow.add(result.getName());
+		newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate()));
+		newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
+		newRow.add(result.getDescription());
+		tableModel.addRow(newRow);
+		ViewManager.refresh();
 	    }
 	});
     }
@@ -85,7 +102,7 @@ public class ActivitiesTab extends JPanel {
      * @return
      * @author Matthew Mongrain
      */
-    private DefaultTableModel buildActivityTableModel() {
+    private void buildActivityTableModel() {
         // names of columns
 	Project project = ViewManager.getCurrentProject();
         Vector<String> columnNames = new Vector<String>();
@@ -113,12 +130,16 @@ public class ActivitiesTab extends JPanel {
     	    } else { 
     		activityVector.add("No date"); 
     	    }
-    	    activityVector.add(activity.getDescription());
+    	    if (!activity.getDescription().equals("null")) {
+    		activityVector.add(activity.getDescription());
+    	    } else {
+    		activityVector.add("");
+    	    }
     	    data.add(activityVector);
     	}
         }
         
-        return new DefaultTableModel(data, columnNames);
+        this.tableModel = new DefaultTableModel(data, columnNames);
     
     }
 }

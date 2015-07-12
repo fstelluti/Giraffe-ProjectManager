@@ -49,7 +49,7 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
 	JList<Project> list = (JList<Project>) e.getSource();
 	Project selectedProject = (Project) list.getSelectedValue();
 	ViewManager.setCurrentProject(selectedProject);
-	ViewManager.refresh();
+	ViewManager.reload();
     }
     
     public void refresh(User user) {

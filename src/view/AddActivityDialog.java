@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,9 +78,11 @@ public class AddActivityDialog extends JDialog
   private JScrollPane scrollSourceActivities;
   private JScrollPane scrollDestActivities;
   
-  private NumberFormat format = NumberFormat.getInstance();
-  private NumberFormatter formatter = new NumberFormatter(format);
+  private NumberFormat numberFormat = NumberFormat.getInstance();
+  private NumberFormatter numberFormatter = new NumberFormatter(numberFormat);
   private JFormattedTextField activityEstimatedBudget, pessimisticDur, optimisticDur, mostLikelyDur;
+  
+  private Activity result;
   
   public AddActivityDialog() {
     super(ApplicationWindow.instance(), "Add Activity", true);
@@ -87,7 +90,11 @@ public class AddActivityDialog extends JDialog
     this.setLocationRelativeTo(null);
     this.setResizable(false);
     this.initComponent();
-    this.setVisible(true);  
+  }
+  
+  public Activity showDialog() {
+      this.setVisible(true);
+      return result;
   }
   
   private void initComponent() {
@@ -100,8 +107,8 @@ public class AddActivityDialog extends JDialog
 	  prop.put("text.year", "Year");
 
 	  //Formatter for the number fields
-	  formatter.setValueClass(Integer.class);
-	  formatter.setMinimum(0);
+	  numberFormatter.setValueClass(Integer.class);
+	  numberFormatter.setMinimum(0);
 	  
 	  //Get the current project
 	  currentProject = ViewManager.getCurrentProject();
@@ -141,7 +148,7 @@ public class AddActivityDialog extends JDialog
 	  panSubDuration.add(panMostLikelyDur);
 	  
 	  //Create dependents using two lists to add/remove dependents.
-	  createAvtivityDependents();
+	  createActivityDependents();
 	  
 	  //Activity Description
 	  createActivityDescription();
@@ -179,10 +186,16 @@ public class AddActivityDialog extends JDialog
 	    	  //Sets variables to simplify verifications
 	    	  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 	    	  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
-	    	  int activityEstimatedCost = Integer.parseInt(activityEstimatedBudget.getText());
+	    	  int activityEstimatedCost = 0;
+	    	  try {
+	    	      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
+	    	  } catch (ParseException e) {
+	    	      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+	    	  }
 	    	  int activityPessimisticDuration = Integer.parseInt(pessimisticDur.getText());
 	    	  int activityOptimisticDuration = Integer.parseInt(optimisticDur.getText());
 	    	  int activityMostLikelyDuration = Integer.parseInt(mostLikelyDur.getText());
+	    	  String activityDescriptionString = activityDescription.getText();
 	    	  
 	    	  activityToInsert.setStartDate(activityStartDate);
 	    	  activityToInsert.setDueDate(activityDueDate);
@@ -190,6 +203,7 @@ public class AddActivityDialog extends JDialog
 	    	  activityToInsert.setPessimisticDuration(activityPessimisticDuration);
 	    	  activityToInsert.setOptimisticDuration(activityOptimisticDuration);
 	    	  activityToInsert.setMostLikelyDuration(activityMostLikelyDuration);
+	    	  activityToInsert.setDescription(activityDescriptionString);
 	    	  
 	    	  //Checks if the activity already exists
 	    	  boolean activityIsInsertable = false;
@@ -224,7 +238,7 @@ public class AddActivityDialog extends JDialog
 					    	  activityToInsert.addDependent(activities.get(dependBox.getSelectedIndex()).getId());
 	    		      }*/
 	    		      activityToInsert.persist();
-	    		      ViewManager.refresh();
+	    		      result = activityToInsert;
 	    		      setVisible(false); 
 	    		  }
 	    	  }
@@ -302,7 +316,7 @@ public class AddActivityDialog extends JDialog
 		panMostLikelyDur.setBackground(Color.white);
 		panMostLikelyDur.setPreferredSize(new Dimension(120, 60));
 		
-		mostLikelyDur = new JFormattedTextField(formatter);
+		mostLikelyDur = new JFormattedTextField(numberFormatter);
 		panMostLikelyDur.setBorder(BorderFactory.createTitledBorder("Most Likely"));
 		mostLikelyDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		mostLikelyDur.setPreferredSize(new Dimension(100,30));
@@ -317,7 +331,7 @@ public class AddActivityDialog extends JDialog
 		panOptimisticDur.setBackground(Color.white);
 		panOptimisticDur.setPreferredSize(new Dimension(120, 60));
 		
-		optimisticDur = new JFormattedTextField(formatter);
+		optimisticDur = new JFormattedTextField(numberFormatter);
 		panOptimisticDur.setBorder(BorderFactory.createTitledBorder("Optimistic"));
 		optimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		optimisticDur.setPreferredSize(new Dimension(100,30));
@@ -332,7 +346,7 @@ public class AddActivityDialog extends JDialog
 		panPessimisticDur.setBackground(Color.white);
 		panPessimisticDur.setPreferredSize(new Dimension(120, 60));
 		
-		pessimisticDur = new JFormattedTextField(formatter);
+		pessimisticDur = new JFormattedTextField(numberFormatter);
 		panPessimisticDur.setBorder(BorderFactory.createTitledBorder("Pessimistic"));
 		pessimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		pessimisticDur.setPreferredSize(new Dimension(100,30));
@@ -347,7 +361,7 @@ public class AddActivityDialog extends JDialog
 		panEstimatedCost.setBackground(Color.white);
 		panEstimatedCost.setPreferredSize(new Dimension(230, 60));
 		
-		activityEstimatedBudget = new JFormattedTextField(formatter);
+		activityEstimatedBudget = new JFormattedTextField(numberFormatter);
 		panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
 		activityEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
 		activityEstimatedBudget.setPreferredSize(new Dimension(200,30));
@@ -421,7 +435,7 @@ public class AddActivityDialog extends JDialog
 	 * the right list contains all the dependents of the newly created activity, which are added with the add/remove
 	 * buttons.
 	 */
-  private void createAvtivityDependents() {
+  private void createActivityDependents() {
   	//Initialize both lists
   	availableActivities = new DefaultListModel<String>();
   	dependantActivities = new DefaultListModel<String>();
@@ -492,4 +506,8 @@ public class AddActivityDialog extends JDialog
   public boolean isRefresh() {
   	return refresh;
   }
+
+public Activity getResult() {
+    return result;
+}
 }

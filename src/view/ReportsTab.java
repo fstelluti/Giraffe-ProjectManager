@@ -19,9 +19,13 @@ public class ReportsTab extends JPanel {
     public ReportsTab (User user) {
 	this.project = ViewManager.getCurrentProject();
 	JTabbedPane tabPane = new JTabbedPane();
-	this.ganttPanel = new GanttPanel(this.project);
+	this.ganttPanel = new GanttPanel();
 	tabPane.addTab("Gantt Chart", null, this.ganttPanel, "View Gantt chart for the currently selected project");
 	this.setLayout(new BorderLayout());
 	this.add(tabPane);
+    }
+
+    public void refresh() {
+	ganttPanel.refresh();
     }
 }

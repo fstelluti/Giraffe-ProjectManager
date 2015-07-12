@@ -16,6 +16,10 @@ public class TabPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     User user;
+    JTabbedPane tabPane;
+    ActivitiesTab activitiesTab;
+    ReportsTab reportsTab;
+    // JComponent detailsTab;
     
     public TabPanel (User user) {
 	super(new BorderLayout());
@@ -29,24 +33,28 @@ public class TabPanel extends JPanel {
 	    this.add(welcomePane);
 	    
 	} else {
-	    refresh(this.user);
+	    this.user = user;
+		this.tabPane = new JTabbedPane();
+		this.activitiesTab = new ActivitiesTab();
+		ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
+		this.reportsTab = new ReportsTab(this.user);
+		ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
+		// JComponent detailsTab = new DetailsTab(project, user);
+		// ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
+		this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
+		this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
+		// tabPane.addTab("Details", detailsIcon, detailsTab);
+		this.add(tabPane);
 	}
     }
     
     public void refresh (User user) {
-	this.removeAll();
-	this.user = user;
-	JTabbedPane tabPane = new JTabbedPane();
-	JComponent activitiesTab = new ActivitiesTab();
-	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
-	JComponent reportsTab = new ReportsTab(this.user);
-	ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
-	// JComponent detailsTab = new DetailsTab(project, user);
-	// ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
-	tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
-	tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
-	// tabPane.addTab("Details", detailsIcon, detailsTab);
-	this.add(tabPane);
+	reportsTab.refresh();
 	this.revalidate();
+    }
+    
+    public void reload() {
+	reportsTab.refresh();
+	activitiesTab.refresh();
     }
 }

@@ -108,6 +108,9 @@ public class ViewManager {
 	    tabPanel.refresh(user);
 	}
 	
+	public static void reload() {
+	    tabPanel.reload();
+	}
 	public static User getCurrentUser() {
 	    return applicationWindow.getCurrentUser();
 	}

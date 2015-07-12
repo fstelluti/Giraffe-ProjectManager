@@ -13,8 +13,7 @@ import model.Activity;
 
 /**
  * 
- * @author Zachary Bergeron
- * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
+ * @authors Zachary Bergeron, Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 
@@ -351,7 +350,6 @@ public class ActivityDB extends DataManager
 		while (rs.next()) {
 		    int id = rs.getInt("id");
 		    activity = getById(id);
-		    System.out.println(id);
 		}
 	    } catch (SQLException e) {
 		e.printStackTrace();
