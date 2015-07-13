@@ -3,7 +3,6 @@ package view;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -19,7 +18,7 @@ public class TabPanel extends JPanel {
     JTabbedPane tabPane;
     ActivitiesTab activitiesTab;
     ReportsTab reportsTab;
-    // JComponent detailsTab;
+    DetailsTab detailsTab;
     
     public TabPanel (User user) {
 	super(new BorderLayout());
@@ -40,6 +39,7 @@ public class TabPanel extends JPanel {
     
     public void refresh (User user) {
 	reportsTab.refresh();
+	detailsTab.refresh();
 	this.revalidate();
     }
     
@@ -49,13 +49,13 @@ public class TabPanel extends JPanel {
 	this.tabPane = new JTabbedPane();
 	this.activitiesTab = new ActivitiesTab();
 	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
-	this.reportsTab = new ReportsTab(this.user);
+	this.reportsTab = new ReportsTab();
 	ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
-	// JComponent detailsTab = new DetailsTab(project, user);
-	// ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
+	this.detailsTab = new DetailsTab();
+	ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
 	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
 	this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
-	// tabPane.addTab("Details", detailsIcon, detailsTab);
+	tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
 	this.add(tabPane);
     }
 }

@@ -37,10 +37,6 @@ public class UserRolesDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				stmt.close();
@@ -83,13 +79,8 @@ public class UserRolesDB extends DataManager
 			stmt.executeUpdate(sql);
 			c.commit();
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -123,13 +114,9 @@ public class UserRolesDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
+		try {
 				if (rs != null) {
 					rs.close();
 				}
@@ -142,8 +129,25 @@ public class UserRolesDB extends DataManager
 			} catch (SQLException e) {
 				System.err.println("Error closing connections in UserRolesDB.getProjectManagerIDByProjectID: " + e.getMessage());
 			}
-		}
+		
 		
 		return projectManagerId;
 	}
+
+	public static void delete(int id) {
+	    Connection c = null;
+	    Statement stmt = null;
+	    try {
+		c = getConnection();
+		stmt = c.createStatement();
+		String sql = "DELETE FROM USERROLES WHERE projectId=" + id + ";";
+		stmt.executeUpdate(sql);
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    } finally {
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+	    }
+	}	    
 }
+

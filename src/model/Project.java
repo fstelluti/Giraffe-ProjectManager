@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.jgrapht.*;
 import org.jgrapht.alg.CycleDetector;
@@ -12,6 +13,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import controller.ActivityDB;
 import controller.PredecessorDB;
 import controller.ProjectDB;
+import controller.UserRolesDB;
 
 /**
  * Create a project.
@@ -214,26 +216,81 @@ public class Project
 		}
 	}
 	
-	public boolean checkIfValidCycle()
-	{		
-		ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
-		DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
-		CycleDetector<Activity, Edge> cy = new CycleDetector<Activity, Edge>(diGraph);
-		for (Activity a : activities)
-		{
-			List<Activity> predecessorActivities = PredecessorDB.getPredecessors(a.getId());
-			for (Activity b : predecessorActivities)
-			{
-				diGraph.addEdge(a, b);
-			}
+	private boolean containsCycles() {		
+	    ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
+	    DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
+	    
+	    for (Activity source : activities) {
+		List<Activity> predecessorActivities = PredecessorDB.getPredecessors(source.getId());
+		for (Activity target : predecessorActivities) {
+		    diGraph.addEdge(source, target);
 		}
-		return cy.detectCycles();
+	    }
+	    
+	    CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(diGraph);
+	    return cycleDetector.detectCycles();
+	}
+	
+	private String getCycleString() {		
+	    ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
+	    DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
+	    
+	    for (Activity source : activities) {
+		List<Activity> predecessorActivities = PredecessorDB.getPredecessors(source.getId());
+		for (Activity target : predecessorActivities) {
+		    diGraph.addEdge(source, target);
+		}
+	    }
+	    
+	    CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(diGraph);
+	    Set<Activity> cycle = cycleDetector.findCycles();
+	    StringBuilder cycleString = new StringBuilder();
+	    for (Activity activity : cycle) {
+		cycleString.append(activity + ", ");
+	    }
+	    // Deletes the last comma!
+	    cycleString.delete(cycleString.length() -2, cycleString.length());
+	    return cycleString.toString();
 	}
 	
 	@Override
 	// Used to generate the list view of projects, returns only name
 	public String toString() {
 		return name;
+	}
+
+	public void delete() {
+	    ProjectDB.delete(this.id);
+	    for (Activity activity : activities) {
+		activity.delete();
+	    }
+	    UserRolesDB.delete(this.id);
+	}
+	
+	private boolean hasUniqueName() {
+	    Project project = ProjectDB.getByName(this.name);
+	    if (project == null || this.id == project.id) {
+		return true;
+	    }
+	    return false;
+	}
+	
+	public class InvalidProjectException extends Exception {
+	    static final long serialVersionUID = 8855960968876727411L;
+	    public InvalidProjectException(String message) { super(message); }
+	}
+	
+	public boolean isValid() throws InvalidProjectException {
+	    if (containsCycles()) {
+		throw new InvalidProjectException("The project contains a cycle (" + getCycleString() + ") and will never complete");
+	    }
+	    if (dueDate != null && dueDate.before(startDate)) {
+		throw new InvalidProjectException("The start date cannot be before the end date");
+	    }
+	    if (!hasUniqueName()) {
+		throw new InvalidProjectException("The name of the project must be unique; this one's taken.");
+	    }
+	    return true;
 	}
 	
 }

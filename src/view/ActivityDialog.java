@@ -42,7 +42,7 @@ import controller.ViewManager;
 
 /**
  * 
- * @author Zachary Bergeron, Lukas Cardot-Goyette, Andrey Uspenskiy, Anne-Marie Dube, Matthew Mongrain, Francois Stelluti
+ * @authors Zachary Bergeron, Lukas Cardot-Goyette, Andrey Uspenskiy, Anne-Marie Dube, Matthew Mongrain, Francois Stelluti
  *
  */
 

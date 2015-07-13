@@ -1,6 +1,8 @@
 package controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -8,6 +10,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 
 import model.Project;
+import model.Project.InvalidProjectException;
 import model.User;
 import view.ApplicationWindow;
 import view.CreateAccountDialog;
@@ -152,5 +155,77 @@ public class ViewManager {
 	
 	public static List<User> getAllUsers() {
 	    return UserDB.getAll();
+	}
+	
+	/**
+	 * Helper method for DetailsTab.
+	 * @param manager
+	 * @param name
+	 * @param startDate
+	 * @param dueDate
+	 * @param description
+	 * @throws IllegalArgumentException
+	 * @throws InvalidProjectException 
+	 */
+	public static void editCurrentProject(User manager,
+		String name, Date startDate,
+		Date dueDate, String description) throws InvalidProjectException {
+
+	    String oldName = getCurrentProject().getName();
+	    Date oldStartDate = getCurrentProject().getStartDate();
+	    Date oldDueDate = getCurrentProject().getDueDate();
+
+	    getCurrentProject().setName(name);
+	    getCurrentProject().setStartDate(startDate);
+	    getCurrentProject().setDueDate(dueDate);
+
+	    if (manager == null) {
+		manager = getCurrentUser();
+	    }
+	    System.out.println(manager.getId() + " / " + getCurrentUser().getId());
+	    try {
+		if (getCurrentProject().isValid()) {
+
+		    if (manager.getId() != getCurrentUser().getId()) {
+			UserRolesDB.delete(getCurrentUser().getId());
+			// Reinsert the user with regular (user-level) permissions
+			UserRolesDB.insert(getCurrentUser().getId(), getCurrentProject().getId(), 2);
+			// Insert the new manager
+			UserRolesDB.insert(manager.getId(), getCurrentProject().getId(), 1);
+		    }
+		}
+	    } catch (InvalidProjectException e) {
+		getCurrentProject().setName(oldName);
+		getCurrentProject().setStartDate(oldStartDate);
+		getCurrentProject().setDueDate(oldDueDate);
+		throw e;
+	    } 
+	    getCurrentProject().setDescription(description);
+	    getCurrentProject().persist();
+
+	}
+	
+	/**
+	 * Helper method for DetailsTab users list. 
+	 * @return A vector containing all users except the current user.
+	 */
+	public static Vector<User> getUsersVector() {
+	    List<User> users = UserDB.getAll();
+	    Vector<User> result = new Vector<User>();
+	    for (User user : users) {
+		if (user != getCurrentUser()) {
+		    result.add(user);
+		}
+	    }
+	    return result;
+	}
+	
+	/**
+	 * Helper method for DetailsTab.
+	 */
+	public static void deleteCurrentProject() {
+	    getCurrentProject().delete();
+	    reload();
+	    refresh();
 	}
 }

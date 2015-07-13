@@ -46,12 +46,10 @@ public class UserDB extends DataManager {
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
+			e.printStackTrace();		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
+			e.printStackTrace();		} finally {
 			try {
 				stmt.close();
 				c.close();
@@ -90,8 +88,7 @@ public class UserDB extends DataManager {
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	    } finally {
+		e.printStackTrace();	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
 	    }
@@ -123,8 +120,7 @@ public class UserDB extends DataManager {
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	    } finally {
+		e.printStackTrace();	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
 	    }
@@ -306,12 +302,10 @@ public class UserDB extends DataManager {
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
+			e.printStackTrace();		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
+			e.printStackTrace();		} finally {
 			try {
 				if (rs != null) {
 					rs.close();

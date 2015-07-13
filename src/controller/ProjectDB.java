@@ -46,10 +46,6 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				stmt.close();
@@ -114,10 +110,6 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				stmt.close();
@@ -157,8 +149,6 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		// } catch (Exception e) {
-		// 	System.err.println(e.getClass().getName() + " in ProjectDB.getAll(): " + e.getMessage());
 		} finally {
 			try {
 				if (rs != null) {
@@ -206,10 +196,6 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		} finally {
 			try {
 				if (rs != null) {
@@ -233,6 +219,7 @@ public class ProjectDB extends DataManager
 	 * Method to get projects by project id
 	 * @param id as an Int
 	 * @return
+	 * @throws Exception 
 	 */
 	public static Project getById(int id) {
 	    Project project = new Project();
@@ -245,8 +232,7 @@ public class ProjectDB extends DataManager
 		c.setAutoCommit(false);
 		stmt = c.createStatement();
 		rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE id = " + id + ";");
-
-		while (rs.next()) {
+		rs.next();
 		    String name = rs.getString("name");
 		    
 		    Date startDate = null;
@@ -265,6 +251,10 @@ public class ProjectDB extends DataManager
 		    double actualBudget = rs.getDouble("ACTUALBUDGET");
 		    double estimatedBudget = rs.getDouble("ESTIMATEDBUDGET");
 		    
+		    if (rs.next()) {
+			throw new RuntimeException("More than one project was returned");
+		    }
+		    
 		    project.setId(id);
 		    project.setName(name);
 		    project.setStartDate(startDate);
@@ -272,7 +262,7 @@ public class ProjectDB extends DataManager
 		    project.setDescription(description);
 		    project.setActualBudget(actualBudget);
 		    project.setEstimatedBudget(estimatedBudget);
-		}
+		
 		
 		stmt.close();
 		rs.close();
@@ -337,10 +327,8 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		} catch (ParseException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -392,10 +380,6 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();
@@ -442,10 +426,6 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();
@@ -483,10 +463,6 @@ public class ProjectDB extends DataManager
 				c.commit();
 			}
 			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
@@ -528,11 +504,7 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			} finally {
+			}finally {
 				try {
 					stmt.close();
 					c.close();
@@ -575,10 +547,6 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();
@@ -609,10 +577,6 @@ public class ProjectDB extends DataManager
 				c.commit();
 			}
 			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
@@ -650,10 +614,6 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();
@@ -686,10 +646,6 @@ public class ProjectDB extends DataManager
 			catch (SQLException e)
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-			catch (Exception e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();
@@ -714,34 +670,29 @@ public class ProjectDB extends DataManager
 			try
 			{
 				c = getConnection();
-				c.setAutoCommit(false);
 
 				stmt = c.createStatement();
 				String sql = "UPDATE PROJECTS "
-						+ "SET dueDate='"
-						+ DataManager.DATE_FORMAT.format(project.getDueDate())  
-						+ "', startDate='"
-						+ DataManager.DATE_FORMAT.format(project.getStartDate())
-						+ "', name='"
+						+ "SET dueDate=";
+				sql += (project.getDueDate() == null) ? "NULL" : "'" + DataManager.DATE_FORMAT.format(project.getDueDate()) + "'"; 
+				sql += ", startDate=";
+				sql += (project.getStartDate() == null) ? "NULL" : "'" + DataManager.DATE_FORMAT.format(project.getStartDate())+ "'";
+				sql += ", name='"
 						+ project.getName()
 						+ "', estimatedBudget='"
 						+ project.getEstimatedBudget()
 						+ "', estimatedBudget='"
 						+ project.getActualBudget()
-						+ "', description='"
-						+ project.getDescription()
-						+ "' WHERE id='"
+						+ "', description='";
+				sql += (project.getDescription() == null) ? "No description" : project.getDescription();
+				sql += "' WHERE id='"
 						+ projectId 
 						+ "';";
 				stmt.executeUpdate(sql);
-				c.commit();
 			}
 			catch (SQLException e) {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 				throw new IllegalArgumentException("ProjectID " + projectId + " does not exist in database");
-			}
-			catch (Exception e) {
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
 				try {
 					stmt.close();

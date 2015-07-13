@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+import model.Project.InvalidProjectException;
 import controller.ActivityDB;
 import controller.DataManager;
 import controller.PredecessorDB;
@@ -213,7 +214,18 @@ public class Activity
 		    exists = false;
 		}
 	    }
-		  
+	    
+	    // See if the overall project will be valid after the activity is added.
+	    // Functionally, just checks for cycles :)
+	    try  {
+		project.addActivity(this);
+		project.isValid(); 
+	    } catch (InvalidProjectException e) {
+		throw e;
+	    } finally {
+		project.removeActivity(this);
+	    }
+	    
 	    //Verifies all text boxes are filled out, if not = error
 	    if (activityName.hashCode() == 0 || activityStartDate == null || activityDueDate == null) {
 		throw new Exception("Please fill out all applicable fields");
@@ -225,12 +237,13 @@ public class Activity
 	    }
 	   	
 	    //Checks that due date not before start date
-	    if (activityDueDate.before(activityStartDate)) {
+	    if (activityDueDate != null && activityDueDate.before(activityStartDate)) {
 		throw new Exception("Please ensure due date is not before start date");
 	    }
 	   	  
 	    //Checks if activity start date falls in project date constraints	   	 
-	    if ((activityStartDate.before(projectStartDate) || activityDueDate.after(projectDueDate)) &&
+	    if ((activityStartDate != null && activityStartDate.before(projectStartDate)) ||
+		(activityDueDate != null && activityDueDate.after(projectDueDate)) &&
 		    activityDueDate != projectDueDate) {
 		throw new Exception("Please ensure due date is within project dates : " + DataManager.DATE_FORMAT.format(projectStartDate) + " to " + DataManager.DATE_FORMAT.format(projectDueDate));
 	    }
