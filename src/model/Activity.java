@@ -8,6 +8,7 @@ import java.util.List;
 import controller.ActivityDB;
 import controller.DataManager;
 import controller.PredecessorDB;
+import controller.UserActivitiesDB;
 
 /**
  * 
@@ -32,6 +33,7 @@ public class Activity
 	private int status = 1;
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
 	private HashSet<Integer> dependents;
+	private HashSet<User> users;
 		
 	/**
 	 * Minimum constructor for Activity objects. Use setters to initialize other fields.
@@ -43,6 +45,7 @@ public class Activity
 	    this.projectId = projectId;
 	    this.name = name;
 	    this.dependents = new HashSet<Integer>();
+	    this.users = new HashSet<User>();
 	}
 	
 	public Activity(int id) {
@@ -62,6 +65,10 @@ public class Activity
 	    if (existingActivity.getDependents() != null) {
 		this.dependents = new HashSet<Integer>(existingActivity.getDependents());
 	    }
+	    if (existingActivity.getUsers() != null) {
+		this.users = new HashSet<User>(existingActivity.getUsers());
+	    }
+	    
 	}
 
 	private void loadDependents() {
@@ -247,9 +254,18 @@ public class Activity
 	    }
 	    
 	    // Insert all dependents, too
+	    PredecessorDB.deleteActivityPredecessors(this.id);
 	    if (dependents != null) {
 		for (Integer dependent : dependents) {
 		    PredecessorDB.insert(this.id, dependent);
+		}
+	    }
+	    
+	    // And all users
+	    UserActivitiesDB.deleteActivityUsers(this.id);
+	    if (users != null) {
+		for (User user: users) {
+		    UserActivitiesDB.insert(user.getId(), this.id);
 		}
 	    }
 	}
@@ -318,8 +334,21 @@ public class Activity
 		return name;
 	}
 	
-	public void delete () {
+	public void delete() {
 	    PredecessorDB.deleteActivityPredecessors(this.id);
 	    ActivityDB.delete(this.id);
+	    UserActivitiesDB.deleteActivityUsers(this.id);;
+	}
+	
+	public List<User> getUsers() {
+	    return new ArrayList<User>(this.users);
+	}
+	
+	public void addUser(User user) {
+	    users.add(user);
+	}
+	
+	public void removeUser(User user) {
+	    users.remove(user);
 	}
 }

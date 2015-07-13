@@ -98,6 +98,7 @@ public class CreateProjectDialog extends JDialog
 					setVisible(false);
 					ViewManager.setCurrentProject(project);
 					ViewManager.getCurrentUser().setCurrentProject(project);
+					ViewManager.reload();
 					ViewManager.refresh();
 
 				    }

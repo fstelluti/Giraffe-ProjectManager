@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.Activity;
@@ -77,7 +76,6 @@ public class PredecessorDB extends DataManager
 		}
 		try {
 			c = getConnection();
-			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			String sql = "INSERT INTO PREDECESSORS (activityID, predecessorID) "
@@ -87,7 +85,6 @@ public class PredecessorDB extends DataManager
 					+ predecessorId
 					+ "')";
 			stmt.executeUpdate(sql);
-			c.commit();
 			
 		} catch (SQLException e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -118,7 +115,6 @@ public class PredecessorDB extends DataManager
 		
 		try	{
 			c = getConnection();
-			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM PREDECESSORS WHERE ACTIVITYID = " + activityId + ";");
@@ -170,13 +166,11 @@ public class PredecessorDB extends DataManager
 		try
 		{
 			c = getConnection();
-			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			String sql = "DELETE FROM PREDECESSORS "
 					+ "WHERE activityId = "+activityId+";";
 			stmt.executeUpdate(sql);
-			c.commit();
 		}
 		catch (SQLException e)
 		{

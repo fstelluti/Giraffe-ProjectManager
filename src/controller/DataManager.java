@@ -48,6 +48,7 @@ public abstract class DataManager
 		ActivityDB.createTable();
 		PredecessorDB.createTable();
 		UserRolesDB.createTable();
+		UserActivitiesDB.createTable();
 	}
 
 	/**

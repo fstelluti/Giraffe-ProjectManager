@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.Activity;
@@ -310,6 +309,17 @@ public class ActivityDB extends DataManager
 		// Add dependents
 		while (rs.next()) {
 		    activity.addDependent(rs.getInt("predecessorId"));
+		}
+		
+		stmt.close();
+		rs.close();
+		
+		// Add users
+		stmt = c.createStatement();
+		rs = stmt.executeQuery("SELECT * FROM USERACTIVITIES WHERE ACTIVITYID='" + id + "';");
+		// Add dependents
+		while (rs.next()) {
+		    activity.addUser(UserDB.getById(rs.getInt("userId")));
 		}
 
 	    } catch (SQLException e) {

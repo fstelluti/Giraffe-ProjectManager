@@ -32,6 +32,7 @@ import javax.swing.text.NumberFormatter;
 import model.Activity;
 import model.DateLabelFormatter;
 import model.Project;
+import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -81,6 +82,12 @@ public class ActivityDialog extends JDialog
   private JFormattedTextField activityEstimatedBudget, pessimisticDur, optimisticDur, mostLikelyDur;
   
   private Activity activity;
+private DefaultListModel<User> currentUsers;
+private DefaultListModel<User> availableUsers;
+private JList<User> usersSourceList;
+private JList<User> usersDestList;
+private JPanel usersSubPanel;
+
   
   /**
    * The "Add Activity" dialog constructor
@@ -113,7 +120,7 @@ public class ActivityDialog extends JDialog
   
   private void initComponent() {
 	  //Setting the preferred size is needed to wrap the ScrollPanel properly
-	  activityPanel.setPreferredSize(new Dimension(450, 700));
+	  activityPanel.setPreferredSize(new Dimension(450, 750));
 	  
 	  //These set the properties for date picker
 	  prop.put("text.today", "Today");
@@ -164,11 +171,14 @@ public class ActivityDialog extends JDialog
 	  //Create dependents using two lists to add/remove dependents.
 	  createActivityDependents();
 	  
+	  //Create users using two lists to add/remove users
+	  createUsersPanel();
+	  
 	  //Activity Description
 	  createActivityDescription();
 	  
 	  //Adding Comments panel
-	  createComments();
+	  // createComments();
 	  
 	  //Create the scrollable panel for comments
 	  final JScrollPane scrollPanDependArea = new JScrollPane(activityComment, 
@@ -188,8 +198,8 @@ public class ActivityDialog extends JDialog
 	      }      
 	  });
 	  
-	  activitiCommentsSubPanel.add(addCommentButton);
-	  activitiCommentsSubPanel.add(scrollPanDependArea);
+	  //activitiCommentsSubPanel.add(addCommentButton);
+	  //activitiCommentsSubPanel.add(scrollPanDependArea);
 
 	  //Checks and Creates the Activity
 	  okButton.addActionListener(new ActionListener(){
@@ -234,6 +244,14 @@ public class ActivityDialog extends JDialog
 		  for (int i = 0; i < dependantActivities.getSize(); i++) {
 		      activity.addDependent(dependantActivities.getElementAt(i).getId());
 		  }
+		  
+		  for (int i = 0; i < availableUsers.getSize(); i++) {
+		      activity.removeUser(availableUsers.getElementAt(i));
+		  }
+		  
+		  for (int i = 0; i < currentUsers.getSize(); i++) {
+		      activity.addUser(currentUsers.getElementAt(i));
+		  }
 
 		  //Checks if an activity with that name already exists or is otherwise invalid
 		  boolean activityIsInsertable = false;
@@ -272,8 +290,8 @@ public class ActivityDialog extends JDialog
 	  activityPanel.add(panActivityStartDate);
 	  activityPanel.add(panActivityDueDate);
 	  activityPanel.add(dependSubPanel);
+	  activityPanel.add(usersSubPanel);
 	  activityPanel.add(panDescription);
-	  activityPanel.add(activitiCommentsSubPanel);
 
 	  //Makes the whole dialog scrollable, except the add/cancel buttons
 	  JScrollPane scroll = new JScrollPane(activityPanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
@@ -482,7 +500,7 @@ public class ActivityDialog extends JDialog
 	  sourceActivities = currentProject.getActivities();
 	  //Iterate over all activities, and add them to activitiesList
 	  for(Activity activity: sourceActivities){
-	  	if (this.activity != activity) {
+	  	if (this.activity != activity && activity != null) {
 	  	    availableActivities.addElement(activity);
 	  	}
 	  }
@@ -492,11 +510,16 @@ public class ActivityDialog extends JDialog
 	      List<Activity> existingDependents = new ArrayList<Activity>();
 	      List<Integer> activityDependents = this.activity.getDependents();
 	      for (Integer activityDependent : activityDependents) {
-		  existingDependents.add(new Activity(activityDependent));
+		  if (activityDependent != null) {
+		      existingDependents.add(new Activity(activityDependent));
+		  }
 	      }
 	      for (Activity existingDependent : existingDependents) {
-		  availableActivities.removeElement(existingDependent);
-		  dependantActivities.addElement(existingDependent);
+		  if (existingDependent != null) {
+		      availableActivities.removeElement(existingDependent);
+		      dependantActivities.addElement(existingDependent);
+		  }
+
 	      }
 	  }
 	  
@@ -560,6 +583,90 @@ public class ActivityDialog extends JDialog
 	  dependSubPanel.add(panDepend, BorderLayout.CENTER); 
   }
 
+  private void createUsersPanel() {
+	//Initialize both lists
+	availableUsers = new DefaultListModel<User>();
+	currentUsers = new DefaultListModel<User>();
+	//Create panel for the available dependents 
+	final JPanel panDepend = new JPanel();
+	  panDepend.setBackground(Color.white);
+	  //Get the list of users for the project
+	  List<User> users = ViewManager.getAllUsers();
+	  //Iterate over all users, and add them to activitiesList
+	  for (User user : users) {
+	      availableUsers.addElement(user);
+	  }
+	  
+	  // If we are editing an activity, pre-populate the users list
+	  if (this.activity != null) {
+	      List<User> existingUsers = this.activity.getUsers();
+	      for (User user : existingUsers) {
+		  availableUsers.removeElement(user);
+		  currentUsers.addElement(user);
+	      }
+
+	  }
+	  
+	  //Create scrollable source user list
+	  usersSourceList = new JList<User>(availableUsers);
+	  JScrollPane scrollSourceUsers = new JScrollPane(usersSourceList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+	  		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	  scrollSourceUsers.setPreferredSize(new Dimension(145, 110));
+	  
+	  //Button is used to dynamically add user fields
+	  JButton addUserButton = new JButton("Add>");
+	  addUserButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	      	//Add users to destination list, remove from source list
+	      	//First get all selected activities
+	      	List<User> selectedUsers = usersSourceList.getSelectedValuesList();
+	      	for (User selectedUser : selectedUsers) {
+	      	    availableUsers.removeElement(selectedUser);
+	      	    currentUsers.addElement(selectedUser);
+	      	}
+	      }      
+	  });
+	  
+	  //Button is used to dynamically remove user fields
+	  JButton removeUserButton = new JButton("<Remove");
+	  removeUserButton.addActionListener(new ActionListener(){
+	      public void actionPerformed(ActionEvent arg0) {
+	      	//Remove activities from destination list, add to source list
+	      	//First get all selected activities
+		List<User> selectedUsers = usersDestList.getSelectedValuesList();
+		for (User selectedUser : selectedUsers) {
+		    currentUsers.removeElement(selectedUser);
+		    availableUsers.addElement(selectedUser);
+		}
+	      }      
+	  });
+	  
+	  //Create scrollable destination user list
+	  usersDestList = new JList<User>(currentUsers);
+	  JScrollPane scrollDestUsers = new JScrollPane(usersDestList, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, 
+	  		ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	  scrollDestUsers.setPreferredSize(new Dimension(145, 110));
+	  
+	  //Add subComponents
+	  panDepend.add(scrollSourceUsers);
+	  //Subcomponent for add/remove buttons
+	  JPanel subUserButtons = new JPanel();
+	  subUserButtons.add(addUserButton);
+	  subUserButtons.add(removeUserButton);
+	  subUserButtons.setBackground(Color.white);
+	  subUserButtons.setPreferredSize(new Dimension(100,110));
+	  
+	  panDepend.add(subUserButtons);
+	  panDepend.add(scrollDestUsers);
+	  
+	  //Construct the Dependencies panel
+	  usersSubPanel = new JPanel();
+	  usersSubPanel.setBackground(Color.white);
+	  usersSubPanel.setPreferredSize(new Dimension(465, 145));
+	  usersSubPanel.setBorder(BorderFactory.createTitledBorder("Users"));
+	  usersSubPanel.add(panDepend, BorderLayout.CENTER); 
+}
+  
 public Activity getResult() {
     return activity;
 }

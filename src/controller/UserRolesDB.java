@@ -7,8 +7,7 @@ import java.sql.Statement;
 
 /**
  * 
- * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
+ * @authors Andrey Uspenskiy,-Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
  *
  */
 

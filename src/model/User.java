@@ -195,22 +195,20 @@ public class User
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (id != other.id)
-			return false;
+		if (id == other.id)
+			return true;
 		if (userName == null) {
 			if (other.userName != null)
 				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
+		} else if (userName.equals(other.userName))
+			return true;
 		return true;
 	}
 	
 	@Override
 	public String toString()
 	{
-		return "User [id=" + id + ", userName=" + userName + ", password="
-				+ "*****" + ", email=" + email + ", regDate=" + regDate
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", currentProject=" + currentProject + "]";
+		return firstName + " " + lastName;
 	}
 
 	public Project getCurrentProject() {

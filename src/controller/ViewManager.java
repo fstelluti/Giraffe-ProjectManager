@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -146,5 +148,9 @@ public class ViewManager {
   		Activities1.addElement((String)selected[i]);
   		Activities2.removeElement((String)selected[i]);
   	}
+	}
+	
+	public static List<User> getAllUsers() {
+	    return UserDB.getAll();
 	}
 }
