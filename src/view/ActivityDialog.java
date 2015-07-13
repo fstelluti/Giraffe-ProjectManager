@@ -218,14 +218,21 @@ private JPanel usersSubPanel;
 		  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 		  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
 		  int activityEstimatedCost = 0;
+		  int activityOptimisticDuration = 0;
+		  int activityPessimisticDuration = 0;
+		  int activityMostLikelyDuration = 0;
 		  try {
 		      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
 		  } catch (ParseException e) {
-		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+	      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+		  try { 
+		  		activityPessimisticDuration = numberFormat.parse(pessimisticDur.getText()).intValue();
+		  		activityOptimisticDuration = numberFormat.parse(optimisticDur.getText()).intValue();
+		  	  activityMostLikelyDuration = numberFormat.parse(mostLikelyDur.getText()).intValue();
+		  } catch (ParseException e) {
+		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for a duration", "Error", JOptionPane.ERROR_MESSAGE);
 		  }
-		  int activityPessimisticDuration = Integer.parseInt(pessimisticDur.getText());
-		  int activityOptimisticDuration = Integer.parseInt(optimisticDur.getText());
-		  int activityMostLikelyDuration = Integer.parseInt(mostLikelyDur.getText());
 		  String activityDescriptionString = activityDescription.getText();
 		  
 		  // Builds the Activity object
@@ -350,6 +357,9 @@ private JPanel usersSubPanel;
 		if (this.activity != null) {
 		    mostLikelyDur.setValue(this.activity.getMostLikelyDuration());
 		}
+		else {
+			mostLikelyDur.setValue(0);  //Default value of 0 displayed
+		}
 		panMostLikelyDur.setBorder(BorderFactory.createTitledBorder("Most Likely"));
 		mostLikelyDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		mostLikelyDur.setPreferredSize(new Dimension(100,30));
@@ -367,6 +377,9 @@ private JPanel usersSubPanel;
 		optimisticDur = new JFormattedTextField(numberFormatter);
 		if (this.activity != null) {
 		    optimisticDur.setValue(this.activity.getOptimisticDuration());
+		}
+		else {
+				optimisticDur.setValue(0);  //Default value of 0 displayed
 		}
 		panOptimisticDur.setBorder(BorderFactory.createTitledBorder("Optimistic"));
 		optimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
@@ -386,6 +399,9 @@ private JPanel usersSubPanel;
 		if (this.activity != null) {
 		    pessimisticDur.setValue(this.activity.getPessimisticDuration());
 		}
+		else {
+			pessimisticDur.setValue(0);  //Default value of 0 displayed
+		}
 		panPessimisticDur.setBorder(BorderFactory.createTitledBorder("Pessimistic"));
 		pessimisticDur.setHorizontalAlignment(JFormattedTextField.CENTER);
 		pessimisticDur.setPreferredSize(new Dimension(100,30));
@@ -403,6 +419,9 @@ private JPanel usersSubPanel;
 		activityEstimatedBudget = new JFormattedTextField(numberFormatter);
 		if (this.activity != null) {
 		    activityEstimatedBudget.setValue(this.activity.getEstimatedCost());
+		}
+		else {
+			activityEstimatedBudget.setValue(0);  //Default value of 0 displayed
 		}
 		panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
 		activityEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
