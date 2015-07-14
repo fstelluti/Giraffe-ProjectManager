@@ -37,6 +37,9 @@ public class TabPanel extends JPanel {
 	}
     }
     
+    public void setActiveTab(int i) {
+	tabPane.setSelectedIndex(i);
+    }
     public void refresh (User user) {
 	activitiesTab.refresh();
 	reportsTab.refresh();

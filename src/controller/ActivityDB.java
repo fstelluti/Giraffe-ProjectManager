@@ -81,13 +81,13 @@ public class ActivityDB extends DataManager
 		c = getConnection();
 		stmt = c.prepareStatement("INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		stmt.setInt(1, activity.getAssociatedProjectId());
-		stmt.setString(2,  activity.getName());
+		stmt.setString(2, activity.getName());
 		if (activity.getStartDate() == null) {
 		    stmt.setNull(3, Types.VARCHAR);
 		} else {
 		    stmt.setString(3, DataManager.DATE_FORMAT.format(activity.getStartDate()));
 		}
-		if (activity.getDueDate() == null) {
+		if (activity.getDueDate() == null) {	
 		    stmt.setNull(4, Types.VARCHAR);
 		} else {
 		    stmt.setString(4, DataManager.DATE_FORMAT.format(activity.getDueDate()));
@@ -135,7 +135,7 @@ public class ActivityDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID = "	+ projectId + ";");
+			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE PROJECTID = " + projectId + ";");
 			while (rs.next()) {
 				Activity activity = getById(rs.getInt("id"));
 				activities.add(activity);
@@ -308,10 +308,10 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-
+		System.out.println(activityName);
 		stmt = c.createStatement();
 		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
-			+ activityName + "' AND PROJECTID = " + projectId + ";");
+			+ DataManager.safeSql(activityName) + "' AND PROJECTID = " + projectId + ";");
 
 		while (rs.next()) {
 		    int id = rs.getInt("id");
@@ -341,7 +341,7 @@ public class ActivityDB extends DataManager
 		c = getConnection();
 		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=? WHERE ID=?;");
 		stmt.setInt(1, activity.getAssociatedProjectId());
-		stmt.setString(2,  activity.getName());
+		stmt.setString(2,  DataManager.safeSql(activity.getName()));
 		if (activity.getStartDate() == null) {
 		    stmt.setNull(3, Types.VARCHAR);
 		} else {
@@ -356,7 +356,7 @@ public class ActivityDB extends DataManager
 		if (activity.getDescription() == null) {
 		    stmt.setNull(6, Types.VARCHAR);
 		} else {
-		    stmt.setString(6, activity.getDescription());
+		    stmt.setString(6, DataManager.safeSql(activity.getDescription()));
 		}
 		stmt.setInt(7, activity.getOptimisticDuration());
 		stmt.setInt(8, activity.getPessimisticDuration());

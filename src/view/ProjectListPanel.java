@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -38,6 +39,7 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
 	    public void actionPerformed(ActionEvent arg0) {
 		@SuppressWarnings("unused")
 		CreateProjectDialog createProjectDialog = new CreateProjectDialog(user);
+		ViewManager.setTab(1);
 	    }
 	});
 	this.refresh(this.user);
@@ -54,8 +56,9 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
     
     public void refresh(User user) {
 	this.removeAll();
-	northPanel = new JPanel();
-	northPanel.add(createProjectButton);
+	northPanel = new JPanel(new BorderLayout());
+	northPanel.add(new JLabel("My Projects"), BorderLayout.NORTH);
+	northPanel.add(createProjectButton, BorderLayout.CENTER);
 	this.add(northPanel, BorderLayout.NORTH);
 	
 	this.user = user;

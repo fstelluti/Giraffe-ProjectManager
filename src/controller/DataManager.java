@@ -133,6 +133,11 @@ public abstract class DataManager
 	public static void setTesting(boolean testing) {
 		DataManager.testing = testing;
 	}
+
+	public static String safeSql(String name) {
+	    String result = name.replace("'", "''");
+	    return result;
+	}
 	
 	
 	

@@ -153,6 +153,7 @@ public class ActivitiesTab extends JPanel {
      * @return
      * @author Matthew Mongrain
      */
+    @SuppressWarnings("serial")
     private void buildActivityTableModel() {
         // names of columns
 	Project project = ViewManager.getCurrentProject();
@@ -167,29 +168,45 @@ public class ActivitiesTab extends JPanel {
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
         ArrayList<Activity> activities = project.getActivities();
         if (activities != null) {
-    	for (Activity activity : activities) {
-    	    Vector<Object> activityVector = new Vector<Object>();
-    	    activityVector.add(activity.getId());
-    	    activityVector.add(activity);
-    	    if (activity.getStartDate() != null) {
-    		activityVector.add(DataManager.DATE_FORMAT.format(activity.getStartDate()));
-    	    } else { 
-    		activityVector.add("No date"); 
-    	    }
-    	    if (activity.getDueDate() != null) {
-    		activityVector.add(DataManager.DATE_FORMAT.format(activity.getDueDate()));
-    	    } else { 
-    		activityVector.add("No date"); 
-    	    }
-    	    if (!activity.getDescription().equals("null")) {
-    		activityVector.add(activity.getDescription());
-    	    } else {
-    		activityVector.add("");
-    	    }
-    	    data.add(activityVector);
-    	}
+            if (activities.size() == 0) {
+                Vector<Object> activityVector = new Vector<Object>();
+                activityVector.add(" ");
+                activityVector.add(null);
+                activityVector.add(" ");
+                activityVector.add(" ");
+                activityVector.add(" ");
+                data.add(activityVector);
+            } else {
+        	for (Activity activity : activities) {
+        	    Vector<Object> activityVector = new Vector<Object>();
+        	    activityVector.add(activity.getId());
+        	    activityVector.add(activity);
+        	    if (activity.getStartDate() != null) {
+        		activityVector.add(DataManager.DATE_FORMAT.format(activity.getStartDate()));
+        	    } else { 
+        		activityVector.add("No date"); 
+        	    }
+        	    if (activity.getDueDate() != null) {
+        		activityVector.add(DataManager.DATE_FORMAT.format(activity.getDueDate()));
+        	    } else { 
+        		activityVector.add("No date"); 
+        	    }
+        	    if (!activity.getDescription().equals("null")) {
+        		activityVector.add(activity.getDescription());
+        	    } else {
+        		activityVector.add("");
+        	    }
+        	    data.add(activityVector);
+        	}
+            }
+
         }
         
-        this.tableModel = new DefaultTableModel(data, columnNames);
+        // Sets the table so that cells are selectable but noneditable
+        this.tableModel = new DefaultTableModel(data, columnNames) {
+            public boolean isCellEditable(int row, int column) {
+        	return false;
+            }
+        };
     }
 }

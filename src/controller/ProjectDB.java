@@ -267,7 +267,7 @@ public class ProjectDB extends DataManager
 			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE NAME = '" + projectName + "'" + ";");
+			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE NAME = '" + DataManager.safeSql(projectName) + "'" + ";");
 			while (rs.next())
 			{
 				int id = rs.getInt("id");
@@ -287,6 +287,7 @@ public class ProjectDB extends DataManager
 		catch (SQLException e)
 		{
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			e.printStackTrace();
 		} catch (ParseException e) {
 		    e.printStackTrace();
 		} finally {

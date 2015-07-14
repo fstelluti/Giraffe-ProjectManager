@@ -226,4 +226,8 @@ public class ViewManager {
 	    reload();
 	    refresh();
 	}
+
+	public static void setTab(int i) {
+	    tabPanel.setActiveTab(i);
+	}
 }
