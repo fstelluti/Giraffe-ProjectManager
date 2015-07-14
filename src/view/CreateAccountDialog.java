@@ -36,13 +36,13 @@ import controller.ViewManager;
 
 /**
  * This class is responsible for displaying a dialog when creating a new account
+ * 
  * @author Andrey Uspenskiy
  * @modifiedBy Anne-Marie Dube, Francois Stelluti, Zachary Bergeron, Ningge Hu
  */
 
 @SuppressWarnings("serial")
-public class CreateAccountDialog extends JDialog
-{
+public class CreateAccountDialog extends JDialog {
 	private JTextField userName, email, firstName, lastName;
 	private JPasswordField userPassword, repeatPassword;
 	private JFileChooser userPicChooser;
@@ -65,7 +65,7 @@ public class CreateAccountDialog extends JDialog
 
 	/**
 	 * Initializes the Create Account Dialog
-	 */ 
+	 */
 	private void initCreateAccountDialog() {
 		JPanel firstNameContainer = new JPanel();
 		firstNameContainer.setBackground(Color.white);
@@ -85,7 +85,8 @@ public class CreateAccountDialog extends JDialog
 				.createTitledBorder("Last Name"));
 		lastNameContainer.add(lastName);
 
-		openFileButton = new JButton("Open a File...", ViewManager.createImageIcon("images/Open16.gif"));
+		openFileButton = new JButton("Open a File...",
+				ViewManager.createImageIcon("images/Open16.gif"));
 
 		JPanel fileChooserContainer = new JPanel();
 		fileChooserContainer.setBackground(Color.white);
@@ -105,7 +106,8 @@ public class CreateAccountDialog extends JDialog
 					File file = userPicChooser.getSelectedFile();
 					sname = file.getAbsolutePath();
 					mImageIcon = new ImageIcon(sname);
-					imageLabel = new JLabel("", new ImageIcon(mImageIcon.getImage().getScaledInstance(130, 130, SOMEBITS)),
+					imageLabel = new JLabel("", new ImageIcon(mImageIcon
+							.getImage().getScaledInstance(130, 130, SOMEBITS)),
 							JLabel.CENTER);
 					imagePanel.removeAll();
 					imagePanel.add(imageLabel, BorderLayout.CENTER);
@@ -150,7 +152,8 @@ public class CreateAccountDialog extends JDialog
 		repeatPasswordContainer.setPreferredSize(new Dimension(220, 60));
 		repeatPassword = new JPasswordField();
 		repeatPassword.setPreferredSize(new Dimension(200, 25));
-		repeatPasswordContainer.setBorder(BorderFactory.createTitledBorder("Repeat password"));
+		repeatPasswordContainer.setBorder(BorderFactory
+				.createTitledBorder("Repeat password"));
 		repeatPasswordContainer.add(repeatPassword);
 
 		JPanel control = new JPanel();
@@ -166,66 +169,63 @@ public class CreateAccountDialog extends JDialog
 									JOptionPane.YES_NO_CANCEL_OPTION,
 									JOptionPane.QUESTION_MESSAGE, null);
 					switch (response) {
-						case JOptionPane.CANCEL_OPTION:
-							return;
-						case JOptionPane.NO_OPTION:
-							resetForm();
-							return;
-						case JOptionPane.YES_OPTION:
-							//Create the User
-							User user = new User(userName.getText().trim(),
-									getAccountPassword(userPassword.getPassword()),
-									email.getText(), firstName.getText(),
-									lastName.getText());
-							
-							//Save User image in the DB
-							try{
+					case JOptionPane.CANCEL_OPTION:
+						return;
+					case JOptionPane.NO_OPTION:
+						resetForm();
+						return;
+					case JOptionPane.YES_OPTION:
+						// Create the User
+						User user = new User(userName.getText().trim(),
+								getAccountPassword(userPassword.getPassword()),
+								email.getText(), firstName.getText(), lastName
+										.getText());
+
+						// Save User image in the DB
+						try {
+							if (sname != null) {
 								File imgPath = new File(sname);
-								BufferedImage bufferedImage = ImageIO.read(imgPath);
-								//TODO Probably something around here is not converting the image correctly
-								WritableRaster raster = bufferedImage.getRaster();	
-								DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
+								BufferedImage bufferedImage = ImageIO
+										.read(imgPath);
+								// TODO Probably something around here is not
+								// converting the image correctly
+								WritableRaster raster = bufferedImage
+										.getRaster();
+								DataBufferByte data = (DataBufferByte) raster
+										.getDataBuffer();
 								user.setUserPicture(data.getData());
+								System.out.println("length: "+data.getData().length );
 							}
-							catch(IOException e)
-							{
-								//Print message + stack trace (others?) //TODO Fix this
-							}
-							finally
-							{
+						} catch (IOException e) {
+							// Print message + stack trace (others?) //TODO Fix
+							// this
+						} finally {
 
-								// This if-statement checks to see if the DB is empty
-								// If it is empty, create the first user as an Admin
-								// If not empty, create a regular user
-								if(DataManager.userTableIsEmpty())
-								{
-									user.setAdmin(true);
-									user.persist();
-									ViewManager.logout(); //Switch to the LoginPanel
-								}
-								else
-								{
-									user.setAdmin(false);
-									user.persist();
-								}
-
-								
-							}
-							
-							/*if(DataManager.userTableIsEmpty())
-							{
+							// This if-statement checks to see if the DB is
+							// empty
+							// If it is empty, create the first user as an Admin
+							// If not empty, create a regular user
+							if (DataManager.userTableIsEmpty()) {
 								user.setAdmin(true);
 								user.persist();
-								ViewManager.logout(); //Switch to the LoginPanel
-							}
-							else
-							{
+								ViewManager.logout(); // Switch to the
+														// LoginPanel
+							} else {
 								user.setAdmin(false);
 								user.persist();
-							}*/
-							
-							setVisible(false);
-							break;
+							}
+
+						}
+
+						/*
+						 * if(DataManager.userTableIsEmpty()) {
+						 * user.setAdmin(true); user.persist();
+						 * ViewManager.logout(); //Switch to the LoginPanel }
+						 * else { user.setAdmin(false); user.persist(); }
+						 */
+
+						setVisible(false);
+						break;
 					}
 				}
 
@@ -257,9 +257,10 @@ public class CreateAccountDialog extends JDialog
 
 	/**
 	 * Method to get the password based on an array of characters
+	 * 
 	 * @param char[] pass
 	 * @return String of the password itself
-	 */ 
+	 */
 	private String getAccountPassword(char[] pass) {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < pass.length; i++) {
@@ -270,31 +271,33 @@ public class CreateAccountDialog extends JDialog
 
 	/**
 	 * Method checks to see if all inputs are valid
+	 * 
 	 * @return boolean
-	 */ 
-	private boolean isInputValid() 
-	{
+	 */
+	private boolean isInputValid() {
 		List<User> users = UserDB.getAll();
 		Pattern p = Pattern.compile("[\\w\\.]+@[\\w\\.]+\\.\\w{2,3}\\b");
 		Matcher m = p.matcher(email.getText());
 		boolean b = m.matches();
-		
-		if (b == false)
-		{
-			JOptionPane.showMessageDialog(null,"Invalid Email, Please Enter A Valid Email", "Error", JOptionPane.ERROR_MESSAGE);
+
+		if (b == false) {
+			JOptionPane.showMessageDialog(null,
+					"Invalid Email, Please Enter A Valid Email", "Error",
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		
-		//Checks that all fields have input
-		if(email.getText().hashCode() == 0 || 
-				userName.getText().hashCode() == 0 || 
-				userPassword.getPassword().length==0 ||
-				firstName.getText().hashCode() == 0 ||
-				lastName.getText().hashCode() == 0) {
-			JOptionPane.showMessageDialog(null,"Please fill out all fields", "Cannot Create User", JOptionPane.ERROR_MESSAGE);
+
+		// Checks that all fields have input
+		if (email.getText().hashCode() == 0
+				|| userName.getText().hashCode() == 0
+				|| userPassword.getPassword().length == 0
+				|| firstName.getText().hashCode() == 0
+				|| lastName.getText().hashCode() == 0) {
+			JOptionPane.showMessageDialog(null, "Please fill out all fields",
+					"Cannot Create User", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
-		//Makes sure that passwords match 
+		// Makes sure that passwords match
 		if (!areCharsEqual(userPassword.getPassword(),
 				repeatPassword.getPassword())) {
 			JOptionPane.showMessageDialog(null,
@@ -303,9 +306,9 @@ public class CreateAccountDialog extends JDialog
 			repeatPassword.setText("");
 			return false;
 		}
-		
+
 		for (User user : users) {
-			//Checks to see if the supplied e-mail already exist
+			// Checks to see if the supplied e-mail already exist
 			if (user.getEmail().equals(email.getText().trim())) {
 				JOptionPane.showMessageDialog(null, "A user with e-mail: "
 						+ email.getText().trim() + " already exists");
@@ -313,7 +316,7 @@ public class CreateAccountDialog extends JDialog
 				return false;
 			}
 
-			//Checks to see if the supplied username already exist
+			// Checks to see if the supplied username already exist
 			if (user.getUserName().equals(userName.getText().trim())) {
 				JOptionPane.showMessageDialog(null, "A user with username: "
 						+ userName.getText().trim() + " already exists");
@@ -322,15 +325,17 @@ public class CreateAccountDialog extends JDialog
 			}
 
 		}
-				
+
 		return true;
 	}
 
 	/**
 	 * Method checks to see if both supplied passwords are the same
-	 * @param Two character arrays, fist and second
+	 * 
+	 * @param Two
+	 *            character arrays, fist and second
 	 * @return boolean
-	 */ 
+	 */
 	private boolean areCharsEqual(char[] first, char[] second) {
 		if (first.length != second.length) {
 			return false;
@@ -342,10 +347,10 @@ public class CreateAccountDialog extends JDialog
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Method resets the dialog form to blank fields
-	 */ 
+	 */
 	private void resetForm() {
 		firstName.setText("");
 		lastName.setText("");
