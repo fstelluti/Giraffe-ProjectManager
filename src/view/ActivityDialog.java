@@ -64,7 +64,7 @@ public class ActivityDialog extends JDialog
   private Project currentProject;
   private JButton addDependantButton, removeDependantButton, addCommentButton, okButton;
   private JPanel dependSubPanel, panActivityStatus, panEstimatedCost, subDepButtons; 
-  private JPanel panActivity, panActivityStartDate, panActivityDueDate, panButtons, panDescription;
+  private JPanel panActivity, panActivityStartDate, panActivityDueDate, panButtons, panDescription, panActualCost;
   private JPanel panSubDuration,panPessimisticDur, panOptimisticDur, panMostLikelyDur, activitiCommentsSubPanel;
  
   private ArrayList<String> activityComments;
@@ -79,7 +79,7 @@ public class ActivityDialog extends JDialog
   
   private NumberFormat numberFormat = NumberFormat.getInstance();
   private NumberFormatter numberFormatter = new NumberFormatter(numberFormat);
-  private JFormattedTextField activityEstimatedBudget, pessimisticDur, optimisticDur, mostLikelyDur;
+  private JFormattedTextField activityEstimatedBudget, activityActualBudget, pessimisticDur, optimisticDur, mostLikelyDur;
   
   private Activity activity;
 private DefaultListModel<User> currentUsers;
@@ -148,6 +148,9 @@ private JPanel usersSubPanel;
 	  
 	  //Estimated Budget
 	  createEstimatedBudget();
+	  
+	  //Actual Budget
+	  createActualBudget();
 	  
 	  //Pessimistic duration
 	  createPessimisticDuration();
@@ -294,6 +297,7 @@ private JPanel usersSubPanel;
 	  activityPanel.add(panActivity);
 	  activityPanel.add(panActivityStatus);
 	  activityPanel.add(panEstimatedCost);
+	  activityPanel.add(panActualCost);
 	  activityPanel.add(panSubDuration);
 	  activityPanel.add(panActivityStartDate);
 	  activityPanel.add(panActivityDueDate);
@@ -428,6 +432,27 @@ private JPanel usersSubPanel;
 		activityEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
 		activityEstimatedBudget.setPreferredSize(new Dimension(200,30));
 		panEstimatedCost.add(activityEstimatedBudget);
+	}
+	
+	/**
+	 * Creates the Actual Budget Panel
+	 */
+	private void createActualBudget() {
+		panActualCost = new JPanel();
+		panActualCost.setBackground(Color.white);
+		panActualCost.setPreferredSize(new Dimension(230, 60));
+		
+		activityActualBudget = new JFormattedTextField(numberFormatter);
+		if (this.activity != null) {
+			activityActualBudget.setValue(this.activity.getActualCost());
+		}
+		else {
+			activityActualBudget.setValue(0);  //Default value of 0 displayed
+		}
+		panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
+		activityActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
+		activityActualBudget.setPreferredSize(new Dimension(200,30));
+		panActualCost.add(activityActualBudget);
 	}
 
 	/**

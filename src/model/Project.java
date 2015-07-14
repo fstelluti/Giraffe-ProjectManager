@@ -118,7 +118,7 @@ public class Project
 	}
 
 	public void setEstimatedBudget(long estimatedBudget) {
-		if (estimatedBudget < this.estimatedBudget) {
+		if (estimatedBudget < 0) {
 			throw new IllegalArgumentException("estimatedBudget cannot be negative");
 		}
 		this.estimatedBudget = estimatedBudget;
