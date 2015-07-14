@@ -142,6 +142,9 @@ public class ActivitiesTab extends JPanel {
 		}
 		newRow.add(result.getDescription());
 		tableModel.addRow(newRow);
+		if (tableModel.getValueAt(0, 1) == null) {
+		   ViewManager.reload();
+		}
 	    }
 	});
     }

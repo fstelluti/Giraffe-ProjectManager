@@ -5,12 +5,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -57,7 +59,9 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
     public void refresh(User user) {
 	this.removeAll();
 	northPanel = new JPanel(new BorderLayout());
-	northPanel.add(new JLabel("My Projects"), BorderLayout.NORTH);
+	JLabel projectsLabel = new JLabel("<html><h2>My Projects</h2></html>");
+	projectsLabel.setHorizontalAlignment(JLabel.CENTER);
+	northPanel.add(projectsLabel, BorderLayout.NORTH);
 	northPanel.add(createProjectButton, BorderLayout.CENTER);
 	this.add(northPanel, BorderLayout.NORTH);
 	
@@ -77,6 +81,7 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
 	this.projectsList.setSelectedValue(ViewManager.getCurrentProject(), true);
 	projectsList.addListSelectionListener(this);
 	this.add(projectsList, BorderLayout.CENTER);
+	this.projectsList.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 	this.repaint();
 	this.revalidate();
     }
