@@ -1,9 +1,11 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,61 +65,19 @@ public class ProjectDB extends DataManager
 	 */
 	public static void insert(Project project) {
 	    Connection c = null;
-	    Statement stmt = null;
+	    PreparedStatement stmt = null;
 
 	    try {
 		c = getConnection();
-		stmt = c.createStatement();
-		String sql = "INSERT INTO PROJECTS (ID, NAME) "
-			+ "VALUES (NULL, '" 
-			+ project.getName() + "');";
-		stmt.executeUpdate(sql);
+		stmt = c.prepareStatement("INSERT INTO PROJECTS (ID, NAME) VALUES (NULL, ?);");
+		stmt.setString(1, project.getName());
+		stmt.executeUpdate();
 	    } catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		e.printStackTrace();
 	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
 	    }
-	}
-	
-    /**
-     * Method to insert a new project into the Project Table
-     * @param startDate as a String
-     * @param dueDate as a String
-     * @param description as a String
-     * @param name as a String
-     * @return
-     */
-    public static void insert(String projectName, String startDate, String dueDate, 
-    		String description, String estimatedBudget, String actualBudget)
-    {
-
-		Connection c = null;
-		Statement stmt = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			String sql = "INSERT INTO PROJECTS (ID, NAME, STARTDATE, DUEDATE, DESCRIPTION, ESTIMATEDBUDGET, ACTUALBUDGET) "
-					+ "VALUES (NULL, '" + projectName + "', '" + startDate + "', '"
-					+ dueDate + "', '" + description + "', '" + estimatedBudget + "', '" + actualBudget + "')";
-			stmt.executeUpdate(sql);
-			c.commit();
-		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ProjectDB.insertProjectIntoTable: " + e.getMessage());
-			}
-		}
 	}
 	
 	/**
@@ -248,8 +208,8 @@ public class ProjectDB extends DataManager
 		    } catch (ParseException ignore) {}
 		    
 		    String description = rs.getString("description");
-		    double actualBudget = rs.getDouble("ACTUALBUDGET");
-		    double estimatedBudget = rs.getDouble("ESTIMATEDBUDGET");
+		    long actualBudget = rs.getInt("ACTUALBUDGET");
+		    long estimatedBudget = rs.getInt("ESTIMATEDBUDGET");
 		    
 		    if (rs.next()) {
 			throw new RuntimeException("More than one project was returned");
@@ -348,214 +308,6 @@ public class ProjectDB extends DataManager
 		return project;
 	}
 	
-	
-	// START OF EDITING PROJECT METHODS
-	
-		/**
-		 * Method to edit a project's name
-		 * @param projectId as an int
-		 * @param newProjectName as a String
-		 */
-		public static void editName(int projectId, String newProjectName)
-		{
-			Connection c = null;
-			Statement stmt = null;
-			
-			try
-			{
-				c = getConnection();
-				c.setAutoCommit(false);
-
-				stmt = c.createStatement();
-				String sql = "UPDATE PROJECTS "
-						+ "SET name='"
-						+ newProjectName
-						+ "' WHERE id='"
-						+ projectId 
-						+ "';"
-						;
-				stmt.executeUpdate(sql);
-				c.commit();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.editProjectByName: " + e.getMessage());
-				}
-			}
-		}
-
-		/**
-		 * Method to get edit a project's properties by looking up the project id
-		 * @param id as an Int
-		 * @param name as a String
-		 * @param startDate as a String
-		 * @param dueDate as a String
-		 * @param description as a String
-		 * @param projectManagerId as an Int
-		 */
-		public static void update(int id, String name,
-				String startDate, String dueDate, String description, int projectManagerId)
-		{
-			Connection c = null;
-			Statement stmt = null;
-			
-			try
-			{
-				c = getConnection();
-				c.setAutoCommit(false);
-
-				stmt = c.createStatement();
-				String sql = "UPDATE PROJECTS SET "
-						+ "name = '"+ name +"',"
-						+ "startdate = '" + startDate+"',"
-						+ "duedate = '" + dueDate+"',"
-						+ "description = '" + description+"' "
-						+ "WHERE id = "+id+"; "
-						+" UPDATE USERROLES SET "
-						+ "userid = " + projectManagerId+" "
-						+ "WHERE projectid = "+id;
-				stmt.executeUpdate(sql);
-				c.commit();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.editProjectById: " + e.getMessage());
-				}
-			}
-		}
-		
-		/**
-		 * Method to edit a project's start date
-		 * @param projectId as an Int
-		 * @param newStartDate as a String
-		 */
-		public static void editProjectStartDate(int projectId, String newStartDate)
-		{
-			Connection c = null;
-			Statement stmt = null;
-			
-			try
-			{
-				c = getConnection();
-				c.setAutoCommit(false);
-
-				stmt = c.createStatement();
-				String sql = "UPDATE PROJECTS "
-						+ "SET startDate='"
-						+ newStartDate
-						+ "' WHERE id='"
-						+ projectId 
-						+ "';"
-						;
-				stmt.executeUpdate(sql);
-				c.commit();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.editProjectStartDate: " + e.getMessage());
-				}
-			}
-		}
-		
-		/**
-		 * Method to edit a project's due date
-		 * @param projectId as an Int
-		 * @param newDueDate as a String
-		 */
-		public static void editProjectDueDate(int projectId, String newDueDate)
-		{
-			Connection c = null;
-			Statement stmt = null;
-			
-			try
-			{
-				c = getConnection();
-				c.setAutoCommit(false);
-
-				stmt = c.createStatement();
-				String sql = "UPDATE PROJECTS "
-						+ "SET dueDate='"
-						+ newDueDate
-						+ "' WHERE id='"
-						+ projectId 
-						+ "';"
-						;
-				stmt.executeUpdate(sql);
-				c.commit();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.editProjectDueDate: " + e.getMessage());
-				}
-			}
-		}
-		
-		/**
-		 * Method to edit Project Manager role
-		 * @param connectionString as a String
-		 * @param userId as an integer
-		 * @param projectId	as an integer
-		 * @param roleId as an integer
-		 */
-		
-		//TODO roleId needs to be implemented
-		public static void editProjectUserRole(String connectionString,	int userId, int projectId, int roleId)
-		{
-			Connection c = null;
-			Statement stmt = null;
-			
-			try
-			{
-				c = getConnection();
-				c.setAutoCommit(false);
-
-				stmt = c.createStatement();
-				String sql = "UPDATE USERROLES "
-						+ "SET USERID='"
-						+ userId
-						+ "' WHERE PROJECTID='"
-						+ projectId 
-						+ "';"
-						;
-				stmt.executeUpdate(sql);
-				c.commit();
-			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.editProjectUserRole: " + e.getMessage());
-				}
-			}
-		}
 		
 		/**
 		 * Method to delete a Project from the table & application
@@ -663,32 +415,34 @@ public class ProjectDB extends DataManager
 		 */
 		public static void update(Project project) {
 			Connection c = null;
-			Statement stmt = null;
+			PreparedStatement stmt = null;
 			
 			int projectId = project.getId();
 			
-			try
-			{
+			try {
 				c = getConnection();
 
-				stmt = c.createStatement();
-				String sql = "UPDATE PROJECTS "
-						+ "SET dueDate=";
-				sql += (project.getDueDate() == null) ? "NULL" : "'" + DataManager.DATE_FORMAT.format(project.getDueDate()) + "'"; 
-				sql += ", startDate=";
-				sql += (project.getStartDate() == null) ? "NULL" : "'" + DataManager.DATE_FORMAT.format(project.getStartDate())+ "'";
-				sql += ", name='"
-						+ project.getName()
-						+ "', estimatedBudget='"
-						+ project.getEstimatedBudget()
-						+ "', estimatedBudget='"
-						+ project.getActualBudget()
-						+ "', description='";
-				sql += (project.getDescription() == null) ? "No description" : project.getDescription();
-				sql += "' WHERE id='"
-						+ projectId 
-						+ "';";
-				stmt.executeUpdate(sql);
+				stmt = c.prepareStatement("UPDATE PROJECTS SET dueDate=?, startDate=?, name=?, estimatedBudget=?, actualBudget=?, description=? WHERE ID=?;");
+				if (project.getDueDate() == null) {
+				    stmt.setNull(1, Types.VARCHAR);
+				} else {
+				    stmt.setString(1, DataManager.DATE_FORMAT.format(project.getDueDate()));
+				}
+				if (project.getStartDate() == null) {
+				    stmt.setNull(2, Types.VARCHAR);
+				} else {
+				    stmt.setString(2, DataManager.DATE_FORMAT.format(project.getStartDate()));
+				}
+				stmt.setString(3, project.getName());
+				stmt.setInt(4, (int)project.getEstimatedBudget());
+				stmt.setInt(5, (int)project.getActualBudget());
+				if (project.getDescription() != null) {
+				    stmt.setNull(6, Types.VARCHAR);
+				} else {
+				    stmt.setString(6, project.getDescription());
+				}
+				stmt.setInt(7, projectId);
+				stmt.executeUpdate();
 			}
 			catch (SQLException e) {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());

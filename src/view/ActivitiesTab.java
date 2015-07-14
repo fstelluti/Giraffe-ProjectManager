@@ -130,8 +130,16 @@ public class ActivitiesTab extends JPanel {
 		Vector<Object> newRow = new Vector<Object>();
 		newRow.add(Integer.toString(result.getId()));
 		newRow.add(result);
-		newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate()));
-		newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
+		if (result.getStartDate() != null) { 
+		    newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate())); 
+		} else { 
+		    newRow.add("No Date");
+		}
+		if (result.getDueDate() != null) {
+		    newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
+		} else {
+		    newRow.add("No date");
+		}
 		newRow.add(result.getDescription());
 		tableModel.addRow(newRow);
 	    }

@@ -266,6 +266,7 @@ private JPanel usersSubPanel;
 		      activityIsInsertable =  activity.isInsertable(currentProject);
 		  } catch (Exception e) {
 		      JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+		      e.printStackTrace();
 		  } else {
 		      activityIsInsertable = true;
 		  }
@@ -273,8 +274,8 @@ private JPanel usersSubPanel;
 		  if (activityIsInsertable && projectId >= 0) {
 		      activity.persist();
 		      setVisible(false); 
-		  } else {
-		      JOptionPane.showMessageDialog(activityPanel, "An error occurred when adding the activity: associated ProjectID is invalid", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
+		  } else if (projectId <= 0) {
+		      JOptionPane.showMessageDialog(activityPanel, "A fatal error occurred when adding the activity: associated ProjectID is invalid", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 		  }
 	      }      
 	  });

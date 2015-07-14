@@ -1,9 +1,11 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,25 +75,35 @@ public class ActivityDB extends DataManager
 	 */
 	public static void insert(Activity activity) {
 	    Connection c = null;
-	    Statement stmt = null;
+	    PreparedStatement stmt = null;
 
 	    try {
 		c = getConnection();
-		stmt = c.createStatement();
-		String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) "
-			+ "VALUES (NULL, + " 
-			+ activity.getProjectId() + ", '"
-			+ activity.getName() + "', '"
-			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "', '"
-			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', '" // 'null'
-			+ activity.getStatus() + "', '"
-			+ activity.getDescription() + "',"
-			+ activity.getOptimisticDuration() + ","
-			+ activity.getPessimisticDuration() + ","
-			+ activity.getMostLikelyDuration() + ","
-			+ activity.getEstimatedCost() + ","
-			+ activity.getActualCost() + ")";
-		stmt.executeUpdate(sql);
+		stmt = c.prepareStatement("INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		stmt.setInt(1, activity.getAssociatedProjectId());
+		stmt.setString(2,  activity.getName());
+		if (activity.getStartDate() == null) {
+		    stmt.setNull(3, Types.VARCHAR);
+		} else {
+		    stmt.setString(3, DataManager.DATE_FORMAT.format(activity.getStartDate()));
+		}
+		if (activity.getDueDate() == null) {
+		    stmt.setNull(4, Types.VARCHAR);
+		} else {
+		    stmt.setString(4, DataManager.DATE_FORMAT.format(activity.getDueDate()));
+		}
+		stmt.setInt(5, activity.getStatus());
+		if (activity.getDescription() == null) {
+		    stmt.setNull(6, Types.VARCHAR);
+		} else {
+		    stmt.setString(6, activity.getDescription());
+		}
+		stmt.setInt(7, activity.getOptimisticDuration());
+		stmt.setInt(8, activity.getPessimisticDuration());
+		stmt.setInt(9, activity.getMostLikelyDuration());
+		stmt.setInt(10, (int) activity.getEstimatedCost());
+		stmt.setInt(11, (int) activity.getActualCost());
+		stmt.executeUpdate();
 	    }
 
 	    catch (SQLException e) {
@@ -101,62 +113,7 @@ public class ActivityDB extends DataManager
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
 	    }
 	}
-    /**
-     * Method to insert an activity into the table
-     * Gets called in ViewManager.java when an activity is added
-     * @param associatedProjectId as an Int
-     * @param activityName as a String
-     * @param startDate as a String
-     * @param dueDate as a String
-     * @param status as an Int
-     * @param description as a String
-     */
-    public static void insert(int associatedProjectId, String activityName, String startDate, String dueDate,
-            int status, String description)
-    {
-		// startDate and dueDate are String variables in a format "yyyy-MM-dd"
-		Connection c = null;
-		Statement stmt = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
-			stmt = c.createStatement();
-			String sql = "INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION) "
-					+ "VALUES (NULL, '"
-					+ associatedProjectId
-					+ "', '"
-					+ activityName
-					+ "', '"
-					+ startDate
-					+ "', '"
-					+ dueDate
-					+ "', '"
-					+ status
-					+ "', '"
-					+ description + "')";
-			stmt.executeUpdate(sql);
-			c.commit();
-		}
-		
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ActivityDB.insertActivityIntoTable: " + e.getMessage());
-			}
-		}
-	}
-	
+    
 	
 	/**
 	 * Method to get a project's activities
@@ -290,7 +247,7 @@ public class ActivityDB extends DataManager
 		    activity.setStartDate(DataManager.DATE_FORMAT.parse(startDateString));
 		}
 		String dueDateString = rs.getString("dueDate");
-		if (startDateString != null) { 
+		if (dueDateString != null) { 
 		    activity.setDueDate(DataManager.DATE_FORMAT.parse(dueDateString));
 		}		
 		activity.setStatus(rs.getInt("status"));
@@ -378,24 +335,36 @@ public class ActivityDB extends DataManager
 	 */
 	public static void update(Activity activity) {
 	    Connection c = null;
-	    Statement stmt = null;
+	    PreparedStatement stmt = null;
 
 	    try {
 		c = getConnection();
-		stmt = c.createStatement();
-		String sql = "UPDATE ACTIVITIES SET "
-			+ "name = '"+ activity.getName() +"',"
-			+ "startdate = '" + DataManager.DATE_FORMAT.format(activity.getStartDate()) + "',"
-			+ "duedate = '" + DataManager.DATE_FORMAT.format(activity.getDueDate()) + "',"
-			+ "status = " + activity.getStatus() + ","
-			+ "description = '" + activity.getDescription() + "',"
-			+ "optimisticDuration = " + activity.getOptimisticDuration() + ","
-			+ "pessimisticDuration = " + activity.getPessimisticDuration() + ","
-			+ "mostLikelyDuration = " + activity.getMostLikelyDuration() + ","
-			+ "estimatedCost = " + activity.getEstimatedCost() + ","
-			+ "actualCost = " + activity.getActualCost() + " "
-			+ "WHERE id = " + activity.getId() + ";";
-		stmt.executeUpdate(sql);
+		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=? WHERE ID=?;");
+		stmt.setInt(1, activity.getAssociatedProjectId());
+		stmt.setString(2,  activity.getName());
+		if (activity.getStartDate() == null) {
+		    stmt.setNull(3, Types.VARCHAR);
+		} else {
+		    stmt.setString(3, DataManager.DATE_FORMAT.format(activity.getStartDate()));
+		}
+		if (activity.getDueDate() == null) {
+		    stmt.setNull(4, Types.VARCHAR);
+		} else {
+		    stmt.setString(4, DataManager.DATE_FORMAT.format(activity.getDueDate()));
+		}
+		stmt.setInt(5, activity.getStatus());
+		if (activity.getDescription() == null) {
+		    stmt.setNull(6, Types.VARCHAR);
+		} else {
+		    stmt.setString(6, activity.getDescription());
+		}
+		stmt.setInt(7, activity.getOptimisticDuration());
+		stmt.setInt(8, activity.getPessimisticDuration());
+		stmt.setInt(9, activity.getMostLikelyDuration());
+		stmt.setInt(10, (int) activity.getEstimatedCost());
+		stmt.setInt(11, (int) activity.getActualCost());
+		stmt.setInt(12, activity.getId());
+		stmt.executeUpdate();
 	    } catch (SQLException e) {
 		e.printStackTrace();
 	    } finally {
@@ -404,53 +373,7 @@ public class ActivityDB extends DataManager
 	    }
 	}
 
-	/**
-	 * Method to edit an Activity by searching for it with its ID
-	 * @param id as an Int
-	 * @param activityName as a String
-	 * @param startDate as a String
-	 * @param dueDate as a String
-	 * @param status as an Int
-	 * @param description as a String
-	 */
-	public static void update(int id, String activityName, String startDate, String dueDate,
-			int status, String description)
-	{
-		Connection c = null;
-		Statement stmt = null;
-		
-		try
-		{
-			c = getConnection();
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			String sql = "UPDATE ACTIVITIES SET "
-					+ "name = '"+ activityName +"',"
-					+ "startdate = '" + startDate+"',"
-					+ "duedate = '" + dueDate+"',"
-					+ "status = " + status+","
-					+ "description = '" + description+"' "
-					+ "WHERE id = "+id+"; ";
-			stmt.executeUpdate(sql);
-			c.commit();
-		}
-		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ActivityDB.editActivityById: " + e.getMessage());
-			}
-		}
-	}
+	
 	
 	/**
 	 * Method to delete an Activity from the application

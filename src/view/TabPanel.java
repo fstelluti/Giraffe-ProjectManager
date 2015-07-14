@@ -48,13 +48,13 @@ public class TabPanel extends JPanel {
 	this.revalidate();
 	this.tabPane = new JTabbedPane();
 	this.activitiesTab = new ActivitiesTab();
-	ImageIcon activitiesIcon = new ImageIcon("images/activitiesIcon.gif");
+	ImageIcon activitiesIcon = new ImageIcon("src/view/images/activitiesIcon.png");
 	this.reportsTab = new ReportsTab();
-	ImageIcon reportsIcon = new ImageIcon("images/reportsIcon.gif");
+	ImageIcon reportsIcon = new ImageIcon("src/view/images/reportsIcon.png");
 	this.detailsTab = new DetailsTab();
-	ImageIcon detailsIcon = new ImageIcon("images/detailsIcon.gif");
-	this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
+	ImageIcon detailsIcon = new ImageIcon("src/view/images/detailsIcon.png");
 	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
+	this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
 	this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
 	this.add(tabPane);
     }

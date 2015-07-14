@@ -31,8 +31,8 @@ public class Project
 	private Date startDate, dueDate;
 
 	private String description;
-	private double estimatedBudget;
-	private double actualBudget;
+	private long estimatedBudget;
+	private long actualBudget;
 	private ArrayList<Activity> activities;
 	
 	public Project(){}
@@ -113,22 +113,22 @@ public class Project
 		this.description = description;
 	}
 
-	public double getEstimatedBudget() {
+	public long getEstimatedBudget() {
 		return estimatedBudget;
 	}
 
-	public void setEstimatedBudget(double estimatedBudget) {
+	public void setEstimatedBudget(long estimatedBudget) {
 		if (estimatedBudget < this.estimatedBudget) {
 			throw new IllegalArgumentException("estimatedBudget cannot be negative");
 		}
 		this.estimatedBudget = estimatedBudget;
 	}
 
-	public double getActualBudget() {
+	public long getActualBudget() {
 		return actualBudget;
 	}
 
-	public void setActualBudget(double actualBudget) {
+	public void setActualBudget(long actualBudget) {
 		if (actualBudget < this.actualBudget) {
 			throw new IllegalArgumentException("actualBudget cannot be negative");
 		}
