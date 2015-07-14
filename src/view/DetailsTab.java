@@ -12,6 +12,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +27,7 @@ import model.User;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
+import org.pushingpixels.trident.Timeline;
 
 import controller.ViewManager;
 
@@ -52,6 +54,8 @@ public class DetailsTab extends JPanel {
     private JPanel panStartDate;
     private JPanel content;
     private JPanel panManager;
+    private JLabel notificationLabel;
+    private boolean justSaved;
 
     public DetailsTab() {
 	super(new BorderLayout());
@@ -60,14 +64,29 @@ public class DetailsTab extends JPanel {
 
 	this.repaint();
 	this.revalidate();
+	justSaved = false;
     }
 
     public void refresh() {
 	this.project = ViewManager.getCurrentProject();
-	this.removeAll();
-	this.initComponent();
+	this.projectDescription.setText(this.project.getDescription());
+	this.projectName.setText(this.project.getName());
+	if (project.getStartDate() != null) { this.startModel.setValue(project.getStartDate()); }
+	if (project.getDueDate() != null) { this.startModel.setValue(project.getDueDate()); }
 	this.repaint();
-	this.revalidate();
+	if (justSaved) {
+	    System.out.println("WOW");
+	    justSaved = false;
+	    notificationLabel.setText("Project saved successfully");
+	    notificationLabel.repaint();
+	    Timeline timeline = new Timeline(notificationLabel);
+	    timeline.addPropertyToInterpolate("background", notificationLabel.getBackground(), 
+		     new Color(notificationLabel.getBackground().getRGB(), true));
+	    timeline.addPropertyToInterpolate("foreground", notificationLabel.getForeground(), 
+		      new Color(notificationLabel.getForeground().getRGB(), true));
+	    timeline.play(); 
+	}
+
     }
     
     private void initComponent() {
@@ -146,7 +165,9 @@ public class DetailsTab extends JPanel {
 
 	control = new JPanel();
 	saveButton = new JButton("Save");
+	notificationLabel = new JLabel();
 	saveButton.addActionListener(new ActionListener() {
+
 	    public void actionPerformed(ActionEvent arg0) {
 		String projectNameContents = projectName.getText();
 		//Date startDatePickerContents = 
@@ -163,6 +184,8 @@ public class DetailsTab extends JPanel {
 			    dueDatePickerContents,
 			    projectDescriptionText
 			    );
+		    justSaved = true;
+		    ViewManager.refresh();
 		} catch (InvalidProjectException e) {
 		    JOptionPane.showMessageDialog(content, "Cannot Save Project" + e.getMessage(), "Cannot Save Project", JOptionPane.ERROR_MESSAGE);
 		}
@@ -184,6 +207,7 @@ public class DetailsTab extends JPanel {
 	    }
 	});
 
+
 	control.add(saveButton);
 	control.add(deleteButton);
 	content.setBackground(Color.white);
@@ -196,7 +220,8 @@ public class DetailsTab extends JPanel {
 	
 	content.add(datesPanel);
 	content.add(panDescription);
-
+	
+	control.add(notificationLabel, BorderLayout.WEST);
 	this.add(content, BorderLayout.CENTER);
 	this.add(control, BorderLayout.NORTH);
 	this.setPreferredSize(new Dimension(500, 650));

@@ -182,7 +182,6 @@ public class ViewManager {
 	    if (manager == null) {
 		manager = getCurrentUser();
 	    }
-	    System.out.println(manager.getId() + " / " + getCurrentUser().getId());
 	    try {
 		if (getCurrentProject().isValid()) {
 
@@ -202,7 +201,6 @@ public class ViewManager {
 	    } 
 	    getCurrentProject().setDescription(description);
 	    getCurrentProject().persist();
-
 	}
 	
 	/**

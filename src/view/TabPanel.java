@@ -38,9 +38,9 @@ public class TabPanel extends JPanel {
     }
     
     public void refresh (User user) {
+	activitiesTab.refresh();
 	reportsTab.refresh();
 	detailsTab.refresh();
-	this.revalidate();
     }
     
     public void reload() {

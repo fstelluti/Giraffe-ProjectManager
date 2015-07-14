@@ -81,10 +81,7 @@ public class CreateProjectDialog extends JDialog
 					JOptionPane.showMessageDialog(content,"Project with this name already exists", "Cannot Create Project", JOptionPane.ERROR_MESSAGE);
 				}
 				else{
-				    int response = JOptionPane.showConfirmDialog(content,
-					    "Are you sure you want to create the following Project?\n"
-						    + "\nProject Name: " + projectName.getText());
-				    if(response == JOptionPane.YES_OPTION){
+
 					Project project = new Project();
 					project.setName(projectName.getText());
 					project.persist();
@@ -101,7 +98,6 @@ public class CreateProjectDialog extends JDialog
 					ViewManager.reload();
 					ViewManager.refresh();
 
-				    }
 				}
 			}     
 		});

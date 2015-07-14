@@ -74,6 +74,7 @@ public class ProjectListPanel extends JPanel implements ListSelectionListener {
 	this.projectsList.setSelectedValue(ViewManager.getCurrentProject(), true);
 	projectsList.addListSelectionListener(this);
 	this.add(projectsList, BorderLayout.CENTER);
+	this.repaint();
 	this.revalidate();
     }
 }

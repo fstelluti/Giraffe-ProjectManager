@@ -41,10 +41,10 @@ public class ActivitiesTab extends JPanel {
 	this.buildDeleteActivityButton();
 	this.buttonPanel.add(this.deleteActivityButton);
 	this.add(buttonPanel, BorderLayout.NORTH);
-	this.refresh();
+	this.reload();
     }
     
-    public void refresh() {
+    public void reload() {
 	if (this.grid != null) { this.remove(this.grid); }
 	buildActivityTableModel();
 	this.grid = new JTable(tableModel);
@@ -60,7 +60,13 @@ public class ActivitiesTab extends JPanel {
 	this.grid.getColumnModel().getColumn(3).setPreferredWidth(50);
 	this.grid.getColumnModel().getColumn(4).setPreferredWidth(200);
 	this.add(new JScrollPane(grid), BorderLayout.CENTER);
+	this.repaint();
 	this.revalidate();
+    }
+    
+    public void refresh() {
+	buildActivityTableModel();
+	this.repaint();
     }
     
     // TODO
@@ -143,7 +149,6 @@ public class ActivitiesTab extends JPanel {
     private void buildActivityTableModel() {
         // names of columns
 	Project project = ViewManager.getCurrentProject();
-	System.out.println(project);
         Vector<String> columnNames = new Vector<String>();
         columnNames.add("ID");
         columnNames.add("Name");
