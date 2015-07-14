@@ -36,18 +36,6 @@ public class MainViewPanelTest {
 		assertNotNull("MainViewPanel object is null", mainView1);
 	}
 	
-	//Tests getSouthPanel()
-	@Test
-	public void shouldGetSouthPanel() {
-		
-		//Create a MainViewPanel object
-		MainPanel mainView1 = new MainPanel(user);
-		
-		//Test the method
-		JPanel jPanel = mainView1.getSouthPanel();
-		assertNotNull("SouthViewPanel object is null", jPanel);
-	}
-	
 	//Tests getNorthPanel()
 	@Test
 	public void shouldGetNorthPanel() {

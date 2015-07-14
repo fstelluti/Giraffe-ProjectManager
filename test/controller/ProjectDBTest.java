@@ -113,60 +113,6 @@ public class ProjectDBTest {
 		}
 	}
 
-	// Tests DataManager.insertIntoTableProjects()
-	@Test
-	public void insertedProjectShouldMatchData() throws ParseException {
-		ProjectDB.insert("testProject", "1969-12-31", "1970-01-01", "dummy description");
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			c = DataManager.getConnection();
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM PROJECTS WHERE name='testProject';");
-			
-			boolean startDateMatch = false;
-			boolean dueDateMatch = false;
-			// if an entry is returned, test it, otherwise fail
-			if (rs.next()) {
-				String startDate = rs.getString("STARTDATE").trim();
-				String dueDate = rs.getString("DUEDATE").trim();
-				startDateMatch = startDate.equals("1969-12-31");
-				dueDateMatch = dueDate.equals("1970-01-01");
-				if (rs.next()) {
-					fail("More than one result was returned!");
-				}
-			} else {
-				fail("No results were returned, expected 1!");
-			}
-			assertTrue("startDate did not match!", startDateMatch);
-			assertTrue("dueDate name did not match!", dueDateMatch);
-			c.commit();
-			stmt.close();
-			rs.close();
-			c.close();
-		} catch (SQLException e) {
-			fail("An SQLException was thrown: " + e.getStackTrace());
-		} finally {
-		    try {
-		    	if (c != null && !c.isClosed()) {
-		    		c.close();
-		    	}
-		    	if (stmt != null && !stmt.isClosed()) {
-		    		stmt.close();
-		    	}
-		    	if (rs != null && !rs.isClosed()) {
-		    		rs.close();
-		    	}
-		    } catch (SQLException ex) {
-		        System.err.println ("Error closing connections");
-		        ex.printStackTrace();
-		    }
-		}
-	}
-	
 	// Tests DataManager.getProjects()
 	@Test
 	public void returnedProjectsShouldBeValid() {

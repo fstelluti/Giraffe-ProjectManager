@@ -10,12 +10,10 @@ import org.junit.runners.Suite;
 	controller.ProjectDBTest.class,
 	controller.UserDBTest.class,
 	controller.UserRolesDBTest.class,
-//	controller.UserRolesDictDBTest.class,
 	controller.ViewManagerTest.class,
 	model.UserTest.class,
 	model.ActivityTest.class,
 	view.LoginPanelTest.class,
-	view.TreePanelTest.class,
 	view.MainViewPanelTest.class,
 	view.ApplicationPanelTest.class
 })

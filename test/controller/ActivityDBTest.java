@@ -125,61 +125,6 @@ public class ActivityDBTest {
 		}
 	}
 	
-	// Tests DataManager.insertIntoTableActivities()
-	@Test
-	public void insertedActivityShouldMatchData() throws ParseException {
-		ActivityDB.insert(1337, "dummy activity", "1969-12-31", "1970-01-01", 42, "dummy description");
-		Connection c = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			c = DataManager.getConnection();
-			c.setAutoCommit(false);
-
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE STATUS=42;");
-			rs.next();
-			String projectId = rs.getString("PROJECTID").trim();
-			String name = rs.getString("NAME").trim();
-			String startDate = rs.getString("STARTDATE").trim();
-			String dueDate = rs.getString("DUEDATE").trim();
-			String status = rs.getString("STATUS").trim();
-			boolean projectIdMatch = projectId.equals("1337");
-			boolean nameMatch = name.equals("dummy activity");
-			boolean startDateMatch = startDate.equals("1969-12-31");
-			boolean dueDateMatch = dueDate.equals("1970-01-01");
-			boolean statusMatch = status.equals("42");
-			if (rs.next()) {
-				fail("More than one result was returned!");
-			}
-			assertTrue("ProjectID did not match!", projectIdMatch);
-			assertTrue("Name did not match!", nameMatch);
-			assertTrue("startDate did not match!", startDateMatch);
-			assertTrue("dueDate name did not match!", dueDateMatch);
-			assertTrue("status name did not match!", statusMatch);
-			stmt.close();
-			rs.close();
-			c.close();
-		} catch (SQLException e) {
-			fail("An Exception was thrown: " + e.getStackTrace());
-		} finally {
-		    try {
-		    	if (c != null && !c.isClosed()) {
-		    		c.close();
-		    	}
-		    	if (stmt != null && !stmt.isClosed()) {
-		    		stmt.close();
-		    	}
-		    	if (rs != null && !rs.isClosed()) {
-		    		rs.close();
-		    	}
-		    } catch (SQLException ex) {
-		        System.err.println ("Error closing connections");
-		        ex.printStackTrace();
-		    }
-		}
-	}
-	
 	// Tests ActivityDB.getProjectActivities()
 	@Test
 	public void returnedActivitiesShouldBeValid() {

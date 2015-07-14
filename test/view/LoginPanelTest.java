@@ -11,15 +11,6 @@ import org.junit.Test;
  */
 public class LoginPanelTest {
 
-	//Tests constructor of LoginPanel
-	@Test
-	public void shouldCreateLoginPanel() {
-		
-		//Create LoginPanel object
-		LoginPanel login = LoginPanel.instance();
-		
-		assertNotNull("Login Panel object is null", login);
-		
-	}
+
 
 }
