@@ -134,7 +134,6 @@ public class ActivitiesTab extends JPanel {
 		newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
 		newRow.add(result.getDescription());
 		tableModel.addRow(newRow);
-		ViewManager.refresh();
 	    }
 	});
     }

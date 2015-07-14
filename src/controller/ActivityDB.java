@@ -83,7 +83,7 @@ public class ActivityDB extends DataManager
 			+ activity.getProjectId() + ", '"
 			+ activity.getName() + "', '"
 			+ DataManager.DATE_FORMAT.format(activity.getStartDate()) + "', '"
-			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', '"
+			+ DataManager.DATE_FORMAT.format(activity.getDueDate()) + "', '" // 'null'
 			+ activity.getStatus() + "', '"
 			+ activity.getDescription() + "',"
 			+ activity.getOptimisticDuration() + ","

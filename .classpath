@@ -9,5 +9,6 @@
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JCommon 1.0.23"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFreeChart 1.0.19"/>
 	<classpathentry kind="lib" path="lib/jgrapht-core-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/trident.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -18,8 +18,7 @@ import controller.UserActivitiesDB;
  *
  */
 
-public class Activity
-{
+public class Activity {
 	private int id;
 	private int projectId;
 	private int pessimisticDuration;
@@ -203,16 +202,10 @@ public class Activity
 	    String activityName = this.getName();
 	    Date activityStartDate = this.getStartDate();
 	    Date activityDueDate = this.getDueDate();
-	    boolean exists = false;
-	    List<Activity> activities = ActivityDB.getProjectActivities(projectId);
 	    
-	    for(Activity activitySelected:activities){ //TODO bug: need to account for a project with, initially, no activities
-		if(activityName.equals(activitySelected.getName())) { 
-		    exists = true; 
-		    break; 
-		} else {
-		    exists = false;
-		}
+	    Activity activityToTest = ActivityDB.getByNameAndProjectId(this.name, project.getId());
+	    if (activityToTest != null) {
+		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
 	    }
 	    
 	    // See if the overall project will be valid after the activity is added.
@@ -227,25 +220,25 @@ public class Activity
 	    }
 	    
 	    //Verifies all text boxes are filled out, if not = error
-	    if (activityName.hashCode() == 0 || activityStartDate == null || activityDueDate == null) {
-		throw new Exception("Please fill out all applicable fields");
-	    }
- 
-	    //Provides error if activity name exists
-	    if (exists) {
-		throw new Exception("Activity with this name already exists");
+	    if (activityName.hashCode() == 0) {
+		throw new Exception("Activity name cannot be empty");
 	    }
 	   	
 	    //Checks that due date not before start date
 	    if (activityDueDate != null && activityDueDate.before(activityStartDate)) {
 		throw new Exception("Please ensure due date is not before start date");
 	    }
-	   	  
-	    //Checks if activity start date falls in project date constraints	   	 
-	    if ((activityStartDate != null && activityStartDate.before(projectStartDate)) ||
-		(activityDueDate != null && activityDueDate.after(projectDueDate)) &&
-		    activityDueDate != projectDueDate) {
-		throw new Exception("Please ensure due date is within project dates : " + DataManager.DATE_FORMAT.format(projectStartDate) + " to " + DataManager.DATE_FORMAT.format(projectDueDate));
+	    
+	    if (projectStartDate != null) {
+		if (activityStartDate != null && activityStartDate.before(projectStartDate)) {
+		    throw new Exception("Please ensure start date is before project start date (" + DataManager.DATE_FORMAT.format(projectStartDate) +")");
+		}
+	    }
+	    
+	    if (projectDueDate != null) {
+		if (activityDueDate != null && activityDueDate.after(projectDueDate)) {
+		    throw new Exception("Please ensure due date is before project due date (" + DataManager.DATE_FORMAT.format(projectDueDate) + ")");
+		}
 	    }
 	   	  
 	    return true;
