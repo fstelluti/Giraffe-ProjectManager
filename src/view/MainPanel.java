@@ -29,14 +29,11 @@ public class MainPanel extends JPanel  {
 	private JScrollPane listView;
 	private TabPanel tabView;
 	private ProjectListPanel projectListPanel;
-	//private JPanel southPanel;	
 	private JSplitPane splitPanel;
 	private User user;
-	private JLabel userLabel, imageLabel, titleLabel; //TODO: Remove + other bullshit code
+	private JLabel userLabel, imageLabel, titleLabel; 
 	private JButton logoutActivity;
-	//private JButton createProject, editProject, addActivity, editActivity, logoutActivity;
 
-	//private List<JButton> toolbarButtons = new ArrayList<JButton>();
 	public static final int SIZE_Y = 700;
 	public static final int SIZE_X = 1000;
 	private final int DIVIDER_LOCATION = 200;
@@ -53,8 +50,6 @@ public class MainPanel extends JPanel  {
 		splitPanel = buildSplitPanel();
 		this.add(northPanel, BorderLayout.NORTH);
 		this.add(splitPanel, BorderLayout.CENTER);
-		
-		//ViewManager.getRootPane().setDefaultButton(editProject);	//Set the default button to editProject TODO: Change this
 	}
 	
 	/**
@@ -128,12 +123,6 @@ public class MainPanel extends JPanel  {
 				if (e.getSource() == logoutActivity) {
 					ViewManager.logout();	
 				}
-				//TODO: Edit buttons here temporarily 
-/*				CreateProjectDialog newProject = new CreateProjectDialog(null, "Create a Project", true, user);
-				if (newProject.isRefresh())
-				{
-					refresh();
-				}*/
 			}
 		});
 		
@@ -147,8 +136,6 @@ public class MainPanel extends JPanel  {
 		projectListPanel = new ProjectListPanel(this.user);
 		splitPanel.setLeftComponent(projectListPanel);
 		splitPanel.setRightComponent(tabView);
-		//TODO: Other properties (see above)?
-		//addTreeSelectionListener();
 	}
 
 	public User getCurrentUser() {
