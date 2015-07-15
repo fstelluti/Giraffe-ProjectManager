@@ -169,7 +169,7 @@ public class ViewManager {
 	 */
 	public static void editCurrentProject(User manager,
 		String name, Date startDate,
-		Date dueDate, String description) throws InvalidProjectException {
+		Date dueDate, String description, long estimatedBudget) throws InvalidProjectException {
 
 	    String oldName = getCurrentProject().getName();
 	    Date oldStartDate = getCurrentProject().getStartDate();
@@ -200,6 +200,7 @@ public class ViewManager {
 		throw e;
 	    } 
 	    getCurrentProject().setDescription(description);
+	    getCurrentProject().setEstimatedBudget(estimatedBudget);
 	    getCurrentProject().persist();
 	}
 	
