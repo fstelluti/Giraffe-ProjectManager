@@ -3,6 +3,8 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
@@ -266,6 +268,8 @@ public class DetailsTab extends JPanel {
 
 	control.add(saveButton);
 	control.add(deleteButton);
+	control.add(notificationLabel, BorderLayout.WEST);
+	
 	content.add(panName);
 	//content.add(panManager);
 	
@@ -279,9 +283,26 @@ public class DetailsTab extends JPanel {
 	content.add(dependSubPanel);
 	content.add(panDescription);
 	
-	control.add(notificationLabel, BorderLayout.WEST);
-	this.add(content, BorderLayout.CENTER);
-	this.add(control, BorderLayout.NORTH);
+	content.setBorder(BorderFactory.createTitledBorder("Project Details"));
+	
+	//Use this layout so that panels won't move when Main window is scaled
+	this.setLayout(new GridBagLayout());  
+	
+	//Set up constraints for the GridBagLayout
+	GridBagConstraints g1 = new GridBagConstraints();
+	g1.gridx = 0;
+	g1.gridy = 1;
+	g1.ipady = 450;
+	g1.anchor = GridBagConstraints.CENTER;
+	
+	GridBagConstraints g2 = new GridBagConstraints();
+	g2.gridx = 0;
+	g2.gridy = 0;
+	g2.ipady = 10;
+	g2.anchor = GridBagConstraints.NORTH;
+	
+	this.add(control, g2);
+	this.add(content, g1); 
 	this.setPreferredSize(new Dimension(500, 650));
 
     } //init
