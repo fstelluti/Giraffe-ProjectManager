@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.User;
 
 /**
  * 
@@ -65,7 +69,6 @@ public class UserRolesDB extends DataManager
 
 			// roleId 1: projectManager
 			// roleId 2: regularUser
-			// roleId 3: admin
 			
 			stmt = c.createStatement();
 			String sql = "INSERT INTO USERROLES (USERID, PROJECTID, ROLEID) "
@@ -92,13 +95,13 @@ public class UserRolesDB extends DataManager
 	}
 	
 	/**
-	 * Method to get the Project Manager associated to a Project
+	 * Method to get the Project Manager(s) associated to a Project
 	 * @param id as an Int
-	 * @return
+	 * @return List<User>
 	 */
-	public static int getProjectManagerIdByProjectId(int id)
+	public static List<User> getProjectManagersByProjectId(int id)
 	{
-		int projectManagerId = 0;
+		List<User> projectManagers = new ArrayList<User>();
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs  = null;
@@ -110,7 +113,14 @@ public class UserRolesDB extends DataManager
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
-			projectManagerId = rs.getInt("USERID");
+			while (rs.next()) {
+		    User user = null;
+		    int userid = rs.getInt("userid");
+		    // A little less efficient, as this means a new DB query for each user,
+		    // but worth it in avoided code duplication imho --Matthew
+		    user = UserDB.getById(userid);
+		    projectManagers.add(user);
+		}
 		}
 		catch (SQLException e)
 		{
@@ -131,7 +141,7 @@ public class UserRolesDB extends DataManager
 			}
 		
 		
-		return projectManagerId;
+		return projectManagers;
 	}
 
 	public static void delete(int id) {

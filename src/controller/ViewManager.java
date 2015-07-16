@@ -156,6 +156,14 @@ public class ViewManager {
 	    return UserDB.getAll();
 	}
 	
+	public static void setUserRole(int userID, int projectID, int roleID) { 
+		UserRolesDB.insert(userID, projectID, roleID);
+	}
+	
+	public static List<User> getProjectManagersByProject(int id) {
+		return UserRolesDB.getProjectManagersByProjectId(id);
+	}
+	
 	/**
 	 * Helper method for DetailsTab.
 	 * @param manager

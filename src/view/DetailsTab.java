@@ -10,8 +10,10 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -38,6 +40,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import controller.UserRolesDB;
 import controller.ViewManager;
 
 /**
@@ -73,7 +76,7 @@ public class DetailsTab extends JPanel {
     
     private DefaultListModel<User> availableUsers;
     private DefaultListModel<User> addedUsers;
-    private List<User> sourceUsers;
+    private List<User> sourceUsers, projectManagerUsers;
     private JList<User> usersSourceList;
     private JList<User> usersDestList;
     private JScrollPane scrollSourceUsers;
@@ -316,18 +319,24 @@ public class DetailsTab extends JPanel {
     	addedUsers = new DefaultListModel<User>();
     	//Create panel for the added Users 
     	final JPanel panAddedUsers = new JPanel();
-  	  //Get the list of Users for the project
-    	sourceUsers = ViewManager.getAllUsers(); //Only for adding PMs to the project
-    	//TODO Left users should be all users that have no userrole (as PM?) for the project (Userroles table)
-    	//TODO Right users should be all users that have PM role for the project
-  	  //Iterate over all users, and add them to availableUsers list
-  	  for(User user: sourceUsers){
-  	  	if (!this.user.equals(user) && user != null) {	//Makes sure that the current user isn't in the left list
-  	  		availableUsers.addElement(user);
-  	  	}
-  	  	else {
-  	  		addedUsers.addElement(user);	//Add current PM to right list
-  	  	}
+    	
+    	//Get list of all users
+    	sourceUsers = ViewManager.getAllUsers();
+    	//Get List of all PMs for the current project
+    	projectManagerUsers = ViewManager.getProjectManagersByProject(project.getId());
+    	
+    	//Convert to sets to take the difference: Users that do not have a RoleID of 1 for current project
+    	Set<User> allUsers = new HashSet<User>(sourceUsers);
+    	Set<User> projectUsers = new HashSet<User>(projectManagerUsers);
+    	allUsers.removeAll(projectUsers);
+    	
+  	  //Populate the left list with users that don't have a roleID of 1 for the current project
+  	  for(User user1: allUsers){	
+  	  		availableUsers.addElement(user1);
+  	  }
+  	  //Populate right list with Users that have a roleID of 1
+  	  for(User user2: projectUsers) {
+  	  		addedUsers.addElement(user2);
   	  }
   	  
   	  //Create scrollable source user list
@@ -364,7 +373,7 @@ public class DetailsTab extends JPanel {
   	      	//Remove users from destination list, add to source list
   	      	//First get all selected users
   	      	List<User> selectedUsers = usersDestList.getSelectedValuesList();
-  	      	for (User selectedUser : selectedUsers) {		//TODO keep PM on right side? NO
+  	      	for (User selectedUser : selectedUsers) {		
   	      			addedUsers.removeElement(selectedUser);
   	      			availableUsers.addElement(selectedUser);
   	      	}
