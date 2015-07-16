@@ -143,7 +143,6 @@ public class ViewManager {
 	 * Updates the Source and Remove lists for the activity dependencies
 	 * @param Object selected[], DefaultListModel<String> Activities1, DefaultListModel<String> Activities2
 	 */
-	//TODO: Check for activity cycles and save in DB (Predecessors table?) use dependents HashSet in Activity
 	public static void setActivityDependLists(Object selected[], DefaultListModel<String> Activities1, 
 			DefaultListModel<String> Activities2) {
 		for(int i=0; i< selected.length; i++) {
@@ -167,9 +166,9 @@ public class ViewManager {
 	 * @throws IllegalArgumentException
 	 * @throws InvalidProjectException 
 	 */
-	public static void editCurrentProject(User manager,
+	public static void editCurrentProject(User user,
 		String name, Date startDate,
-		Date dueDate, String description) throws InvalidProjectException {
+		Date dueDate, String description, long estimatedBudget, long actualBudget) throws InvalidProjectException {
 
 	    String oldName = getCurrentProject().getName();
 	    Date oldStartDate = getCurrentProject().getStartDate();
@@ -179,18 +178,18 @@ public class ViewManager {
 	    getCurrentProject().setStartDate(startDate);
 	    getCurrentProject().setDueDate(dueDate);
 
-	    if (manager == null) {
-		manager = getCurrentUser();
+	    if (user == null) {
+		user = getCurrentUser();
 	    }
 	    try {
 		if (getCurrentProject().isValid()) {
 
-		    if (manager.getId() != getCurrentUser().getId()) {
+		    if (user.getId() != getCurrentUser().getId()) {
 			UserRolesDB.delete(getCurrentUser().getId());
 			// Reinsert the user with regular (user-level) permissions
 			UserRolesDB.insert(getCurrentUser().getId(), getCurrentProject().getId(), 2);
 			// Insert the new manager
-			UserRolesDB.insert(manager.getId(), getCurrentProject().getId(), 1);
+			UserRolesDB.insert(user.getId(), getCurrentProject().getId(), 1);
 		    }
 		}
 	    } catch (InvalidProjectException e) {
@@ -200,6 +199,8 @@ public class ViewManager {
 		throw e;
 	    } 
 	    getCurrentProject().setDescription(description);
+	    getCurrentProject().setEstimatedBudget(estimatedBudget);
+	    getCurrentProject().setActualBudget(actualBudget);
 	    getCurrentProject().persist();
 	}
 	
