@@ -49,7 +49,7 @@ public class DetailsTab extends JPanel {
     private JTextField projectName;
     private JTextArea projectDescription;
     private JScrollPane scrollPanDescription;
-    private JComboBox<User> managerBox;
+    //private JComboBox<User> managerBox;
     private UtilDateModel startModel = new UtilDateModel();
     private UtilDateModel dueModel = new UtilDateModel();
     private Properties p = new Properties();
@@ -61,10 +61,10 @@ public class DetailsTab extends JPanel {
     private JPanel panDueDate;
     private JPanel panStartDate;
     private JPanel content;
-    private JPanel panManager;
+    //private JPanel panManager;
     private JLabel notificationLabel;
     private boolean justSaved;
-    private JFormattedTextField projectEstimatedBudget;
+    private JFormattedTextField projectEstimatedBudget, projectActualBudget;
     
     private NumberFormat numberFormat = NumberFormat.getInstance();
     private NumberFormatter numberFormatter = new NumberFormatter(numberFormat);
@@ -115,17 +115,17 @@ public class DetailsTab extends JPanel {
 	p.put("text.year", "Year");
 
 	//Project Manager TODO: Delete
-	panManager = new JPanel();
+/*	panManager = new JPanel();
 	panManager.setPreferredSize(new Dimension(220, 60));
 	panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
 	final Vector<User> usersVector = ViewManager.getUsersVector();
 	managerBox = new JComboBox<User>(usersVector);
-	panManager.add(managerBox);
+	panManager.add(managerBox);*/
 	
 	//Project Estimated Cost 
 	JPanel panEstimatedCost = new JPanel();
 	panEstimatedCost.setPreferredSize(new Dimension(220, 60));
-	panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Cost"));
+	panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
 
 	projectEstimatedBudget = new JFormattedTextField(numberFormatter);
 	projectEstimatedBudget.setValue(this.project.getEstimatedBudget());  
@@ -133,6 +133,18 @@ public class DetailsTab extends JPanel {
 	projectEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
 	projectEstimatedBudget.setPreferredSize(new Dimension(200,30));
 	panEstimatedCost.add(projectEstimatedBudget);
+	
+	//Project Actual Cost
+	JPanel panActualCost = new JPanel();
+	panActualCost.setPreferredSize(new Dimension(220, 60));
+	panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
+	
+	projectActualBudget = new JFormattedTextField(numberFormatter);
+	projectActualBudget.setValue(this.project.getActualBudget());
+
+	projectActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
+	projectActualBudget.setPreferredSize(new Dimension(200,30));
+	panActualCost.add(projectActualBudget);
 
 	//Rename Project Name Box
 	JPanel panName = new JPanel();
@@ -189,7 +201,7 @@ public class DetailsTab extends JPanel {
 
 	//Set Content to project selection
 	projectName.setText(project.getName());
-	managerBox.setSelectedItem(ViewManager.getCurrentUser());
+	//managerBox.setSelectedItem(ViewManager.getCurrentUser()); TODO delete
 
 	control = new JPanel();
 	saveButton = new JButton("Save");
@@ -201,23 +213,32 @@ public class DetailsTab extends JPanel {
 		Date startDatePickerContents = (Date) startDatePicker.getModel().getValue();
 		Date dueDatePickerContents = (Date) dueDatePicker.getModel().getValue();
 		String projectDescriptionText = projectDescription.getText();
-		User managerBoxContents = (User) managerBox.getSelectedItem(); //TODO Remove
-		int projectEstimatedCost = 0;
+		//User managerBoxContents = (User) managerBox.getSelectedItem(); //TODO Remove
+		long projectEstimatedCost = 0;
+		long projectActualCost = 0;
 		try {	
 			projectEstimatedCost = numberFormat.parse(projectEstimatedBudget.getText()).intValue();
 		} catch (ParseException e) {
 			e.getStackTrace();
 			JOptionPane.showMessageDialog(content, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		try {
+			projectActualCost = numberFormat.parse(projectActualBudget.getText()).intValue();
+		} catch (ParseException e) {
+			e.getStackTrace();
+			JOptionPane.showMessageDialog(content, "Invalid value for actual cost", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
+
 		try { 
 		    ViewManager.editCurrentProject(
-			    managerBoxContents,
+			    user,
 			    projectNameContents,
 			    startDatePickerContents,
 			    dueDatePickerContents,
 			    projectDescriptionText,
-			    projectEstimatedCost
+			    projectEstimatedCost,
+			    projectActualCost
 			    );
 		    justSaved = true;
 		    ViewManager.refresh();
@@ -246,7 +267,7 @@ public class DetailsTab extends JPanel {
 	control.add(saveButton);
 	control.add(deleteButton);
 	content.add(panName);
-	content.add(panManager);
+	//content.add(panManager);
 	
 	JPanel datesPanel = new JPanel();
 	datesPanel.add(panStartDate);
@@ -254,6 +275,7 @@ public class DetailsTab extends JPanel {
 	
 	content.add(datesPanel);
 	content.add(panEstimatedCost);
+	content.add(panActualCost);
 	content.add(dependSubPanel);
 	content.add(panDescription);
 	
@@ -274,8 +296,8 @@ public class DetailsTab extends JPanel {
     	//Create panel for the added Users 
     	final JPanel panAddedUsers = new JPanel();
   	  //Get the list of Users for the project
-    	sourceUsers = ViewManager.getAllUsers(); 
-    	//TODO Left users should be all users that have no userrole for the project (Userroles table)
+    	sourceUsers = ViewManager.getAllUsers(); //Only for adding PMs to the project
+    	//TODO Left users should be all users that have no userrole (as PM?) for the project (Userroles table)
     	//TODO Right users should be all users that have PM role for the project
   	  //Iterate over all users, and add them to availableUsers list
   	  for(User user: sourceUsers){
@@ -283,7 +305,7 @@ public class DetailsTab extends JPanel {
   	  		availableUsers.addElement(user);
   	  	}
   	  	else {
-  	  		addedUsers.addElement(user);	//Add PM to right list
+  	  		addedUsers.addElement(user);	//Add current PM to right list
   	  	}
   	  }
   	  
@@ -321,7 +343,7 @@ public class DetailsTab extends JPanel {
   	      	//Remove users from destination list, add to source list
   	      	//First get all selected users
   	      	List<User> selectedUsers = usersDestList.getSelectedValuesList();
-  	      	for (User selectedUser : selectedUsers) {		//TODO keep PM on right side?
+  	      	for (User selectedUser : selectedUsers) {		//TODO keep PM on right side? NO
   	      			addedUsers.removeElement(selectedUser);
   	      			availableUsers.addElement(selectedUser);
   	      	}
@@ -342,7 +364,7 @@ public class DetailsTab extends JPanel {
   	  //Construct the Dependencies panel
   	  dependSubPanel = new JPanel();
   	  dependSubPanel.setPreferredSize(new Dimension(465, 145));
-  	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Project Users"));
+  	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Project Managers"));
   	  dependSubPanel.add(panAddedUsers, BorderLayout.CENTER); 
     } 
 }
