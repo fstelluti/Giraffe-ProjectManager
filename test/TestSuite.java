@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
 	controller.ViewManagerTest.class,
 	model.UserTest.class,
 	model.ActivityTest.class,
+	model.ProjectTest.class,
 	view.LoginPanelTest.class,
 	view.MainViewPanelTest.class,
 	view.ApplicationPanelTest.class

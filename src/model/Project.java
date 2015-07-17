@@ -143,11 +143,11 @@ public class Project
 	 */
 	public void persist() {
 	    if (this.id == 0) {
-		ProjectDB.insert(this);
-		Project temp = ProjectDB.getByName(this.name);
-		this.id = temp.id;
+	    	ProjectDB.insert(this);
+	    	Project temp = ProjectDB.getByName(this.name);
+	    	this.id = temp.id;
 	    } else {
-		ProjectDB.update(this);
+	    	ProjectDB.update(this);
 	    }
 	}
 
@@ -160,25 +160,25 @@ public class Project
 	}
 
 	public ArrayList<Activity> getActivities() {
-	    if (activities == null) {
-		activities = ActivityDB.getProjectActivities(this.id);
-	    }
-	    return activities;
+		if (activities == null) {
+			activities = ActivityDB.getProjectActivities(this.id);
+		}
+		return activities;
 	}
-	
+
 	public void addActivity(Activity activity) {
-	    if (activities == null) {
-		activities = new ArrayList<Activity>();
-	    }
-	    if (!activities.contains(activity)) {
-		activities.add(activity);
-	    }
+		if (activities == null) {
+			activities = new ArrayList<Activity>();
+		}
+		if (!activities.contains(activity)) {
+			activities.add(activity);
+		}
 	}
-	
+
 	public void removeActivity(Activity activity) {
 		activities.remove(activity);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -196,7 +196,9 @@ public class Project
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+
 		Project other = (Project) obj;
+
 		if (id != other.id)
 			return false;
 		if (name == null) {
@@ -207,50 +209,56 @@ public class Project
 		return true;
 	}
 
-	private class Edge implements EdgeFactory<Activity, Edge>
-	{
+	private class Edge implements EdgeFactory<Activity, Edge> {
 		@Override
-		public Edge createEdge(Activity sourceVertex, Activity targetVertex) 
-		{
+		public Edge createEdge(Activity sourceVertex, Activity targetVertex) {
 			return null;
 		}
 	}
-	
-	private boolean containsCycles() {		
-	    ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
-	    DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
-	    
-	    for (Activity source : activities) {
-		List<Activity> predecessorActivities = PredecessorDB.getPredecessors(source.getId());
-		for (Activity target : predecessorActivities) {
-		    diGraph.addEdge(source, target);
+
+	private boolean containsCycles() {
+		ClassBasedEdgeFactory<Activity, Edge> edgeFactory = new ClassBasedEdgeFactory<Activity, Edge>(
+				null);
+		DefaultDirectedGraph<Activity, Edge> diGraph = new DefaultDirectedGraph<Activity, Edge>(
+				edgeFactory);
+
+		for (Activity source : activities) {
+			List<Activity> predecessorActivities = PredecessorDB
+					.getPredecessors(source.getId());
+			for (Activity target : predecessorActivities) {
+				diGraph.addEdge(source, target);
+			}
 		}
-	    }
-	    
-	    CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(diGraph);
-	    return cycleDetector.detectCycles();
+
+		CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(
+				diGraph);
+		return cycleDetector.detectCycles();
 	}
-	
-	private String getCycleString() {		
-	    ClassBasedEdgeFactory<Activity,Edge> edgeFactory = new ClassBasedEdgeFactory<Activity,Edge>(null);
-	    DefaultDirectedGraph<Activity,Edge> diGraph = new DefaultDirectedGraph<Activity,Edge>(edgeFactory);
-	    
-	    for (Activity source : activities) {
-		List<Activity> predecessorActivities = PredecessorDB.getPredecessors(source.getId());
-		for (Activity target : predecessorActivities) {
-		    diGraph.addEdge(source, target);
+
+	private String getCycleString() {
+		ClassBasedEdgeFactory<Activity, Edge> edgeFactory = new ClassBasedEdgeFactory<Activity, Edge>(
+				null);
+		DefaultDirectedGraph<Activity, Edge> diGraph = new DefaultDirectedGraph<Activity, Edge>(
+				edgeFactory);
+
+		for (Activity source : activities) {
+			List<Activity> predecessorActivities = PredecessorDB
+					.getPredecessors(source.getId());
+			for (Activity target : predecessorActivities) {
+				diGraph.addEdge(source, target);
+			}
 		}
-	    }
-	    
-	    CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(diGraph);
-	    Set<Activity> cycle = cycleDetector.findCycles();
-	    StringBuilder cycleString = new StringBuilder();
-	    for (Activity activity : cycle) {
-		cycleString.append(activity + ", ");
-	    }
-	    // Deletes the last comma!
-	    cycleString.delete(cycleString.length() -2, cycleString.length());
-	    return cycleString.toString();
+
+		CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(
+				diGraph);
+		Set<Activity> cycle = cycleDetector.findCycles();
+		StringBuilder cycleString = new StringBuilder();
+		for (Activity activity : cycle) {
+			cycleString.append(activity + ", ");
+		}
+		// Deletes the last comma!
+		cycleString.delete(cycleString.length() - 2, cycleString.length());
+		return cycleString.toString();
 	}
 	
 	@Override
@@ -260,37 +268,42 @@ public class Project
 	}
 
 	public void delete() {
-	    ProjectDB.delete(this.id);
-	    for (Activity activity : activities) {
-		activity.delete();
-	    }
-	    UserRolesDB.delete(this.id);
+		ProjectDB.delete(this.id);
+		for (Activity activity : activities) {
+			activity.delete();
+		}
+		UserRolesDB.delete(this.id);
 	}
-	
+
 	private boolean hasUniqueName() {
-	    Project project = ProjectDB.getByName(this.name);
-	    if (project == null || this.id == project.id) {
-		return true;
-	    }
-	    return false;
+		Project project = ProjectDB.getByName(this.name);
+		if (project == null || this.id == project.id) {
+			return true;
+		}
+		return false;
 	}
-	
+
 	public class InvalidProjectException extends Exception {
-	    static final long serialVersionUID = 8855960968876727411L;
-	    public InvalidProjectException(String message) { super(message); }
+		static final long serialVersionUID = 8855960968876727411L;
+
+		public InvalidProjectException(String message) {
+			super(message);
+		}
 	}
-	
+
 	public boolean isValid() throws InvalidProjectException {
-	    if (containsCycles()) {
-		throw new InvalidProjectException("The project contains a cycle (" + getCycleString() + ") and will never complete");
-	    }
-	    if (dueDate != null && dueDate.before(startDate)) {
-		throw new InvalidProjectException("The start date cannot be before the end date");
-	    }
-	    if (!hasUniqueName()) {
-		throw new InvalidProjectException("The name of the project must be unique; this one's taken.");
-	    }
-	    return true;
+		if (containsCycles()) {
+			throw new InvalidProjectException("The project contains a cycle ("
+					+ getCycleString() + ") and will never complete");
+		}
+		if (dueDate != null && dueDate.before(startDate)) {
+			throw new InvalidProjectException(
+					"The start date cannot be before the end date");
+		}
+		if (!hasUniqueName()) {
+			throw new InvalidProjectException(
+					"The name of the project must be unique; this one's taken.");
+		}
+		return true;
 	}
-	
 }
