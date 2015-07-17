@@ -194,7 +194,7 @@ public class CreateAccountDialog extends JDialog {
 								DataBufferByte data = (DataBufferByte) raster
 										.getDataBuffer();
 								user.setUserPicture(data.getData());
-								System.out.println("length: "+data.getData().length );
+								System.out.println("length: "+user.getUserPicture().length );
 							}
 						} catch (IOException e) {
 							// Print message + stack trace (others?) //TODO Fix

@@ -152,6 +152,7 @@ public class User
 
 	public void setUserPicture(byte[] userPicture) {
 		this.userPicture = userPicture;
+		System.out.println("length in User.java:"+this.userPicture.length);
 	}
 	
 	public boolean isAdmin() {
