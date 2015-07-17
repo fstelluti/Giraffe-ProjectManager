@@ -1,6 +1,8 @@
 package controller;
 
+import java.sql.Blob;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,7 +16,7 @@ import model.User;
 /**
  * 
  * @author Andrey Uspenskiy
- * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
+ * @modifiedBy Anne-Marie Dube, Francois Stelluti, Matthew Mongrain, Ningge Hu
  *
  */
 
@@ -41,7 +43,7 @@ public class UserDB extends DataManager {
 					+ " REGDATE 		DATETIME DEFAULT CURRENT_TIMESTAMP, "
 					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT, "
 					+ " ADMIN INTEGER, "
-					+ " IMAGEICON BLOB);";
+					+ " IMAGEICON VARBINARY);";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
@@ -73,6 +75,10 @@ public class UserDB extends DataManager {
 		c = getConnection();
 		stmt = c.createStatement();
 		int adminInt = user.isAdmin() ? 1 : 0;
+		
+		// Blob blob =c.createBlob();
+		// blob.setBytes(1, user.getUserPicture());
+		
 		String sql = "INSERT INTO USERS (ID, USERNAME, PASSWORD, EMAIL, FIRSTNAME, LASTNAME, ADMIN, IMAGEICON) "
 			+ "VALUES (NULL, '"
 			+ user.getUserName()
@@ -82,10 +88,17 @@ public class UserDB extends DataManager {
 			+ user.getEmail() + "', '" + user.getFirstName() + "', '" + user.getLastName() 
 			+ "', " 
 			+ adminInt 
-			+ ", '" 
-			+ user.getUserPicture() 
-			+ "')";
-		stmt.executeUpdate(sql);
+			//+ ", '" 
+			//+ user.getUserPicture()
+			//+ "')";
+			+",?)";
+		
+		PreparedStatement pstmt = c.prepareStatement(sql);
+		pstmt.setBytes(1, user.getUserPicture());
+		pstmt.executeUpdate();
+		pstmt.close();
+		
+		// stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
 		e.printStackTrace();	    } finally {
@@ -194,8 +207,14 @@ public class UserDB extends DataManager {
 		user.setAdmin(adminFlag);
 		user.setId(id);
 		String regDateString = rs.getString("regDate");
+		
+		// Blob imageiconBlob = rs.getBlob("imageicon");
+		// byte[] userPic = imageiconBlob.getBytes(1, (int) imageiconBlob.length());
+		
 		byte[] userPic = rs.getBytes("imageicon");
-		user.setUserPicture(userPic);
+		System.out.println("userPic length: " + userPic.length);
+		user.setUserPicture(userPic); 
+		
 		Date regDate = null;
 		try { regDate = DataManager.DATE_FORMAT.parse(regDateString); } catch (ParseException ignore) {}
 		user.setRegDate(regDate);
