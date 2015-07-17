@@ -176,7 +176,8 @@ public class ViewManager {
 	 */
 	public static void editCurrentProject(User user,
 		String name, Date startDate,
-		Date dueDate, String description, long estimatedBudget, long actualBudget) throws InvalidProjectException {
+		Date dueDate, String description, long estimatedBudget, long actualBudget, 
+		DefaultListModel<User> addedUsers, DefaultListModel<User> availableUsers) throws InvalidProjectException {
 
 	    String oldName = getCurrentProject().getName();
 	    Date oldStartDate = getCurrentProject().getStartDate();
@@ -209,6 +210,15 @@ public class ViewManager {
 	    getCurrentProject().setDescription(description);
 	    getCurrentProject().setEstimatedBudget(estimatedBudget);
 	    getCurrentProject().setActualBudget(actualBudget);
+	    
+		  /*for (int i = 0; i < availableUsers.getSize(); i++) { TODO Needed???
+	      getCurrentProject().removeProjectManager(availableUsers.getElementAt(i));
+		  }*/
+	    
+		  for (int i = 0; i < addedUsers.getSize(); i++) {
+		  	getCurrentProject().addProjectPM(addedUsers.getElementAt(i));
+		  }
+	    
 	    getCurrentProject().persist();
 	}
 	
