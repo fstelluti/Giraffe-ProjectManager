@@ -10,7 +10,7 @@ import controller.UserDB;
  * Describes the User class, which stores a User object and allows it to interact
  * with its representation in the database via the controller/UserDB helper class.
  * 
- * @authors Andrey Uspenskiy, Anne-Marie Dube, Francois Stelluti, Matthew Mongrain
+ * @authors Andrey Uspenskiy, Anne-Marie Dube, Francois Stelluti, Matthew Mongrain, Ningge Hu
  *
  */
 
@@ -24,7 +24,7 @@ public class User
 	private Date regDate;
 	private String firstName;
 	private String lastName;
-	private byte[] userPicture;
+	private String userPicture;
 	private boolean admin; //Use for the admin status (1=admin, 0=PM/Regular User)
 	private Project currentProject;
 		
@@ -43,7 +43,7 @@ public class User
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.admin = false;	//Default is PM or Regular User
-		this.userPicture = "".getBytes();
+		this.userPicture = "";
 		List<Project> projects = UserDB.getUserProjects(this);
 		if (projects.size() > 0) {
 		    setCurrentProject(projects.get(0));
@@ -145,14 +145,13 @@ public class User
 		this.regDate = regDate;
 	}
 
-	public byte[] getUserPicture() {
-		
-		return Arrays.copyOf(userPicture, userPicture.length);	//Returns a deep copy of the array
+	public String getUserPicture() {
+		return userPicture;	//Returns a deep copy of the array
 	}
 
-	public void setUserPicture(byte[] userPicture) {
+	public void setUserPicture(String userPicture) {
 		this.userPicture = userPicture;
-		System.out.println("length in User.java:"+this.userPicture.length);
+		
 	}
 	
 	public boolean isAdmin() {

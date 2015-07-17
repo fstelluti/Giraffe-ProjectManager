@@ -43,7 +43,7 @@ public class UserDB extends DataManager {
 					+ " REGDATE 		DATETIME DEFAULT CURRENT_TIMESTAMP, "
 					+ " FIRSTNAME		TEXT,	" + " LASTNAME		TEXT, "
 					+ " ADMIN INTEGER, "
-					+ " IMAGEICON VARBINARY);";
+					+ " IMAGEICON VARCHAR(255));";
 			stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
@@ -94,7 +94,7 @@ public class UserDB extends DataManager {
 			+",?)";
 		
 		PreparedStatement pstmt = c.prepareStatement(sql);
-		pstmt.setBytes(1, user.getUserPicture());
+		pstmt.setString(1, user.getUserPicture());
 		pstmt.executeUpdate();
 		pstmt.close();
 		
@@ -211,8 +211,8 @@ public class UserDB extends DataManager {
 		// Blob imageiconBlob = rs.getBlob("imageicon");
 		// byte[] userPic = imageiconBlob.getBytes(1, (int) imageiconBlob.length());
 		
-		byte[] userPic = rs.getBytes("imageicon");
-		System.out.println("userPic length: " + userPic.length);
+		String userPic = rs.getString("imageicon");
+		
 		user.setUserPicture(userPic); 
 		
 		Date regDate = null;

@@ -109,6 +109,7 @@ public class CreateAccountDialog extends JDialog {
 					imageLabel = new JLabel("", new ImageIcon(mImageIcon
 							.getImage().getScaledInstance(130, 130, SOMEBITS)),
 							JLabel.CENTER);
+					System.out.println(mImageIcon.toString());
 					imagePanel.removeAll();
 					imagePanel.add(imageLabel, BorderLayout.CENTER);
 					imagePanel.revalidate();
@@ -193,8 +194,8 @@ public class CreateAccountDialog extends JDialog {
 										.getRaster();
 								DataBufferByte data = (DataBufferByte) raster
 										.getDataBuffer();
-								user.setUserPicture(data.getData());
-								System.out.println("length: "+user.getUserPicture().length );
+								user.setUserPicture(sname);
+								
 							}
 						} catch (IOException e) {
 							// Print message + stack trace (others?) //TODO Fix
