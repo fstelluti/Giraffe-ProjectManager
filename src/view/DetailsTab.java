@@ -295,7 +295,7 @@ public class DetailsTab extends JPanel {
 	GridBagConstraints g1 = new GridBagConstraints();
 	g1.gridx = 0;
 	g1.gridy = 1;
-	g1.ipady = 450;
+	g1.ipady = 400;
 	g1.anchor = GridBagConstraints.CENTER;
 	
 	GridBagConstraints g2 = new GridBagConstraints();

@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import model.Activity;
 import model.Project;
 import model.User;
 
@@ -137,6 +140,25 @@ public abstract class DataManager
 	public static String safeSql(String name) {
 	    String result = name.replace("'", "''");
 	    return result;
+	}
+
+	public static List<Project> getAssignedUserProjects(User user) {
+	    List<Activity> userActivities = UserActivitiesDB.getActivities(user.getId());
+	    HashSet<Project> userProjects = new HashSet<Project>();
+	    for (Activity activity : userActivities) {
+		userProjects.add(ProjectDB.getById(activity.getAssociatedProjectId()));
+	    }
+	    return new ArrayList<Project>(userProjects);
+	}
+
+	public static boolean userManagesProject(User user, Project project) {
+	    List<User> projectManagers = UserRolesDB.getProjectManagersByProjectId(project.getId());
+	    for (User manager : projectManagers) {
+		if (manager.getId() == user.getId()) {
+		    return true;
+		}
+	    }
+	    return false;
 	}
 	
 	

@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import model.Activity;
 import model.Project;
+import model.User;
 import controller.DataManager;
 import controller.ViewManager;
 
@@ -169,6 +170,7 @@ public class ActivitiesTab extends JPanel {
     private void buildActivityTableModel() {
         // names of columns
 	Project project = ViewManager.getCurrentProject();
+	User user = ViewManager.getCurrentUser();
         Vector<String> columnNames = new Vector<String>();
         columnNames.add("ID");
         columnNames.add("Name");
@@ -178,7 +180,12 @@ public class ActivitiesTab extends JPanel {
     
         // data of the table
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-        ArrayList<Activity> activities = project.getActivities();
+        ArrayList<Activity> activities;
+        if (DataManager.userManagesProject(user, project)) {
+            activities = project.getActivities();
+        } else {
+            activities = project.getUserActivities(user);
+        }
         if (activities != null) {
             if (activities.size() == 0) {
                 Vector<Object> activityVector = new Vector<Object>();

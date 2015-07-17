@@ -13,6 +13,7 @@ import org.jgrapht.graph.DefaultDirectedGraph;
 import controller.ActivityDB;
 import controller.PredecessorDB;
 import controller.ProjectDB;
+import controller.UserActivitiesDB;
 import controller.UserRolesDB;
 
 /**
@@ -164,6 +165,17 @@ public class Project
 			activities = ActivityDB.getProjectActivities(this.id);
 		}
 		return activities;
+	}
+	
+	public ArrayList<Activity> getUserActivities(User user) {
+	    	ArrayList<Activity> allUserActivities = (ArrayList<Activity>) UserActivitiesDB.getActivities(user.getId());
+	    	ArrayList<Activity> userActivities = new ArrayList<Activity>();
+	    	for (Activity activity : allUserActivities) {
+	    	    if (activity.getAssociatedProjectId() == this.id) {
+	    		userActivities.add(activity);
+	    	    }
+	    	}
+	    	return userActivities;
 	}
 
 	public void addActivity(Activity activity) {
