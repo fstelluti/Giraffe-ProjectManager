@@ -1,25 +1,22 @@
 package controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import model.Activity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import controller.DataManagerTest;
-import model.Activity;
-import model.DateLabelFormatter;
-
-import java.util.Date;
-import java.util.List;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
@@ -28,7 +25,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
- * @modifiedBy  Anne-Marie Dube (modified method names)
+ * @modifiedBy  Anne-Marie Dube (modified method names), Zachary Bergeron (iteration 2)
  */
 
 @RunWith(JUnit4.class)
@@ -40,16 +37,12 @@ public class ActivityDBTest {
 	// (i.e. make sure there is minimum coupling between test classes and classes themselves, defeats purpose of testing)
 	@Before
 	public void setUp() throws Exception {
-		try{
-			DataManagerTest.destroyDatabaseFixtures();
-		}
-		catch(Exception e){}
 		DataManagerTest.createDatabaseFixtures();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-//		DataManagerTest.destroyDatabaseFixtures();
+		DataManagerTest.destroyDatabaseFixtures();
 	}
 	
 	// Tests ActivityDB.create();
@@ -143,10 +136,6 @@ public class ActivityDBTest {
 			condition = test.equalsIgnoreCase(result);
 			assertTrue("Twelfth column is not ACTUALCOST, but " + result + "!", condition);
 			
-			stmt.close();
-			rs.close();
-			c.close();
-			
 		} catch (SQLException e) {
 			fail("An Exception was thrown: " + e.getStackTrace());
 			
@@ -155,7 +144,7 @@ public class ActivityDBTest {
 		    	if (c != null && !c.isClosed()) {
 		    		c.close();
 		    	}
-		    	if (stmt != null && !stmt.isClosed() && !c.isClosed()) {
+		    	if (stmt != null && !stmt.isClosed()) {
 		    		stmt.close();
 		    	}
 		    	if (rs != null && !rs.isClosed()) {
@@ -230,10 +219,7 @@ public class ActivityDBTest {
 			assertTrue("optimisticDuration did not match!", optimisticDurationMatch);
 			assertTrue("mostLikelyDuration did not match!", mostLikelyDurationMatch);
 			assertTrue("description did not match!", descriptionMatch);
-			
-			stmt.close();
-			rs.close();
-			c.close();
+
 		} catch (SQLException e) {
 			System.out.println("An Exception was thrown: " + e.getStackTrace());
 			fail();
@@ -242,7 +228,7 @@ public class ActivityDBTest {
 		    	if (c != null && !c.isClosed()) {
 		    		c.close();
 		    	}
-		    	if (stmt != null && !stmt.isClosed() && !c.isClosed()) {
+		    	if (stmt != null && !stmt.isClosed()) {
 		    		stmt.close();
 		    	}
 		    	if (rs != null && !rs.isClosed()) {
@@ -372,10 +358,6 @@ public class ActivityDBTest {
 			assertTrue("optimisticDuration did not update!", optimisticDurationMatch);
 			assertTrue("mostLikelyDuration did not update!", mostLikelyDurationMatch);
 			assertTrue("description did not update!", descriptionMatch);
-			
-			stmt.close();
-			rs.close();
-			c.close();
 		} catch (SQLException e) {
 			System.out.println("An Exception was thrown: " + e.getStackTrace());
 			fail();
@@ -384,7 +366,7 @@ public class ActivityDBTest {
 		    	if (c != null && !c.isClosed()) {
 		    		c.close();
 		    	}
-		    	if (stmt != null && !stmt.isClosed() && !c.isClosed()) {
+		    	if (stmt != null && !stmt.isClosed()) {
 		    		stmt.close();
 		    	}
 		    	if (rs != null && !rs.isClosed()) {

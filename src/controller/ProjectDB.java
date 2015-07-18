@@ -437,7 +437,7 @@ public class ProjectDB extends DataManager
 				stmt.setString(3, project.getName());
 				stmt.setInt(4, (int)project.getEstimatedBudget());
 				stmt.setInt(5, (int)project.getActualBudget());
-				if (project.getDescription() != null) {
+				if (project.getDescription() == null) {
 				    stmt.setNull(6, Types.VARCHAR);
 				} else {
 				    stmt.setString(6, project.getDescription());

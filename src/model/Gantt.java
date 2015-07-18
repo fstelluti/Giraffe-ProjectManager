@@ -34,7 +34,6 @@ public class Gantt {
 		TaskSeries scheduledTasks = new TaskSeries("Scheduled Tasks");
 		ArrayList<Activity> activities = project.getActivities();
 		for (Activity activity : activities) {
-			System.out.println(activity);
 
 		    if (activity.getStartDate() != null && activity.getDueDate() != null)
 			scheduledTasks.add(new Task(

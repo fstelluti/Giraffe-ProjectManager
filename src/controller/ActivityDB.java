@@ -308,7 +308,6 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-		System.out.println(activityName);
 		stmt = c.createStatement();
 		rs = stmt.executeQuery("SELECT * FROM ACTIVITIES WHERE NAME = '"
 			+ DataManager.safeSql(activityName) + "' AND PROJECTID = " + projectId + ";");

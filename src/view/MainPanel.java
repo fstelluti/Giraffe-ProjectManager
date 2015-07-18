@@ -103,7 +103,6 @@ public class MainPanel extends JPanel  {
 			
 			// get image from imageicon
 			Image image = mImage.getImage();
-			System.out.println("image size:"+image.getWidth(null)+" ,"+image.getHeight(null));
 			
 			
 			imageLabel = new JLabel("" , new ImageIcon(mImage
