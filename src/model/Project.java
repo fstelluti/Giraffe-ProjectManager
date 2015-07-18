@@ -259,7 +259,7 @@ public class Project
 		return true;
 	}
 
-	private boolean containsCycles() {
+private boolean containsCycles() {
 		
 		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = 
 				new DefaultDirectedGraph<Activity, DefaultEdge>(DefaultEdge.class);
