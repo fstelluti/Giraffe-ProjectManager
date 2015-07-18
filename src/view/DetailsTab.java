@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -14,12 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -40,7 +37,6 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import controller.UserRolesDB;
 import controller.ViewManager;
 
 /**
@@ -83,6 +79,8 @@ public class DetailsTab extends JPanel {
     private JScrollPane scrollDestUsers;
     private JButton addDependantButton, removeDependantButton;
     private JPanel subDepButtons, dependSubPanel;
+    private JDatePickerImpl startDatePicker;
+    private JDatePickerImpl dueDatePicker;
 
     public DetailsTab() {
 			super(new BorderLayout());
@@ -103,7 +101,6 @@ public class DetailsTab extends JPanel {
 			if (project.getDueDate() != null) { this.dueModel.setValue(project.getDueDate()); }
 			this.repaint();
 			if (justSaved) {
-			    System.out.println("WOW");
 			    justSaved = false;
 			    notificationLabel.setText("Project saved successfully");
 			    notificationLabel.repaint();
@@ -183,9 +180,10 @@ public class DetailsTab extends JPanel {
 	control.add(saveButton);
 	control.add(deleteButton);
 	control.add(notificationLabel, BorderLayout.WEST);
+	control.setMinimumSize(new Dimension(300, 30));
 	
-	// Build content panel
 	content = new JPanel();
+	// Build content panel
 	JPanel budgetsPanel = buildBudgetsPanel();
 	JPanel datesPanel = buildDatesPanel();
 	JPanel panName = buildNamePanel();
@@ -200,6 +198,7 @@ public class DetailsTab extends JPanel {
 	content.add(budgetsPanel);
 	content.add(dependSubPanel);
 	content.add(panDescription);
+	content.setSize(new Dimension(475, 300));
 	
 	content.setBorder(BorderFactory.createTitledBorder("Project Details"));
 	
@@ -221,7 +220,7 @@ public class DetailsTab extends JPanel {
 	
 	this.add(control, g2);
 	this.add(content, g1); 
-	this.setPreferredSize(new Dimension(500, 650));
+	this.setPreferredSize(new Dimension(500, 670));
 
     } //init
     
@@ -244,7 +243,7 @@ public class DetailsTab extends JPanel {
 
     private JPanel buildNamePanel() {
 	JPanel panName = new JPanel();
-	panName.setPreferredSize(new Dimension(465, 60));
+	panName.setPreferredSize(new Dimension(465, 70));
 	projectName = new JTextField();
 	panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
 	projectName.setPreferredSize(new Dimension(200,30));
@@ -262,7 +261,7 @@ public class DetailsTab extends JPanel {
 	panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
 	startModel.setSelected(true);
 	JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
-	final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
+	startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
 	if (project.getStartDate() != null) {
 	    startModel.setValue(project.getStartDate());
 	}
@@ -277,12 +276,12 @@ public class DetailsTab extends JPanel {
 	    dueModel.setValue(project.getDueDate());
 	}
 	JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
-	final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
+	dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
 	panDueDate.add(dueDatePicker);
 
 	datesPanel.add(panStartDate);
 	datesPanel.add(panDueDate);
-	datesPanel.setPreferredSize(new Dimension(465, 60));
+	datesPanel.setPreferredSize(new Dimension(465, 70));
 
 	return datesPanel;
     }
@@ -314,7 +313,7 @@ public class DetailsTab extends JPanel {
 
 	budgetsPanel.add(panEstimatedCost);
 	budgetsPanel.add(panActualCost);
-	budgetsPanel.setPreferredSize(new Dimension(465, 60));
+	budgetsPanel.setPreferredSize(new Dimension(465, 70));
 
 	return budgetsPanel;
     }
@@ -402,7 +401,7 @@ public class DetailsTab extends JPanel {
   	  
   	  //Construct the Dependencies panel
   	  dependSubPanel = new JPanel();
-  	  dependSubPanel.setPreferredSize(new Dimension(465, 145));
+  	  dependSubPanel.setPreferredSize(new Dimension(465, 155));
   	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Project Managers"));
   	  dependSubPanel.add(panAddedUsers, BorderLayout.CENTER); 
     } 

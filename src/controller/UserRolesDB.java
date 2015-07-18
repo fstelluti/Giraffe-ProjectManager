@@ -109,26 +109,26 @@ public class UserRolesDB extends DataManager
 		Connection c = null;
 		Statement stmt = null;
 		ResultSet rs  = null;
-		
+
 		try
 		{
-			c = getConnection();
-			c.setAutoCommit(false);
+		    c = getConnection();
+		    c.setAutoCommit(false);
 
-			stmt = c.createStatement();
-			rs = stmt.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
-			while (rs.next()) {
-		    User user = null;
-		    int userid = rs.getInt("userid");
-		    // A little less efficient, as this means a new DB query for each user,
-		    // but worth it in avoided code duplication imho --Matthew
-		    user = UserDB.getById(userid);
-		    projectManagers.add(user);
-		}
+		    stmt = c.createStatement();
+		    rs = stmt.executeQuery("SELECT * FROM USERROLES WHERE PROJECTID = " + id + " AND ROLEID = 1;");
+		    while (rs.next()) {
+			User user = null;
+			int userid = rs.getInt("userid");
+			// A little less efficient, as this means a new DB query for each user,
+			// but worth it in avoided code duplication imho --Matthew
+			user = UserDB.getById(userid);
+			projectManagers.add(user);
+		    }
 		}
 		catch (SQLException e)
 		{
-			e.printStackTrace();
+		    e.printStackTrace();
 		}
 		try {
 				if (rs != null) {

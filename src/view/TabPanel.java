@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextPane;
 
+import controller.DataManager;
+import controller.ViewManager;
+import model.Project;
 import model.User;
 
 public class TabPanel extends JPanel {
@@ -15,6 +18,7 @@ public class TabPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     User user;
+    Project project;
     JTabbedPane tabPane;
     ActivitiesTab activitiesTab;
     ReportsTab reportsTab;
@@ -22,6 +26,8 @@ public class TabPanel extends JPanel {
     
     public TabPanel (User user) {
 	super(new BorderLayout());
+
+	this.project = ViewManager.getCurrentProject();
 	this.user = user;
 	
 	// If the user has no projects (which should be strictly equivalent to the statement
@@ -36,7 +42,7 @@ public class TabPanel extends JPanel {
 	    reload();
 	}
     }
-    
+
     public void setActiveTab(int i) {
 	tabPane.setSelectedIndex(i);
     }
@@ -44,11 +50,23 @@ public class TabPanel extends JPanel {
 	activitiesTab.refresh();
 	reportsTab.refresh();
 	detailsTab.refresh();
-    }
-    
-    public void reload() {
-	this.removeAll();
+	if (DataManager.userManagesProject(user, project)) {
+	    detailsTab.setVisible(true);
+	    reportsTab.setVisible(true);
+	} else {
+	    detailsTab.setVisible(false);
+	    reportsTab.setVisible(false);    
+	}
 	this.revalidate();
+	this.repaint();
+    }
+
+    public void reload() {
+	this.project = ViewManager.getCurrentProject();
+	
+
+	this.removeAll();
+	this.validate();
 	this.tabPane = new JTabbedPane();
 	this.activitiesTab = new ActivitiesTab();
 	ImageIcon activitiesIcon = new ImageIcon("src/view/images/activitiesIcon.png");
@@ -57,8 +75,12 @@ public class TabPanel extends JPanel {
 	this.detailsTab = new DetailsTab();
 	ImageIcon detailsIcon = new ImageIcon("src/view/images/detailsIcon.png");
 	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
-	this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
-	this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
+	if (DataManager.userManagesProject(user, project)) {
+	    this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
+	    this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
+	}
 	this.add(tabPane);
+	this.revalidate();
+	this.repaint();
     }
 }
