@@ -9,6 +9,7 @@ import org.jgrapht.*;
 import org.jgrapht.alg.CycleDetector;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 
 import controller.ActivityDB;
 import controller.PredecessorDB;
@@ -258,37 +259,41 @@ public class Project
 		return true;
 	}
 
-	private class Edge implements EdgeFactory<Activity, Edge> {
-		@Override
-		public Edge createEdge(Activity sourceVertex, Activity targetVertex) {
-			return null;
-		}
-	}
-
 	private boolean containsCycles() {
-		ClassBasedEdgeFactory<Activity, Edge> edgeFactory = new ClassBasedEdgeFactory<Activity, Edge>(
-				null);
-		DefaultDirectedGraph<Activity, Edge> diGraph = new DefaultDirectedGraph<Activity, Edge>(
-				edgeFactory);
-
+		
+		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = 
+				new DefaultDirectedGraph<Activity, DefaultEdge>(DefaultEdge.class);
+		CycleDetector<Activity, DefaultEdge> cycleDetector;
+		List<Activity> predecessorActivities;
+		
+		// Vertices
+		for (Activity source : activities)
+			diGraph.addVertex(source);
+		
+		// Edges
 		for (Activity source : activities) {
-			List<Activity> predecessorActivities = PredecessorDB
-					.getPredecessors(source.getId());
+			
+			predecessorActivities = PredecessorDB.getPredecessors( source.getId() );
+			
 			for (Activity target : predecessorActivities) {
 				diGraph.addEdge(source, target);
 			}
+			
 		}
 
-		CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(
-				diGraph);
+		cycleDetector = new CycleDetector<Activity, DefaultEdge>(diGraph);
+		
 		return cycleDetector.detectCycles();
 	}
 
-	private String getCycleString() {
-		ClassBasedEdgeFactory<Activity, Edge> edgeFactory = new ClassBasedEdgeFactory<Activity, Edge>(
+	private String getCycleString() {/*
+		ClassBasedEdgeFactory<Activity, DefaultEdge> edgeFactory = new ClassBasedEdgeFactory<Activity, DefaultEdge>(
 				null);
-		DefaultDirectedGraph<Activity, Edge> diGraph = new DefaultDirectedGraph<Activity, Edge>(
+		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = new DefaultDirectedGraph<Activity, DefaultEdge>(
 				edgeFactory);
+		
+		for (Activity source : activities)
+			diGraph.addVertex(source);
 
 		for (Activity source : activities) {
 			List<Activity> predecessorActivities = PredecessorDB
@@ -298,7 +303,7 @@ public class Project
 			}
 		}
 
-		CycleDetector<Activity, Edge> cycleDetector = new CycleDetector<Activity, Edge>(
+		CycleDetector<Activity, DefaultEdge> cycleDetector = new CycleDetector<Activity, DefaultEdge>(
 				diGraph);
 		Set<Activity> cycle = cycleDetector.findCycles();
 		StringBuilder cycleString = new StringBuilder();
@@ -307,7 +312,8 @@ public class Project
 		}
 		// Deletes the last comma!
 		cycleString.delete(cycleString.length() - 2, cycleString.length());
-		return cycleString.toString();
+		return cycleString.toString();*/
+		return "lol";
 	}
 	
 	@Override
