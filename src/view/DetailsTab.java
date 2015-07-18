@@ -136,17 +136,18 @@ public class DetailsTab extends JPanel {
 			e.getStackTrace();
 			JOptionPane.showMessageDialog(content, "Invalid value for actual cost", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
 
 		try { 
-		    ViewManager.editCurrentProject(
+		    ViewManager.editCurrentProject(	//TODO Still need to deal with removing users, how to save in DB
 			    user,
 			    projectNameContents,
 			    startDatePickerContents,
 			    dueDatePickerContents,
 			    projectDescriptionText,
 			    projectEstimatedCost,
-			    projectActualCost
+			    projectActualCost,
+			    addedUsers,
+			    availableUsers
 			    );
 		    justSaved = true;
 		    ViewManager.refresh();
@@ -361,7 +362,7 @@ public class DetailsTab extends JPanel {
   	      	//First get all selected users
   	      	List<User> selectedUsers = usersSourceList.getSelectedValuesList();
   	      	for (User selectedUser : selectedUsers) {
-  	      			availableUsers.removeElement(selectedUser);
+  	      			availableUsers.removeElement(selectedUser); //TODO Remove based on index, since list gets populated above
   	      			addedUsers.addElement(selectedUser);
   	      	}
   	      }      

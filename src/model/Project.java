@@ -35,6 +35,7 @@ public class Project
 	private long estimatedBudget;
 	private long actualBudget;
 	private ArrayList<Activity> activities;
+	private ArrayList<User> projectPMs;
 	
 	public Project(){}
 	
@@ -56,6 +57,7 @@ public class Project
 			this.estimatedBudget = projectFromDb.getEstimatedBudget();
 			this.name = projectFromDb.getName();
 			this.activities = (ArrayList<Activity>) ActivityDB.getProjectActivities(id);
+			this.projectPMs = UserRolesDB.getProjectManagersByProjectId(id);
 		}
 	}
 	
@@ -69,7 +71,7 @@ public class Project
 		this.description = description;
 	}
 	
-	///should be modified to reflect new DB schema!!!
+	///should be modified to reflect new DB schema!!! TODO Need all these constructors?
 	public Project(String name, Date startDate, Date dueDate, String description)
 	{
 		this.name = name;
@@ -130,7 +132,7 @@ public class Project
 	}
 
 	public void setActualBudget(long actualBudget) {
-		if (actualBudget < this.actualBudget) {
+		if (actualBudget < 0) {
 			throw new IllegalArgumentException("actualBudget cannot be negative");
 		}
 		this.actualBudget = actualBudget;
@@ -149,6 +151,21 @@ public class Project
 	    	this.id = temp.id;
 	    } else {
 	    	ProjectDB.update(this);
+	    	
+		    // Insert all project PMs TODO Need to update roleID column?? Delete then insert?
+		    if (projectPMs != null) {
+					for (User user : projectPMs) {
+						int projectID = UserRolesDB.getProjectIdByRegUser(user);
+						if(this.id == projectID) {
+							//If the user is already assigned to the project, just update Role ID to 1
+							UserRolesDB.updateRole(user.getId(), this.id, 1);
+						}
+						else {	
+							//If the user isn't part of the project, insert a row with role ID = 1
+					    UserRolesDB.insert(user.getId(), this.id, 1); //TODO Fails because of UNIQUE constraints
+						}
+					}
+		    }
 	    }
 	}
 
@@ -167,16 +184,23 @@ public class Project
 		return activities;
 	}
 	
+	public ArrayList<User> getProjectPMs() {
+		if (projectPMs == null) {
+			projectPMs = UserRolesDB.getProjectManagersByProjectId(this.id);
+		}
+		return projectPMs;
+	}
+	
 	public ArrayList<Activity> getUserActivities(User user) {
-	    	ArrayList<Activity> allUserActivities = (ArrayList<Activity>) UserActivitiesDB.getActivities(user.getId());
+    	ArrayList<Activity> allUserActivities = (ArrayList<Activity>) UserActivitiesDB.getActivities(user.getId());
 	    	ArrayList<Activity> userActivities = new ArrayList<Activity>();
 	    	for (Activity activity : allUserActivities) {
 	    	    if (activity.getAssociatedProjectId() == this.id) {
-	    		userActivities.add(activity);
+	    	    	userActivities.add(activity);
 	    	    }
 	    	}
 	    	return userActivities;
-	}
+			}
 
 	public void addActivity(Activity activity) {
 		if (activities == null) {
@@ -186,9 +210,22 @@ public class Project
 			activities.add(activity);
 		}
 	}
+	
+	public void addProjectPM(User user) {
+		if (projectPMs == null) {
+			projectPMs = new ArrayList<User>();
+		}
+		if (!activities.contains(user)) {
+			projectPMs.add(user);
+		}
+	}
 
 	public void removeActivity(Activity activity) {
 		activities.remove(activity);
+	}
+	
+	public void removeProjectManager(User user) {
+		projectPMs.remove(user);
 	}
 
 	@Override
