@@ -316,6 +316,7 @@ private boolean containsCycles() {
 		return "lol";
 	}
 	
+	
 	@Override
 	// Used to generate the list view of projects, returns only name
 	public String toString() {
