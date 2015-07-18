@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import controller.PredecessorDB;
-
 import controller.DataManagerTest;
 
 import java.util.List;
@@ -196,6 +195,36 @@ public class PredecessorDBTest {
 		}
 		boolean correctNumberOfResults = (counter == 3);
 		assertTrue("An incorrect number of results was returned (" + counter + ", expecting 3)!", correctNumberOfResults);
+	}
+	
+	// Tests PredecessorDB.deleteActivityPredecessors(ActivityID)
+	@Test
+	public void deletedPredessorsShouldNoLongerExist(){
+		Activity activity = new Activity(1);
+		ActivityDB.insert(activity);
+		PredecessorDB.insert(6, 1);
+		PredecessorDB.insert(6, 2);
+		PredecessorDB.insert(6, 3);
+		PredecessorDB.insert(6, 4);
+		PredecessorDB.insert(6, 5);
+		assertEquals(PredecessorDB.getPredecessors(6).size(), 5);
+		PredecessorDB.deleteActivityPredecessors(6);
+		assertEquals(PredecessorDB.getPredecessors(6).size(), 0);
+	}
+	
+	// Tests ActivitDB.delete(ActivityID) deletes the predecessors also
+	@Test
+	public void deletedActivityShouldDeletePredecessors(){
+		Activity activity = new Activity(1);
+		ActivityDB.insert(activity);
+		PredecessorDB.insert(6, 1);
+		PredecessorDB.insert(6, 2);
+		PredecessorDB.insert(6, 3);
+		PredecessorDB.insert(6, 4);
+		PredecessorDB.insert(6, 5);
+		assertEquals(PredecessorDB.getPredecessors(6).size(), 5);
+		ActivityDB.delete(6);
+		assertEquals(PredecessorDB.getPredecessors(6).size(), 0);	
 	}
 		
 }
