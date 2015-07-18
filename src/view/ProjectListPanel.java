@@ -1,12 +1,18 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -14,6 +20,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -38,6 +45,16 @@ public class ProjectListPanel extends JPanel {
     private JComboBox<String> comboBox;
     private String[] filters = {"My Projects", "Assigned Projects"};
     private int selectedFilter = 0;
+
+    private JButton logoutActivity;
+
+    private JPanel userPanel;
+
+    private JPanel userSubPanel;
+
+    private JButton imageLabel;
+
+    private ImageIcon mImage;
     
     public ProjectListPanel(final User user) {
 	super(new BorderLayout());
@@ -73,7 +90,11 @@ public class ProjectListPanel extends JPanel {
 	northPanel = new JPanel(new BorderLayout());
 	JLabel projectsLabel = new JLabel("<html><h2>Projects</h2></html>");
 	projectsLabel.setHorizontalAlignment(JLabel.CENTER);
-	northPanel.add(projectsLabel, BorderLayout.NORTH);
+	buildUserPanel();
+	JPanel northPanelWrapper = new JPanel(new BorderLayout());
+	northPanelWrapper.add(userPanel, BorderLayout.NORTH);
+	northPanelWrapper.add(projectsLabel, BorderLayout.CENTER);
+	northPanel.add(northPanelWrapper, BorderLayout.NORTH);
 	northPanel.add(comboBox);
 	northPanel.add(createProjectButton, BorderLayout.SOUTH);
 	this.add(northPanel, BorderLayout.NORTH);
@@ -131,4 +152,71 @@ public class ProjectListPanel extends JPanel {
 	this.revalidate();
 	this.repaint();
     }
+    
+	
+	/**
+	 * Creates a Panel that displays the Project Name and the user name and picture
+	 * User picture can be clicked to see user settings or to logout
+	 * @return JPanel
+	 */
+    public void buildUserPanel() {
+	userPanel = new JPanel();
+	userPanel.setLayout(new BorderLayout());
+
+	if (user.getUserPicture() != null && user.getUserPicture().length() > 3) {
+	    mImage = new ImageIcon(user.getUserPicture());
+	} else {
+	    mImage = new ImageIcon(ProjectListPanel.class.getResource("images/default.png"));
+	}
+	imageLabel = new JButton("" , new ImageIcon(mImage
+		.getImage().getScaledInstance(50, 50, SOMEBITS)));
+	imageLabel.setBorderPainted(false);
+	imageLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	imageLabel.addActionListener(new ActionListener() {
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		AccountDialog accountDialog = new AccountDialog(user);
+		user = accountDialog.getUser();
+		ViewManager.setCurrentUser(user);
+		refresh(user);
+	    }
+	    
+	});
+	
+	// imageLabel = new JLabel("pic:"+user.getUserPicture().length,  mImage, JLabel.CENTER);
+	//Sets the padding of the top bar, but only for the height
+	userPanel.setPreferredSize(new Dimension(0, 85));	
+
+	createLogoutButton();
+	//Adds the labels and logout button to the left side
+	userSubPanel = new JPanel();
+	userSubPanel.add(imageLabel, BorderLayout.WEST);
+	userSubPanel.add(logoutActivity);
+	//Add everything to the northPanel
+	userPanel.add(userSubPanel);
+	userPanel.setBorder(new TitledBorder(user.toString()));
+	userPanel.revalidate();
+	userPanel.repaint();
+
+    }
+
+    /**
+     * Creates and implements a button for the logout function
+     */
+    private void createLogoutButton() {
+	logoutActivity = new JButton("Logout");
+
+	//Logs the user out and returns them to the login panel
+	logoutActivity.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == logoutActivity) {
+		    ViewManager.logout();	
+		}
+	    }
+	});
+
+    }
+
 }

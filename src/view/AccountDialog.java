@@ -22,7 +22,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,7 +41,7 @@ import controller.ViewManager;
  */
 
 @SuppressWarnings("serial")
-public class CreateAccountDialog extends JDialog {
+public class AccountDialog extends JDialog {
 	private JTextField userName, email, firstName, lastName;
 	private JPasswordField userPassword, repeatPassword;
 	private JFileChooser userPicChooser;
@@ -51,10 +50,11 @@ public class CreateAccountDialog extends JDialog {
 	private JPanel imagePanel;
 	private ImageIcon mImageIcon;
 	private String sname;
+	private User user;
 	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public CreateAccountDialog(JFrame parent, String title, boolean modal) {
-		super(parent, title, modal);
+	public AccountDialog() {
+		super(ApplicationWindow.instance(), "Create Account", true);
 		this.setSize(500, 500);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
@@ -62,7 +62,17 @@ public class CreateAccountDialog extends JDialog {
 		this.setVisible(true);
 
 	}
-
+	
+	public AccountDialog(User user) {
+		super(ApplicationWindow.instance(), "Edit Account", true);
+		this.user = user;
+		this.setSize(500, 500);
+		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+		this.initCreateAccountDialog();
+		this.setVisible(true);
+	}
+	
 	/**
 	 * Initializes the Create Account Dialog
 	 */
@@ -71,6 +81,7 @@ public class CreateAccountDialog extends JDialog {
 		firstNameContainer.setBackground(Color.white);
 		firstNameContainer.setPreferredSize(new Dimension(220, 60));
 		firstName = new JTextField();
+
 		firstName.setPreferredSize(new Dimension(200, 25));
 		firstNameContainer.setBorder(BorderFactory
 				.createTitledBorder("First Name"));
@@ -80,6 +91,7 @@ public class CreateAccountDialog extends JDialog {
 		lastNameContainer.setBackground(Color.white);
 		lastNameContainer.setPreferredSize(new Dimension(220, 60));
 		lastName = new JTextField();
+
 		lastName.setPreferredSize(new Dimension(200, 25));
 		lastNameContainer.setBorder(BorderFactory
 				.createTitledBorder("Last Name"));
@@ -153,83 +165,72 @@ public class CreateAccountDialog extends JDialog {
 		repeatPassword = new JPasswordField();
 		repeatPassword.setPreferredSize(new Dimension(200, 25));
 		repeatPasswordContainer.setBorder(BorderFactory
-				.createTitledBorder("Repeat password"));
+			.createTitledBorder("Repeat password"));
 		repeatPasswordContainer.add(repeatPassword);
 
+		// If editing a user, populate the text fields
+		if (this.user != null) {
+		    firstName.setText(user.getFirstName());
+		    lastName.setText(user.getLastName());
+		    userName.setText(user.getUserName());
+		    email.setText(user.getEmail());
+		}
+
 		JPanel control = new JPanel();
-		JButton okButton = new JButton("Create account");
+		JButton okButton;
+		if (this.user == null) {
+		    okButton = new JButton("Create account");
+		} else {
+		    okButton = new JButton("Edit account");
+		}
 		okButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (isInputValid()) {
-					int response = JOptionPane
-							.showConfirmDialog(
-									null,
-									"Are you sure that you want to create a new account?",
-									"Confirm",
-									JOptionPane.YES_NO_CANCEL_OPTION,
-									JOptionPane.QUESTION_MESSAGE, null);
-					switch (response) {
-					case JOptionPane.CANCEL_OPTION:
-						return;
-					case JOptionPane.NO_OPTION:
-						resetForm();
-						return;
-					case JOptionPane.YES_OPTION:
-						// Create the User
-						User user = new User(userName.getText().trim(),
-								getAccountPassword(userPassword.getPassword()),
-								email.getText(), firstName.getText(), lastName
-										.getText());
 
-						// Save User image in the DB
-						try {
-							if (sname != null) {
-								File imgPath = new File(sname);
-								BufferedImage bufferedImage = ImageIO
-										.read(imgPath);
-								// TODO Probably something around here is not
-								// converting the image correctly
-								WritableRaster raster = bufferedImage
-										.getRaster();
-								DataBufferByte data = (DataBufferByte) raster
-										.getDataBuffer();
-								user.setUserPicture(sname);
-								
-							}
-						} catch (IOException e) {
-							// Print message + stack trace (others?) //TODO Fix
-							// this
-						} finally {
+		    public void actionPerformed(ActionEvent arg0) {
+			if (isInputValid()) {
 
-							// This if-statement checks to see if the DB is
-							// empty
-							// If it is empty, create the first user as an Admin
-							// If not empty, create a regular user
-							if (DataManager.userTableIsEmpty()) {
-								user.setAdmin(true);
-								user.persist();
-								ViewManager.logout(); // Switch to the
-														// LoginPanel
-							} else {
-								user.setAdmin(false);
-								user.persist();
-							}
+			    if (user == null) {
+				user = new User(userName.getText().trim(),
+					getAccountPassword(userPassword.getPassword()),
+					email.getText(), firstName.getText(), lastName
+					.getText());
+			    } else {
+				user.setUserName(userName.getText().trim());
+				user.setPassword(getAccountPassword(userPassword.getPassword()));
+				user.setEmail(email.getText());
+				user.setFirstName(firstName.getText());
+				user.setLastName(lastName.getText());
+			    }
+			    if (sname != null) {
+				user.setUserPicture(sname);
+			    }
 
-						}
-
-						/*
-						 * if(DataManager.userTableIsEmpty()) {
-						 * user.setAdmin(true); user.persist();
-						 * ViewManager.logout(); //Switch to the LoginPanel }
-						 * else { user.setAdmin(false); user.persist(); }
-						 */
-
-						setVisible(false);
-						break;
-					}
-				}
+			    // This if-statement checks to see if the DB is
+			    // empty
+			    // If it is empty, create the first user as an Admin
+			    // If not empty, create a regular user
+			    if (DataManager.userTableIsEmpty()) {
+				user.setAdmin(true);
+				user.persist();
+				ViewManager.logout(); // Switch to the
+				// LoginPanel
+			    } else {
+				user.persist();
+			    }
+				setVisible(false);
 
 			}
+
+			/*
+			 * if(DataManager.userTableIsEmpty()) {
+			 * user.setAdmin(true); user.persist();
+			 * ViewManager.logout(); //Switch to the LoginPanel }
+			 * else { user.setAdmin(false); user.persist(); }
+			 */
+
+
+
+
+		    }
 		});
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(new ActionListener() {
@@ -309,7 +310,8 @@ public class CreateAccountDialog extends JDialog {
 
 		for (User user : users) {
 			// Checks to see if the supplied e-mail already exist
-			if (user.getEmail().equals(email.getText().trim())) {
+			if (user.getEmail().equals(email.getText().trim()) &&
+				(this.user != null && this.user.getId() != user.getId())) {
 				JOptionPane.showMessageDialog(null, "A user with e-mail: "
 						+ email.getText().trim() + " already exists");
 				email.setText("");
@@ -317,7 +319,8 @@ public class CreateAccountDialog extends JDialog {
 			}
 
 			// Checks to see if the supplied username already exist
-			if (user.getUserName().equals(userName.getText().trim())) {
+			if (user.getUserName().equals(userName.getText().trim()) &&
+				(this.user != null && this.user.getId() != user.getId())) {
 				JOptionPane.showMessageDialog(null, "A user with username: "
 						+ userName.getText().trim() + " already exists");
 				userName.setText("");
@@ -358,6 +361,10 @@ public class CreateAccountDialog extends JDialog {
 		userName.setText("");
 		userPassword.setText("");
 		repeatPassword.setText("");
+	}
+
+	public User getUser() {
+	    return user;
 	}
 
 }

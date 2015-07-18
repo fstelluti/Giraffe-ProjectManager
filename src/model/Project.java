@@ -286,7 +286,7 @@ private boolean containsCycles() {
 		return cycleDetector.detectCycles();
 	}
 
-	private String getCycleString() {/*
+	private String getCycleString() {
 		ClassBasedEdgeFactory<Activity, DefaultEdge> edgeFactory = new ClassBasedEdgeFactory<Activity, DefaultEdge>(
 				null);
 		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = new DefaultDirectedGraph<Activity, DefaultEdge>(
@@ -312,8 +312,7 @@ private boolean containsCycles() {
 		}
 		// Deletes the last comma!
 		cycleString.delete(cycleString.length() - 2, cycleString.length());
-		return cycleString.toString();*/
-		return "lol";
+		return cycleString.toString();
 	}
 	
 	
@@ -349,8 +348,7 @@ private boolean containsCycles() {
 
 	public boolean isValid() throws InvalidProjectException {
 		if (containsCycles()) {
-			throw new InvalidProjectException("The project contains a cycle ("
-					+ getCycleString() + ") and will never complete");
+			throw new InvalidProjectException("The project contains a cycle, and will never complete!");
 		}
 		if (dueDate != null && dueDate.before(startDate)) {
 			throw new InvalidProjectException(

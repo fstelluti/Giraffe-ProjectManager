@@ -128,12 +128,14 @@ public class UserDB extends DataManager {
 			+ "FIRSTNAME='" + user.getFirstName() + "',"
 			+ "LASTNAME='" + user.getLastName() + "',"
 			+ "ADMIN='" + adminInt + "',"
-			+ "IMAGEICON='" + user.getUserPicture() + "';."
+			+ "IMAGEICON='" + user.getUserPicture() + "' "
 			+ "WHERE ID=" + user.getId() + ";";
+		System.out.println(sql);
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
-		e.printStackTrace();	    } finally {
+		e.printStackTrace();	    
+	    } finally {
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 		if (c != null) try { c.close(); } catch (SQLException ignore) {}
 	    }
@@ -248,7 +250,6 @@ public class UserDB extends DataManager {
 		try
 		{
 			c = getConnection();
-			c.setAutoCommit(false);
 
 			stmt = c.createStatement();
 			rs = stmt.executeQuery("SELECT * FROM USERS WHERE USERNAME = '"	+ userName + "';");

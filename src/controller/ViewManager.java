@@ -12,8 +12,8 @@ import javax.swing.JRootPane;
 import model.Project;
 import model.Project.InvalidProjectException;
 import model.User;
+import view.AccountDialog;
 import view.ApplicationWindow;
-import view.CreateAccountDialog;
 import view.LoginPanel;
 import view.ProjectListPanel;
 import view.StartupPanel;
@@ -67,7 +67,7 @@ public class ViewManager {
 	
 	@SuppressWarnings("unused")
 	public static void createAccountDialog() {
-		CreateAccountDialog accountCreate = new CreateAccountDialog(applicationWindow, "Create account dialog", true);
+		AccountDialog accountCreate = new AccountDialog();
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class ViewManager {
 	 * Probably doesn't work, or need to be modified
 	 */
 	public static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = CreateAccountDialog.class.getResource(path);
+		java.net.URL imgURL = AccountDialog.class.getResource(path);
 
 		//Using a Null Object design pattern, instead of returning a null object directly
 		if(imgURL != null) {

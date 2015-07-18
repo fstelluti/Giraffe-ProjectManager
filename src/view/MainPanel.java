@@ -5,12 +5,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -49,12 +43,8 @@ public class MainPanel extends JPanel  {
 		super();
 		this.user = currentUser;
 		this.setLayout(new BorderLayout());
-		logoutActivity = this.createLogoutButton();
-		userSubPanel = new JPanel();
 		//Get the current Panels
-		northPanel = getNorthPanel();
 		splitPanel = buildSplitPanel();
-		this.add(northPanel, BorderLayout.NORTH);
 		this.add(splitPanel, BorderLayout.CENTER);
 	}
 	
@@ -85,67 +75,6 @@ public class MainPanel extends JPanel  {
 		splitPanel.setContinuousLayout(true); 
 		
 		return splitPanel;
-	}
-	
-	/**
-	 * Creates a Panel that displays the Project Name and the user name and picture
-	 * User picture can be clicked to see user settings or to logout
-	 * @return JPanel
-	 */
-	public JPanel getNorthPanel() {
-		if (northPanel == null) {
-			northPanel = new JPanel();
-		  northPanel.setLayout(new BorderLayout());
-
-			userLabel = new JLabel("Hello " + user.getFirstName() + " " + user.getLastName() + "  ");
-	
-			ImageIcon mImage = new ImageIcon(user.getUserPicture());
-			
-			// get image from imageicon
-			Image image = mImage.getImage();
-			
-			
-			imageLabel = new JLabel("" , new ImageIcon(mImage
-					.getImage().getScaledInstance(50, 50, SOMEBITS)),
-					JLabel.CENTER);
-			
-			// imageLabel = new JLabel("pic:"+user.getUserPicture().length,  mImage, JLabel.CENTER);
-			titleLabel = new JLabel("Giraffe Manager");
-			titleLabel.setHorizontalAlignment(JLabel.CENTER);	//Forces the middle panel to be centered
-			//Sets the padding of the top bar, but only for the height
-			northPanel.setPreferredSize(new Dimension(0, 60));	
-			
-			//Adds the labels and logout button to the left side
-			userSubPanel.add(userLabel);
-			userSubPanel.add(imageLabel, BorderLayout.CENTER);
-			userSubPanel.add(logoutActivity);
-			//Add everything to the northPanel
-			northPanel.add(userSubPanel, BorderLayout.EAST);
-			northPanel.add(titleLabel, BorderLayout.CENTER);
-			northPanel.revalidate();
-			northPanel.repaint();
-		}
-		return northPanel;
-	}
-	
-	/**
-	 * Creates and implements a button for the logout function
-	 */
-	private JButton createLogoutButton() {
-		logoutActivity = new JButton("Logout");
-
-		//Logs the user out and returns them to the login panel
-		logoutActivity.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (e.getSource() == logoutActivity) {
-					ViewManager.logout();	
-				}
-			}
-		});
-		
-		return logoutActivity;
 	}
 	
 	/**

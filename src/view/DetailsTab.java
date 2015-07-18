@@ -198,7 +198,7 @@ public class DetailsTab extends JPanel {
 	content.add(budgetsPanel);
 	content.add(dependSubPanel);
 	content.add(panDescription);
-	content.setSize(new Dimension(475, 300));
+	content.setSize(new Dimension(475, 350));
 	
 	content.setBorder(BorderFactory.createTitledBorder("Project Details"));
 	
@@ -209,13 +209,13 @@ public class DetailsTab extends JPanel {
 	GridBagConstraints g1 = new GridBagConstraints();
 	g1.gridx = 0;
 	g1.gridy = 1;
-	g1.ipady = 400;
+	g1.ipady = 420;
 	g1.anchor = GridBagConstraints.CENTER;
 	
 	GridBagConstraints g2 = new GridBagConstraints();
 	g2.gridx = 0;
 	g2.gridy = 0;
-	g2.ipady = 10;
+	g2.ipady = 0;
 	g2.anchor = GridBagConstraints.NORTH;
 	
 	this.add(control, g2);
