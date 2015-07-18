@@ -112,105 +112,8 @@ public class DetailsTab extends JPanel {
     }
     
     private void initComponent() {
-	content = new JPanel();
-
-	//These set the properties for date picker
-	p.put("text.today", "Today");
-	p.put("text.month", "Month");
-	p.put("text.year", "Year");
-
-	//Project Manager TODO: Delete
-/*	panManager = new JPanel();
-	panManager.setPreferredSize(new Dimension(220, 60));
-	panManager.setBorder(BorderFactory.createTitledBorder("Project Manager"));
-	final Vector<User> usersVector = ViewManager.getUsersVector();
-	managerBox = new JComboBox<User>(usersVector);
-	panManager.add(managerBox);*/
 	
-	//Project Estimated Cost 
-	JPanel panEstimatedCost = new JPanel();
-	panEstimatedCost.setPreferredSize(new Dimension(220, 60));
-	panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
-
-	projectEstimatedBudget = new JFormattedTextField(numberFormatter);
-	projectEstimatedBudget.setValue(this.project.getEstimatedBudget());  
-
-	projectEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
-	projectEstimatedBudget.setPreferredSize(new Dimension(200,30));
-	panEstimatedCost.add(projectEstimatedBudget);
-	
-	//Project Actual Cost
-	JPanel panActualCost = new JPanel();
-	panActualCost.setPreferredSize(new Dimension(220, 60));
-	panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
-	
-	projectActualBudget = new JFormattedTextField(numberFormatter);
-	projectActualBudget.setValue(this.project.getActualBudget());
-
-	projectActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
-	projectActualBudget.setPreferredSize(new Dimension(200,30));
-	panActualCost.add(projectActualBudget);
-
-	//Rename Project Name Box
-	JPanel panName = new JPanel();
-	panName.setPreferredSize(new Dimension(220, 60));
-	projectName = new JTextField();
-	projectName.setPreferredSize(new Dimension(100, 25));
-	panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
-	projectName.setPreferredSize(new Dimension(200,30));
-	projectName.setHorizontalAlignment(JTextField.CENTER);
-	panName.add(projectName);
-	
-	//Start Date
-	panStartDate = new JPanel();
-	panStartDate.setPreferredSize(new Dimension(220, 60));
-	panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
-	startModel.setSelected(true);
-	JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
-	final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
-	if (project.getStartDate() != null) {
-	    startModel.setValue(project.getStartDate());
-	}
-	panStartDate.add(startDatePicker);
-
-	//Due date
-	panDueDate = new JPanel();
-	panDueDate.setPreferredSize(new Dimension(220, 60));
-	panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
-	dueModel.setSelected(false);
-	if (project.getDueDate() != null) {
-	    dueModel.setValue(project.getDueDate());
-	}
-	JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
-	final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
-	panDueDate.add(dueDatePicker);
-	
-	//Select Users to add to project
-	createAddUsersToProject();
-
-	//Project Description
-	panDescription = new JPanel();
-	panDescription.setPreferredSize(new Dimension(465, 120));
-	projectDescription = new JTextArea();
-	panDescription.setBorder(BorderFactory.createTitledBorder("Description"));
-	projectDescription.setBorder( new JTextField().getBorder() );
-	projectDescription.setLineWrap(true);
-	projectDescription.setWrapStyleWord(true);
-	scrollPanDescription = new JScrollPane(projectDescription, 
-		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	scrollPanDescription.setPreferredSize(new Dimension(445,85));
-	if (project.getDescription() != null) {
-	    projectDescription.setText(project.getDescription());
-	}
-	panDescription.add(scrollPanDescription);
-
-	//Set Content to project selection
-	projectName.setText(project.getName());
-	//managerBox.setSelectedItem(ViewManager.getCurrentUser()); TODO delete
-
-	control = new JPanel();
 	saveButton = new JButton("Save");
-	notificationLabel = new JLabel();
 	saveButton.addActionListener(new ActionListener() {
 
 	    public void actionPerformed(ActionEvent arg0) {
@@ -267,22 +170,33 @@ public class DetailsTab extends JPanel {
 
 	    }
 	});
-
-
+	
+	//These set the properties for date picker
+	p.put("text.today", "Today");
+	p.put("text.month", "Month");
+	p.put("text.year", "Year");
+	
+	// Build control panel
+	control = new JPanel();
+	notificationLabel = new JLabel();
 	control.add(saveButton);
 	control.add(deleteButton);
 	control.add(notificationLabel, BorderLayout.WEST);
 	
+	// Build content panel
+	content = new JPanel();
+	JPanel budgetsPanel = buildBudgetsPanel();
+	JPanel datesPanel = buildDatesPanel();
+	JPanel panName = buildNamePanel();
+	//Select Users to add to project
+	createAddUsersToProject();	
+	//Project Description
+	createDescriptionPanel();
+	//Set Content to project selection
+	projectName.setText(project.getName());
 	content.add(panName);
-	//content.add(panManager);
-	
-	JPanel datesPanel = new JPanel();
-	datesPanel.add(panStartDate);
-	datesPanel.add(panDueDate);
-	
 	content.add(datesPanel);
-	content.add(panEstimatedCost);
-	content.add(panActualCost);
+	content.add(budgetsPanel);
 	content.add(dependSubPanel);
 	content.add(panDescription);
 	
@@ -310,6 +224,100 @@ public class DetailsTab extends JPanel {
 
     } //init
     
+    private void createDescriptionPanel() {
+	panDescription = new JPanel();
+	panDescription.setPreferredSize(new Dimension(465, 120));
+	projectDescription = new JTextArea();
+	panDescription.setBorder(BorderFactory.createTitledBorder("Description"));
+	projectDescription.setBorder( new JTextField().getBorder() );
+	projectDescription.setLineWrap(true);
+	projectDescription.setWrapStyleWord(true);
+	scrollPanDescription = new JScrollPane(projectDescription, 
+		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	scrollPanDescription.setPreferredSize(new Dimension(445,85));
+	if (project.getDescription() != null) {
+	    projectDescription.setText(project.getDescription());
+	}
+	panDescription.add(scrollPanDescription);	
+    }
+
+    private JPanel buildNamePanel() {
+	JPanel panName = new JPanel();
+	panName.setPreferredSize(new Dimension(465, 60));
+	projectName = new JTextField();
+	panName.setBorder(BorderFactory.createTitledBorder("Project Name"));
+	projectName.setPreferredSize(new Dimension(200,30));
+	projectName.setHorizontalAlignment(JTextField.CENTER);
+	panName.add(projectName);
+
+	return panName;
+    }
+
+    private JPanel buildDatesPanel() {
+	JPanel datesPanel = new JPanel();
+	//Start Date
+	panStartDate = new JPanel();
+	panStartDate.setPreferredSize(new Dimension(220, 60));
+	panStartDate.setBorder(BorderFactory.createTitledBorder("Start Date"));
+	startModel.setSelected(true);
+	JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, p);
+	final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
+	if (project.getStartDate() != null) {
+	    startModel.setValue(project.getStartDate());
+	}
+	panStartDate.add(startDatePicker);
+
+	//Due date
+	panDueDate = new JPanel();
+	panDueDate.setPreferredSize(new Dimension(220, 60));
+	panDueDate.setBorder(BorderFactory.createTitledBorder("Due Date"));
+	dueModel.setSelected(false);
+	if (project.getDueDate() != null) {
+	    dueModel.setValue(project.getDueDate());
+	}
+	JDatePanelImpl dueDateCalendarPanel = new JDatePanelImpl(dueModel, p);
+	final JDatePickerImpl dueDatePicker = new JDatePickerImpl(dueDateCalendarPanel,new DateLabelFormatter());
+	panDueDate.add(dueDatePicker);
+
+	datesPanel.add(panStartDate);
+	datesPanel.add(panDueDate);
+	datesPanel.setPreferredSize(new Dimension(465, 60));
+
+	return datesPanel;
+    }
+
+    private JPanel buildBudgetsPanel() {
+	JPanel budgetsPanel = new JPanel();
+	JPanel panEstimatedCost = new JPanel();
+	panEstimatedCost.setPreferredSize(new Dimension(220, 60));
+	panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
+
+	projectEstimatedBudget = new JFormattedTextField(numberFormatter);
+	projectEstimatedBudget.setValue(this.project.getEstimatedBudget());  
+
+	projectEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
+	projectEstimatedBudget.setPreferredSize(new Dimension(200,30));
+	panEstimatedCost.add(projectEstimatedBudget);
+
+	//Project Actual Cost
+	JPanel panActualCost = new JPanel();
+	panActualCost.setPreferredSize(new Dimension(220, 60));
+	panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
+
+	projectActualBudget = new JFormattedTextField(numberFormatter);
+	projectActualBudget.setValue(this.project.getActualBudget());
+
+	projectActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
+	projectActualBudget.setPreferredSize(new Dimension(200,30));
+	panActualCost.add(projectActualBudget);
+
+	budgetsPanel.add(panEstimatedCost);
+	budgetsPanel.add(panActualCost);
+	budgetsPanel.setPreferredSize(new Dimension(465, 60));
+
+	return budgetsPanel;
+    }
+
     /**
   	 * Creates the list of users that can be added, or removed, to a project
   	 */  
