@@ -46,7 +46,8 @@ public class GanttTest {
 		JFreeChart testChart = ChartFactory.createGanttChart(
 				nameChart, xAxis, yAxis, dataset, true, true, false);
 		
-		assertNotNull("Chart not Create", testChart);
+		//Test if chart was correctly created
+		assertNotNull("Chart not Created", testChart);
 	}
 	
 	//Test createDataset()
@@ -66,6 +67,7 @@ public class GanttTest {
 		
 		IntervalCategoryDataset dataset = testGantt.createDataset();
 		
+		//Test if dataset was correctly created
 		assertNotNull("Dataset is not created", dataset);
 	}
 }

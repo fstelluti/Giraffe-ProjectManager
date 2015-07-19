@@ -202,7 +202,7 @@ public class User
 				return false;
 		} else if (userName.equals(other.userName))
 			return true;
-		return true;
+		return false;
 	}
 	
 	@Override

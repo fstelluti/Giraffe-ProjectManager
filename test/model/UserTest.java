@@ -1,7 +1,9 @@
 package model;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
 import java.util.Date;
 
 /**
@@ -22,7 +24,6 @@ public class UserTest {
 	  String email = "test@test.com";
 	  String firstName = "Frank";
 	  String lastName = "Stone";
-	  Date regDate = new Date();
 		
 	  User testUser = new User(5, userName, password, email, firstName, lastName);
 		
@@ -36,7 +37,6 @@ public class UserTest {
 	  assertEquals("Email didn't match", testUser.getEmail(), email);
 	  assertEquals("First name didn't match", testUser.getFirstName(), firstName);
 	  assertEquals("Last name didn't match", testUser.getLastName(), lastName);
-	  assertEquals("No date was created", testUser.getRegDate(), regDate);
 	}
 
 	//Tests getUserName()
@@ -183,15 +183,6 @@ public class UserTest {
 	  assertEquals("ID not set properly", testUser.getId(), ID);
 	}
 	
-	//Tests getRegDate()
-	@Test
-	public void shouldGetRegDate() {
-	  //Create an "empty" Object 
-	  User testUser = new User(0, null, null, null, null, null);
-		
-	  assertNotNull("Registration date does not exist", testUser.getRegDate());
-	}
-	
 	//Tests setRegDate()
 	@Test
 	public void shouldSetRegDate() {
@@ -205,6 +196,39 @@ public class UserTest {
 	  testUser.setRegDate(regDate);
 		
 	  assertEquals("RegDate not set properly", testUser.getRegDate().toString(), stringDate);
+	}
+	
+	//Tests equals
+	@Test
+	public void shouldBeEqualOrNot()
+	{
+		//Set test variables
+		User testUser1 = new User(5, "test1", "test1", "test1@a.com", "test1", "test1");
+		User testUser2 = new User(5, "test1", "test1", "test1@a.com", "test1", "test1");
+		User testUser3 = new User(6, "test2", "test2", "test2@a.com", "test2", "test2");
+		
+		//Test equality and inequality
+		assertTrue("2 same users are not equal.", testUser1.equals(testUser2));
+		assertTrue("2 same users are not equal.", testUser1.equals(testUser1));
+		assertFalse(testUser1.equals(testUser3));
+	}
+	
+	// Test getCurrentProject()
+	@Test
+	public void shouldReturnCurrentProject()
+	{
+		//Test variables
+		User testUser1 = new User(5, "test1", "test1", "test1@a.com", "test1", "test1");
+		Project testProject1 = new Project(1, "test", new Date(), new Date(), "Test");
+		Project testProject2 = new Project(2, "test", new Date(), new Date(), "Test");
+		
+		//Should get project 2
+		testUser1.setCurrentProject(testProject2);
+		assertEquals("Did not get correct project.", testUser1.getCurrentProject(), testProject2);
+		
+		//Should get project 1
+		testUser1.setCurrentProject(testProject1);
+		assertEquals("Did not get correct project.", testUser1.getCurrentProject(), testProject1);
 	}
 
 }
