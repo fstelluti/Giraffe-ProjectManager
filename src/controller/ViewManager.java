@@ -32,14 +32,6 @@ public class ViewManager {
 	private static ProjectListPanel projectListPanel;
 	
 	private static final ImageIcon NO_ACCOUNT_ICON = null;	//Used in place of returning a null in createImageIcon
-
-	/**
-	 * Returns the main JRootPane from ApplicationPanel, needed to set default buttons
-	 * @return JRootPane
-	 */
-	public static JRootPane getRootPane() {
-		return rootPane;
-	}
 	
 	/**
 	 * Displays an error message when user can't login correctly and returns to the LoginPanel
