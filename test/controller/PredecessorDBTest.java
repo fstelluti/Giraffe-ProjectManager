@@ -26,7 +26,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within this test class.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
- * @modifiedBy  Anne-Marie Dube (modified method names)
+ * @modifiedBy  Anne-Marie Dube (modified method names), Zachary Bergeron
  */
 
 @RunWith(JUnit4.class)
@@ -120,7 +120,7 @@ public class PredecessorDBTest {
 			if (rs.next()) {
 				fail("More than one result was returned!");
 			}
-			assertTrue("dueDate name did not match!", predecessorMatch);
+			assertTrue("predecessorId name did not match!", predecessorMatch);
 			
 			c.commit();
 			stmt.close();
