@@ -163,7 +163,8 @@ public class Project
 						}
 						else {	
 							//If the user isn't part of the project, insert a row with role ID = 1
-					    UserRolesDB.insert(user.getId(), this.id, 1); //TODO Fails because of UNIQUE constraints
+							if(this.id != user.getId()) 
+					    	UserRolesDB.insert(user.getId(), this.id, 1); 
 						}
 					}
 		    }

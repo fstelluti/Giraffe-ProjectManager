@@ -211,12 +211,12 @@ public class ViewManager {
 	    getCurrentProject().setEstimatedBudget(estimatedBudget);
 	    getCurrentProject().setActualBudget(actualBudget);
 	    
-		  /*for (int i = 0; i < availableUsers.getSize(); i++) { TODO Needed???
-	      getCurrentProject().removeProjectManager(availableUsers.getElementAt(i));
-		  }*/
-	    
 		  for (int i = 0; i < addedUsers.getSize(); i++) {
 		  	getCurrentProject().addProjectPM(addedUsers.getElementAt(i));
+		  }
+	    
+		  for (int i = 0; i < availableUsers.getSize(); i++) { 
+	      getCurrentProject().removeProjectManager(availableUsers.getElementAt(i));
 		  }
 	    
 	    getCurrentProject().persist();
