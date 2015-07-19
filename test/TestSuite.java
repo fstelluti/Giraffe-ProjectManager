@@ -14,6 +14,7 @@ import org.junit.runners.Suite;
 	model.UserTest.class,
 	model.ActivityTest.class,
 	model.ProjectTest.class,
+	model.GanttTest.class,
 	view.LoginPanelTest.class,
 	view.MainViewPanelTest.class,
 	view.ApplicationPanelTest.class

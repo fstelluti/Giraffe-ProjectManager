@@ -11,7 +11,7 @@ import java.util.Date;
 
 /**
  * Tests model/Project.java
- * @author Lukas
+ * @author Lukas Cardot-Goyette
  *
  */
 
@@ -56,46 +56,57 @@ public class ProjectTest {
 	@Test
 	public void shouldHaveUniqueName()
 	{
-		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		Project testProject = new Project(1, "test1", new Date(), new Date(), "Test");
 		
 		Project project = ProjectDB.getByName("test");
 		
-		//Tests if project is Null, that is, 
+		//Tests if project is Null, that is, no project with the same name
 		assertNull("Project cannot be unique", project);
 	}
 	
-	/*//Test delete()
-	@Test
-	public void shouldDelete()
+	/*
+	//Test delete()
+	@Test(expected = NullPointerException.class)
+	public void shouldDeleteProjectAndActivities()
 	{
 		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
-		Activity testActivity1 = new Activity(1, "Test");
+		Activity testActivity1 = new Activity(1, "Test1");
+		testProject.addActivity(testActivity1);
 		Activity testActivity2 = new Activity(1, "Test2");
-		
+		testProject.addActivity(testActivity2);
+
+		Project testProject2 = ProjectDB.getById(1);
+		assertEquals(testProject2, testProject);
 		testProject.delete();
-		
-		assertNotNull("Project is not deleted", testProject);
-		assertNull("Activity 1 is not deleted", testActivity1);
-		assertNull("Activity 2 is not deleted", testActivity2);
+		Project testProject3 = ProjectDB.getById(1);
+		assertEquals(testProject3, testProject);
+		//assertNull("Project is not deleted", testProject);
+		//assertEquals(testProject, testProject);
+		//assertNull("Activity 2 is not deleted", testActivity2);
 	}
 	
+	/*
 	//Tests containsCycles()
 	@Test
 	public void shouldHaveCycle()
 	{
-		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
-		Activity testActivity1 = new Activity(1, "Test");
+		Project testProject = new Project(1, "testProject", new Date(), new Date(), "Test");
+		Activity testActivity1 = new Activity(1, "Test1");
 		testActivity1.setId(1);
 		Activity testActivity2 = new Activity(1, "Test2");
 		testActivity2.setId(2);
+		Activity testActivity3 = new Activity(1, "Test3");
+		testActivity3.setId(3);
 		
 		testProject.addActivity(testActivity1);
 		testProject.addActivity(testActivity2);
+		testProject.addActivity(testActivity2);
 		
-		System.out.println(testActivity2.getId() + " " + testActivity1.getId());
+		System.out.println(testActivity2.getId() + " " + testActivity1.getId() + " " + testActivity3.getId());
 		
 		testActivity1.addDependent(2);
-		testActivity2.addDependent(1);
+		testActivity2.addDependent(3);
+		testActivity3.addDependent(1);
 		
 		assertTrue("Doesn't detect a cycle.", testProject.containsCycles());
 	}*/
