@@ -112,6 +112,22 @@ public class DetailsTab extends JPanel {
     
     private void initComponent() {
 	
+	JButton optimizeButton = new JButton("Optimize");
+	optimizeButton.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		int dialogResult = JOptionPane.showConfirmDialog(content, "<html><p>This will automatically change the dates of the project and all its associated activities.</p><p>Continue?</p>", "Warning", JOptionPane.YES_NO_OPTION);
+		if (dialogResult == JOptionPane.YES_OPTION) {
+		    try { 
+			ViewManager.optimizeCurrentProject(); 
+		    } catch (InvalidProjectException e1) {
+			JOptionPane.showMessageDialog(content, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		    }
+		}
+	    }
+
+	});
 	saveButton = new JButton("Save");
 	saveButton.addActionListener(new ActionListener() {
 
@@ -185,8 +201,9 @@ public class DetailsTab extends JPanel {
 	notificationLabel = new JLabel();
 	control.add(saveButton);
 	control.add(deleteButton);
+	control.add(optimizeButton);
 	control.add(notificationLabel, BorderLayout.WEST);
-	control.setMinimumSize(new Dimension(300, 30));
+	control.setMinimumSize(new Dimension(400, 30));
 	
 	content = new JPanel();
 	// Build content panel

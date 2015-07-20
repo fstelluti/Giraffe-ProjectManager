@@ -245,6 +245,64 @@ public class Activity {
 	}
 	
 	/**
+	 * Checks to see if an activity can be inserted.
+	 * 
+	 * @author Matthew Mongrain
+	 * @param activity
+	 * @param project
+	 * @return True if the activity is insertable, false otherwise.
+	 * @throws Exception
+	 */
+	public boolean isEditable(Project project) throws Exception {
+	    Date projectStartDate = project.getStartDate();
+	    Date projectDueDate = project.getDueDate();
+	    String activityName = this.getName();
+	    Date activityStartDate = this.getStartDate();
+	    Date activityDueDate = this.getDueDate();
+	    
+	    Activity activityToTest = ActivityDB.getByNameAndProjectId(this.name, project.getId());
+	    if (activityToTest != null && activityToTest.getId() != id) {
+		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
+	    }
+	    
+	    // See if the overall project will be valid after the activity is added.
+	    // Functionally, just checks for cycles :)
+	    try  {
+		project.isValid(); 
+	    } catch (InvalidProjectException e) {
+		throw e;
+	    } finally {
+		project.removeActivity(this);
+	    }
+	    
+	    //Verifies all text boxes are filled out, if not = error
+	    if (activityName.hashCode() == 0) {
+		throw new Exception("Activity name cannot be empty");
+	    }
+	   	
+	    //Checks that due date not before start date
+	    if (activityDueDate != null && activityDueDate.before(activityStartDate)) {
+		throw new Exception("Please ensure due date is not before start date");
+	    }
+	    
+	    if (projectStartDate != null) {
+		if (activityStartDate != null && activityStartDate.before(projectStartDate)) {
+		    throw new Exception("Please ensure start date is before project start date (" + DataManager.DATE_FORMAT.format(projectStartDate) +")");
+		}
+	    }
+	    
+	    if (projectDueDate != null) {
+		if (activityDueDate != null && activityDueDate.after(projectDueDate)) {
+		    throw new Exception("Please ensure due date is before project due date (" + DataManager.DATE_FORMAT.format(projectDueDate) + ")");
+		}
+	    }
+	   	  
+	    return true;
+	}
+	
+	
+	
+	/**
 	 * Persists an Activity object in the database.
 	 * If the Activity has an id of 0, it is assumed not to exist in the database, and is created there.
 	 * Otherwise it is updated in the database.
@@ -277,14 +335,24 @@ public class Activity {
 	}
 
 	public ArrayList<Integer> getDependents() {
-	    return new ArrayList<Integer>(dependents);
+	    if (dependents != null) {
+		return new ArrayList<Integer>(dependents);
+	    } else return new ArrayList<Integer>();
 	}
 
 	public void addDependent(int dependent) {
-	    dependents.add(dependent);
+	    if (dependents != null) {
+		dependents.add(dependent);
+	    } else { 
+		dependents = new HashSet<Integer>();
+		dependents.add(dependent);
+	    }
 	}
 	
 	public void removeDependent(int dependent) {
+	    if (dependents == null) {
+		dependents = new HashSet<Integer>();
+	    }
 	    dependents.remove(dependent);
 	}
 
@@ -356,5 +424,9 @@ public class Activity {
 	
 	public void removeUser(User user) {
 	    users.remove(user);
+	}
+
+	public void clearDependents() {
+	    dependents = null;
 	}
 }

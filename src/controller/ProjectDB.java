@@ -237,6 +237,13 @@ public class ProjectDB extends DataManager
 		    Activity child = ActivityDB.getById(activityId);
 		    project.addActivity(child);
 		}
+		
+		// Now iterate thru the owners and add them to the object that will be returned
+		List<User> owners = UserRolesDB.getProjectManagersByProjectId(project.getId());
+		for (User owner : owners) {
+		    project.addProjectPM(owner);
+		}
+		
 
 	    } catch (SQLException e) {
 		e.printStackTrace();

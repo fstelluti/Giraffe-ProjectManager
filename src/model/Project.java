@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -201,9 +202,7 @@ public class Project
 		if (projectManagers == null) {
 			projectManagers = new ArrayList<User>();
 		}
-		if (!activities.contains(user)) {
 			projectManagers.add(user);
-		}
 	}
 
 	public void removeActivity(Activity activity) {
@@ -243,38 +242,94 @@ public class Project
 			return false;
 		return true;
 	}
+	
+	public void optimize() throws InvalidProjectException {
 
-private boolean containsCycles() {
-		
-		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = 
-				new DefaultDirectedGraph<Activity, DefaultEdge>(DefaultEdge.class);
-		CycleDetector<Activity, DefaultEdge> cycleDetector;
-		List<Activity> predecessorActivities;
-		
-		// Vertices
-		for (Activity source : activities) {
-			diGraph.addVertex(source);
+	    for (Activity activity : activities) {
+		// If we are missing any durations, throw an error
+		if (activity.getMostLikelyDuration() < 1) {
+		    throw new InvalidProjectException("All the activities in your project must have a Most Likely Duration in order to optimize project dates!");
 		}
-		
-		// Edges
-		for (Activity source : activities) {
-			
-			predecessorActivities = PredecessorDB.getPredecessors( source.getId() );
-			
-			for (Activity target : predecessorActivities) {
-				diGraph.addEdge(source, target);
-			}
-			
-		}
+	    }
 
-		cycleDetector = new CycleDetector<Activity, DefaultEdge>(diGraph);
-		
-		return cycleDetector.detectCycles();
+	    for (Activity activity : activities) {
+		// If the activity is a "target" node (it has predecessors, but no children)
+		// call the recursive method optimizeActivity to optimize all nodes backwards along the path
+		if (activity.getDependents().isEmpty()) {
+		    optimizeActivity(activity);
+		}
+	    }
+	    
+	    // Then get the latest date of all activities and set the project due date to it
+	    setDueDate(new Date(0));
+	    for (Activity activity : activities) {
+		if (activity.getDueDate().after(dueDate)) {
+		    dueDate = activity.getDueDate();
+		}
+	    }    
+	}
+
+	private void optimizeActivity(Activity activity) {
+	    Calendar cal = Calendar.getInstance();
+	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
+	    Set<DefaultEdge> incomingActivities = digraph.incomingEdgesOf(activity);
+	    // Base case: if there are no incoming activities, this is an "origin" node
+	    // Set the start date to the project start date and the due date to start date + duration
+	    if (incomingActivities.isEmpty()) {
+		activity.setStartDate(startDate);
+		cal.setTime(startDate);
+		cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());
+		activity.setDueDate(cal.getTime());
+	    } else {
+		// Recursive case: otherwise set to the max of preceding activities' due dates
+		List<Activity> predecessors = new ArrayList<Activity>();
+		for (DefaultEdge predecessorEdge : incomingActivities) {
+		    predecessors.add(digraph.getEdgeSource(predecessorEdge));
+		}
+		// Reset the activity start date
+		activity.setStartDate(new Date(0));
+		for (Activity predecessor : predecessors) {
+		    optimizeActivity(predecessor);
+		    if (predecessor.getDueDate().after(activity.getStartDate())) {
+			activity.setStartDate(predecessor.getDueDate());
+			cal.setTime(activity.getStartDate());
+			cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());
+			activity.setDueDate(cal.getTime());
+		    }
+		}
+	    }
+	}
+
+	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraph() {
+	    DefaultDirectedGraph<Activity, DefaultEdge> diGraph = 
+		    new DefaultDirectedGraph<Activity, DefaultEdge>(DefaultEdge.class);
+	    List<Activity> predecessorActivities;
+
+	    // Vertices
+	    for (Activity source : activities) {
+		diGraph.addVertex(source);
+	    }
+
+	    // Edges
+	    for (Activity source : activities) {
+		predecessorActivities = PredecessorDB.getPredecessors( source.getId() );
+
+		for (Activity target : predecessorActivities) {
+		    diGraph.addEdge(source, target);
+		}
+	    }
+	    return diGraph;
+	}
+
+	private boolean containsCycles() {
+	    CycleDetector<Activity, DefaultEdge> cycleDetector;
+	    cycleDetector = new CycleDetector<Activity, DefaultEdge>(toDigraph());
+	    return cycleDetector.detectCycles();
 	}
 
 	private String getCycleString() {
-		ClassBasedEdgeFactory<Activity, DefaultEdge> edgeFactory = new ClassBasedEdgeFactory<Activity, DefaultEdge>(
-				null);
+	    ClassBasedEdgeFactory<Activity, DefaultEdge> edgeFactory = new ClassBasedEdgeFactory<Activity, DefaultEdge>(
+		    null);
 		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = new DefaultDirectedGraph<Activity, DefaultEdge>(
 				edgeFactory);
 		

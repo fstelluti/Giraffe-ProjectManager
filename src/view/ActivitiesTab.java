@@ -116,15 +116,26 @@ public class ActivitiesTab extends JPanel {
 		    Activity selectedActivity = (Activity)grid.getValueAt(selectedRow, 1);
 		    ActivityDialog editActivityDialog = new ActivityDialog(selectedActivity);
 		    Activity result = editActivityDialog.showDialog();
-		    tableModel.setValueAt(result.getId(), selectedRow, 0);
-		    tableModel.setValueAt(result, selectedRow, 1);
-		    if (result.getStartDate() != null) {
-			tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getStartDate()), selectedRow, 2);
+		    if (result != null) {
+			System.out.println("hello");
+			try { 
+			    ViewManager.getCurrentProject().isValid();
+			} catch (Exception e1) {
+			    result.clearDependents();
+			    result.persist();
+			    JOptionPane.showMessageDialog(null, e1.getMessage() + " The dependents for the edited activity have been cleared to correct this error.", "Error editing an activity", JOptionPane.ERROR_MESSAGE);
+			    e1.printStackTrace();
+			}
+			tableModel.setValueAt(result.getId(), selectedRow, 0);
+			tableModel.setValueAt(result, selectedRow, 1);
+			if (result.getStartDate() != null) {
+			    tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getStartDate()), selectedRow, 2);
+			}
+			if (result.getDueDate() != null) {
+			    tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getDueDate()), selectedRow, 3);
+			}
+			tableModel.setValueAt(result.getDescription(), selectedRow, 4);
 		    }
-		    if (result.getDueDate() != null) {
-			tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getDueDate()), selectedRow, 3);
-		    }
-		    tableModel.setValueAt(result.getDescription(), selectedRow, 4);
 		    ViewManager.refresh();
 		}
 	    }
@@ -140,24 +151,35 @@ public class ActivitiesTab extends JPanel {
 	    public void actionPerformed(ActionEvent e) {
 		ActivityDialog addActivityDialog = new ActivityDialog();
 		Activity result = addActivityDialog.showDialog();
-		ViewManager.getCurrentProject().addActivity(result);
-		Vector<Object> newRow = new Vector<Object>();
-		newRow.add(Integer.toString(result.getId()));
-		newRow.add(result);
-		if (result.getStartDate() != null) { 
-		    newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate())); 
-		} else { 
-		    newRow.add("No Date");
-		}
-		if (result.getDueDate() != null) {
-		    newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
-		} else {
-		    newRow.add("No date");
-		}
-		newRow.add(result.getDescription());
-		tableModel.addRow(newRow);
-		if (tableModel.getValueAt(0, 1) == null) {
-		   ViewManager.reload();
+		if (result != null) {
+		    ViewManager.getCurrentProject().addActivity(result);
+		    try {
+			if (ViewManager.getCurrentProject().isValid()) {
+			    Vector<Object> newRow = new Vector<Object>();
+			    newRow.add(Integer.toString(result.getId()));
+			    newRow.add(result);
+			    if (result.getStartDate() != null) { 
+				newRow.add(DataManager.DATE_FORMAT.format(result.getStartDate())); 
+			    } else { 
+				newRow.add("No Date");
+			    }
+			    if (result.getDueDate() != null) {
+				newRow.add(DataManager.DATE_FORMAT.format(result.getDueDate()));
+			    } else {
+				newRow.add("No date");
+			    }
+			    newRow.add(result.getDescription());
+			    tableModel.addRow(newRow);
+			    if (tableModel.getValueAt(0, 1) == null) {
+				ViewManager.reload();
+			    }
+			}
+		    } catch (Exception e1) {
+			result.clearDependents();
+			result.persist();
+			JOptionPane.showMessageDialog(null, e1.getMessage(), "Error editing an activity", JOptionPane.ERROR_MESSAGE);
+			e1.printStackTrace();
+		    }
 		}
 	    }
 	});

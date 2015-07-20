@@ -168,8 +168,8 @@ private JPanel usersSubPanel;
 	  panSubDuration.setBorder(BorderFactory.createTitledBorder("Durations"));
 	  //Add all duration panels
 	  panSubDuration.add(panPessimisticDur);
-	  panSubDuration.add(panOptimisticDur);
 	  panSubDuration.add(panMostLikelyDur);
+	  panSubDuration.add(panOptimisticDur);
 	  
 	  //Create dependents using two lists to add/remove dependents.
 	  createActivityDependents();
@@ -227,17 +227,17 @@ private JPanel usersSubPanel;
 		  try {
 		      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
 		  } catch (ParseException e) {
-	      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
-	    }
+		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+		  }
 		  try { 
-		  		activityPessimisticDuration = numberFormat.parse(pessimisticDur.getText()).intValue();
-		  		activityOptimisticDuration = numberFormat.parse(optimisticDur.getText()).intValue();
-		  	  activityMostLikelyDuration = numberFormat.parse(mostLikelyDur.getText()).intValue();
+		      activityPessimisticDuration = numberFormat.parse(pessimisticDur.getText()).intValue();
+		      activityOptimisticDuration = numberFormat.parse(optimisticDur.getText()).intValue();
+		      activityMostLikelyDuration = numberFormat.parse(mostLikelyDur.getText()).intValue();
 		  } catch (ParseException e) {
 		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for a duration", "Error", JOptionPane.ERROR_MESSAGE);
 		  }
 		  String activityDescriptionString = activityDescription.getText();
-		  
+
 		  // Builds the Activity object
 		  activity.setStartDate(activityStartDate);
 		  activity.setDueDate(activityDueDate);

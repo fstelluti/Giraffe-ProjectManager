@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 
+import model.Activity;
 import model.Project;
 import model.Project.InvalidProjectException;
 import model.User;
@@ -225,5 +226,16 @@ public class ViewManager {
 
 	public static void setTab(int i) {
 	    tabPanel.setActiveTab(i);
+	}
+
+	public static void optimizeCurrentProject() throws InvalidProjectException {
+	    if (getCurrentProject().isValid()) {
+		getCurrentProject().optimize();
+		for (Activity activity : getCurrentProject().getActivities()) {
+		    activity.persist();
+		}
+		getCurrentProject().persist();
+		reload();
+	    }
 	}
 }
