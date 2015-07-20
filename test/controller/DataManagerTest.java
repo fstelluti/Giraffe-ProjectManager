@@ -20,7 +20,7 @@ import org.junit.runners.JUnit4;
  * Since database methods are integral to the program, we are aiming for 100% code coverage of those classes
  * within all db test classes.
  * @author      Matthew Mongrain <matthew (dot) mongrain (at) gmail (dot) com>
- * @modifiedBy  Anne-Marie Dube (modified method names)
+ * @modifiedBy  Anne-Marie Dube (modified method names), Zachary Bergeron
  */
 
 @RunWith(JUnit4.class)
@@ -87,10 +87,10 @@ public class DataManagerTest {
 										+ "INSERT INTO PREDECESSORS (ACTIVITYID, PREDECESSORID) VALUES (2, 5);";
 		
 		String userActivitiesFixtureQuery =  "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 1);"
+											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (2, 1);"
+											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (3, 1);"
 											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 2);"
-											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 3);"
-											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 4);"
-											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 5);";
+											+ "INSERT INTO USERACTIVITIES (USERID, ACTIVITYID) VALUES (1, 3);";
 		
 		String fixtureQuery = userFixtureQuery + activityFixtureQuery + projectFixtureQuery + userRolesQuery + predecessorFixtureQuery + userActivitiesFixtureQuery;
 		// Execute queries and commit

@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
 	controller.DataManagerTest.class,
 	controller.PredecessorDBTest.class,
 	controller.ProjectDBTest.class,
+	controller.UserActivitiesDBTest.class,
 	controller.UserDBTest.class,
 	controller.UserRolesDBTest.class,
 	controller.ViewManagerTest.class,

@@ -10,12 +10,13 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
+import model.Gantt;
+
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 
 import controller.ViewManager;
-import model.Gantt;
 
 public class GanttPanel extends JPanel implements ActionListener {
     
