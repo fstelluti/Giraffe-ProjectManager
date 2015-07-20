@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -133,9 +135,14 @@ public class DetailsTab extends JPanel {
 			e.getStackTrace();
 			JOptionPane.showMessageDialog(content, "Invalid value for actual cost", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-
+		
+		Object[] selectedProjectManagers = addedUsers.toArray();
+		ArrayList<User> newProjectManagers = new ArrayList<User>();
+		for (Object manager : selectedProjectManagers) {
+		    newProjectManagers.add((User) manager);
+		}
 		try { 
-		    ViewManager.editCurrentProject(	//TODO Still need to deal with removing users, how to save in DB
+		    ViewManager.editCurrentProject(	
 			    user,
 			    projectNameContents,
 			    startDatePickerContents,
@@ -143,13 +150,12 @@ public class DetailsTab extends JPanel {
 			    projectDescriptionText,
 			    projectEstimatedCost,
 			    projectActualCost,
-			    addedUsers,
-			    availableUsers
+			    newProjectManagers
 			    );
 		    justSaved = true;
 		    ViewManager.refresh();
 		} catch (InvalidProjectException e) {
-		    JOptionPane.showMessageDialog(content, "Cannot Save Project" + e.getMessage(), "Cannot Save Project", JOptionPane.ERROR_MESSAGE);
+		    JOptionPane.showMessageDialog(content, "Cannot Save Project: " + e.getMessage(), "Cannot Save Project", JOptionPane.ERROR_MESSAGE);
 		}
 
 	    }     

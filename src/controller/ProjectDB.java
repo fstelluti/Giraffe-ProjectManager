@@ -13,6 +13,7 @@ import java.util.List;
 
 import model.Activity;
 import model.Project;
+import model.User;
 
 /**
  * 
@@ -236,19 +237,18 @@ public class ProjectDB extends DataManager
 		    Activity child = ActivityDB.getById(activityId);
 		    project.addActivity(child);
 		}
-		
-	    } catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getMessage());
-	    }
-	    
-	    // Close the connections
-	    if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
-	    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
-	    if (c != null) try { c.close(); } catch (SQLException ignore) {}
 
+	    } catch (SQLException e) {
+		e.printStackTrace();
+	    } finally {
+		// Close the connections
+		if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		if (c != null) try { c.close(); } catch (SQLException ignore) {}
+	    }
 	    return project;
 	}
-	
+
 	/**
 	 * Method to get projects by their name
 	 * @param projectName as a String
@@ -286,26 +286,16 @@ public class ProjectDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			e.printStackTrace();
+		    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		    e.printStackTrace();
 		} catch (ParseException e) {
 		    e.printStackTrace();
 		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-				if (stmt != null) {
-					stmt.close();
-				}
-				rs.close();
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in ProjectDB.getProjectByName: " + e.getMessage());
-			}
+		    if (rs != null) try { rs.close(); } catch (SQLException ignore) {}
+		    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+		    if (c != null) try { c.close(); } catch (SQLException ignore) {}
 		}
-		
+
 		return project;
 	}
 	
@@ -333,12 +323,8 @@ public class ProjectDB extends DataManager
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.deleteProject: " + e.getMessage());
-				}
+			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			    if (c != null) try { c.close(); } catch (SQLException ignore) {}
 			}
 			
 			deleteProjectActivities(projectId);
@@ -368,12 +354,8 @@ public class ProjectDB extends DataManager
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.deleteProjectActivities: " + e.getMessage());
-				}
+			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			    if (c != null) try { c.close(); } catch (SQLException ignore) {}
 			}
 		}
 		
@@ -400,12 +382,8 @@ public class ProjectDB extends DataManager
 			{
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.deleteProjectPMRelation: " + e.getMessage());
-				}
+			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			    if (c != null) try { c.close(); } catch (SQLException ignore) {}
 			}
 		}
 		
@@ -415,47 +393,46 @@ public class ProjectDB extends DataManager
 		 * Throws IllegalArgumentException() if the Project has not been created.
 		 */
 		public static void update(Project project) {
-			Connection c = null;
-			PreparedStatement stmt = null;
-			
-			int projectId = project.getId();
-			
-			try {
-				c = getConnection();
+		    Connection c = null;
+		    PreparedStatement stmt = null;
 
-				stmt = c.prepareStatement("UPDATE PROJECTS SET dueDate=?, startDate=?, name=?, estimatedBudget=?, actualBudget=?, description=? WHERE ID=?;");
-				if (project.getDueDate() == null) {
-				    stmt.setNull(1, Types.VARCHAR);
-				} else {
-				    stmt.setString(1, DataManager.DATE_FORMAT.format(project.getDueDate()));
-				}
-				if (project.getStartDate() == null) {
-				    stmt.setNull(2, Types.VARCHAR);
-				} else {
-				    stmt.setString(2, DataManager.DATE_FORMAT.format(project.getStartDate()));
-				}
-				stmt.setString(3, project.getName());
-				stmt.setInt(4, (int)project.getEstimatedBudget());
-				stmt.setInt(5, (int)project.getActualBudget());
-				if (project.getDescription() == null) {
-				    stmt.setNull(6, Types.VARCHAR);
-				} else {
-				    stmt.setString(6, project.getDescription());
-				}
-				stmt.setInt(7, projectId);
-				stmt.executeUpdate();
+		    int projectId = project.getId();
+
+		    try {
+			c = getConnection();
+
+			stmt = c.prepareStatement("UPDATE PROJECTS SET dueDate=?, startDate=?, name=?, estimatedBudget=?, actualBudget=?, description=? WHERE ID=?;");
+			if (project.getDueDate() == null) {
+			    stmt.setNull(1, Types.VARCHAR);
+			} else {
+			    stmt.setString(1, DataManager.DATE_FORMAT.format(project.getDueDate()));
 			}
-			catch (SQLException e) {
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				throw new IllegalArgumentException("ProjectID " + projectId + " does not exist in database");
-			} finally {
-				try {
-					stmt.close();
-					c.close();
-				} catch (SQLException e) {
-					System.err.println("Error closing connections in ProjectDB.update: " + e.getMessage());
-				}
+			if (project.getStartDate() == null) {
+			    stmt.setNull(2, Types.VARCHAR);
+			} else {
+			    stmt.setString(2, DataManager.DATE_FORMAT.format(project.getStartDate()));
 			}
+			stmt.setString(3, project.getName());
+			stmt.setInt(4, (int)project.getEstimatedBudget());
+			stmt.setInt(5, (int)project.getActualBudget());
+			if (project.getDescription() == null) {
+			    stmt.setNull(6, Types.VARCHAR);
+			} else {
+			    stmt.setString(6, project.getDescription());
+			}
+			stmt.setInt(7, projectId);
+			stmt.executeUpdate();
+
+			UserRolesDB.delete(project.getId());
+			List<User> projectManagers = project.getProjectManagers();
+			for (User manager : projectManagers) {
+			    UserRolesDB.insert(manager.getId(), project.getId(), 1);
+			}
+		    } catch (SQLException e) {
+			e.printStackTrace();
+		    } finally {
+			if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
+			if (c != null) try { c.close(); } catch (SQLException ignore) {}
+		    }
 		}
-		// END OF EDITING PROJECT METHODS
 }

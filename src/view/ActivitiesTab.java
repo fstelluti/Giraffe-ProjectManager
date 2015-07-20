@@ -109,22 +109,26 @@ public class ActivitiesTab extends JPanel {
 	this.editActivityButton.addActionListener(new ActionListener() {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
-				int selectedRow = grid.getSelectedRow();
-			  if (selectedRow < 0) {
-			  	JOptionPane.showMessageDialog(null, "No activies exist or are selected", "Error editing an activity", JOptionPane.ERROR_MESSAGE);
-			  } else {
-				Activity selectedActivity = (Activity)grid.getValueAt(selectedRow, 1);
-				ActivityDialog editActivityDialog = new ActivityDialog(selectedActivity);
-				Activity result = editActivityDialog.showDialog();
-				tableModel.setValueAt(result.getId(), selectedRow, 0);
-				tableModel.setValueAt(result, selectedRow, 1);
-				tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getStartDate()), selectedRow, 2);
-				tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getDueDate()), selectedRow, 3);
-				tableModel.setValueAt(result.getDescription(), selectedRow, 4);
-				ViewManager.refresh();
-			  }
+		int selectedRow = grid.getSelectedRow();
+		if (selectedRow < 0) {
+		    JOptionPane.showMessageDialog(null, "No activies exist or are selected", "Error editing an activity", JOptionPane.ERROR_MESSAGE);
+		} else {
+		    Activity selectedActivity = (Activity)grid.getValueAt(selectedRow, 1);
+		    ActivityDialog editActivityDialog = new ActivityDialog(selectedActivity);
+		    Activity result = editActivityDialog.showDialog();
+		    tableModel.setValueAt(result.getId(), selectedRow, 0);
+		    tableModel.setValueAt(result, selectedRow, 1);
+		    if (result.getStartDate() != null) {
+			tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getStartDate()), selectedRow, 2);
+		    }
+		    if (result.getDueDate() != null) {
+			tableModel.setValueAt(DataManager.DATE_FORMAT.format(result.getDueDate()), selectedRow, 3);
+		    }
+		    tableModel.setValueAt(result.getDescription(), selectedRow, 4);
+		    ViewManager.refresh();
+		}
 	    }
-	    
+
 	});
     }
 

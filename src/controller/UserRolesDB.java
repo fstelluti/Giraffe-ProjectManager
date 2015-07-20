@@ -37,7 +37,7 @@ public class UserRolesDB extends DataManager
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS USERROLES " + "(USERID 		INTEGER,"
 					+ " PROJECTID 	INTEGER," + " ROLEID  	INTEGER,"
-					+ " PRIMARY KEY(USERID,PROJECTID)," //TODO Remove? Still works but get error because it doesn't want duplicates
+    					+ " PRIMARY KEY(USERID,PROJECTID)," //TODO Remove? Still works but get error because it doesn't want duplicates
 					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID))";
 			stmt.executeUpdate(sql);

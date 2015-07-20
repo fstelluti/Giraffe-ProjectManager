@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -177,15 +178,17 @@ public class ViewManager {
 	public static void editCurrentProject(User user,
 		String name, Date startDate,
 		Date dueDate, String description, long estimatedBudget, long actualBudget, 
-		DefaultListModel<User> addedUsers, DefaultListModel<User> availableUsers) throws InvalidProjectException {
+		List<User> addedUsers) throws InvalidProjectException {
 
 	    String oldName = getCurrentProject().getName();
 	    Date oldStartDate = getCurrentProject().getStartDate();
 	    Date oldDueDate = getCurrentProject().getDueDate();
+	    ArrayList<User> oldManagers = getCurrentProject().getProjectManagers();
 
 	    getCurrentProject().setName(name);
 	    getCurrentProject().setStartDate(startDate);
 	    getCurrentProject().setDueDate(dueDate);
+	    getCurrentProject().setProjectManagers((ArrayList<User>)addedUsers);
 
 	    if (user == null) {
 		user = getCurrentUser();
@@ -205,23 +208,17 @@ public class ViewManager {
 		getCurrentProject().setName(oldName);
 		getCurrentProject().setStartDate(oldStartDate);
 		getCurrentProject().setDueDate(oldDueDate);
+		getCurrentProject().setProjectManagers(oldManagers);
 		throw e;
 	    } 
 	    getCurrentProject().setDescription(description);
 	    getCurrentProject().setEstimatedBudget(estimatedBudget);
 	    getCurrentProject().setActualBudget(actualBudget);
-	    
-		  for (int i = 0; i < addedUsers.getSize(); i++) {
-		  	getCurrentProject().addProjectPM(addedUsers.getElementAt(i));
-		  }
-	    
-		  for (int i = 0; i < availableUsers.getSize(); i++) { 
-	      getCurrentProject().removeProjectManager(availableUsers.getElementAt(i));
-		  }
-	    
+	    getCurrentProject().setProjectManagers(new ArrayList<User>(addedUsers));
+
 	    getCurrentProject().persist();
 	}
-	
+
 	/**
 	 * Helper method for DetailsTab users list. 
 	 * @return A vector containing all users except the current user.

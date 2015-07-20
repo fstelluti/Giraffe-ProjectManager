@@ -210,26 +210,11 @@ public class AccountDialog extends JDialog {
 			    // If not empty, create a regular user
 			    if (DataManager.userTableIsEmpty()) {
 				user.setAdmin(true);
-				user.persist();
-				ViewManager.logout(); // Switch to the
-				// LoginPanel
-			    } else {
-				user.persist();
 			    }
-				setVisible(false);
-
+			    user.persist();
+			    ViewManager.logout(); // Switch to the
+			    setVisible(false);
 			}
-
-			/*
-			 * if(DataManager.userTableIsEmpty()) {
-			 * user.setAdmin(true); user.persist();
-			 * ViewManager.logout(); //Switch to the LoginPanel }
-			 * else { user.setAdmin(false); user.persist(); }
-			 */
-
-
-
-
 		    }
 		});
 		JButton cancelButton = new JButton("Cancel");

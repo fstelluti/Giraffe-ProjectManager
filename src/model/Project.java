@@ -36,7 +36,7 @@ public class Project
 	private long estimatedBudget;
 	private long actualBudget;
 	private ArrayList<Activity> activities;
-	private ArrayList<User> projectPMs;
+	private ArrayList<User> projectManagers;
 	
 	public Project(){}
 	
@@ -58,7 +58,7 @@ public class Project
 			this.estimatedBudget = projectFromDb.getEstimatedBudget();
 			this.name = projectFromDb.getName();
 			this.activities = (ArrayList<Activity>) ActivityDB.getProjectActivities(id);
-			this.projectPMs = UserRolesDB.getProjectManagersByProjectId(id);
+			this.projectManagers = UserRolesDB.getProjectManagersByProjectId(id);
 		}
 	}
 	
@@ -152,22 +152,6 @@ public class Project
 	    	this.id = temp.id;
 	    } else {
 	    	ProjectDB.update(this);
-	    	
-		    // Insert all project PMs TODO Need to update roleID column?? Delete then insert?
-		    if (projectPMs != null) {
-					for (User user : projectPMs) {
-						int projectID = UserRolesDB.getProjectIdByRegUser(user);
-						if(this.id == projectID) {
-							//If the user is already assigned to the project, just update Role ID to 1
-							UserRolesDB.updateRole(user.getId(), this.id, 1);
-						}
-						else {	
-							//If the user isn't part of the project, insert a row with role ID = 1
-							if(this.id != user.getId()) 
-					    	UserRolesDB.insert(user.getId(), this.id, 1); 
-						}
-					}
-		    }
 	    }
 	}
 
@@ -187,10 +171,10 @@ public class Project
 	}
 	
 	public ArrayList<User> getProjectPMs() {
-		if (projectPMs == null) {
-			projectPMs = UserRolesDB.getProjectManagersByProjectId(this.id);
+		if (projectManagers == null) {
+			projectManagers = UserRolesDB.getProjectManagersByProjectId(this.id);
 		}
-		return projectPMs;
+		return projectManagers;
 	}
 	
 	public ArrayList<Activity> getUserActivities(User user) {
@@ -214,11 +198,11 @@ public class Project
 	}
 	
 	public void addProjectPM(User user) {
-		if (projectPMs == null) {
-			projectPMs = new ArrayList<User>();
+		if (projectManagers == null) {
+			projectManagers = new ArrayList<User>();
 		}
 		if (!activities.contains(user)) {
-			projectPMs.add(user);
+			projectManagers.add(user);
 		}
 	}
 
@@ -227,7 +211,7 @@ public class Project
 	}
 	
 	public void removeProjectManager(User user) {
-		projectPMs.remove(user);
+		projectManagers.remove(user);
 	}
 
 	@Override
@@ -243,7 +227,7 @@ public class Project
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (obj == null 	)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -268,8 +252,9 @@ private boolean containsCycles() {
 		List<Activity> predecessorActivities;
 		
 		// Vertices
-		for (Activity source : activities)
+		for (Activity source : activities) {
 			diGraph.addVertex(source);
+		}
 		
 		// Edges
 		for (Activity source : activities) {
@@ -348,6 +333,9 @@ private boolean containsCycles() {
 	}
 
 	public boolean isValid() throws InvalidProjectException {
+	    	if (projectManagers.size() < 1) {
+	    	    throw new InvalidProjectException("The project needs at least one project manager!");
+	    	}
 		if (containsCycles()) {
 			throw new InvalidProjectException("The project contains a cycle, and will never complete!");
 		}
@@ -360,5 +348,13 @@ private boolean containsCycles() {
 					"The name of the project must be unique; this one's taken.");
 		}
 		return true;
+	}
+
+	public ArrayList<User> getProjectManagers() {
+	    return projectManagers;
+	}
+
+	public void setProjectManagers(ArrayList<User> projectManagers) {
+	    this.projectManagers = projectManagers;
 	}
 }
