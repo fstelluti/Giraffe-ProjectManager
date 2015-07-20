@@ -388,7 +388,7 @@ public class Project
 	}
 
 	public boolean isValid() throws InvalidProjectException {
-	    	if (projectManagers.size() < 1) {
+	    	if (projectManagers != null && projectManagers.size() < 1) {
 	    	    throw new InvalidProjectException("The project needs at least one project manager!");
 	    	}
 		if (containsCycles()) {
