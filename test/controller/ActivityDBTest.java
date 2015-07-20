@@ -296,7 +296,7 @@ public class ActivityDBTest {
 	
 	// Tests ActivityDB.update(Activity)
 	@Test
-	public void updatedActivityShouldMatchData() throws ParseException{
+	public void updatedActivityShouldMatchUpdatedData() throws ParseException{
 		Activity activity = ActivityDB.getById(1);
 		activity.setActivityName("activity1-updated");
 		activity.setStartDate(new SimpleDateFormat("yyyy-MM-dd").parse("1999-12-31"));
