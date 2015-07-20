@@ -78,21 +78,9 @@ public class ViewManager {
 			return NO_ACCOUNT_ICON;
 		}
 	}
-	
-	public static void updateTabPanel (Project project) {
-	    
-	}
-
-	public static TabPanel getTabPanel() {
-	    return tabPanel;
-	}
 
 	public static void setTabPanel(TabPanel tabPanel) {
 	    ViewManager.tabPanel = tabPanel;
-	}
-
-	public static ProjectListPanel getProjectListPanel() {
-	    return projectListPanel;
 	}
 
 	public static void setProjectListPanel(ProjectListPanel projectListPanel) {

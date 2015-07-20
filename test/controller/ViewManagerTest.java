@@ -1,29 +1,58 @@
 package controller;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import javax.swing.JPanel;
-
-import model.User;
+import java.awt.Component;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import view.AccountDialog;
+import view.ApplicationWindow;
+import view.LoginPanel;
+import view.StartupPanel;
 
 /**
  * Tests controller/ViewManager.java
  * Only non-trivial and non-GUI, public methods are tested.
- * @author: Francois Stelluti
+ * @author: Francois Stelluti, Andrey Uspenskiy (iteration 2)
  */
+@RunWith(JUnit4.class)
 public class ViewManagerTest {
 	
-	//Tests if the main view panel was created
 	@Test
-	public void shouldCreateMainViewPanel() {
-	  //Create a User with test variables 
-	  User user1 = new User(1,"user1","pass1","test@aol.com","Dave", "Johnson");
-		
-	  //Need to run the startApplication method before testing if the main view panel was created
-	  //This avoids a Null pointer exception
-	  ViewManager.openApplicationWindow();
+	public void logoutShouldRedisplayLoginPanel()
+	{
+		String cardName = "LoginPanel";
+		ApplicationWindow appWindow = ViewManager.openApplicationWindow();
+		appWindow.setCard(cardName, StartupPanel.SIZE_X, StartupPanel.SIZE_Y);
+		LoginPanel card = null;
+		for (Component comp : appWindow.getContentPane().getComponents()) {
+		    if (comp.isVisible() == true && comp instanceof LoginPanel) {
+		        card = (LoginPanel) comp;
+		    }
+		}
+		assert (card.getName().equals(cardName));
 	}
+	
+	@Test
+	public void openApplicationWindowShouldNotBeNull()
+	{
+		ApplicationWindow appWindow = ViewManager.openApplicationWindow();
+		assertNotNull(appWindow);
+	}
+	
+	@Test
+	public void createAccountDialogShouldBuildCreateAccountDialog()
+	{
+		AccountDialog aDialog = new AccountDialog();
+		boolean objectClass = aDialog instanceof AccountDialog;
+		assertTrue("Created object is not of type AccountDialog", objectClass);
+		aDialog.dispose();
+	}
+	
+	
 
 }
