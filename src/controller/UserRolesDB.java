@@ -37,9 +37,8 @@ public class UserRolesDB extends DataManager
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID))";
 			stmt.executeUpdate(sql);
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();

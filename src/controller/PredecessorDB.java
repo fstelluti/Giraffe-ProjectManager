@@ -46,7 +46,7 @@ public class PredecessorDB extends DataManager
 		}
 		catch (Exception e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		    e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -87,9 +87,7 @@ public class PredecessorDB extends DataManager
 			stmt.executeUpdate(sql);
 			
 		} catch (SQLException e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		    e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -129,11 +127,7 @@ public class PredecessorDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		    e.printStackTrace();
 		} finally {
 			try {
 				if (rs2 != null) {
@@ -162,30 +156,26 @@ public class PredecessorDB extends DataManager
 	{
 		Connection c = null;
 		Statement stmt = null;
-		
+
 		try
 		{
-			c = getConnection();
+		    c = getConnection();
 
-			stmt = c.createStatement();
-			String sql = "DELETE FROM PREDECESSORS "
-					+ "WHERE activityId = "+activityId+";";
-			stmt.executeUpdate(sql);
+		    stmt = c.createStatement();
+		    String sql = "DELETE FROM PREDECESSORS "
+			    + "WHERE activityId = "+activityId+";";
+		    stmt.executeUpdate(sql);
 		}
 		catch (SQLException e)
 		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		catch (Exception e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		    e.printStackTrace();		
 		} finally {
-			try {
-				stmt.close();
-				c.close();
-			} catch (SQLException e) {
-				System.err.println("Error closing connections in PredecessorDB.deleteActivityPredecessors: " + e.getMessage());
-			}
+		    try {
+			stmt.close();
+			c.close();
+		    } catch (SQLException e) {
+			System.err.println("Error closing connections in PredecessorDB.deleteActivityPredecessors: " + e.getMessage());
+		    }
 		}
 	}
 }

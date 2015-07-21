@@ -46,9 +46,8 @@ public class ProjectDB extends DataManager
 					+ " description       TEXT);";
 			stmt.executeUpdate(sql);
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -107,9 +106,8 @@ public class ProjectDB extends DataManager
 				projects.add(getById(id));
 			}
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -154,9 +152,8 @@ public class ProjectDB extends DataManager
 				projects.add(getById(id));
 			}
 		}
-		catch (SQLException e)
-		{
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
+		    e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -291,9 +288,7 @@ public class ProjectDB extends DataManager
 				project = new Project(id, name, startDate, dueDate, description);
 			}
 		}
-		catch (SQLException e)
-		{
-		    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		catch (SQLException e) {
 		    e.printStackTrace();
 		} catch (ParseException e) {
 		    e.printStackTrace();
@@ -326,9 +321,8 @@ public class ProjectDB extends DataManager
 				stmt.executeUpdate(sql);
 				c.commit();
 			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			catch (SQLException e) {
+			    e.printStackTrace();
 			} finally {
 			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 			    if (c != null) try { c.close(); } catch (SQLException ignore) {}
@@ -357,9 +351,8 @@ public class ProjectDB extends DataManager
 				stmt.executeUpdate(sql);
 				c.commit();
 			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			catch (SQLException e) {
+			    e.printStackTrace();
 			} finally {
 			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 			    if (c != null) try { c.close(); } catch (SQLException ignore) {}
@@ -385,9 +378,8 @@ public class ProjectDB extends DataManager
 				stmt.executeUpdate(sql);
 				c.commit();
 			}
-			catch (SQLException e)
-			{
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			catch (SQLException e) {
+			    e.printStackTrace();
 			} finally {
 			    if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {}
 			    if (c != null) try { c.close(); } catch (SQLException ignore) {}

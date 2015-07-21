@@ -25,8 +25,7 @@ import controller.UserRolesDB;
  *
  */
 
-public class Project
-{
+public class Project {
 	private int id;
 	private String name;
 	private Date startDate, dueDate;

@@ -165,7 +165,7 @@ public class UserDB extends DataManager {
 		}
 		
 	    } catch (SQLException e) {
-		System.err.println(e.getClass().getName() + ": " + e.getStackTrace());
+		    e.printStackTrace();
 	    } finally {
 		if (rs != null) try { rs.close(); } catch (SQLException ignore) {} 
 		if (stmt != null) try { stmt.close(); } catch (SQLException ignore) {} 

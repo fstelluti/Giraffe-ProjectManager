@@ -60,11 +60,11 @@ public class TabPanel extends JPanel {
 	this.validate();
 	this.tabPane = new JTabbedPane();
 	this.activitiesTab = new ActivitiesTab();
-	ImageIcon activitiesIcon = new ImageIcon("src/view/images/activitiesIcon.png");
+	ImageIcon activitiesIcon = new ImageIcon(TabPanel.class.getResource("images/activitiesIcon.png"));
 	this.reportsTab = new ReportsTab();
-	ImageIcon reportsIcon = new ImageIcon("src/view/images/reportsIcon.png");
+	ImageIcon reportsIcon = new ImageIcon(TabPanel.class.getResource("images/reportsIcon.png"));
 	this.detailsTab = new DetailsTab();
-	ImageIcon detailsIcon = new ImageIcon("src/view/images/detailsIcon.png");
+	ImageIcon detailsIcon = new ImageIcon(TabPanel.class.getResource("images/detailsIcon.png"));
 	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
 	if (DataManager.userManagesProject(user, project)) {
 	    this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");

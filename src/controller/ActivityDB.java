@@ -198,10 +198,6 @@ public class ActivityDB extends DataManager
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 		} finally {
 			try {
 				if (rs != null) {
@@ -397,10 +393,6 @@ public class ActivityDB extends DataManager
 		catch (SQLException e)
 		{
 			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
 		} finally {
 			try {
 				stmt.close();
@@ -434,10 +426,6 @@ public class ActivityDB extends DataManager
 			c.commit();
 		}
 		catch (SQLException e)
-		{
-			e.printStackTrace();
-		}
-		catch (Exception e)
 		{
 			e.printStackTrace();
 		} finally {
