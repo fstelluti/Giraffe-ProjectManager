@@ -276,6 +276,9 @@ public class Project
 	    // Base case: if there are no incoming activities, this is an "origin" node
 	    // Set the start date to the project start date and the due date to start date + duration
 	    if (incomingActivities.isEmpty()) {
+		if (startDate == null) {
+		    startDate = new Date();
+		}
 		activity.setStartDate(startDate);
 		cal.setTime(startDate);
 		cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());

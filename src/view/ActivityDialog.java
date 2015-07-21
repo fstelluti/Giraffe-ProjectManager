@@ -545,6 +545,7 @@ private JPanel usersSubPanel;
 	  sourceActivities = currentProject.getActivities();
 	  //Iterate over all activities, and add them to activitiesList
 	  for(Activity activity: sourceActivities){
+	      System.out.println("Wow" + activity + " " + this.activity);
 	  	if (this.activity != activity && activity != null) {
 	  	    availableActivities.addElement(activity);
 	  	}

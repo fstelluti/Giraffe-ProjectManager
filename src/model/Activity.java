@@ -208,16 +208,6 @@ public class Activity {
 		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
 	    }
 	    
-	    // See if the overall project will be valid after the activity is added.
-	    try  {
-		project.addActivity(this);
-		project.isValid(); 
-	    } catch (InvalidProjectException e) {
-		throw e;
-	    } finally {
-		project.removeActivity(this);
-	    }
-	    
 	    //Verifies all text boxes are filled out, if not = error
 	    if (activityName.hashCode() == 0) {
 		throw new Exception("Activity name cannot be empty");
