@@ -6,9 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.jgrapht.*;
 import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
@@ -38,6 +36,8 @@ public class Project
 	private long actualBudget;
 	private ArrayList<Activity> activities;
 	private ArrayList<User> projectManagers;
+	
+	private String errorString;
 	
 	public Project(){}
 	
@@ -295,7 +295,7 @@ public class Project
 			cal.setTime(activity.getStartDate());
 			cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());
 			activity.setDueDate(cal.getTime());
-		    }
+		    }	
 		}
 	    }
 	}
@@ -324,36 +324,26 @@ public class Project
 	private boolean containsCycles() {
 	    CycleDetector<Activity, DefaultEdge> cycleDetector;
 	    cycleDetector = new CycleDetector<Activity, DefaultEdge>(toDigraph());
-	    return cycleDetector.detectCycles();
+	    if (cycleDetector.detectCycles()) {
+		errorString = getCycleString();
+		return true;
+	    }
+	    return false;
 	}
 
 	private String getCycleString() {
-	    ClassBasedEdgeFactory<Activity, DefaultEdge> edgeFactory = new ClassBasedEdgeFactory<Activity, DefaultEdge>(
-		    null);
-		DefaultDirectedGraph<Activity, DefaultEdge> diGraph = new DefaultDirectedGraph<Activity, DefaultEdge>(
-				edgeFactory);
-		
-		for (Activity source : activities)
-			diGraph.addVertex(source);
+	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
 
-		for (Activity source : activities) {
-			List<Activity> predecessorActivities = PredecessorDB
-					.getPredecessors(source.getId());
-			for (Activity target : predecessorActivities) {
-				diGraph.addEdge(source, target);
-			}
-		}
-
-		CycleDetector<Activity, DefaultEdge> cycleDetector = new CycleDetector<Activity, DefaultEdge>(
-				diGraph);
-		Set<Activity> cycle = cycleDetector.findCycles();
-		StringBuilder cycleString = new StringBuilder();
-		for (Activity activity : cycle) {
-			cycleString.append(activity + ", ");
-		}
-		// Deletes the last comma!
-		cycleString.delete(cycleString.length() - 2, cycleString.length());
-		return cycleString.toString();
+	    CycleDetector<Activity, DefaultEdge> cycleDetector = new CycleDetector<Activity, DefaultEdge>(
+		    digraph);
+	    Set<Activity> cycle = cycleDetector.findCycles();
+	    StringBuilder cycleString = new StringBuilder();
+	    for (Activity activity : cycle) {
+		cycleString.append(activity + ", ");
+	    }
+	    // Deletes the last comma!
+	    cycleString.delete(cycleString.length() - 2, cycleString.length());
+	    return cycleString.toString();
 	}
 	
 	
@@ -391,8 +381,12 @@ public class Project
 	    	if (projectManagers != null && projectManagers.size() < 1) {
 	    	    throw new InvalidProjectException("The project needs at least one project manager!");
 	    	}
-		if (containsCycles()) {
-			throw new InvalidProjectException("The project contains a cycle, and will never complete!");
+	    	boolean containsCycles = false;
+	    	try {
+	    	    containsCycles = containsCycles();
+	    	} catch (IllegalArgumentException ignore) {}
+		if (containsCycles) {
+			throw new InvalidProjectException("<html>The project contains a cycle <br>(" + errorString + ")<br>and will never complete!<br><br>Dependents have been removed from the<br>edited activity to resolve this problem.</html>");
 		}
 		if (dueDate != null && dueDate.before(startDate)) {
 			throw new InvalidProjectException(

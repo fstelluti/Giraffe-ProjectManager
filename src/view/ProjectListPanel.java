@@ -1,15 +1,12 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -183,9 +180,8 @@ public class ProjectListPanel extends JPanel {
 	    
 	});
 	
-	// imageLabel = new JLabel("pic:"+user.getUserPicture().length,  mImage, JLabel.CENTER);
 	//Sets the padding of the top bar, but only for the height
-	userPanel.setPreferredSize(new Dimension(0, 85));	
+	userPanel.setPreferredSize(new Dimension(0, 95));	
 
 	createLogoutButton();
 	//Adds the labels and logout button to the left side

@@ -1,13 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -18,26 +11,21 @@ import controller.ViewManager;
 
 /**
  * 
- * @author Andrey Uspenskiy
- * @modifiedBy Zachary Bergeron, Francois Stelluti, Ningge Hu
+ * @authors Andrey Uspenskiy, Zachary Bergeron, Francois Stelluti, Matthew Mongrain
  * 
  */
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel  {
-	private JPanel northPanel, userSubPanel;
 	private JScrollPane listView;
 	private TabPanel tabView;
 	private ProjectListPanel projectListPanel;
 	private JSplitPane splitPanel;
 	private User user;
-	private JLabel userLabel, imageLabel, titleLabel; 
-	private JButton logoutActivity;
 
 	public static final int SIZE_Y = 700;
 	public static final int SIZE_X = 1000;
 	private final int DIVIDER_LOCATION = 200;
-	private final int TOP_PANEL_HEIGHT = 30;
 
 	public MainPanel(User currentUser) {
 		super();

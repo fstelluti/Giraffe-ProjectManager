@@ -116,8 +116,7 @@ public class ActivitiesTab extends JPanel {
 		    Activity selectedActivity = (Activity)grid.getValueAt(selectedRow, 1);
 		    ActivityDialog editActivityDialog = new ActivityDialog(selectedActivity);
 		    Activity result = editActivityDialog.showDialog();
-		    if (result != null) {
-			System.out.println("hello");
+		    if (result != null) {	
 			try { 
 			    ViewManager.getCurrentProject().isValid();
 			} catch (Exception e1) {

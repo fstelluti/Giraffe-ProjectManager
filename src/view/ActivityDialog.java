@@ -46,8 +46,7 @@ import controller.ViewManager;
  *
  */
 
-public class ActivityDialog extends JDialog
-{
+public class ActivityDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTextField activityName;
   private JTextArea activityDescription, activityComment;
@@ -221,13 +220,15 @@ private JPanel usersSubPanel;
 		  Date activityStartDate = (Date)startDatePicker.getModel().getValue();
 		  Date activityDueDate = (Date)dueDatePicker.getModel().getValue();
 		  int activityEstimatedCost = 0;
+		  int activityActualCost = 0;
 		  int activityOptimisticDuration = 0;
 		  int activityPessimisticDuration = 0;
 		  int activityMostLikelyDuration = 0;
 		  try {
 		      activityEstimatedCost = numberFormat.parse(activityEstimatedBudget.getText()).intValue();
+		      activityActualCost = numberFormat.parse(activityActualBudget.getText()).intValue();
 		  } catch (ParseException e) {
-		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
+		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for cost", "Error", JOptionPane.ERROR_MESSAGE);
 		  }
 		  try { 
 		      activityPessimisticDuration = numberFormat.parse(pessimisticDur.getText()).intValue();
@@ -242,6 +243,7 @@ private JPanel usersSubPanel;
 		  activity.setStartDate(activityStartDate);
 		  activity.setDueDate(activityDueDate);
 		  activity.setEstimatedCost(activityEstimatedCost);
+		  activity.setActualCost(activityActualCost);
 		  activity.setPessimisticDuration(activityPessimisticDuration);
 		  activity.setOptimisticDuration(activityOptimisticDuration);
 		  activity.setMostLikelyDuration(activityMostLikelyDuration);
@@ -265,13 +267,11 @@ private JPanel usersSubPanel;
 
 		  //Checks if an activity with that name already exists or is otherwise invalid
 		  boolean activityIsInsertable = false;
-		  if (!edit) try {
+		  try {
 		      activityIsInsertable =  activity.isInsertable(currentProject);
 		  } catch (Exception e) {
 		      JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 		      e.printStackTrace();
-		  } else {
-		      activityIsInsertable = true;
 		  }
 		  
 		  if (activityIsInsertable && projectId >= 0) {
@@ -624,7 +624,7 @@ private JPanel usersSubPanel;
 	  dependSubPanel = new JPanel();
 	  dependSubPanel.setBackground(Color.white);
 	  dependSubPanel.setPreferredSize(new Dimension(465, 145));
-	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Dependants"));
+	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Requires"));
 	  dependSubPanel.add(panDepend, BorderLayout.CENTER); 
   }
 

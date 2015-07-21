@@ -1,12 +1,12 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextPane;
 
 import controller.DataManager;
 import controller.ViewManager;
@@ -33,12 +33,8 @@ public class TabPanel extends JPanel {
 	// If the user has no projects (which should be strictly equivalent to the statement
 	// user.getCurrentProject() == null), draw the welcome pane; else draw the TabView.
 	if (user.getCurrentProject() == null || user.getCurrentProject().getId() < 0) {
-	    JTextPane welcomePane = new JTextPane();
-	    welcomePane.insertComponent(new JLabel("<html><h1>Hi there!</h1><p>Looks like you haven't created a project yet. Click \"Create Project\" in the left menu to get started.</p></html>"));
-	    this.add(welcomePane);
-	    
+		this.add(new JLabel(new ImageIcon(TabPanel.class.getResource("images/welcomegiraffe4.png"))));
 	} else {
-	    this.user = user;
 	    reload();
 	}
     }
@@ -50,22 +46,17 @@ public class TabPanel extends JPanel {
 	activitiesTab.refresh();
 	reportsTab.refresh();
 	detailsTab.refresh();
-	if (DataManager.userManagesProject(user, project)) {
-	    detailsTab.setVisible(true);
-	    reportsTab.setVisible(true);
-	} else {
-	    detailsTab.setVisible(false);
-	    reportsTab.setVisible(false);    
-	}
 	this.revalidate();
 	this.repaint();
     }
 
     public void reload() {
 	this.project = ViewManager.getCurrentProject();
-	
-
 	this.removeAll();
+	JPanel labelPanel = new JPanel(new GridBagLayout());
+	JLabel projectLabel = new JLabel("<html><h1>" + this.project.toString() + "</h1></html");
+	labelPanel.add(projectLabel);
+	this.add(labelPanel, BorderLayout.NORTH);
 	this.validate();
 	this.tabPane = new JTabbedPane();
 	this.activitiesTab = new ActivitiesTab();

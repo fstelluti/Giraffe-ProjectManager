@@ -32,7 +32,7 @@ public class Activity {
 	private String description;
 	private int status = 1;
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
-	private HashSet<Integer> dependents;
+	private HashSet<Integer> predecessors;
 	private HashSet<User> users;
 		
 	/**
@@ -44,7 +44,7 @@ public class Activity {
 	public Activity(int projectId, String name) {
 	    this.projectId = projectId;
 	    this.name = name;
-	    this.dependents = new HashSet<Integer>();
+	    this.predecessors = new HashSet<Integer>();
 	    this.users = new HashSet<User>();
 	}
 	
@@ -63,7 +63,7 @@ public class Activity {
 	    this.description = existingActivity.getDescription();
 	    this.status = existingActivity.getStatus();
 	    if (existingActivity.getDependents() != null) {
-		this.dependents = new HashSet<Integer>(existingActivity.getDependents());
+		this.predecessors = new HashSet<Integer>(existingActivity.getDependents());
 	    }
 	    if (existingActivity.getUsers() != null) {
 		this.users = new HashSet<User>(existingActivity.getUsers());
@@ -72,11 +72,11 @@ public class Activity {
 	}
 
 	private void loadDependents() {
-	    this.dependents = new HashSet<Integer>();
+	    this.predecessors = new HashSet<Integer>();
 	    List<Activity> dependentsFromDb = PredecessorDB.getPredecessors(this.id);
-	    if (dependents != null) {
+	    if (predecessors != null) {
 		for (Activity dependent : dependentsFromDb) {
-		    this.dependents.add(dependent.getId());
+		    this.predecessors.add(dependent.getId());
 		}
 	    }
 	}
@@ -204,12 +204,11 @@ public class Activity {
 	    Date activityDueDate = this.getDueDate();
 	    
 	    Activity activityToTest = ActivityDB.getByNameAndProjectId(this.name, project.getId());
-	    if (activityToTest != null) {
+	    if (activityToTest != null && activityToTest.getId() != this.id) {
 		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
 	    }
 	    
 	    // See if the overall project will be valid after the activity is added.
-	    // Functionally, just checks for cycles :)
 	    try  {
 		project.addActivity(this);
 		project.isValid(); 
@@ -240,67 +239,16 @@ public class Activity {
 		    throw new Exception("Please ensure due date is before project due date (" + DataManager.DATE_FORMAT.format(projectDueDate) + ")");
 		}
 	    }
-	   	  
-	    return true;
-	}
-	
-	/**
-	 * Checks to see if an activity can be inserted.
-	 * 
-	 * @author Matthew Mongrain
-	 * @param activity
-	 * @param project
-	 * @return True if the activity is insertable, false otherwise.
-	 * @throws Exception
-	 */
-	public boolean isEditable(Project project) throws Exception {
-	    Date projectStartDate = project.getStartDate();
-	    Date projectDueDate = project.getDueDate();
-	    String activityName = this.getName();
-	    Date activityStartDate = this.getStartDate();
-	    Date activityDueDate = this.getDueDate();
 	    
-	    Activity activityToTest = ActivityDB.getByNameAndProjectId(this.name, project.getId());
-	    if (activityToTest != null && activityToTest.getId() != id) {
-		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
-	    }
-	    
-	    // See if the overall project will be valid after the activity is added.
-	    // Functionally, just checks for cycles :)
-	    try  {
-		project.isValid(); 
-	    } catch (InvalidProjectException e) {
-		throw e;
-	    } finally {
-		project.removeActivity(this);
-	    }
-	    
-	    //Verifies all text boxes are filled out, if not = error
-	    if (activityName.hashCode() == 0) {
-		throw new Exception("Activity name cannot be empty");
-	    }
-	   	
-	    //Checks that due date not before start date
-	    if (activityDueDate != null && activityDueDate.before(activityStartDate)) {
-		throw new Exception("Please ensure due date is not before start date");
-	    }
-	    
-	    if (projectStartDate != null) {
-		if (activityStartDate != null && activityStartDate.before(projectStartDate)) {
-		    throw new Exception("Please ensure start date is before project start date (" + DataManager.DATE_FORMAT.format(projectStartDate) +")");
+	    // Verify that the start date is not before the due dates of any predecessorss
+	    for (Integer predecessorId : predecessors) {
+		Activity predecessor = ActivityDB.getById(predecessorId);
+		if (predecessor.getDueDate() != null && startDate.before(predecessor.getDueDate())) {
+		    throw new Exception("<html>The start date of this activity (" + DataManager.DATE_FORMAT.format(startDate) + ") is before the due date<br>of an activity it requires (" + predecessor.toString() + ", " + DataManager.DATE_FORMAT.format(predecessor.getDueDate()) + ").");
 		}
 	    }
-	    
-	    if (projectDueDate != null) {
-		if (activityDueDate != null && activityDueDate.after(projectDueDate)) {
-		    throw new Exception("Please ensure due date is before project due date (" + DataManager.DATE_FORMAT.format(projectDueDate) + ")");
-		}
-	    }
-	   	  
 	    return true;
 	}
-	
-	
 	
 	/**
 	 * Persists an Activity object in the database.
@@ -319,8 +267,8 @@ public class Activity {
 	    
 	    // Insert all dependents, too
 	    PredecessorDB.deleteActivityPredecessors(this.id);
-	    if (dependents != null) {
-		for (Integer dependent : dependents) {
+	    if (predecessors != null) {
+		for (Integer dependent : predecessors) {
 		    PredecessorDB.insert(this.id, dependent);
 		}
 	    }
@@ -335,25 +283,25 @@ public class Activity {
 	}
 
 	public ArrayList<Integer> getDependents() {
-	    if (dependents != null) {
-		return new ArrayList<Integer>(dependents);
+	    if (predecessors != null) {
+		return new ArrayList<Integer>(predecessors);
 	    } else return new ArrayList<Integer>();
 	}
 
 	public void addDependent(int dependent) {
-	    if (dependents != null) {
-		dependents.add(dependent);
+	    if (predecessors != null) {
+		predecessors.add(dependent);
 	    } else { 
-		dependents = new HashSet<Integer>();
-		dependents.add(dependent);
+		predecessors = new HashSet<Integer>();
+		predecessors.add(dependent);
 	    }
 	}
 	
 	public void removeDependent(int dependent) {
-	    if (dependents == null) {
-		dependents = new HashSet<Integer>();
+	    if (predecessors == null) {
+		predecessors = new HashSet<Integer>();
 	    }
-	    dependents.remove(dependent);
+	    predecessors.remove(dependent);
 	}
 
 	public int getProjectId() {
@@ -427,6 +375,6 @@ public class Activity {
 	}
 
 	public void clearDependents() {
-	    dependents = null;
+	    predecessors = null;
 	}
 }

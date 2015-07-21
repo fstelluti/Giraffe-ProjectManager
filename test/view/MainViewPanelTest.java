@@ -6,7 +6,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import model.User;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 /**
@@ -34,18 +33,6 @@ public class MainViewPanelTest {
 		MainPanel mainView1 = new MainPanel(user);
 		
 		assertNotNull("MainViewPanel object is null", mainView1);
-	}
-	
-	//Tests getNorthPanel()
-	@Test
-	public void shouldGetNorthPanel() {
-		
-		//Create a MainViewPanel object
-		MainPanel mainView1 = new MainPanel(user);
-		
-		//Test the method
-		JPanel jPanel = mainView1.getNorthPanel();
-		assertNotNull("NorthViewPanel object is null", jPanel);
 	}
 	
 	//Tests getSplitPanel()

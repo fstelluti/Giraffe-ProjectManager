@@ -40,7 +40,7 @@ public class ApplicationWindow extends JFrame {
 	private ApplicationWindow() {	//private constructor for Singleton pattern
 		JFrame.setDefaultLookAndFeelDecorated(true);
 		currentCard = new JPanel();
-		setTitle("Giraffe Manager by Giraffe Inc.");
+		setTitle("Giraffe Manager");
 		cardLayout = new CardLayout();
 		currentCard.setLayout(cardLayout);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);

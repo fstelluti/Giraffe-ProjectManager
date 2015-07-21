@@ -200,8 +200,8 @@ public class DetailsTab extends JPanel {
 	control = new JPanel();
 	notificationLabel = new JLabel();
 	control.add(saveButton);
-	control.add(deleteButton);
 	control.add(optimizeButton);
+	control.add(deleteButton);
 	control.add(notificationLabel, BorderLayout.WEST);
 	control.setMinimumSize(new Dimension(400, 30));
 	

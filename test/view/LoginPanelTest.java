@@ -1,8 +1,5 @@
 package view;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
 
 /**
  * Tests view/LoginPanel.java.

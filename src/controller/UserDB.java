@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -130,7 +129,6 @@ public class UserDB extends DataManager {
 			+ "ADMIN='" + adminInt + "',"
 			+ "IMAGEICON='" + user.getUserPicture() + "' "
 			+ "WHERE ID=" + user.getId() + ";";
-		System.out.println(sql);
 		stmt.executeUpdate(sql);
 	    }
 	    catch (SQLException e) {
