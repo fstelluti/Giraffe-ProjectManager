@@ -19,7 +19,8 @@ import org.junit.runners.Suite;
 	model.GanttTest.class,
 //	view.LoginPanelTest.class, // Not yet Implemented
 	view.MainViewPanelTest.class,
-	view.ApplicationPanelTest.class
+	view.ApplicationPanelTest.class,
+	view.SetupPanelTest.class
 })
 
 public class TestSuite {}  	
