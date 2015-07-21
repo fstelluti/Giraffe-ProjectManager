@@ -169,9 +169,6 @@ public class UserDBTest {
 			assertTrue("Last name did not match!", lastNameMatch);
 			
 			// Close up database objects
-			stmt.close();
-			rs.close();
-			c.close();
 		} catch (SQLException e) {
 			fail("An Exception was thrown: " + e.getStackTrace());
 		} finally {

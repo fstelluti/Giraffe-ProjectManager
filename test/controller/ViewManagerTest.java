@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.Component;
 
+import javax.swing.ImageIcon;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -52,7 +54,5 @@ public class ViewManagerTest {
 		assertTrue("Created object is not of type AccountDialog", objectClass);
 		aDialog.dispose();
 	}
-	
-	
 
 }
