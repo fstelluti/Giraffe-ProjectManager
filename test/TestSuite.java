@@ -12,11 +12,12 @@ import org.junit.runners.Suite;
 	controller.UserDBTest.class,
 	controller.UserRolesDBTest.class,
 	controller.ViewManagerTest.class,
+	model.DateLabelFormatterTest.class,
 	model.UserTest.class,
-	model.ActivityTest.class,
+//	model.ActivityTest.class, // Not yet Implemented
 	model.ProjectTest.class,
 	model.GanttTest.class,
-	view.LoginPanelTest.class,
+//	view.LoginPanelTest.class, // Not yet Implemented
 	view.MainViewPanelTest.class,
 	view.ApplicationPanelTest.class
 })

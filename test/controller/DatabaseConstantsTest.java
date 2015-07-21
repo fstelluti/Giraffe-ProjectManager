@@ -3,6 +3,7 @@ package controller;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,13 +23,6 @@ public class DatabaseConstantsTest {
 		assertEquals(DataManager.getDb(),"jdbc:sqlite:testing.db");
 		DataManager.setTesting(false);
 		assertEquals(DataManager.getDb(),"jdbc:sqlite:projectManagement.db");
-		DataManager.userDatabase = "jdbc:sqlite:randomDB.db";
-		assertEquals(DataManager.getDb(), "jdbc:sqlite:randomDB.db");
 	}
 	
-	@Test
-	public void setUserDatabaseTest(){
-		DataManager.setUserDatabase("randomDB");
-		assertEquals(DataManager.userDatabase, "jdbc:sqlite:randomDB.db");
-	}
 }

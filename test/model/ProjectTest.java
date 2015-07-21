@@ -2,8 +2,11 @@ package model;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import controller.DataManagerTest;
 import controller.ProjectDB;
 
 import java.util.ArrayList;
@@ -17,6 +20,16 @@ import java.util.Date;
 
 public class ProjectTest {
 
+	@Before
+	public void setUp() throws Exception {
+		DataManagerTest.createDatabaseFixtures();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		DataManagerTest.destroyDatabaseFixtures();
+	}
+	
 	// Tests Constructor
 	@Test
 	public void projectShouldBeCreated()
