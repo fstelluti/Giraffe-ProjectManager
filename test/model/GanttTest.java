@@ -5,8 +5,11 @@ import static org.junit.Assert.*;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.IntervalCategoryDataset;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import controller.DataManagerTest;
 import controller.ProjectDB;
 import model.Gantt;
 
@@ -20,7 +23,17 @@ import java.util.Date;
  */
 
 public class GanttTest {
+	
+	@Before
+	public void setUp() throws Exception {
+		DataManagerTest.createDatabaseFixtures();
+	}
 
+	@After
+	public void tearDown() throws Exception {
+		DataManagerTest.destroyDatabaseFixtures();
+	}
+	
 	//Test Constructor
 	@Test
 	public void chartShouldBeCreated()

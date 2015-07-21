@@ -2,7 +2,11 @@ package model;
 
 import static org.junit.Assert.*;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
+
+import controller.DataManagerTest;
 
 import java.util.Date;
 
@@ -14,6 +18,17 @@ import java.util.Date;
  */
 public class UserTest {
 
+	@Before
+	public void setUp() throws Exception {
+		DataManagerTest.createDatabaseFixtures();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		DataManagerTest.destroyDatabaseFixtures();
+	}
+	
+	
   //Tests constructor
 	@Test
 	public void userShouldBeCreated() {

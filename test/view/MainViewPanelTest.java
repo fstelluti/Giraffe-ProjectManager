@@ -1,12 +1,19 @@
 package view;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+import java.sql.SQLException;
+
+import javax.swing.JSplitPane;
+
+import model.User;
+
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import model.User;
-import javax.swing.JSplitPane;
+import controller.DataManagerTest;
 
 /**
  * Tests view/MainViewPanel.java
@@ -19,10 +26,15 @@ public class MainViewPanelTest {
 	private static User user;
 	
 	@BeforeClass
-	public static void createUser() {
-		
+	public static void createUser() throws SQLException {
+		DataManagerTest.createDatabaseFixtures();
 		//Create the user with random test data
 		user = new User(3, "eep", "12345", "lol@hotmail.com", "Dave", "Johnson");
+	}
+	
+	@AfterClass
+	public static void tearDown() throws Exception {
+		DataManagerTest.destroyDatabaseFixtures();
 	}
 	
 	//Tests Constructor
