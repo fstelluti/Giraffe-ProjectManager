@@ -160,7 +160,22 @@ public abstract class DataManager
 	    }
 	    return false;
 	}
-	
+
+	/**
+	* Get the project AC as the sum of the Activities AC
+	* @return totalAC
+	*/
+	public static long getProjectActualCost(Project project) {
+		List<Activity> activities = ActivityDB.getProjectActivities(project.getId());
+		long actualCostTotal  = 0;
+		
+		//Sum the ACs for all activities
+		for (Activity projectActivity : activities) {
+			actualCostTotal += projectActivity.getActualCost();
+		}
+		
+		return actualCostTotal;
+	}
 	
 	
 }

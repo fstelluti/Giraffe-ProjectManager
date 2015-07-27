@@ -39,6 +39,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import controller.DataManager;
 import controller.ViewManager;
 
 /**
@@ -138,19 +139,19 @@ public class DetailsTab extends JPanel {
 		String projectDescriptionText = projectDescription.getText();
 		//User managerBoxContents = (User) managerBox.getSelectedItem(); //TODO Remove
 		long projectEstimatedCost = 0;
-		long projectActualCost = 0;
+		long projectActualCost = project.getActualBudget();
 		try {	
 			projectEstimatedCost = numberFormat.parse(projectEstimatedBudget.getText()).intValue();
 		} catch (ParseException e) {
 			e.getStackTrace();
 			JOptionPane.showMessageDialog(content, "Invalid value for estimated cost", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		try {
+		/*try {
 			projectActualCost = numberFormat.parse(projectActualBudget.getText()).intValue();
 		} catch (ParseException e) {
 			e.getStackTrace();
 			JOptionPane.showMessageDialog(content, "Invalid value for actual cost", "Error", JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
 		
 		Object[] selectedProjectManagers = addedUsers.toArray();
 		ArrayList<User> newProjectManagers = new ArrayList<User>();
@@ -326,9 +327,10 @@ public class DetailsTab extends JPanel {
 	JPanel panActualCost = new JPanel();
 	panActualCost.setPreferredSize(new Dimension(220, 60));
 	panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
-
+	
 	projectActualBudget = new JFormattedTextField(numberFormatter);
-	projectActualBudget.setValue(this.project.getActualBudget());
+	projectActualBudget.setValue(DataManager.getProjectActualCost(project));  //Get the project AC
+	projectActualBudget.setEditable(false);
 
 	projectActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
 	projectActualBudget.setPreferredSize(new Dimension(200,30));
