@@ -100,6 +100,7 @@ public class DetailsTab extends JPanel {
 			this.project = ViewManager.getCurrentProject();
 			this.projectDescription.setText(this.project.getDescription());
 			this.projectName.setText(this.project.getName());
+			this.projectActualBudget.setValue(DataManager.getProjectActualCost(project));
 			if (project.getStartDate() != null) { this.startModel.setValue(project.getStartDate()); }
 			if (project.getDueDate() != null) { this.dueModel.setValue(project.getDueDate()); }
 			this.repaint();
@@ -329,7 +330,7 @@ public class DetailsTab extends JPanel {
 	panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
 	
 	projectActualBudget = new JFormattedTextField(numberFormatter);
-	projectActualBudget.setValue(DataManager.getProjectActualCost(project));  //Get the project AC
+	projectActualBudget.setValue(DataManager.getProjectActualCost(project));  
 	projectActualBudget.setEditable(false);
 
 	projectActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);

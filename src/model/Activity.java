@@ -24,6 +24,7 @@ public class Activity {
 	private int pessimisticDuration;
 	private int optimisticDuration;
 	private int mostLikelyDuration;
+	private int percentageComplete;
 	private long estimatedCost;
 	private long actualCost;
 	private String name;
@@ -62,6 +63,7 @@ public class Activity {
 	    this.dueDate = existingActivity.getDueDate();
 	    this.description = existingActivity.getDescription();
 	    this.status = existingActivity.getStatus();
+	    this.percentageComplete = existingActivity.getPercentageComplete();
 	    if (existingActivity.getDependents() != null) {
 		this.predecessors = new HashSet<Integer>(existingActivity.getDependents());
 	    }
@@ -103,6 +105,17 @@ public class Activity {
 
 	public int getStatus() {
 		return status;
+	}
+	
+	public int getPercentageComplete() {
+		return percentageComplete;
+	}
+	
+	public void setPercentageComplete(int percentComplete) {
+		if(percentComplete < 0 || percentComplete > 100)
+			this.percentageComplete = 0;
+		else
+			this.percentageComplete = percentComplete;
 	}
 
 	public void setStatus(int status) {

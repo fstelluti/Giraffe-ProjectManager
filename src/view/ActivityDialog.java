@@ -24,9 +24,11 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.text.NumberFormatter;
 
 import model.Activity;
@@ -64,8 +66,9 @@ public class ActivityDialog extends JDialog {
   private JButton addDependantButton, removeDependantButton, addCommentButton, okButton;
   private JPanel dependSubPanel, panActivityStatus, panEstimatedCost, subDepButtons; 
   private JPanel panActivity, panActivityStartDate, panActivityDueDate, panButtons, panDescription, panActualCost;
-  private JPanel panSubDuration,panPessimisticDur, panOptimisticDur, panMostLikelyDur, activitiCommentsSubPanel;
- 
+  private JPanel panSubDuration,panPessimisticDur, panOptimisticDur, panMostLikelyDur, activitiCommentsSubPanel, panPercent;
+  private JSpinner activityPercent;
+  
   private ArrayList<String> activityComments;
   
   private List<Activity> sourceActivities;
@@ -150,6 +153,9 @@ private JPanel usersSubPanel;
 	  
 	  //Actual Budget
 	  createActualBudget();
+	  
+	  //Percentage of Activity that is completed
+	  createPercentComplete();
 	  
 	  //Pessimistic duration
 	  createPessimisticDuration();
@@ -238,6 +244,7 @@ private JPanel usersSubPanel;
 		      JOptionPane.showMessageDialog(activityPanel, "Invalid value for a duration", "Error", JOptionPane.ERROR_MESSAGE);
 		  }
 		  String activityDescriptionString = activityDescription.getText();
+		  int percentageCompleted = (Integer) activityPercent.getValue();
 
 		  // Builds the Activity object
 		  activity.setStartDate(activityStartDate);
@@ -248,6 +255,7 @@ private JPanel usersSubPanel;
 		  activity.setOptimisticDuration(activityOptimisticDuration);
 		  activity.setMostLikelyDuration(activityMostLikelyDuration);
 		  activity.setDescription(activityDescriptionString);
+		  activity.setPercentageComplete(percentageCompleted);
 		  
 		  for (int i = 0; i < availableActivities.getSize(); i++) {
 		      activity.removeDependent(availableActivities.getElementAt(i).getId());
@@ -298,6 +306,7 @@ private JPanel usersSubPanel;
 	  activityPanel.add(panActivityStatus);
 	  activityPanel.add(panEstimatedCost);
 	  activityPanel.add(panActualCost);
+	  activityPanel.add(panPercent);
 	  activityPanel.add(panSubDuration);
 	  activityPanel.add(panActivityStartDate);
 	  activityPanel.add(panActivityDueDate);
@@ -419,7 +428,7 @@ private JPanel usersSubPanel;
 	private void createEstimatedBudget() {
 		panEstimatedCost = new JPanel();
 		panEstimatedCost.setBackground(Color.white);
-		panEstimatedCost.setPreferredSize(new Dimension(230, 60));
+		panEstimatedCost.setPreferredSize(new Dimension(163, 60));
 		
 		activityEstimatedBudget = new JFormattedTextField(numberFormatter);
 		if (this.activity != null) {
@@ -430,7 +439,7 @@ private JPanel usersSubPanel;
 		}
 		panEstimatedCost.setBorder(BorderFactory.createTitledBorder("Estimated Budget"));
 		activityEstimatedBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
-		activityEstimatedBudget.setPreferredSize(new Dimension(200,30));
+		activityEstimatedBudget.setPreferredSize(new Dimension(140,30));
 		panEstimatedCost.add(activityEstimatedBudget);
 	}
 	
@@ -440,7 +449,7 @@ private JPanel usersSubPanel;
 	private void createActualBudget() {
 		panActualCost = new JPanel();
 		panActualCost.setBackground(Color.white);
-		panActualCost.setPreferredSize(new Dimension(230, 60));
+		panActualCost.setPreferredSize(new Dimension(163, 60));
 		
 		activityActualBudget = new JFormattedTextField(numberFormatter);
 		if (this.activity != null) {
@@ -451,8 +460,26 @@ private JPanel usersSubPanel;
 		}
 		panActualCost.setBorder(BorderFactory.createTitledBorder("Actual Budget"));
 		activityActualBudget.setHorizontalAlignment(JFormattedTextField.CENTER);
-		activityActualBudget.setPreferredSize(new Dimension(200,30));
+		activityActualBudget.setPreferredSize(new Dimension(140,30));
 		panActualCost.add(activityActualBudget);
+	}
+	
+	/**
+	 * Creates a percentage as a spinner
+	 * @return JSpinner
+	 */
+	private JSpinner createPercentComplete() {
+		panPercent = new JPanel();
+		panPercent.setBackground(Color.white);
+		panPercent.setPreferredSize(new Dimension(120, 60));
+		
+		SpinnerNumberModel model = new SpinnerNumberModel(0,0,100,1);
+		activityPercent = new JSpinner(model);
+		
+		panPercent.setBorder(BorderFactory.createTitledBorder("% Complete"));
+		panPercent.add(activityPercent);
+		
+		return activityPercent;
 	}
 
 	/**

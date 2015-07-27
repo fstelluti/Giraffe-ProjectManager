@@ -48,6 +48,7 @@ public class ActivityDB extends DataManager
 					+ " MOSTLIKELYDURATION INTEGER,"
 					+ " ESTIMATEDCOST INTEGER,"
 					+ " ACTUALCOST INTEGER,"
+					+ " PERCENTAGECOMPLETE INTEGER,"
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS (ID))";
 			stmt.executeUpdate(sql);
 		}
@@ -79,7 +80,7 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-		stmt = c.prepareStatement("INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		stmt = c.prepareStatement("INSERT INTO ACTIVITIES (ID, PROJECTID, NAME, STARTDATE, DUEDATE, STATUS, DESCRIPTION, OPTIMISTICDURATION, PESSIMISTICDURATION, MOSTLIKELYDURATION, ESTIMATEDCOST, ACTUALCOST, PERCENTAGECOMPLETE) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 		stmt.setInt(1, activity.getAssociatedProjectId());
 		stmt.setString(2, activity.getName());
 		if (activity.getStartDate() == null) {
@@ -103,6 +104,7 @@ public class ActivityDB extends DataManager
 		stmt.setInt(9, activity.getMostLikelyDuration());
 		stmt.setInt(10, (int) activity.getEstimatedCost());
 		stmt.setInt(11, (int) activity.getActualCost());
+		stmt.setInt(12, activity.getPercentageComplete());
 		stmt.executeUpdate();
 	    }
 
@@ -253,6 +255,7 @@ public class ActivityDB extends DataManager
 		activity.setMostLikelyDuration(rs.getInt("mostLikelyDuration"));
 		activity.setEstimatedCost(rs.getInt("estimatedCost"));
 		activity.setActualCost(rs.getInt("actualCost"));
+		activity.setPercentageComplete(rs.getInt("percentageComplete"));
 		
 		stmt.close();
 		rs.close();
@@ -334,7 +337,7 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=? WHERE ID=?;");
+		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=? PERCENTAGECOMPLETE=? WHERE ID=?;");
 		stmt.setInt(1, activity.getAssociatedProjectId());
 		stmt.setString(2,  DataManager.safeSql(activity.getName()));
 		if (activity.getStartDate() == null) {
@@ -358,7 +361,8 @@ public class ActivityDB extends DataManager
 		stmt.setInt(9, activity.getMostLikelyDuration());
 		stmt.setInt(10, (int) activity.getEstimatedCost());
 		stmt.setInt(11, (int) activity.getActualCost());
-		stmt.setInt(12, activity.getId());
+		stmt.setInt(12, activity.getPercentageComplete());
+		stmt.setInt(13, activity.getId());
 		stmt.executeUpdate();
 	    } catch (SQLException e) {
 		e.printStackTrace();

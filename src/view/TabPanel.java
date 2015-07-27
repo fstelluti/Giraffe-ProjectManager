@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import controller.DataManager;
 import controller.ViewManager;
@@ -70,6 +72,19 @@ public class TabPanel extends JPanel {
 	    this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
 	    this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
 	}
+	
+	//Add a changeListner to update the AC for a project
+	tabPane.addChangeListener(new ChangeListener() {
+
+		public void stateChanged(ChangeEvent e) {
+			//If detailsTab is selected, update the AC
+			if(tabPane.getSelectedIndex()==1) {
+				detailsTab.refresh();
+			}
+		}
+		
+	});
+	
 	this.add(tabPane);
 	this.revalidate();
 	this.repaint();
