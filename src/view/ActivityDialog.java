@@ -115,6 +115,21 @@ private JPanel usersSubPanel;
       this.initComponent();
   }
   
+	/**
+	 * Disables the Percentage completed spinner if dependant activities are not completed
+	 */
+	private void checkIfDependantActivitiesAreComplete() {
+		if(dependantActivities != null) {
+		  for (int i = 0; i < dependantActivities.getSize(); i++) {
+		    activity.addDependent(dependantActivities.getElementAt(i).getId());
+		    //If at least one dependant activity isn't 100% complete, then disable the percentage complete for the current activity
+		  	if (dependantActivities.getElementAt(i).getPercentageComplete() != 100) {
+		  		activityPercent.setEnabled(false); 
+		  	}
+		  }
+		}
+	}
+  
   public Activity showDialog() {
       this.setVisible(true);
       return activity;
@@ -197,6 +212,8 @@ private JPanel usersSubPanel;
 	  panButtons = new JPanel();
 	  String okButtonString = (this.activity == null) ? "Add Activity" : "Edit Activity";
 	  okButton = new JButton(okButtonString);
+	  
+	  checkIfDependantActivitiesAreComplete();
 	  
 	  //Create Add button for the comment
 	  addCommentButton = new JButton("Add");
@@ -473,8 +490,8 @@ private JPanel usersSubPanel;
 		panPercent.setBackground(Color.white);
 		panPercent.setPreferredSize(new Dimension(120, 60));
 		
-		SpinnerNumberModel model = new SpinnerNumberModel(0,0,100,1);
-		activityPercent = new JSpinner(model);
+		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0,0,100,1);
+		activityPercent = new JSpinner(spinnerModel);
 		
 		panPercent.setBorder(BorderFactory.createTitledBorder("% Complete"));
 		panPercent.add(activityPercent);
@@ -533,7 +550,7 @@ private JPanel usersSubPanel;
 		JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel, prop);
 		final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
 		if (this.activity != null) {
-		    dueModel.setValue(this.activity.getStartDate());
+		    startModel.setValue(this.activity.getStartDate());
 		}
 		panActivityStartDate.add(startDatePicker);
 		return startDatePicker;
@@ -572,7 +589,7 @@ private JPanel usersSubPanel;
 	  sourceActivities = currentProject.getActivities();
 	  //Iterate over all activities, and add them to activitiesList
 	  for(Activity activity: sourceActivities){
-	      System.out.println("Wow" + activity + " " + this.activity);
+	      //System.out.println("Wow" + activity + " " + this.activity);
 	  	if (this.activity != activity && activity != null) {
 	  	    availableActivities.addElement(activity);
 	  	}
@@ -654,7 +671,7 @@ private JPanel usersSubPanel;
 	  dependSubPanel.setPreferredSize(new Dimension(465, 145));
 	  dependSubPanel.setBorder(BorderFactory.createTitledBorder("Requires"));
 	  dependSubPanel.add(panDepend, BorderLayout.CENTER); 
-  }
+  } //Create Dependants 
 
   private void createUsersPanel() {
 	//Initialize both lists

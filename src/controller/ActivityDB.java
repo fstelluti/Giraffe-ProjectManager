@@ -337,7 +337,7 @@ public class ActivityDB extends DataManager
 
 	    try {
 		c = getConnection();
-		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=? PERCENTAGECOMPLETE=? WHERE ID=?;");
+		stmt = c.prepareStatement("UPDATE ACTIVITIES SET PROJECTID=?, NAME=?, STARTDATE=?, DUEDATE=?, STATUS=?, DESCRIPTION=?, OPTIMISTICDURATION=?, PESSIMISTICDURATION=?, MOSTLIKELYDURATION=?, ESTIMATEDCOST=?, ACTUALCOST=?, PERCENTAGECOMPLETE=? WHERE ID=?;");
 		stmt.setInt(1, activity.getAssociatedProjectId());
 		stmt.setString(2,  DataManager.safeSql(activity.getName()));
 		if (activity.getStartDate() == null) {

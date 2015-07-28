@@ -290,6 +290,9 @@ public class DetailsTab extends JPanel {
 	if (project.getStartDate() != null) {
 	    startModel.setValue(project.getStartDate());
 	}
+	else {
+		startModel.setValue(null);
+	}
 	panStartDate.add(startDatePicker);
 
 	//Due date

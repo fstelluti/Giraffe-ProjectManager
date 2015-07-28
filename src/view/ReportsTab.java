@@ -21,7 +21,7 @@ public class ReportsTab extends JPanel {
 			ImageIcon evaIcon = new ImageIcon(TabPanel.class.getResource("images/chart_stock.png"));
 			
 			tabPane.addTab("Gantt Chart", null, this.ganttPanel, "View Gantt chart for the currently selected project");
-			tabPane.addTab("EVA", evaIcon, earnedValueAnalysisTab, "Generate Earned Value Analysis for the currently selected project");
+			tabPane.addTab("Earned Value Analysis", evaIcon, earnedValueAnalysisTab, "Generate Earned Value Analysis for the currently selected project");
 			this.setLayout(new BorderLayout());
 			this.add(tabPane);
     }

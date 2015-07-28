@@ -362,6 +362,23 @@ public class Project {
 		}
 		UserRolesDB.delete(this.id);
 	}
+	
+  /**
+   * Checks to see if a selected date is within the Project start and end dates, for EVA
+   * @param project, pickedDate
+   * @return true if the selected date is within the project dates
+   */
+	public boolean isWithinProjectDates(Project project, Date pickedDate) throws Exception {
+		//If there is no dueDate set, then check if it before the start date
+		if (project.dueDate == null && pickedDate.before(project.startDate)) {
+			throw new Exception("Please pick a date that is after the project start date");
+		}
+		if (project.dueDate != null && pickedDate.before(project.dueDate) && pickedDate.after(project.startDate)) {
+			throw new Exception("Please ensure the selected date with within the project start and end dates");
+		}
+		
+		return true;
+	}
 
 	private boolean hasUniqueName() {
 		Project project = ProjectDB.getByName(this.name);

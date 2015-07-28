@@ -97,7 +97,19 @@ public class EarnedValueAnalysisTab extends JPanel {
   	EVA.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
+			Date EVADate = (Date)progressDatePicker.getModel().getValue();
 			
+			 //Checks if the date is within the project start and end dates
+		  boolean dateWithinProject = false;
+		  try {
+		  	dateWithinProject =  project.isWithinProjectDates(project, EVADate);
+		  } catch (Exception exception) {
+		      JOptionPane.showMessageDialog(datesPanel, exception.getMessage(), "Cannot generate EVA", JOptionPane.ERROR_MESSAGE);
+		      exception.printStackTrace();
+		  }
+		  
+		  //Use the selected Date variable to generate the EVA statistics
+		  generateEVAStatistics(EVADate);
 		}
   		
   	});
@@ -112,30 +124,16 @@ public class EarnedValueAnalysisTab extends JPanel {
   	
   	//Build content panel
   	content = new JPanel();
-  	content.setLayout(new BorderLayout());
   	datesPanel = pickProjectDatePanel();
   	
-  	content.add(datesPanel, BorderLayout.CENTER);
-  	content.add(control, BorderLayout.SOUTH);
-  	
-  	content.setBorder(BorderFactory.createTitledBorder("Earned Value Analysis"));
-  	content.setPreferredSize(new Dimension(450,150));
+  	content.add(datesPanel);
+  	content.add(control);
   	
   	JPanel subPanel = new JPanel();
   	subPanel.add(content);
   	
-  	//Use this layout so that panels won't move when Main window is scaled
-  	this.setLayout(new GridBagLayout());  
-  	
-  	//Set up constraints for the GridBagLayout
-  	GridBagConstraints g1 = new GridBagConstraints();
-  	g1.gridx = 0;
-  	g1.gridy = 0;
-  	g1.ipady = 150;
-  	g1.ipadx = 450;
-  	g1.anchor = GridBagConstraints.CENTER;
-  	
-  	this.add(subPanel, g1); 
+  	this.setLayout(new BorderLayout());
+  	this.add(subPanel, BorderLayout.NORTH); 
   	
   } //init
 
@@ -155,11 +153,21 @@ public class EarnedValueAnalysisTab extends JPanel {
 		if (project.getStartDate() != null) {
 		    startModel.setValue(project.getStartDate());
 		}
+		else {
+			startModel.setValue(null);
+		}
 		projectDate.add(progressDatePicker);
 		
 		datePanel.add(projectDate);
 		
 		return datePanel;
+	}
+	
+  /**
+   * Generates the EVA statistics Table 
+   */
+	private void generateEVAStatistics(Date selectedDate) {
+		
 	}
     
 }
