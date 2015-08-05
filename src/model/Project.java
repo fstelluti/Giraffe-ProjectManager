@@ -373,7 +373,7 @@ public class Project {
 		if (project.dueDate == null && pickedDate.before(project.startDate)) {
 			throw new Exception("Please pick a date that is after the project start date");
 		}
-		if (project.dueDate != null && pickedDate.before(project.dueDate) && pickedDate.after(project.startDate)) {
+		if (project.dueDate != null && pickedDate.after(project.dueDate) || pickedDate.before(project.startDate)) {
 			throw new Exception("Please ensure the selected date with within the project start and end dates");
 		}
 		

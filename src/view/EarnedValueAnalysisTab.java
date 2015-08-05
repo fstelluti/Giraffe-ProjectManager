@@ -3,37 +3,28 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.text.NumberFormatter;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import model.Activity;
 import model.DateLabelFormatter;
 import model.Project;
-import model.Project.InvalidProjectException;
 import model.User;
 
 import org.jdatepicker.impl.JDatePanelImpl;
@@ -55,21 +46,64 @@ public class EarnedValueAnalysisTab extends JPanel {
   private boolean justSaved; //TODO needed?
   
   private Properties p = new Properties();
+  private JTable grid1, grid2;
+  private DefaultTableModel tableModel1, tableModel2;
   
   private JButton EVA;
   private JPanel control, content, datesPanel, projectDate;
   private UtilDateModel startModel = new UtilDateModel();
-  private JDatePickerImpl progressDatePicker, startDateCalendarPanel;
+  private JDatePickerImpl progressDatePicker;
+  private DefaultTableCellRenderer centerText;
+  
+  private Date EVADate = null; //Initially, there is no date selected
 
   public EarnedValueAnalysisTab() {
 		super(new BorderLayout());
 		this.project = ViewManager.getCurrentProject();
 		this.user = ViewManager.getCurrentUser();
 		this.initComponent();
+		
+		//Initialize center cell renderer
+		centerText = new DefaultTableCellRenderer();
+		centerText.setHorizontalAlignment(JLabel.CENTER);
 	
 		this.repaint();
 		this.revalidate();
 		justSaved = false; //TODO Maybe not needed
+		this.reload();
+  }
+  
+  public void reload() {
+  	if (this.grid1 != null) { this.remove(this.grid1); }
+  	if (this.grid2 != null) { this.remove(this.grid2); }
+  	generateEVAStatistics(EVADate); 
+  	if(EVADate != null) {
+	  	this.grid1 = new JTable(tableModel1);
+	  	this.grid2 = new JTable(tableModel2);
+	  	Font dataFont = new Font(null, 0, 12);
+	  	Font headerFont = new Font(null, 0, 12);
+	  	this.grid1.setGridColor(Color.LIGHT_GRAY);
+	  	this.grid2.setGridColor(Color.LIGHT_GRAY);
+	  	this.grid1.setRowHeight(25);
+	  	this.grid2.setRowHeight(25);
+	  	this.grid1.setFont(dataFont);
+	  	this.grid2.setFont(dataFont);
+	  	this.grid1.getTableHeader().setFont(headerFont);
+	  	this.grid2.getTableHeader().setFont(headerFont);
+	  	
+	  	//Set preferred widths
+	  	for(int i=0; i<6; i++) {
+	  		this.grid1.getColumnModel().getColumn(i).setPreferredWidth(50);
+	  		this.grid2.getColumnModel().getColumn(i).setPreferredWidth(50);
+	  		this.grid1.getColumnModel().getColumn(i).setCellRenderer(centerText);
+	  		this.grid2.getColumnModel().getColumn(i).setCellRenderer(centerText);
+	  	}
+	
+	  	this.add(new JScrollPane(grid1), BorderLayout.CENTER);
+	  	this.add(new JScrollPane(grid2), BorderLayout.SOUTH);
+  	}//if
+	  this.repaint();
+	  this.revalidate();
   }
 
   /**
@@ -77,6 +111,7 @@ public class EarnedValueAnalysisTab extends JPanel {
    */
   public void refresh() { //TODO Needed?
 		this.project = ViewManager.getCurrentProject();
+		generateEVAStatistics(EVADate);
 		//this.projectDescription.setText(this.project.getDescription());
 		//this.projectName.setText(this.project.getName());
 		//if (project.getStartDate() != null) { this.startModel.setValue(project.getStartDate()); }
@@ -97,7 +132,7 @@ public class EarnedValueAnalysisTab extends JPanel {
   	EVA.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
-			Date EVADate = (Date)progressDatePicker.getModel().getValue();
+			EVADate = (Date)progressDatePicker.getModel().getValue();
 			
 			 //Checks if the date is within the project start and end dates
 		  boolean dateWithinProject = false;
@@ -108,8 +143,29 @@ public class EarnedValueAnalysisTab extends JPanel {
 		      exception.printStackTrace();
 		  }
 		  
+		  //Checks if all activities that do not fall within the selected date are 100% complete
+		  //TODO extract method
+		  
+		  //Get all activities that are before, and not during, the selected date
+		  /*ArrayList<Activity> activities = project.getActivities();
+		  //Create an iterator
+		  Iterator<Activity> activityIterator = activities.iterator();
+		  
+		  while(activityIterator.hasNext()) {
+		  	Activity act = activityIterator.next();
+		  	
+		  	//remove the activity if it occurs after the selected Date, or within the selected date
+		  	if(act.getStartDate().after(EVADate) || act.getStartDate().before(EVADate) && act.getDueDate().after(EVADate)) {
+		  		activityIterator.remove();
+		  	}
+		  }*/
+		  
+		  //Now check that all activities are 100% complete
+		  //TODO
+		  
 		  //Use the selected Date variable to generate the EVA statistics
 		  generateEVAStatistics(EVADate);
+		  reload();
 		}
   		
   	});
@@ -165,8 +221,59 @@ public class EarnedValueAnalysisTab extends JPanel {
 	
   /**
    * Generates the EVA statistics Table 
+   * @param The EVA selected Date
    */
-	private void generateEVAStatistics(Date selectedDate) {
+	private void generateEVAStatistics(Date date) {
+		
+		if(EVADate != null) {
+			//Project project = ViewManager.getCurrentProject();
+			
+			Vector<String> columnNames1 = new Vector<String>();
+			columnNames1.add("PV");
+			columnNames1.add("EV");
+			columnNames1.add("AC");
+			columnNames1.add("BAC");
+			columnNames1.add("% Scheduled");
+			columnNames1.add("% Completed");
+			
+			Vector<String> columnNames2 = new Vector<String>();
+			columnNames2.add("CV");
+			columnNames2.add("SV");
+			columnNames2.add("CPI");
+			columnNames2.add("SPI");
+			columnNames2.add("EAC");
+			columnNames2.add("ETC");
+			
+			// data of the table
+	    Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
+	    Vector<Object> activityVector1 = new Vector<Object>();
+	    activityVector1.add("111");
+	    activityVector1.add("222");
+	    activityVector1.add("333");
+	    activityVector1.add("444");
+	    data1.add(activityVector1);
+	    
+	    Vector<Vector<Object>> data2 = new Vector<Vector<Object>>();
+	    Vector<Object> activityVector2 = new Vector<Object>();
+	    activityVector2.add("555");
+	    activityVector2.add("666");
+	    activityVector2.add("777");
+	    activityVector2.add("888");
+	    data2.add(activityVector2);
+	    
+	    // Sets the table so that cells are selectable but noneditable
+	    this.tableModel1 = new DefaultTableModel(data1, columnNames1) {
+	        public boolean isCellEditable(int row, int column) {
+	        	return false;
+	        }
+	    };
+	    
+	    this.tableModel2 = new DefaultTableModel(data2, columnNames2) {
+	      public boolean isCellEditable(int row, int column) {
+	      	return false;
+	      }
+	    };
+		}//if
 		
 	}
     
