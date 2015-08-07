@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -425,4 +426,67 @@ public class Project {
 	public void setProjectManagers(ArrayList<User> projectManagers) {
 	    this.projectManagers = projectManagers;
 	}
+	
+  /**
+   * Gets a list of all activities that are strictly before the EVA Date
+   * @param EVADate
+   * @return ArrayList of activities 
+   */
+	public ArrayList<Activity> getActivitiesStrictlyBeforeDate(Date EVADate) {
+		//Get all activities that are before, and not during, the selected date
+	  ArrayList<Activity> allActivities = this.getActivities();
+	  
+	  //Clone list
+	  ArrayList<Activity> cloneActivities = new ArrayList<Activity>(allActivities.size());
+	  for(Activity act : allActivities) {
+	  	cloneActivities.add(act);
+	  }
+	  
+	  //Create an iterator
+	  Iterator<Activity> activityIterator = cloneActivities.iterator();
+	  
+	  while(activityIterator.hasNext()) {
+	  	Activity act = activityIterator.next();
+	  	
+	  	//remove the activity if it occurs after the selected Date, or within the selected date
+	  	if(act.getStartDate().after(EVADate) || (act.getStartDate().before(EVADate) && act.getDueDate().after(EVADate))
+	  			|| act.getStartDate().equals(EVADate) || act.getDueDate().equals(EVADate)) {
+	  		activityIterator.remove();
+	  	}
+	  }
+	  
+	  return cloneActivities;
+	}
+	
+	/**
+   * Gets a list of all activities that are only within the EVA Date
+   * @param EVADate
+   * @return ArrayList of activities 
+   */
+	public ArrayList<Activity> getActivitiesWithinDate(Date EVADate) {
+		//Get all activities that are before, and not during, the selected date
+	  ArrayList<Activity> allActivities = this.getActivities();
+
+	  //Clone list
+	  ArrayList<Activity> cloneActivities = new ArrayList<Activity>(allActivities.size());
+	  for(Activity act : allActivities) {
+	  	cloneActivities.add(act);
+	  }
+	  
+	  //Create an iterator
+	  Iterator<Activity> activityIterator = cloneActivities.iterator();
+	  
+	  while(activityIterator.hasNext()) {
+	  	Activity act = activityIterator.next();
+	  	
+	  	//remove the activity if it is not within the EVA Date
+	  	if( (act.getStartDate().after(EVADate) || act.getDueDate().before(EVADate)) 
+	  			&& (!act.getStartDate().equals(EVADate) && !act.getDueDate().equals(EVADate)) ) {
+	  		activityIterator.remove();
+	  	}
+	  }
+	  
+	  return cloneActivities;
+	}
+	
 }

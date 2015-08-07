@@ -44,6 +44,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private Project project;
   private User user;
   private boolean justSaved; //TODO needed?
+  private boolean goodActivities = true;
   
   private Properties p = new Properties();
   private JTable grid1, grid2;
@@ -133,39 +134,50 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 		public void actionPerformed(ActionEvent e) {
 			EVADate = (Date)progressDatePicker.getModel().getValue();
+	  	goodActivities = true;
 			
 			 //Checks if the date is within the project start and end dates
 		  boolean dateWithinProject = false;
 		  try {
 		  	dateWithinProject =  project.isWithinProjectDates(project, EVADate);
 		  } catch (Exception exception) {
+		  		goodActivities = false;
 		      JOptionPane.showMessageDialog(datesPanel, exception.getMessage(), "Cannot generate EVA", JOptionPane.ERROR_MESSAGE);
 		      exception.printStackTrace();
 		  }
 		  
-		  //Checks if all activities that do not fall within the selected date are 100% complete
-		  //TODO extract method
+		  //Get all activities that do not fall within the selected date 
+		  if(dateWithinProject) {
+			  ArrayList<Activity> activitiesStrictlyBeforeDate = project.getActivitiesStrictlyBeforeDate(EVADate);
+			  
+			  //Now check that they are 100% complete before proceeding 
+			  for(Activity activitiesDate : activitiesStrictlyBeforeDate) {
+			  	if(activitiesDate.getPercentageComplete() != 100) {
+			  		try {
+			  			throw new Exception("Please ensure that all activities are 100% completed");
+			  		} catch (Exception exception) {
+			  			goodActivities = false;
+			  			JOptionPane.showMessageDialog(datesPanel, exception.getMessage(), "Activities not 100% complete", JOptionPane.ERROR_MESSAGE);
+				      exception.printStackTrace();
+				      break;
+			  		}
+			  	}
+			  }
+		  }//if
 		  
-		  //Get all activities that are before, and not during, the selected date
-		  /*ArrayList<Activity> activities = project.getActivities();
-		  //Create an iterator
-		  Iterator<Activity> activityIterator = activities.iterator();
 		  
-		  while(activityIterator.hasNext()) {
-		  	Activity act = activityIterator.next();
-		  	
-		  	//remove the activity if it occurs after the selected Date, or within the selected date
-		  	if(act.getStartDate().after(EVADate) || act.getStartDate().before(EVADate) && act.getDueDate().after(EVADate)) {
-		  		activityIterator.remove();
-		  	}
-		  }*/
+		  //Now get all activities that fall exactly within the date range
+		  ArrayList<Activity> activitiesExactlyWithinDate = project.getActivitiesWithinDate(EVADate);
 		  
-		  //Now check that all activities are 100% complete
+		  //Use these two activity sets to generate the EVA statistics
 		  //TODO
 		  
 		  //Use the selected Date variable to generate the EVA statistics
-		  generateEVAStatistics(EVADate);
-		  reload();
+		  //If all activities are correct, generate the chart
+		  if(goodActivities) {
+		  	generateEVAStatistics(EVADate);
+		  	reload();
+		  }
 		}
   		
   	});
