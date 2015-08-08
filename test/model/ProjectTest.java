@@ -9,6 +9,10 @@ import org.junit.Test;
 import controller.DataManagerTest;
 import controller.ProjectDB;
 
+import model.Project.InvalidProjectException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -59,14 +63,39 @@ public class ProjectTest {
 	@Test
 	public void shouldBeEqual()
 	{
-		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		Project testProject1 = new Project(1, "test", new Date(), new Date(), "Test");
+		Project testProject2 = null;
+		Project testProject3 = new Project(2, "test", new Date(), new Date(), "Test");
+		String testString = "if you read this you're awesome";
 		
 		//Tests if the same project is equal
-		assertEquals("Same Projects are not equal", testProject, testProject);
+		assertTrue("Same Projects are not equal", testProject1.equals(testProject1));
+		assertFalse("Null Project", testProject1.equals(testProject2));
+		assertFalse("Different class", testProject1.equals(testString));
+		assertFalse("Different project", testProject1.equals(testProject3));
 	}
 	
-	// Test hasUniqueName()
-	@Test
+	//Test delete()
+	@Test(expected = NullPointerException.class)
+	public void shouldDeleteProjectAndActivities()
+	{
+		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		
+		testProject.delete();
+		
+		Project testProject2 = testProject;
+		
+		assertNull("Project not deleted properly", testProject2);
+	}
+	
+	//@TODO
+	public void shouldBeInProjectDates()
+	{
+		
+	}
+	
+	
+	// hasUniqueName()
 	public void shouldHaveUniqueName()
 	{
 		Project testProject = new Project(1, "test1", new Date(), new Date(), "Test");
@@ -77,52 +106,38 @@ public class ProjectTest {
 		assertNull("Project cannot be unique", project);
 	}
 	
-	/*
-	//Test delete()
-	@Test(expected = NullPointerException.class)
-	public void shouldDeleteProjectAndActivities()
-	{
-		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
-		Activity testActivity1 = new Activity(1, "Test1");
-		testProject.addActivity(testActivity1);
-		Activity testActivity2 = new Activity(1, "Test2");
-		testProject.addActivity(testActivity2);
-
-		Project testProject2 = ProjectDB.getById(1);
-		assertEquals(testProject2, testProject);
-		testProject.delete();
-		Project testProject3 = ProjectDB.getById(1);
-		assertEquals(testProject3, testProject);
-		//assertNull("Project is not deleted", testProject);
-		//assertEquals(testProject, testProject);
-		//assertNull("Activity 2 is not deleted", testActivity2);
-	}
-	
-	/*
-	//Tests containsCycles()
+	// tests isValid()
 	@Test
-	public void shouldHaveCycle()
+	public void shouldBeValid() throws ParseException, InvalidProjectException
 	{
-		Project testProject = new Project(1, "testProject", new Date(), new Date(), "Test");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date testDate1 = sdf.parse("09/01/2015");
+		
+		Project testProject = new Project(1, "test1", sdf.parse("01/01/2015"), sdf.parse("01/02/2015"), "Test");
 		Activity testActivity1 = new Activity(1, "Test1");
-		testActivity1.setId(1);
+		testActivity1.setDueDate(sdf.parse("10/01/2015"));
+		testActivity1.setStartDate(sdf.parse("09/01/2015"));
 		Activity testActivity2 = new Activity(1, "Test2");
-		testActivity2.setId(2);
+		testActivity2.setDueDate(sdf.parse("20/01/2015"));
+		testActivity2.setStartDate(sdf.parse("19/01/2015"));
 		Activity testActivity3 = new Activity(1, "Test3");
-		testActivity3.setId(3);
+		testActivity3.setDueDate(sdf.parse("30/01/2015"));
+		testActivity3.setStartDate(sdf.parse("29/01/2015"));
 		
 		testProject.addActivity(testActivity1);
 		testProject.addActivity(testActivity2);
-		testProject.addActivity(testActivity2);
+		testProject.addActivity(testActivity3);
 		
-		System.out.println(testActivity2.getId() + " " + testActivity1.getId() + " " + testActivity3.getId());
+		testActivity1.setId(1);
+		testActivity2.setId(2);
+		testActivity3.setId(3);
 		
 		testActivity1.addDependent(2);
 		testActivity2.addDependent(3);
 		testActivity3.addDependent(1);
 		
-		assertTrue("Doesn't detect a cycle.", testProject.containsCycles());
-	}*/
+		assertTrue(testProject.isValid());
+	}
 	
 	//Test removeActivity()
 	@Test
@@ -154,5 +169,89 @@ public class ProjectTest {
 		
 		assertNotNull("No Activity was added.", testProject.getActivities());
 		assertEquals("Activity added is not the one expected", testProject.getActivities().get(0), testActivity);
+	}
+	
+	//Test getActivitiesStrictlyBeforeDate()
+	@Test
+	public void shouldBeBeforeDate() throws ParseException
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date testDate1 = null, testDate2 = null, testDate3 = null;
+		
+		//Initialize Test variables
+		Project testProject = new Project(1, "test", sdf.parse("01/01/2015"), sdf.parse("01/02/2015"), "Test");
+		Activity testActivity1 = new Activity(1, "Test1");
+		testActivity1.setDueDate(sdf.parse("10/01/2015"));
+		testActivity1.setStartDate(sdf.parse("09/01/2015"));
+		Activity testActivity2 = new Activity(1, "Test2");
+		testActivity2.setDueDate(sdf.parse("20/01/2015"));
+		testActivity2.setStartDate(sdf.parse("19/01/2015"));
+		Activity testActivity3 = new Activity(1, "Test3");
+		testActivity3.setDueDate(sdf.parse("30/01/2015"));
+		testActivity3.setStartDate(sdf.parse("29/01/2015"));
+		
+		testProject.addActivity(testActivity1);
+		testProject.addActivity(testActivity2);
+		testProject.addActivity(testActivity3);
+		
+		//Create 3 test dates
+		try {
+			testDate1 = sdf.parse("09/01/2015");
+			testDate2 = sdf.parse("19/01/2015");
+			testDate3 = sdf.parse("31/01/2015");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		//Assert method
+		assertEquals("Should return all activities.", testProject.getActivities(), testProject.getActivitiesStrictlyBeforeDate(testDate3));
+		
+		assertEquals("Activity should be equal.", testActivity1, testProject.getActivitiesStrictlyBeforeDate(testDate2).get(0));
+		assertEquals("Should have only one activity", 1, testProject.getActivitiesStrictlyBeforeDate(testDate2).size());
+		
+		assertTrue("Should return no activities.", testProject.getActivitiesStrictlyBeforeDate(testDate1).isEmpty());
+		assertFalse("Should return activities.", testProject.getActivitiesStrictlyBeforeDate(testDate3).isEmpty());
+	}
+	
+	//Test getActivitiesWithinDate()
+	@Test
+	public void shouldBeWithinDate() throws ParseException
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date testDate1 = null, testDate2 = null, testDate3 = null;
+		
+		//Initialize Test variables
+		Project testProject = new Project(1, "test", sdf.parse("01/01/2015"), sdf.parse("01/02/2015"), "Test");
+		Activity testActivity1 = new Activity(1, "Test1");
+		testActivity1.setDueDate(sdf.parse("10/01/2015"));
+		testActivity1.setStartDate(sdf.parse("08/01/2015"));
+		Activity testActivity2 = new Activity(1, "Test2");
+		testActivity2.setDueDate(sdf.parse("20/01/2015"));
+		testActivity2.setStartDate(sdf.parse("18/01/2015"));
+		Activity testActivity3 = new Activity(1, "Test3");
+		testActivity3.setDueDate(sdf.parse("30/01/2015"));
+		testActivity3.setStartDate(sdf.parse("28/01/2015"));
+		
+		testProject.addActivity(testActivity1);
+		testProject.addActivity(testActivity2);
+		testProject.addActivity(testActivity3);
+		
+		//Create 3 test dates
+		try {
+			testDate1 = sdf.parse("09/01/2015");
+			testDate2 = sdf.parse("19/01/2015");
+			testDate3 = sdf.parse("31/01/2015");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		//Assert method
+		assertEquals("Should return all activities.", testProject.getActivities(), testProject.getActivitiesStrictlyBeforeDate(testDate3));
+		
+		assertEquals("Activity should be equal.", testActivity1, testProject.getActivitiesStrictlyBeforeDate(testDate2).get(0));
+		assertEquals("Should have only one activity", 1, testProject.getActivitiesStrictlyBeforeDate(testDate2).size());
+		
+		assertTrue("Should return no activities.", testProject.getActivitiesStrictlyBeforeDate(testDate1).isEmpty());
+		assertFalse("Should return activities.", testProject.getActivitiesStrictlyBeforeDate(testDate3).isEmpty());
 	}
 }
