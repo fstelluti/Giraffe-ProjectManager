@@ -174,6 +174,9 @@ public abstract class DataManager
 			actualCostTotal += projectActivity.getActualCost();
 		}
 		
+		//Set the project's actual budget
+		project.setActualBudget(actualCostTotal);
+		
 		return actualCostTotal;
 	}
 	

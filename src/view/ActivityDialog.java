@@ -262,6 +262,7 @@ private JPanel usersSubPanel;
 		  }
 		  String activityDescriptionString = activityDescription.getText();
 		  int percentageCompleted = (Integer) activityPercent.getValue();
+		  int activityStatus = statusBox.getSelectedIndex();
 
 		  // Builds the Activity object
 		  activity.setStartDate(activityStartDate);
@@ -273,6 +274,7 @@ private JPanel usersSubPanel;
 		  activity.setMostLikelyDuration(activityMostLikelyDuration);
 		  activity.setDescription(activityDescriptionString);
 		  activity.setPercentageComplete(percentageCompleted);
+		  activity.setStatus(activityStatus);
 		  
 		  for (int i = 0; i < availableActivities.getSize(); i++) {
 		      activity.removeDependent(availableActivities.getElementAt(i).getId());
@@ -492,6 +494,10 @@ private JPanel usersSubPanel;
 		
 		SpinnerNumberModel spinnerModel = new SpinnerNumberModel(0,0,100,1);
 		activityPercent = new JSpinner(spinnerModel);
+		
+		if (this.activity != null) {
+			activityPercent.setValue(this.activity.getPercentageComplete());
+		}
 		
 		panPercent.setBorder(BorderFactory.createTitledBorder("% Complete"));
 		panPercent.add(activityPercent);

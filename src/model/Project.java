@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.jgrapht.alg.CycleDetector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -431,8 +433,10 @@ public class Project {
    * Gets a list of all activities that are strictly before the EVA Date
    * @param EVADate
    * @return ArrayList of activities 
+   * @throws InvalidProjectException 
    */
-	public ArrayList<Activity> getActivitiesStrictlyBeforeDate(Date EVADate) {
+	public ArrayList<Activity> getActivitiesStrictlyBeforeDate(Date EVADate) throws InvalidProjectException {
+		
 		//Get all activities that are before, and not during, the selected date
 	  ArrayList<Activity> allActivities = this.getActivities();
 	  
@@ -448,6 +452,11 @@ public class Project {
 	  while(activityIterator.hasNext()) {
 	  	Activity act = activityIterator.next();
 	  	
+			//Make sure the end date isn't null
+	  	if(act.getDueDate() == null) {
+	  			throw new InvalidProjectException("The project's activity must have a due date for EVA");
+	  	}
+	  	
 	  	//remove the activity if it occurs after the selected Date, or within the selected date
 	  	if(act.getStartDate().after(EVADate) || (act.getStartDate().before(EVADate) && act.getDueDate().after(EVADate))
 	  			|| act.getStartDate().equals(EVADate) || act.getDueDate().equals(EVADate)) {
@@ -462,8 +471,9 @@ public class Project {
    * Gets a list of all activities that are only within the EVA Date
    * @param EVADate
    * @return ArrayList of activities 
+	 * @throws InvalidProjectException 
    */
-	public ArrayList<Activity> getActivitiesWithinDate(Date EVADate) {
+	public ArrayList<Activity> getActivitiesWithinDate(Date EVADate) throws InvalidProjectException {
 		//Get all activities that are before, and not during, the selected date
 	  ArrayList<Activity> allActivities = this.getActivities();
 
@@ -478,6 +488,11 @@ public class Project {
 	  
 	  while(activityIterator.hasNext()) {
 	  	Activity act = activityIterator.next();
+	  	
+			//Make sure the end date isn't null
+	  	if(act.getDueDate() == null) {
+	  			throw new InvalidProjectException("The project's activity must have a due date for EVA");
+	  	}
 	  	
 	  	//remove the activity if it is not within the EVA Date
 	  	if( (act.getStartDate().after(EVADate) || act.getDueDate().before(EVADate)) 
