@@ -345,6 +345,27 @@ public class Project {
 	    }
 	    return diGraph;
 	}
+	
+	public DefaultDirectedGraph<PertActivity, PertEvent> toDigraphPert() {
+	    DefaultDirectedGraph<PertActivity, PertEvent> diGraph = 
+		    new DefaultDirectedGraph<PertActivity, PertEvent>(PertEvent.class);
+	    List<Activity> predecessorActivities;
+
+	    // Vertices
+	    for (Activity source : activities) {
+		diGraph.addVertex(new PertActivity(source.getId()));
+	    }
+
+	    // Edges
+	    for (Activity source : activities) {
+		predecessorActivities = PredecessorDB.getPredecessors( source.getId() );
+
+		for (Activity target : predecessorActivities) {
+		    diGraph.addEdge(new PertActivity(target.getId()), new PertActivity(source.getId()));
+		}
+	    }
+	    return diGraph;
+	}
 
 	private boolean containsCycles() {
 	    CycleDetector<Activity, DefaultEdge> cycleDetector;
