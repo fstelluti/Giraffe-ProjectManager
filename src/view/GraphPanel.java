@@ -1,9 +1,11 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
-import java.util.Set;
 
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -17,14 +19,13 @@ import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.hierarchical.JGraphHierarchicalLayout;
 
 import controller.ViewManager;
 
-public class CriticalPathPanel extends JPanel {
+public class GraphPanel extends JPanel {
 
     private static final long serialVersionUID = 2752605959840841865L;
     private DefaultDirectedGraph<Activity, DefaultEdge> digraph;
@@ -35,24 +36,58 @@ public class CriticalPathPanel extends JPanel {
     @SuppressWarnings("rawtypes")
     private Map nestedMap;
     private JScrollPane scrollPane;
+    private JComboBox<String> comboBox;
     
-    public CriticalPathPanel() {
+    public GraphPanel() {
 	super(new BorderLayout());
+	buildGraph("project");
 	refresh();
     }
     
     public void refresh() {
+	int selectedIndex = 0;
+	if (comboBox != null) { selectedIndex = comboBox.getSelectedIndex(); }
 	this.removeAll();
-	JGraph graph = buildGraph();
 	scrollPane = new JScrollPane();
 	scrollPane.setViewportView(graph);
-	this.add(scrollPane);
+	this.add(scrollPane, BorderLayout.CENTER);
+	comboBox = new JComboBox<String>();
+	comboBox.addItem("Project Graph");
+	comboBox.addItem("Critical Path Graph");
+	comboBox.setSelectedIndex(selectedIndex);
+	comboBox.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		int index = comboBox.getSelectedIndex();
+		if (index == 0) {
+		    buildGraph("project");
+		    refresh();
+		}
+		if (index == 1) {
+		    buildGraph("criticalPath");
+		    refresh();
+		}
+	    }
+	    
+	});
+	
+	this.add(comboBox, BorderLayout.NORTH);
+	redraw();
+    }
+    
+    private void redraw() {
 	this.revalidate();
 	this.repaint();
     }
     
-    private JGraph buildGraph() {
-	digraph = ViewManager.getCurrentProject().toDigraph();
+    private void buildGraph(String arg0) {
+	if (arg0.equals("project")) {
+	    digraph = ViewManager.getCurrentProject().toDigraph();
+	}
+	if (arg0.equals("criticalPath")) {
+	    digraph = ViewManager.getCurrentProject().getCriticalPathGraph();
+	}
 	
 	graphModel = new JGraphModelAdapter<Activity, DefaultEdge>(digraph);
 	
@@ -77,6 +112,5 @@ public class CriticalPathPanel extends JPanel {
 	graph.setEditable(false);
 	graph.setGridMode(JGraph.CROSS_GRID_MODE);
 	graph.setGridEnabled(true);
-	return graph;
     }
 }

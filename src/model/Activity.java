@@ -35,6 +35,13 @@ public class Activity {
 	private String[] statusArray = new String[]{"To Do", "In Progress", "Completed"};
 	private HashSet<Integer> predecessors;
 	private HashSet<User> users;
+	
+	// Datamembers used for Critical Path analysis
+	private int earliestStart;
+	private int earliestFinish;
+	private int latestFinish;
+	private int latestStart;
+	private int floatTime;
 		
 	/**
 	 * Minimum constructor for Activity objects. Use setters to initialize other fields.
@@ -379,5 +386,48 @@ public class Activity {
 
 	public void clearDependents() {
 	    predecessors = null;
+	}
+
+	public int getEarliestStart() {
+	    return earliestStart;
+	}
+
+	public void setEarliestStart(int earliestStart) {
+	    this.earliestStart = earliestStart;
+	}
+
+	public int getEarliestFinish() {
+	    return earliestFinish;
+	}
+
+	public void setEarliestFinish(int earliestFinish) {
+	    this.earliestFinish = earliestFinish;
+	}
+
+	public int getLatestFinish() {
+	    return latestFinish;
+	}
+
+	public void setLatestFinish(int latestFinish) {
+	    this.latestFinish = latestFinish;
+	    System.out.println(name+" setLatestFinish "+latestFinish);
+	}
+
+	public int getLatestStart() {
+	    return latestStart;
+	}
+
+	public void setLatestStart(int lastestStart) {
+	    this.latestStart = lastestStart;
+	    System.out.println(name +" setLatestStart "+latestStart);
+
+	}
+
+	public int getFloatTime() {
+	    return floatTime;
+	}
+
+	public void setFloatTime(int floatTime) {
+	    this.floatTime = floatTime;
 	}
 }

@@ -3,12 +3,14 @@ package model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.jgraph.JGraph;
 import org.jgrapht.ListenableGraph;
+
 import javax.swing.JOptionPane;
 
 import org.jgrapht.alg.CycleDetector;
@@ -520,6 +522,131 @@ public class Project {
 	  }
 	  
 	  return cloneActivities;
+	}
+	
+	public DefaultDirectedGraph<Activity, DefaultEdge> getCriticalPathGraph() {
+	    criticalPathOptimize();
+	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
+	    for (Activity activity : activities) {
+		if (activity.getFloatTime() != 0) {
+		    digraph.removeVertex(activity);
+		}
+	    }
+	    Set<Activity> currentDigraph = digraph.vertexSet();
+	    for (Activity activity : currentDigraph) {
+		if (digraph.inDegreeOf(activity) == 0 && digraph.outDegreeOf(activity) == 0) {
+		    digraph.removeVertex(activity);
+		}
+	    }
+	    return digraph;
+	}
+	
+	public void criticalPathOptimize() {
+	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
+	    HashSet<Activity> sourceNodes = new HashSet<Activity>();
+	    HashSet<Activity> targetNodes = new HashSet<Activity>();
+	    
+	    for (Activity activity : activities) {
+		// Clear anything left over from a previous optimization
+		activity.setEarliestFinish(0);
+		activity.setEarliestStart(0);
+		activity.setLatestStart(0);
+		activity.setLatestFinish(-1);
+		activity.setFloatTime(0);
+		
+		// If the node is a target node or source node, add it to the relevant set
+		// for later use in traversing the graph
+		if (digraph.inDegreeOf(activity) == 0) {
+		    sourceNodes.add(activity);
+		}
+		if (digraph.outDegreeOf(activity) == 0) {
+		    targetNodes.add(activity);
+		}
+	    }
+	    
+	    // Set the earliest start/finish for source nodes
+	    for (Activity source : sourceNodes) {
+		source.setEarliestStart(0);
+		source.setEarliestFinish(source.getMostLikelyDuration());
+	    }
+	    
+	    // Forward pass recursively up the tree
+	    for (Activity source : sourceNodes) {
+		forwardPass(digraph, source);		
+	    }
+	    
+	    // Set latest start/finish for target nodes
+	    for (Activity target : targetNodes) {
+		target.setLatestFinish(target.getEarliestFinish());
+		target.setLatestStart(target.getEarliestStart());
+	    }
+	    
+	    // Backward pass recursively down the tree
+	    for (Activity target : targetNodes) {
+		backwardPass(digraph, target);
+	    }
+	    
+	    // Calculate all floats
+	    for (Activity activity : activities) {
+		activity.setFloatTime(activity.getLatestStart() - activity.getEarliestStart());
+	    }
+	    
+	    // DEBUG
+	    for (Activity activity : activities) {
+		System.out.println(activity.toString() + ": [MLD:" + activity.getMostLikelyDuration() + " ES:" + activity.getEarliestStart() + " EF:" + activity.getEarliestFinish() + " LS:" + activity.getLatestStart() + " LF:" + activity.getLatestFinish() + " F:" + activity.getFloatTime() + "]");
+	    }
+	}
+	
+	private void forwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
+		Set<DefaultEdge> descendentEdges = digraph.outgoingEdgesOf(activity);
+		HashSet<Activity> descendents = new HashSet<Activity>();
+		for (DefaultEdge edge : descendentEdges) {
+		    descendents.add(digraph.getEdgeTarget(edge));
+		}
+		for (Activity descendent : descendents) {
+		    int earliestStart = activity.getEarliestFinish();
+		    if (earliestStart > descendent.getEarliestStart()) {
+			descendent.setEarliestStart(earliestStart);
+		    }
+		    descendent.setEarliestFinish(descendent.getEarliestStart() + descendent.getMostLikelyDuration());
+		}
+		for (Activity descendent : descendents) {
+		    forwardPass(digraph, descendent);
+		}
+	}
+	
+	private void backwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
+		Set<DefaultEdge> antecedentEdges = digraph.incomingEdgesOf(activity);
+		HashSet<Activity> antecedents = new HashSet<Activity>();
+		for (DefaultEdge edge : antecedentEdges) {
+		    antecedents.add(digraph.getEdgeSource(edge));
+		}
+		for (Activity antecedent : antecedents) {
+		    int latestFinish = activity.getLatestStart();
+		    for (Activity actividad : activities) {
+			if (actividad.getName().equals(antecedent.getName())) {
+
+			    if (actividad.getLatestFinish() == -1) { 
+				actividad.setLatestFinish(Integer.MAX_VALUE); 
+			    }
+			    if (actividad.getEarliestStart() == 0) {
+				actividad.setLatestStart(0);
+				actividad.setLatestFinish(actividad.getEarliestFinish());
+			    } else {
+				if (latestFinish < actividad.getLatestFinish()) {
+				    actividad.setLatestFinish(latestFinish);
+				}
+				if (actividad.getLatestFinish() != 0) {
+				    actividad.setLatestStart(actividad.getLatestFinish() - actividad.getMostLikelyDuration());
+				}
+			    }
+			}
+		    }
+		}
+		System.out.println("Backward pass for " + activity.toString() + " complete");
+		for (Activity antecedent : antecedents) {
+		    backwardPass(digraph, antecedent);
+		}
 	}
 	
 }

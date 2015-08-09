@@ -127,7 +127,7 @@ public class PredecessorDB extends DataManager
 		}
 		catch (SQLException e)
 		{
-		    e.printStackTrace();
+		    //e.printStackTrace();
 		} finally {
 			try {
 				if (rs2 != null) {
