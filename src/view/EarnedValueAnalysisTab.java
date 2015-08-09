@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 
 import model.Activity;
 import model.DateLabelFormatter;
@@ -60,6 +63,11 @@ public class EarnedValueAnalysisTab extends JPanel {
   
   private Date EVADate = null; //Initially, there is no date selected
   private ArrayList<Activity> activitiesStrictlyBeforeDate, activitiesExactlyWithinDate;
+  
+  private NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
+  private DecimalFormat decimalFormat = new DecimalFormat("0.00");
+  private DecimalFormat negativeDecimalFormat = (DecimalFormat) NumberFormat.getCurrencyInstance();
+  private String symbol = negativeDecimalFormat.getCurrency().getSymbol();	//To display a minus sign
 
   public EarnedValueAnalysisTab() {
 		super(new BorderLayout());
@@ -80,7 +88,7 @@ public class EarnedValueAnalysisTab extends JPanel {
   public void reload() {
   	if (this.grid1 != null) { this.remove(this.grid1); }
   	if (this.grid2 != null) { this.remove(this.grid2); }
-  	generateEVAStatistics(EVADate); 
+  	//generateEVAStatistics(EVADate); TODO Remove
   	if(EVADate != null) {
 	  	this.grid1 = new JTable(tableModel1);
 	  	this.grid2 = new JTable(tableModel2);
@@ -133,6 +141,7 @@ public class EarnedValueAnalysisTab extends JPanel {
    */
   public void initComponent() {
   	EVA = new JButton("Calculate EVA");
+  	
   	EVA.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
@@ -277,6 +286,23 @@ public class EarnedValueAnalysisTab extends JPanel {
   }
   
   /**
+   * Calculates the budget at completion (BAC)
+   * Needs to be done separately since need to consider all activities
+   * @return double BAC
+   */
+  private double getBAC() {
+  	double totalBAC = 0;
+  	
+  	ArrayList<Activity> allActivities = project.getActivities();
+  	
+  	for(Activity act : allActivities) {
+  		totalBAC += act.getEstimatedCost();
+  	}
+  	
+  	return totalBAC;
+  }
+  
+  /**
    * Calculates the Earned Value (EV) of what was actually completed
    * @return double total EV up to at a certain date
    */
@@ -285,8 +311,7 @@ public class EarnedValueAnalysisTab extends JPanel {
   	
   	//Assume that the % completed in each activity is accurate of what is actually completed
   	for(Activity act : activitySet) {
-  		evTotal += ((double)act.getPercentageComplete()/100) * act.getActualCost();
-  		System.out.println(evTotal);
+  		evTotal += ((double)act.getPercentageComplete()/100) * act.getEstimatedCost();
   	}
   	
   	return evTotal;
@@ -330,42 +355,64 @@ public class EarnedValueAnalysisTab extends JPanel {
 			
 			//Generate statistics
 			
+			//If currency values are negative, display a minus sign after the dollar sign
+			negativeDecimalFormat.setNegativePrefix(symbol + "-");
+			negativeDecimalFormat.setNegativeSuffix("");
+			
 	  	//Earned Value cost
 	  	double EV = getEVCost(activitiesStrictlyBeforeDate) + getEVCost(activitiesExactlyWithinDate);
+	  	String earnedValue = numberFormat.format(EV);
 	  	
 	  	//Project Value cost
 	  	double PV = getPVCost(activitiesStrictlyBeforeDate, true, EVADate) + getPVCost(activitiesExactlyWithinDate, false, EVADate);
+	  	String plannedValue = numberFormat.format(PV);
 	  	
 	  	//Actual cost
 	  	double AC = project.getActualBudget();
+	  	String actualBudget = numberFormat.format(AC);
 	  	
-	  	//Budget at completion (cheating, use the getPVCost method with true each time)
-	  	double BAC = getPVCost(activitiesStrictlyBeforeDate, true, EVADate) + getPVCost(activitiesExactlyWithinDate, true, EVADate) ;
+	  	//Budget at completion 
+	  	double BAC = getBAC();
+	  	String budgetAtCompletion = numberFormat.format(BAC);
 	  	
 	  	//Percent schedules for completion, rounded to two decimal places
-	  	double percentShouldBeCompleted = Math.round(((double)PV/BAC))*100;
+	  	double percentC = ((double)PV/BAC)*100;
+	  	String percentShouldBeCompleted = decimalFormat.format(percentC);
 	  	
 	  	//Percentage actually completed, rounded to two decimal places
-	  	double percentActuallyCompleted = Math.round(((double)EV/BAC))*100;
+	  	double percentA = ((double)EV/BAC)*100;
+	  	String percentActuallyCompleted = decimalFormat.format(percentA);
 	  	
 	  	//Performance Metrics
 	  	//Cost Variance 
 	  	double CV = EV - AC;
+	  	String costVariance = negativeDecimalFormat.format(CV);
 	  	
 	  	//Schedule variance 
 	  	double SV = EV - PV;
+	  	String scheduleVariance = negativeDecimalFormat.format(SV);
 	  	
 	  	//Cost Performance index, rounded to two decimal places
-	  	double CPI = Math.round((double)EV/AC);
+	  	double CPI = (double)EV/AC;
+	  	CPI = CPI*100;
+	  	CPI = (double)((int) CPI); //Truncate after two decimals
+	  	CPI = CPI/100;
+	  	String costPerformanceIndex = decimalFormat.format(CPI);
 	  	
 	  	//Schedule Performance index, rounded to two decimal places
-	  	double SPI = Math.round((double)EV/PV);
+	  	double SPI = (double)EV/PV;
+	  	SPI = SPI*100;
+	  	SPI = (double)((int) SPI); //Truncate after two decimals
+	  	SPI = SPI/100;
+	  	String schedulePerformanceIndex = decimalFormat.format(SPI);
 	  	
 	  	//Estimate at completion, rounded to two decimal places
-	  	double EAC = Math.round((double)BAC/CPI);
+	  	double EAC = (double)BAC/CPI;
+	  	String estimateAtCompletion = numberFormat.format(EAC);
 	  	
 	  	//Estimate to completion
 	  	double ETC = EAC - AC;
+	  	String estimateToCompletion = negativeDecimalFormat.format(ETC);
 	  	
 			//Columns and date for tables
 			Vector<String> columnNames1 = new Vector<String>();
@@ -387,22 +434,22 @@ public class EarnedValueAnalysisTab extends JPanel {
 			// data of the table
 	    Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
 	    Vector<Object> activityVector1 = new Vector<Object>();
-	    activityVector1.add(PV);
-	    activityVector1.add(EV);
-	    activityVector1.add(AC);
-	    activityVector1.add(BAC);
+	    activityVector1.add(plannedValue);
+	    activityVector1.add(earnedValue);
+	    activityVector1.add(actualBudget);
+	    activityVector1.add(budgetAtCompletion);
 	    activityVector1.add(percentShouldBeCompleted);
 	    activityVector1.add(percentActuallyCompleted);
 	    data1.add(activityVector1);
 	    
 	    Vector<Vector<Object>> data2 = new Vector<Vector<Object>>();
 	    Vector<Object> activityVector2 = new Vector<Object>();
-	    activityVector2.add(CV);
-	    activityVector2.add(SV);
-	    activityVector2.add(CPI);
-	    activityVector2.add(SPI);
-	    activityVector2.add(EAC);
-	    activityVector2.add(ETC);
+	    activityVector2.add(costVariance);
+	    activityVector2.add(scheduleVariance);
+	    activityVector2.add(costPerformanceIndex);
+	    activityVector2.add(schedulePerformanceIndex);
+	    activityVector2.add(estimateAtCompletion);
+	    activityVector2.add(estimateToCompletion);
 	    data2.add(activityVector2);
 	    
 	    // Sets the table so that cells are selectable but noneditable
