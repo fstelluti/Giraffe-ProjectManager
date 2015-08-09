@@ -12,5 +12,9 @@
 	<classpathentry kind="lib" path="lib/trident.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.19/lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.23/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="lib/jgraph-5.13.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jgrapht-ext-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/jgraphaddons.jar"/>
+	<classpathentry kind="lib" path="lib/jgraphx.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
