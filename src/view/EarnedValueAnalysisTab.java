@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -16,15 +17,21 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.NumberFormatter;
 
 import model.Activity;
 import model.DateLabelFormatter;
@@ -48,7 +55,6 @@ public class EarnedValueAnalysisTab extends JPanel {
     
 	private Project project;
   private User user;
-  private boolean justSaved; //TODO needed?
   private boolean goodActivities = true;
   
   private Properties p = new Properties();
@@ -56,10 +62,12 @@ public class EarnedValueAnalysisTab extends JPanel {
   private DefaultTableModel tableModel1, tableModel2;
   
   private JButton EVA;
-  private JPanel control, content, datesPanel, projectDate;
+  private JPanel control, content, datesPanel, projectDate, projectReport;
   private UtilDateModel startModel = new UtilDateModel();
   private JDatePickerImpl progressDatePicker;
   private DefaultTableCellRenderer centerText;
+  private JTextPane evaReport;
+  private double EV,PV,AC,BAC,percentC,percentA,CV,SV,CPI,SPI,EAC,ETC;
   
   private Date EVADate = null; //Initially, there is no date selected
   private ArrayList<Activity> activitiesStrictlyBeforeDate, activitiesExactlyWithinDate;
@@ -81,14 +89,12 @@ public class EarnedValueAnalysisTab extends JPanel {
 	
 		this.repaint();
 		this.revalidate();
-		justSaved = false; //TODO Maybe not needed
 		this.reload();
   }
   
-  public void reload() {
+  public void reload() { 
   	if (this.grid1 != null) { this.remove(this.grid1); }
   	if (this.grid2 != null) { this.remove(this.grid2); }
-  	//generateEVAStatistics(EVADate); TODO Remove
   	if(EVADate != null) {
 	  	this.grid1 = new JTable(tableModel1);
 	  	this.grid2 = new JTable(tableModel2);
@@ -103,6 +109,9 @@ public class EarnedValueAnalysisTab extends JPanel {
 	  	this.grid1.getTableHeader().setFont(headerFont);
 	  	this.grid2.getTableHeader().setFont(headerFont);
 	  	
+	  	//Create the Report box
+	  	createEVAReport();
+	  	
 	  	//Set preferred widths
 	  	for(int i=0; i<6; i++) {
 	  		this.grid1.getColumnModel().getColumn(i).setPreferredWidth(50);
@@ -110,30 +119,86 @@ public class EarnedValueAnalysisTab extends JPanel {
 	  		this.grid1.getColumnModel().getColumn(i).setCellRenderer(centerText);
 	  		this.grid2.getColumnModel().getColumn(i).setCellRenderer(centerText);
 	  	}
+	  	
+	  	//Combine grids into one
+	  	Box box = new Box(BoxLayout.Y_AXIS);
+	  	box.add(new JScrollPane(grid1));
+	  	box.add(new JSeparator(SwingConstants.VERTICAL));
+	  	box.add(new JScrollPane(grid2));
 	
-	  	this.add(new JScrollPane(grid1), BorderLayout.CENTER);
-	  	this.add(new JScrollPane(grid2), BorderLayout.SOUTH);
+	  	this.add(box, BorderLayout.CENTER);
+	  	this.add(projectReport, BorderLayout.SOUTH);
   	}//if
 	  this.repaint();
 	  this.revalidate();
   }
 
-  /**
+	/**
+	 * Creates the EVA report text box
+	 */
+	private void createEVAReport() {
+		this.projectReport = new JPanel();
+		this.projectReport.setPreferredSize(new Dimension(350, 300));
+		this.projectReport.setBorder(BorderFactory.createTitledBorder("EVA Report"));
+		
+		//Create a text pane
+		evaReport = new JTextPane();
+		evaReport.setContentType("text/html");
+		String fullReport = getEVAReport();
+		evaReport.setText(fullReport);
+		evaReport.setEditable(false);
+		JScrollPane scrollEvaReport = new JScrollPane(evaReport, 
+			  JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollEvaReport.setPreferredSize(new Dimension(745,250));
+		projectReport.add(scrollEvaReport);
+	}
+
+	/**
+	 * Creates the EVA report 
+	 * @return String containing the full EVA report
+	 */
+  private String getEVAReport() {
+  	
+  	StringBuilder report = new StringBuilder(250);
+	
+  	report.append("<html><p><font size=\"5\"><u>Project  " + project.getName() + ":</u></font></p>");
+  	
+  	//Actual Cost
+  	report.append("<p>Total spent to date: <b>" + numberFormat.format(AC) + "</b></p>");
+  
+  	//Check if over or under budget
+  	if(CV < 0) {
+  		report.append("<p>Project is: <b>Overbudget</b></p>");
+  	}
+  	else {
+  		report.append("<p>Project is: <b>Underbudget</b></p>");
+  	}
+  	
+  	//Check is ahead of behind schedule
+  	if(SV < 0) {
+  		report.append("<p>And is: <b>Behind schedule</b></p>");
+  	}
+  	else {
+  		report.append("<p>And is: <b>Ahead of schedule</b></p>");
+  	}
+  	
+  	//Estimate at completion
+  	report.append("<p>Revised budget: <b>" + numberFormat.format(EAC) + "</b></p>");
+  	
+  	//Estimate to complete
+  	report.append("<p>Amount to spend to complete project: <b>" + numberFormat.format(ETC) + "</b></p>");
+  	
+  	report.append("</html>");
+  	
+  	return report.toString();
+	}
+
+	/**
    * This method refreshes the panel
    */
-  public void refresh() { //TODO Needed?
+  public void refresh() { 
 		this.project = ViewManager.getCurrentProject();
 		generateEVAStatistics(EVADate);
-		//this.projectDescription.setText(this.project.getDescription());
-		//this.projectName.setText(this.project.getName());
-		//if (project.getStartDate() != null) { this.startModel.setValue(project.getStartDate()); }
-		//if (project.getDueDate() != null) { this.dueModel.setValue(project.getDueDate()); }
-		this.repaint();
-		if (justSaved) {
-		    justSaved = false;
-		    //notificationLabel.setText("Project saved successfully");
-		    //notificationLabel.repaint();
-			}
   }
   
   /**
@@ -360,58 +425,58 @@ public class EarnedValueAnalysisTab extends JPanel {
 			negativeDecimalFormat.setNegativeSuffix("");
 			
 	  	//Earned Value cost
-	  	double EV = getEVCost(activitiesStrictlyBeforeDate) + getEVCost(activitiesExactlyWithinDate);
+	  	EV = getEVCost(activitiesStrictlyBeforeDate) + getEVCost(activitiesExactlyWithinDate);
 	  	String earnedValue = numberFormat.format(EV);
 	  	
 	  	//Project Value cost
-	  	double PV = getPVCost(activitiesStrictlyBeforeDate, true, EVADate) + getPVCost(activitiesExactlyWithinDate, false, EVADate);
+	  	PV = getPVCost(activitiesStrictlyBeforeDate, true, EVADate) + getPVCost(activitiesExactlyWithinDate, false, EVADate);
 	  	String plannedValue = numberFormat.format(PV);
 	  	
 	  	//Actual cost
-	  	double AC = project.getActualBudget();
+	  	AC = project.getActualBudget();
 	  	String actualBudget = numberFormat.format(AC);
 	  	
 	  	//Budget at completion 
-	  	double BAC = getBAC();
+	  	BAC = getBAC();
 	  	String budgetAtCompletion = numberFormat.format(BAC);
 	  	
 	  	//Percent schedules for completion, rounded to two decimal places
-	  	double percentC = ((double)PV/BAC)*100;
+	  	percentC = ((double)PV/BAC)*100;
 	  	String percentShouldBeCompleted = decimalFormat.format(percentC);
 	  	
 	  	//Percentage actually completed, rounded to two decimal places
-	  	double percentA = ((double)EV/BAC)*100;
+	  	percentA = ((double)EV/BAC)*100;
 	  	String percentActuallyCompleted = decimalFormat.format(percentA);
 	  	
 	  	//Performance Metrics
 	  	//Cost Variance 
-	  	double CV = EV - AC;
+	  	CV = EV - AC;
 	  	String costVariance = negativeDecimalFormat.format(CV);
 	  	
 	  	//Schedule variance 
-	  	double SV = EV - PV;
+	  	SV = EV - PV;
 	  	String scheduleVariance = negativeDecimalFormat.format(SV);
 	  	
 	  	//Cost Performance index, rounded to two decimal places
-	  	double CPI = (double)EV/AC;
+	  	CPI = (double)EV/AC;
 	  	CPI = CPI*100;
 	  	CPI = (double)((int) CPI); //Truncate after two decimals
 	  	CPI = CPI/100;
 	  	String costPerformanceIndex = decimalFormat.format(CPI);
 	  	
 	  	//Schedule Performance index, rounded to two decimal places
-	  	double SPI = (double)EV/PV;
+	    SPI = (double)EV/PV;
 	  	SPI = SPI*100;
 	  	SPI = (double)((int) SPI); //Truncate after two decimals
 	  	SPI = SPI/100;
 	  	String schedulePerformanceIndex = decimalFormat.format(SPI);
 	  	
 	  	//Estimate at completion, rounded to two decimal places
-	  	double EAC = (double)BAC/CPI;
+	  	EAC = (double)BAC/CPI;
 	  	String estimateAtCompletion = numberFormat.format(EAC);
 	  	
 	  	//Estimate to completion
-	  	double ETC = EAC - AC;
+	    ETC = EAC - AC;
 	  	String estimateToCompletion = negativeDecimalFormat.format(ETC);
 	  	
 			//Columns and date for tables
