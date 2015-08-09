@@ -1,9 +1,12 @@
 package model;
 
+import java.text.DecimalFormat;
+
 public class PertActivity extends Activity
 {
-	private double expectedDuration;
-	private double standardDeviation;
+	private String expectedDuration;
+	private String standardDeviation;
+	private DecimalFormat df = new DecimalFormat("#.##");
 	
 	public PertActivity(int projectId, String name)
 	{
@@ -18,24 +21,24 @@ public class PertActivity extends Activity
 		computeStandardDeviation();
 	}
 	
-	public double getExpectedDuration()
+	public String getExpectedDuration()
 	{
 		return this.expectedDuration;
 	}
 	
-	public double getStandardDeviation()
+	public String getStandardDeviation()
 	{
 		return this.standardDeviation;
 	}
 	
 	private void computeExpectedDuration()
 	{
-		this.expectedDuration = (getOptimisticDuration() + 4 * getMostLikelyDuration() + getPessimisticDuration())/6;
+		this.expectedDuration = df.format(((double)getOptimisticDuration() + 4 * getMostLikelyDuration() + getPessimisticDuration())/6);
 	}
 	
 	private void computeStandardDeviation()
 	{
-		this.standardDeviation = (getPessimisticDuration() - getOptimisticDuration())/6;
+		this.standardDeviation = df.format(((double)getPessimisticDuration() - getOptimisticDuration())/6);
 	}
 	
 	@Override

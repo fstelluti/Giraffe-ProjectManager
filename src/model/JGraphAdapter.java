@@ -27,6 +27,7 @@ public class JGraphAdapter extends JPanel
 				// create a visualization using JGraph, via an adapter
 				jgxAdapter = new JGraphXAdapter<PertActivity, PertEvent>(g);
 				mxGraphComponent graph = new mxGraphComponent(jgxAdapter);
+				graph.setEnabled(false);
 				this.add(graph);
 				
 				
