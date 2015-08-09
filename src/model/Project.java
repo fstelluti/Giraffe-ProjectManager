@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.jgraph.JGraph;
+import org.jgrapht.ListenableGraph;
 import org.jgrapht.alg.CycleDetector;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.ListenableDirectedGraph;
 
 import controller.ActivityDB;
 import controller.PredecessorDB;
@@ -303,6 +306,21 @@ public class Project {
 	    }
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ListenableDirectedGraph<Activity, DefaultEdge> toListenableDirectedGraph() {
+	    ListenableDirectedGraph g = new ListenableDirectedGraph(DefaultEdge.class);
+	    for (Activity activity : activities) {
+		g.addVertex(activity);
+	    }
+	    for (Activity activity : activities) {
+		List<Integer> dependents = activity.getDependents();
+		for (Integer dependent : dependents) {
+		    g.addEdge(activity, new Activity(dependent));
+		}
+	    }
+	    return g;
+	}
+	
 	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraph() {
 	    DefaultDirectedGraph<Activity, DefaultEdge> diGraph = 
 		    new DefaultDirectedGraph<Activity, DefaultEdge>(DefaultEdge.class);
@@ -318,7 +336,7 @@ public class Project {
 		predecessorActivities = PredecessorDB.getPredecessors( source.getId() );
 
 		for (Activity target : predecessorActivities) {
-		    diGraph.addEdge(source, target);
+		    diGraph.addEdge(target, source);
 		}
 	    }
 	    return diGraph;
