@@ -38,6 +38,12 @@ public class PertActivity extends Activity
 		this.standardDeviation = (getPessimisticDuration() - getOptimisticDuration())/6;
 	}
 	
+	@Override
+	public String toString()
+	{
+		return "Activity " + super.getName() + "\nExpected duration: " + expectedDuration + "\nStandard deviation: " + standardDeviation;
+	}
+	
 	
 	
 	

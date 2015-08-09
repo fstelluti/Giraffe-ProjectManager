@@ -8,23 +8,32 @@ import org.jgrapht.graph.DefaultEdge;
 
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.view.mxGraph;
 
 import controller.ViewManager;
 
 public class JGraphAdapter extends JPanel
 {
-	private JGraphXAdapter<Activity, DefaultEdge> jgxAdapter;
+	private JGraphXAdapter<PertActivity, PertEvent> jgxAdapter;
 	public JGraphAdapter()
 	{
 		load();
 	}
 	private void load()
 	{
-		DefaultDirectedGraph<Activity, DefaultEdge> g =
-				ViewManager.getCurrentProject().toDigraph();
+		DefaultDirectedGraph<PertActivity, PertEvent> g =
+				ViewManager.getCurrentProject().toDigraphPert();
 				// create a visualization using JGraph, via an adapter
-				jgxAdapter = new JGraphXAdapter<Activity, DefaultEdge>(g);
-				this.add(new mxGraphComponent(jgxAdapter));
+				jgxAdapter = new JGraphXAdapter<PertActivity, PertEvent>(g);
+				mxGraphComponent graph = new mxGraphComponent(jgxAdapter);
+				this.add(graph);
+				
+				
+				graph.clearCellOverlays();
+				
+				/*mxGraph gr = new mxGraph();
+				gr.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_NOLABEL, "1") */
 				
 				// positioning via jgraphx layouts
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(jgxAdapter);

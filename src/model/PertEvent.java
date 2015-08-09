@@ -42,5 +42,11 @@ public class PertEvent
 	{
 		this.eventNumber = eventNumber;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "";
+	}
 
 }
