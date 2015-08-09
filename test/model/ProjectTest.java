@@ -171,6 +171,18 @@ public class ProjectTest {
 		assertEquals("Activity added is not the one expected", testProject.getActivities().get(0), testActivity);
 	}
 	
+	//test addProjectPM()
+	@Test
+	public void shouldAddProjectPM()
+	{
+		User testUser = new User(1, "test", "test", "test", "test", "test");
+		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		
+		testProject.addProjectPM(testUser);
+		
+		assertEquals(testProject.getProjectPMs().get(0), testUser);
+	}
+	
 	//Test getActivitiesStrictlyBeforeDate()
 	@Test
 	public void shouldBeBeforeDate() throws ParseException, InvalidProjectException
@@ -253,5 +265,25 @@ public class ProjectTest {
 		
 		assertTrue("Should return no activities.", testProject.getActivitiesStrictlyBeforeDate(testDate1).isEmpty());
 		assertFalse("Should return activities.", testProject.getActivitiesStrictlyBeforeDate(testDate3).isEmpty());
+	}
+	
+	//tests setEstimatedBudget
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldNotSetEstimatedBudget()
+	{
+		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		
+		//IllegalArgumentException expected
+		testProject.setEstimatedBudget(-1000);
+	}
+	
+	//tests setActualBudget
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldNotSetActualBudget()
+	{
+		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
+		
+		//IllegalArgumentException expected
+		testProject.setActualBudget(-1000);
 	}
 }
