@@ -23,11 +23,14 @@ public class ReportsTab extends JPanel {
 			
 			//Icons
 			ImageIcon evaIcon = new ImageIcon(TabPanel.class.getResource("images/chart_stock.png"));
-			
-			tabPane.addTab("Gantt Chart", null, this.ganttPanel, "View Gantt chart for the currently selected project");
+			ImageIcon ganttIcon = new ImageIcon(TabPanel.class.getResource("images/ganttIcon.png"));
+			ImageIcon graphIcon = new ImageIcon(TabPanel.class.getResource("images/graphIcon.png"));
+			ImageIcon pertIcon = new ImageIcon(TabPanel.class.getResource("images/pertIcon.png"));
+
+			tabPane.addTab("Graphs", graphIcon, this.graphPanel, "View graphs for the currently selected project");
+			tabPane.addTab("Gantt Chart", ganttIcon, this.ganttPanel, "View Gantt chart for the currently selected project");
 			tabPane.addTab("Earned Value Analysis", evaIcon, earnedValueAnalysisTab, "Generate Earned Value Analysis for the currently selected project");
-			tabPane.addTab("Graphs", null, this.graphPanel, "View graphs for the currently selected project");
-			tabPane.addTab("PERT Analysis", evaIcon, pertAnalysisTab, "Generate PERT Analysis for the currently selected project");
+			tabPane.addTab("PERT Analysis", pertIcon, pertAnalysisTab, "Generate PERT Analysis for the currently selected project");
 			this.setLayout(new BorderLayout());
 			this.add(tabPane);
     }

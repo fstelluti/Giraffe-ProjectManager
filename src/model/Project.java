@@ -612,10 +612,10 @@ public class Project {
 		activity.setFloatTime(activity.getLatestStart() - activity.getEarliestStart());
 	    }
 	    
-	    // DEBUG
+	    /* DEBUG
 	    for (Activity activity : activities) {
 		System.out.println(activity.toString() + ": [MLD:" + activity.getMostLikelyDuration() + " ES:" + activity.getEarliestStart() + " EF:" + activity.getEarliestFinish() + " LS:" + activity.getLatestStart() + " LF:" + activity.getLatestFinish() + " F:" + activity.getFloatTime() + "]");
-	    }
+	    }*/
 	}
 	
 	private void forwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
@@ -664,7 +664,6 @@ public class Project {
 			}
 		    }
 		}
-		System.out.println("Backward pass for " + activity.toString() + " complete");
 		for (Activity antecedent : antecedents) {
 		    backwardPass(digraph, antecedent);
 		}

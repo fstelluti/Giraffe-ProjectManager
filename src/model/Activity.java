@@ -410,7 +410,6 @@ public class Activity {
 
 	public void setLatestFinish(int latestFinish) {
 	    this.latestFinish = latestFinish;
-	    System.out.println(name+" setLatestFinish "+latestFinish);
 	}
 
 	public int getLatestStart() {
@@ -419,7 +418,6 @@ public class Activity {
 
 	public void setLatestStart(int lastestStart) {
 	    this.latestStart = lastestStart;
-	    System.out.println(name +" setLatestStart "+latestStart);
 
 	}
 
