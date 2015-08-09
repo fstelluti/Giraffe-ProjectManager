@@ -173,7 +173,7 @@ public class ProjectTest {
 	
 	//Test getActivitiesStrictlyBeforeDate()
 	@Test
-	public void shouldBeBeforeDate() throws ParseException
+	public void shouldBeBeforeDate() throws ParseException, InvalidProjectException
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date testDate1 = null, testDate2 = null, testDate3 = null;
@@ -215,7 +215,7 @@ public class ProjectTest {
 	
 	//Test getActivitiesWithinDate()
 	@Test
-	public void shouldBeWithinDate() throws ParseException
+	public void shouldBeWithinDate() throws ParseException, InvalidProjectException
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date testDate1 = null, testDate2 = null, testDate3 = null;
