@@ -12,12 +12,14 @@ public class ReportsTab extends JPanel {
     private GanttPanel ganttPanel;
     private EarnedValueAnalysisTab earnedValueAnalysisTab;
     private CriticalPathPanel criticalPathPanel;
+    private PertAnalysisTab pertAnalysisTab;
     
     public ReportsTab () {
 			JTabbedPane tabPane = new JTabbedPane();
 			this.ganttPanel = new GanttPanel();
 			this.earnedValueAnalysisTab = new EarnedValueAnalysisTab();
 			this.criticalPathPanel = new CriticalPathPanel();
+			this.pertAnalysisTab = new PertAnalysisTab();
 			
 			//Icons
 			ImageIcon evaIcon = new ImageIcon(TabPanel.class.getResource("images/chart_stock.png"));
@@ -25,6 +27,7 @@ public class ReportsTab extends JPanel {
 			tabPane.addTab("Gantt Chart", null, this.ganttPanel, "View Gantt chart for the currently selected project");
 			tabPane.addTab("Earned Value Analysis", evaIcon, earnedValueAnalysisTab, "Generate Earned Value Analysis for the currently selected project");
 			tabPane.addTab("Critical Path", null, this.criticalPathPanel, "View critical path for the currently selected project");
+			tabPane.addTab("PERT Analysis", evaIcon, pertAnalysisTab, "Generate PERT Analysis for the currently selected project");
 			this.setLayout(new BorderLayout());
 			this.add(tabPane);
     }
@@ -33,5 +36,6 @@ public class ReportsTab extends JPanel {
     	ganttPanel.refresh();
     	earnedValueAnalysisTab.refresh();
     	criticalPathPanel.refresh();
+    	pertAnalysisTab.refresh();
     }
 }
