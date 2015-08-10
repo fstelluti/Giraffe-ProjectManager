@@ -135,9 +135,11 @@ public class ActivitiesTab extends JPanel {
 			}
 			tableModel.setValueAt(result.getDescription(), selectedRow, 4);
 		    }
-		    ViewManager.reload();
 		    //ViewManager.refresh();
 		}
+		ViewManager.refresh();
+		ViewManager.reload();
+
 	    }
 
 	});
@@ -181,6 +183,7 @@ public class ActivitiesTab extends JPanel {
 			e1.printStackTrace();
 		    }
 		}
+		ViewManager.reload();
 	    }
 	});
     }
