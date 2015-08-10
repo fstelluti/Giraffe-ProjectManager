@@ -263,7 +263,14 @@ public class Project {
 	    // which we can use to get the correct days here
 	    criticalPathOptimize();
 	    Calendar cal = Calendar.getInstance();
-	    if (startDate == null) { startDate = new Date(); }
+	    if (startDate == null) { 
+		startDate = new Date();
+		cal.setTime(startDate);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR, 0);
+		startDate = cal.getTime();
+	    }
 	    for (Activity activity : activities) {
 		cal.setTime(startDate);
 		cal.add(Calendar.DAY_OF_MONTH, activity.getEarliestStart());
