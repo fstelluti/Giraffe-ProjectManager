@@ -501,7 +501,7 @@ public class Project {
 	  return cloneActivities;
 	}
 	
-	public DefaultDirectedGraph<Activity, DefaultEdge> getCriticalPathGraph() {
+	public synchronized DefaultDirectedGraph<Activity, DefaultEdge> getCriticalPathGraph() {
 	    criticalPathOptimize();
 	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
 	    for (Activity activity : activities) {
@@ -509,13 +509,26 @@ public class Project {
 		    digraph.removeVertex(activity);
 		}
 	    }
-	    Set<Activity> currentDigraph = digraph.vertexSet();
-	    for (Activity activity : currentDigraph) {
-		if (digraph.inDegreeOf(activity) == 0 && digraph.outDegreeOf(activity) == 0) {
-		    digraph.removeVertex(activity);
+	    // Convert to array and iterate over array to prevent concurrent modification of underlying vertexSet
+	    // and subsequent iterator invalidation
+	    Object[] currentDigraph = digraph.vertexSet().toArray(); 
+	    for (int i = 0; i < currentDigraph.length; i++) {
+		if (digraph.inDegreeOf((Activity) currentDigraph[i]) == 0 && digraph.outDegreeOf((Activity) currentDigraph[i]) == 0) {
+		    digraph.removeVertex((Activity) currentDigraph[i]);
 		}
 	    }
 	    return digraph;
+	}
+	
+	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraphWithoutOrphans() {
+	    DefaultDirectedGraph<Activity, DefaultEdge> orphanage = toDigraph();
+	    Object[] currentDigraph = orphanage.vertexSet().toArray(); 
+	    for (int i = 0; i < currentDigraph.length; i++) {
+		if (orphanage.inDegreeOf((Activity) currentDigraph[i]) == 0 && orphanage.outDegreeOf((Activity) currentDigraph[i]) == 0) {
+		    orphanage.removeVertex((Activity) currentDigraph[i]);
+		}
+	    }
+	    return orphanage;
 	}
 	
 	public void criticalPathOptimize() {

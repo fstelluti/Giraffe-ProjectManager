@@ -115,7 +115,7 @@ public class GraphPanel extends JPanel {
     
     private void buildGraph(String arg0) {
 	if (arg0.equals("project")) {
-	    digraph = ViewManager.getCurrentProject().toDigraph();
+	    digraph = ViewManager.getCurrentProject().toDigraphWithoutOrphans();
 	}
 	if (arg0.equals("criticalPath")) {
 	    digraph = ViewManager.getCurrentProject().getCriticalPathGraph();
