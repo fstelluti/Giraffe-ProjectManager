@@ -135,7 +135,8 @@ public class ActivitiesTab extends JPanel {
 			}
 			tableModel.setValueAt(result.getDescription(), selectedRow, 4);
 		    }
-		    ViewManager.refresh();
+		    ViewManager.reload();
+		    //ViewManager.refresh();
 		}
 	    }
 

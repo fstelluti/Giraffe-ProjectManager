@@ -1,11 +1,18 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -22,7 +29,6 @@ import org.jgrapht.graph.DefaultEdge;
 import com.jgraph.layout.JGraphFacade;
 import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.hierarchical.JGraphHierarchicalLayout;
-
 import controller.ViewManager;
 
 public class GraphPanel extends JPanel {
@@ -37,6 +43,9 @@ public class GraphPanel extends JPanel {
     private Map nestedMap;
     private JScrollPane scrollPane;
     private JComboBox<String> comboBox;
+    private JPanel controlPanel;
+    private JButton saveToPng;
+
     
     public GraphPanel() {
 	super(new BorderLayout());
@@ -71,8 +80,31 @@ public class GraphPanel extends JPanel {
 	    }
 	    
 	});
-	
-	this.add(comboBox, BorderLayout.NORTH);
+	saveToPng = new JButton("Save to PNG");
+	saveToPng.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showSaveDialog(GraphPanel.this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		    File file = fc.getSelectedFile();
+		    try {
+			BufferedImage image = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = image.createGraphics();
+			paint(g);
+			ImageIO.write(image, "PNG", file);
+		    } catch (IOException e1) {
+			e1.printStackTrace();
+		    }
+		}
+	    }
+	    
+	});
+	controlPanel = new JPanel();
+	controlPanel.add(comboBox, BorderLayout.CENTER);
+	controlPanel.add(saveToPng, BorderLayout.CENTER);
+	this.add(controlPanel, BorderLayout.NORTH);
 	redraw();
     }
     
@@ -92,7 +124,6 @@ public class GraphPanel extends JPanel {
 	graphModel = new JGraphModelAdapter<Activity, DefaultEdge>(digraph);
 	
 	graph = new JGraph(graphModel);
-	
 	// Removes the labels from the edges
 	GraphLayoutCache cache = graph.getGraphLayoutCache();
 	CellView[] cells = cache.getCellViews();
