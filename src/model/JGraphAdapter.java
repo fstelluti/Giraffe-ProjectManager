@@ -32,10 +32,7 @@ public class JGraphAdapter extends JPanel
 				
 				
 				graph.clearCellOverlays();
-				
-				/*mxGraph gr = new mxGraph();
-				gr.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_NOLABEL, "1") */
-				
+
 				// positioning via jgraphx layouts
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(jgxAdapter);
 				layout.execute(jgxAdapter.getDefaultParent());

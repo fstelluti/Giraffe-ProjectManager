@@ -338,9 +338,6 @@ public class Project {
 	    {
 	    	PertActivity tempActivity = iterator.next();
 	    	
-	    	System.out.println("Printing temp activity");
-	    	System.out.println(tempActivity.getName());
-	    	
 	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equalsIgnoreCase("End"))
 	    	{
 	    		diGraph.addEdge(start, tempActivity);
@@ -352,6 +349,10 @@ public class Project {
 	    	}
 	    	
 	    }
+	    for (PertEvent event : diGraph.edgesOf(start))
+	    {
+			event.setExpectedDate(0);
+		}
 	    return diGraph;
 	}
 

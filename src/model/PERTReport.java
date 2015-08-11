@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +13,7 @@ import javax.swing.JFrame;
 import org.jgraph.JGraph;
 import org.jgrapht.alg.DirectedNeighborIndex;
 import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.GraphIterator;
 
@@ -47,17 +50,39 @@ public class PERTReport//NOT FINISHED
         while (iterator.hasNext())
         {
         	PertActivity temp = iterator.next();
+        	
         	if(temp.getName().equals("Start"))
         	{
         		start = temp;
         	}
-        	if(temp.getName().equals("End"))
+        	else if(temp.getName().equals("End"))
         	{
         		end = temp;
+        	}
+        	else
+        	{
+        		computeExpectedFinishDate(temp);
         	}
         }
 		allPaths = getAllPaths(start, end);
 		
+		Set<PertEvent> events = graph.edgeSet();
+		for (PertEvent pertEvent : events)
+		{
+			pertEvent.setExpectedDate(Double.parseDouble(graph.getEdgeTarget(pertEvent).getExpectedDuration()));
+			graph.getEdgeTarget(pertEvent);
+		}
+		
+	}
+	
+	private void computeExpectedFinishDate(PertActivity activity)
+	{
+			double durDouble = Double.parseDouble(activity.getExpectedDuration());
+			int durInt = (int) durDouble;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.add(Calendar.DATE, durInt);
+			activity.setExpectedFinishDate(cal.getTime());
 	}
 	
 	public List<List<PertActivity>> getAllPaths(PertActivity source, PertActivity destination)
