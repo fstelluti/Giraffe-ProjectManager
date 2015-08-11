@@ -452,6 +452,7 @@ public class Project {
 	}
 
 	public ArrayList<User> getProjectManagers() {
+	    if (projectManagers == null) { projectManagers = new ArrayList<User>(); }
 	    return projectManagers;
 	}
 
@@ -564,7 +565,7 @@ public class Project {
 	    return orphanage;
 	}
 	
-	public void criticalPathOptimize() {
+	public synchronized void criticalPathOptimize() {
 	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
 	    HashSet<Activity> sourceNodes = new HashSet<Activity>();
 	    HashSet<Activity> targetNodes = new HashSet<Activity>();
@@ -573,8 +574,8 @@ public class Project {
 		// Clear anything left over from a previous optimization
 		activity.setEarliestFinish(0);
 		activity.setEarliestStart(0);
-		activity.setLatestStart(0);
-		activity.setLatestFinish(-1);
+		activity.setLatestStart(Integer.MAX_VALUE);
+		activity.setLatestFinish(Integer.MAX_VALUE);
 		activity.setFloatTime(0);
 		
 		// If the node is a target node or source node, add it to the relevant set
@@ -594,8 +595,8 @@ public class Project {
 	    }
 	    
 	    // Forward pass recursively up the tree
-	    for (Activity source : sourceNodes) {
-		forwardPass(digraph, source);		
+	    for (Activity activity : activities) {
+		forwardPass(digraph, activity);		
 	    }
 	    
 	    // Set latest start/finish for target nodes
@@ -605,8 +606,8 @@ public class Project {
 	    }
 	    
 	    // Backward pass recursively down the tree
-	    for (Activity target : targetNodes) {
-		backwardPass(digraph, target);
+	    for (Activity activity : targetNodes) {
+		backwardPass(digraph, activity);
 	    }
 	    
 	    // Calculate all floats
@@ -620,55 +621,67 @@ public class Project {
 	    }*/
 	}
 	
-	private void forwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
-		Set<DefaultEdge> descendentEdges = digraph.outgoingEdgesOf(activity);
-		HashSet<Activity> descendents = new HashSet<Activity>();
-		for (DefaultEdge edge : descendentEdges) {
-		    descendents.add(digraph.getEdgeTarget(edge));
+	private synchronized void forwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
+	    Set<DefaultEdge> descendentEdges = digraph.outgoingEdgesOf(activity);
+	    HashSet<Activity> descendents = new HashSet<Activity>();
+	    for (DefaultEdge edge : descendentEdges) {
+		descendents.add(digraph.getEdgeTarget(edge));
+	    }
+	    for (Activity descendent : descendents) {
+		int earliestStart = activity.getEarliestFinish();
+		if (earliestStart > descendent.getEarliestStart()) {
+		    descendent.setEarliestStart(earliestStart);
 		}
-		for (Activity descendent : descendents) {
-		    int earliestStart = activity.getEarliestFinish();
-		    if (earliestStart > descendent.getEarliestStart()) {
-			descendent.setEarliestStart(earliestStart);
-		    }
-		    descendent.setEarliestFinish(descendent.getEarliestStart() + descendent.getMostLikelyDuration());
-		}
-		for (Activity descendent : descendents) {
-		    forwardPass(digraph, descendent);
-		}
+		descendent.setEarliestFinish(descendent.getEarliestStart() + descendent.getMostLikelyDuration());
+	    }
+	    for (Activity descendent : descendents) {
+		forwardPass(digraph, descendent);
+	    }
 	}
-	
-	private void backwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
-		Set<DefaultEdge> antecedentEdges = digraph.incomingEdgesOf(activity);
-		HashSet<Activity> antecedents = new HashSet<Activity>();
-		for (DefaultEdge edge : antecedentEdges) {
-		    antecedents.add(digraph.getEdgeSource(edge));
-		}
-		for (Activity antecedent : antecedents) {
-		    int latestFinish = activity.getLatestStart();
-		    for (Activity actividad : activities) {
-			if (actividad.getName().equals(antecedent.getName())) {
 
-			    if (actividad.getLatestFinish() == -1) { 
-				actividad.setLatestFinish(Integer.MAX_VALUE); 
+	private synchronized void backwardPass(DefaultDirectedGraph<Activity, DefaultEdge> digraph, Activity activity) {
+
+	    Set<DefaultEdge> antecedentEdges = digraph.incomingEdgesOf(activity);
+	    HashSet<Activity> antecedents = new HashSet<Activity>();
+	    for (DefaultEdge edge : antecedentEdges) {
+		antecedents.add(digraph.getEdgeSource(edge));
+	    }
+	    for (Activity antecedent : antecedents) {
+		int latestFinish = activity.getLatestStart();
+		// Somewhat incomprehensibly (to me), on the first pass thru the backwards recursive loop,
+		// the Activity parameter is passed by reference; on subsequent passes thru the loop, the
+		// parameter is passed by value. Particularly puzzling is that no similar problem occurs during
+		// the forwards recursive loop above, which is always passed by reference. 
+		// The kludge below involving "actividad" was the best solution
+		// that I could come up with for keeping the activities consistent between passes thru the
+		// loops. If you can explain the behaviour, I'd love to hear about it. --Matthew
+		for (Activity actividad : activities) {
+		    if (actividad.getId() == antecedent.getId()) {
+
+			if (actividad.getLatestFinish() == -1) {
+			    actividad.setLatestFinish(Integer.MAX_VALUE); 
+			}
+			if (actividad.getEarliestStart() == 0) {
+			    actividad.setLatestStart(0);
+			    actividad.setLatestFinish(actividad.getEarliestFinish());
+			} else {
+			    if (latestFinish < actividad.getLatestFinish()) {
+				actividad.setLatestFinish(latestFinish);
 			    }
-			    if (actividad.getEarliestStart() == 0) {
-				actividad.setLatestStart(0);
-				actividad.setLatestFinish(actividad.getEarliestFinish());
-			    } else {
-				if (latestFinish < actividad.getLatestFinish()) {
-				    actividad.setLatestFinish(latestFinish);
-				}
-				if (actividad.getLatestFinish() != 0) {
-				    actividad.setLatestStart(actividad.getLatestFinish() - actividad.getMostLikelyDuration());
-				}
+			    if (actividad.getLatestFinish() != 0) {
+				actividad.setLatestStart(actividad.getLatestFinish() - actividad.getMostLikelyDuration());
 			    }
 			}
 		    }
 		}
-		for (Activity antecedent : antecedents) {
-		    backwardPass(digraph, antecedent);
+	    }
+	    for (Activity antecedent : antecedents) {
+		for (Activity actividad : activities) {
+		    if (actividad.getId() == antecedent.getId()) {
+			backwardPass(digraph, actividad);
+		    }
 		}
+	    }
 	}
-	
+
 }
