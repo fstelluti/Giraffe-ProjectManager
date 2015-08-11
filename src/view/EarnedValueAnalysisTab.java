@@ -68,6 +68,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private JDatePickerImpl progressDatePicker;
 	private DefaultTableCellRenderer centerText;
 	private JTextPane evaReport;
+	private Box box;
 	private double EV, PV, AC, BAC, percentC, percentA, CV, SV, CPI, SPI, EAC,
 			ETC;
 
@@ -106,6 +107,12 @@ public class EarnedValueAnalysisTab extends JPanel {
 		if (this.grid2 != null) {
 			this.remove(this.grid2);
 		}
+		if (this.projectReport != null) {
+			this.remove(this.projectReport);
+		}
+		if (this.box != null) {
+			this.remove(this.box);
+		}
 		if (EVADate != null) {
 			this.grid1 = new JTable(tableModel1);
 			this.grid2 = new JTable(tableModel2);
@@ -134,7 +141,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 			}
 
 			// Combine grids into one
-			Box box = new Box(BoxLayout.Y_AXIS);
+			box = new Box(BoxLayout.Y_AXIS);
 			box.add(new JScrollPane(grid1));
 			box.add(new JSeparator(SwingConstants.VERTICAL));
 			box.add(new JScrollPane(grid2));
@@ -300,9 +307,12 @@ public class EarnedValueAnalysisTab extends JPanel {
 						generateEVAStatistics(EVADate);
 						reload();
 					}
-				}// if
+					
+					
+				}// if datewithinProject
 
 			}
+			
 
 		});
 
