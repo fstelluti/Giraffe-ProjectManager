@@ -24,20 +24,21 @@ public class PERTReport//NOT FINISHED
 	private Project project;
 	private DefaultDirectedGraph<PertActivity, PertEvent> graph;
 	private List<List<PertActivity>> allPaths;
+	private JGraphAdapter graphAdapter;
 	
 	public PERTReport(Project project)
 	{
 		this.project = project;
 		this.graph = this.project.toDigraphPert();
-		JGraphAdapter graphAdapter = new JGraphAdapter();
-		JDialog dialog = new JDialog();
+		graphAdapter = new JGraphAdapter();
 		computeData();
+		/*JDialog dialog = new JDialog();
 		dialog.getContentPane().add(graphAdapter);
 		dialog.setTitle("PERT chart");
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);
 		dialog.setModal(true);
-		dialog.setVisible(true);
+		dialog.setVisible(true);*/
 		
 	}
 	
@@ -111,5 +112,8 @@ public class PERTReport//NOT FINISHED
         }
 
         path.remove(current);
+    }
+    public JGraphAdapter getGraphAdapter() {
+        return graphAdapter;
     }    
 }
