@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -80,11 +79,8 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private DecimalFormat decimalFormat = new DecimalFormat("0.00");
 	private DecimalFormat negativeDecimalFormat = (DecimalFormat) NumberFormat
 			.getCurrencyInstance();
-	private String symbol = negativeDecimalFormat.getCurrency().getSymbol(); // To
-																				// display
-																				// a
-																				// minus
-																				// sign
+	// To display a minus sign
+	private String symbol = negativeDecimalFormat.getCurrency().getSymbol(); 
 
 	public EarnedValueAnalysisTab() {
 		super(new BorderLayout());
@@ -252,8 +248,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 				if (dateWithinProject) {
 					// Check that the due date isn't null
 					try {
-						activitiesStrictlyBeforeDate = project
-								.getActivitiesStrictlyBeforeDate(EVADate);
+						activitiesStrictlyBeforeDate = project.getActivitiesStrictlyBeforeDate(EVADate);
 					} catch (InvalidProjectException exception) {
 						JOptionPane.showMessageDialog(datesPanel,
 								exception.getMessage(),
@@ -287,8 +282,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 					// range
 					// Check that the due date isn't null
 					try {
-						activitiesExactlyWithinDate = project
-								.getActivitiesWithinDate(EVADate);
+						activitiesExactlyWithinDate = project.getActivitiesWithinDate(EVADate);
 					} catch (InvalidProjectException exception) {
 						JOptionPane.showMessageDialog(datesPanel,
 								exception.getMessage(),
@@ -372,9 +366,15 @@ public class EarnedValueAnalysisTab extends JPanel {
 				dateDifference1 = differenceOfDates(cal2, cal1);
 				// Then dueDate - startDate
 				dateDifference2 = differenceOfDates(cal2, cal3);
-				// Now get the percentage expected to be complete for the
-				// activity
-				datePercent = (double) dateDifference1 / dateDifference2;
+				// Now get the percentage expected to be complete for the activity
+				// The the activity starts and ends on the same day (which would result
+				// in a division by zero), then datePercent is set to zero
+				if(dateDifference2 == 0) {
+					datePercent = 0;
+				}
+				else {
+					datePercent = (double) dateDifference1 / dateDifference2;
+				}
 				pvTotal += datePercent * act.getEstimatedCost();
 			}
 		}
@@ -468,8 +468,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	/**
 	 * Generates the EVA statistics Table
 	 * 
-	 * @param The
-	 *            EVA selected Date
+	 * @param The EVA selected Date
 	 */
 	private void generateEVAStatistics(Date date) {
 
@@ -592,7 +591,8 @@ public class EarnedValueAnalysisTab extends JPanel {
 		}// if
 
 	}
-
+	
+	//Used to test the various private methods in this class
 	public static  class TestingClass {
 		private static TestingClass instance = null;
 		private static EarnedValueAnalysisTab a = null;
