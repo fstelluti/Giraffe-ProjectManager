@@ -295,6 +295,7 @@ private JPanel usersSubPanel;
 		  try {
 		      activityIsInsertable =  activity.isInsertable(currentProject);
 		  } catch (Exception e) {
+		  	activity = null;
 		      JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 		      e.printStackTrace();
 		  }
@@ -303,6 +304,7 @@ private JPanel usersSubPanel;
 		      activity.persist();
 		      setVisible(false); 
 		  } else if (projectId <= 0) {
+		  	activity = null;
 		      JOptionPane.showMessageDialog(activityPanel, "A fatal error occurred when adding the activity: associated ProjectID is invalid", "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 		  }
 	      }      
