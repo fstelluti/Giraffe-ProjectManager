@@ -500,11 +500,21 @@ public class EarnedValueAnalysisTab extends JPanel {
 			String budgetAtCompletion = numberFormat.format(BAC);
 
 			// Percent schedules for completion, rounded to two decimal places
-			percentC = ((double) PV / BAC) * 100;
+			// Handle possible divisions by zero
+			if(BAC == 0) {
+				percentC = 0;
+			} else {
+				percentC = ((double) PV / BAC) * 100;
+			}
 			String percentShouldBeCompleted = decimalFormat.format(percentC);
 
 			// Percentage actually completed, rounded to two decimal places
-			percentA = ((double) EV / BAC) * 100;
+			// Handle possible divisions by zero
+			if(BAC == 0) {
+				percentA = 0;
+			} else {
+				percentA = ((double) EV / BAC) * 100;
+			}
 			String percentActuallyCompleted = decimalFormat.format(percentA);
 
 			// Performance Metrics
@@ -517,25 +527,37 @@ public class EarnedValueAnalysisTab extends JPanel {
 			String scheduleVariance = negativeDecimalFormat.format(SV);
 
 			// Cost Performance index, rounded to two decimal places
-			CPI = (double) EV / AC;
+			// Handle possible divisions by zero
+			if(AC == 0) {
+				CPI = 0;
+			}
+			else {
+				CPI = (double) EV / AC;
+			}
 			CPI = CPI * 100;
 			CPI = (double) ((int) CPI); // Truncate after two decimals
 			CPI = CPI / 100;
 			String costPerformanceIndex = decimalFormat.format(CPI);
 
 			// Schedule Performance index, rounded to two decimal places
-			SPI = (double) EV / PV;
-			System.out.println(SPI);
+			// Handle possible divisions by zero
+			if(PV == 0) {
+				SPI = 0;
+			} else {
+				SPI = (double) EV / PV;
+			}
 			SPI = SPI * 100;
-			System.out.println(SPI);
 			SPI = (double) ((int) SPI); // Truncate after two decimals
-			System.out.println(SPI);
 			SPI = SPI / 100;
-			System.out.println(SPI);
 			String schedulePerformanceIndex = decimalFormat.format(SPI);
 
 			// Estimate at completion, rounded to two decimal places
-			EAC = (double) BAC / CPI;
+			// Handle possible divisions by zero
+			if(CPI == 0) {
+				EAC = 0;
+			} else {
+				EAC = (double) BAC / CPI;
+			}
 			String estimateAtCompletion = numberFormat.format(EAC);
 
 			// Estimate to completion

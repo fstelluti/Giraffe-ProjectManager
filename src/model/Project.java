@@ -266,6 +266,7 @@ public class Project {
 	    // which we can use to get the correct days here
 	    criticalPathOptimize();
 	    Calendar cal = Calendar.getInstance();
+	    Date lastDate = new Date(0);
 	    if (startDate == null) { 
 		startDate = new Date();
 		cal.setTime(startDate);
@@ -281,7 +282,11 @@ public class Project {
 		cal.setTime(startDate);
 		cal.add(Calendar.DAY_OF_MONTH, activity.getEarliestFinish());
 		activity.setDueDate(cal.getTime());
+		if (cal.getTime().after(lastDate)) {
+		    lastDate = cal.getTime();
+		}
 	    }
+	    this.dueDate = lastDate;
 	}
 	
 	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraph() {

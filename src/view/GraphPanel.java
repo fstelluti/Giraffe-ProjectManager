@@ -126,6 +126,7 @@ public class GraphPanel extends JPanel {
 	controlPanel = new JPanel();
 	controlPanel.add(comboBox, BorderLayout.CENTER);
 	controlPanel.add(saveToPng, BorderLayout.CENTER);
+	controlPanel.add(saveToJpeg, BorderLayout.CENTER);
 	this.add(controlPanel, BorderLayout.NORTH);
 	redraw();
     }
