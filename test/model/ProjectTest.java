@@ -111,7 +111,6 @@ public class ProjectTest {
 	public void shouldBeValid() throws ParseException, InvalidProjectException
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date testDate1 = sdf.parse("09/01/2015");
 		
 		Project testProject = new Project(1, "test1", sdf.parse("01/01/2015"), sdf.parse("01/02/2015"), "Test");
 		Activity testActivity1 = new Activity(1, "Test1");

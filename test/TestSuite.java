@@ -14,10 +14,11 @@ import org.junit.runners.Suite;
 	controller.ViewManagerTest.class,
 	model.DateLabelFormatterTest.class,
 	model.UserTest.class,
-//	model.ActivityTest.class, // Not yet Implemented
+	model.ActivityTest.class, 
 	model.ProjectTest.class,
 	model.GanttTest.class,
 //	view.LoginPanelTest.class, // Not yet Implemented
+	view.EarnedValueAnalysisTabTest.class,
 	view.MainViewPanelTest.class,
 	view.ApplicationPanelTest.class,
 	view.SetupPanelTest.class
