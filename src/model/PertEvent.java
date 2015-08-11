@@ -2,7 +2,9 @@ package model;
 
 import java.util.Date;
 
-public class PertEvent
+import org.jgrapht.graph.DefaultEdge;
+
+public class PertEvent extends DefaultEdge
 {
 	private int eventNumber;
 	private Date targetDate;
@@ -46,7 +48,7 @@ public class PertEvent
 	@Override
 	public String toString()
 	{
-		return "";
+		return "From " + ((PertActivity)getSource()).getName();
 	}
 
 }

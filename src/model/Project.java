@@ -14,9 +14,12 @@ import org.jgrapht.ListenableGraph;
 import javax.swing.JOptionPane;
 
 import org.jgrapht.alg.CycleDetector;
+import org.jgrapht.alg.DirectedNeighborIndex;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.ListenableDirectedGraph;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.traverse.GraphIterator;
 
 import controller.ActivityDB;
 import controller.PredecessorDB;
@@ -307,10 +310,17 @@ public class Project {
 		    new DefaultDirectedGraph<PertActivity, PertEvent>(PertEvent.class);
 	    List<Activity> predecessorActivities;
 
+	    PertActivity start = new PertActivity(0, "Start");
+	    PertActivity end = new PertActivity(-1, "End");
+	    
+	    diGraph.addVertex(start);
+	    
 	    // Vertices
 	    for (Activity source : activities) {
 		diGraph.addVertex(new PertActivity(source.getId()));
 	    }
+	    
+	    diGraph.addVertex(end);
 
 	    // Edges
 	    for (Activity source : activities) {
@@ -319,6 +329,26 @@ public class Project {
 		for (Activity target : predecessorActivities) {
 		    diGraph.addEdge(new PertActivity(target.getId()), new PertActivity(source.getId()));
 		}
+	    }
+	    
+	    GraphIterator<PertActivity, PertEvent> iterator = 
+                new DepthFirstIterator<PertActivity, PertEvent>(diGraph);
+	    
+	    while(iterator.hasNext())
+	    {
+	    	PertActivity tempActivity = iterator.next();
+	    	
+	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0)
+	    	{
+	    		diGraph.addEdge(start, tempActivity);
+	    		continue;
+	    	}
+	    	
+	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equals("End"))
+	    	{
+	    		diGraph.addEdge(tempActivity, end);
+	    	}
+	    	
 	    }
 	    return diGraph;
 	}
