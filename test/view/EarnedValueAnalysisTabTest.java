@@ -4,22 +4,19 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import model.Activity;
 import model.Project;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import view.EarnedValueAnalysisTab;
 import view.EarnedValueAnalysisTab.TestingClass;;
 
 /**
- * 
+ * Tests view.EarnedValueAnalysisTab
  * @author lukas cardot
  *
  */

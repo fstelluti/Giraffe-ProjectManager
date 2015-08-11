@@ -378,7 +378,6 @@ public class EarnedValueAnalysisTab extends JPanel {
 				pvTotal += datePercent * act.getEstimatedCost();
 			}
 		}
-		System.out.println(pvTotal);
 		return pvTotal;
 	}
 
@@ -397,7 +396,6 @@ public class EarnedValueAnalysisTab extends JPanel {
 			date.add(Calendar.DAY_OF_MONTH, 1);
 			differenceDays++;
 		}
-		System.out.println(differenceDays);
 		return differenceDays;
 	}
 
