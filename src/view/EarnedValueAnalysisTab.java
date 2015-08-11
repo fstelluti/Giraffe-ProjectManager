@@ -525,9 +525,13 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 			// Schedule Performance index, rounded to two decimal places
 			SPI = (double) EV / PV;
+			System.out.println(SPI);
 			SPI = SPI * 100;
+			System.out.println(SPI);
 			SPI = (double) ((int) SPI); // Truncate after two decimals
+			System.out.println(SPI);
 			SPI = SPI / 100;
+			System.out.println(SPI);
 			String schedulePerformanceIndex = decimalFormat.format(SPI);
 
 			// Estimate at completion, rounded to two decimal places
@@ -540,20 +544,20 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 			// Columns and date for tables
 			Vector<String> columnNames1 = new Vector<String>();
-			columnNames1.add("PV");
-			columnNames1.add("EV");
-			columnNames1.add("AC");
-			columnNames1.add("BAC");
+			columnNames1.add("Planned Value");
+			columnNames1.add("Earned Value");
+			columnNames1.add("Actual Cost");
+			columnNames1.add("Budget at Completion");
 			columnNames1.add("% Scheduled");
 			columnNames1.add("% Completed");
 
 			Vector<String> columnNames2 = new Vector<String>();
-			columnNames2.add("CV");
-			columnNames2.add("SV");
-			columnNames2.add("CPI");
-			columnNames2.add("SPI");
-			columnNames2.add("EAC");
-			columnNames2.add("ETC");
+			columnNames2.add("Cost Variance");
+			columnNames2.add("Schedule Variance");
+			columnNames2.add("Cost Performance Index");
+			columnNames2.add("Schedule Performance Index");
+			columnNames2.add("Estimate at Completion");
+			columnNames2.add("Estimate to Complete");
 
 			// data of the table
 			Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
