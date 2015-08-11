@@ -49,6 +49,7 @@ import controller.ViewManager;
  * This class defined the tab panel used to generate Earned Value Analysis
  * 
  * @author Francois Stelluti
+ * @modifiedBy: lukas cardot
  */
 
 @SuppressWarnings("serial")

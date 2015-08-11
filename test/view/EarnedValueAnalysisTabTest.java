@@ -18,6 +18,12 @@ import org.junit.Test;
 import view.EarnedValueAnalysisTab;
 import view.EarnedValueAnalysisTab.TestingClass;;
 
+/**
+ * 
+ * @author lukas cardot
+ *
+ */
+
 public class EarnedValueAnalysisTabTest {
 	
 	private TestingClass testingClass = null;
