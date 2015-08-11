@@ -258,71 +258,27 @@ public class Project {
 		    throw new InvalidProjectException("All the activities in your project must have a Most Likely Duration in order to optimize project dates!");
 		}
 	    }
-
-	    for (Activity activity : activities) {
-		// If the activity is a "target" node (it has predecessors, but no children)
-		// call the recursive method optimizeActivity to optimize all nodes backwards along the path
-		if (activity.getDependents().isEmpty()) {
-		    optimizeActivity(activity);
-		}
-	    }
 	    
-	    // Then get the latest date of all activities and set the project due date to it
-	    setDueDate(new Date(0));
-	    for (Activity activity : activities) {
-		if (activity.getDueDate().after(dueDate)) {
-		    dueDate = activity.getDueDate();
-		}
-	    }    
-	}
-
-	private void optimizeActivity(Activity activity) {
+	    // The critical path optimize algorithm traverses the graph and sets earliest start and finish dates,
+	    // which we can use to get the correct days here
+	    criticalPathOptimize();
 	    Calendar cal = Calendar.getInstance();
-	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
-	    Set<DefaultEdge> incomingActivities = digraph.incomingEdgesOf(activity);
-	    // Base case: if there are no incoming activities, this is an "origin" node
-	    // Set the start date to the project start date and the due date to start date + duration
-	    if (incomingActivities.isEmpty()) {
-		if (startDate == null) {
-		    startDate = new Date();
-		}
-		activity.setStartDate(startDate);
+	    if (startDate == null) { 
+		startDate = new Date();
 		cal.setTime(startDate);
-		cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR, 0);
+		startDate = cal.getTime();
+	    }
+	    for (Activity activity : activities) {
+		cal.setTime(startDate);
+		cal.add(Calendar.DAY_OF_MONTH, activity.getEarliestStart());
+		activity.setStartDate(cal.getTime());
+		cal.setTime(startDate);
+		cal.add(Calendar.DAY_OF_MONTH, activity.getEarliestFinish());
 		activity.setDueDate(cal.getTime());
-	    } else {
-		// Recursive case: otherwise set to the max of preceding activities' due dates
-		List<Activity> predecessors = new ArrayList<Activity>();
-		for (DefaultEdge predecessorEdge : incomingActivities) {
-		    predecessors.add(digraph.getEdgeSource(predecessorEdge));
-		}
-		// Reset the activity start date
-		activity.setStartDate(new Date(0));
-		for (Activity predecessor : predecessors) {
-		    optimizeActivity(predecessor);
-		    if (predecessor.getDueDate().after(activity.getStartDate())) {
-			activity.setStartDate(predecessor.getDueDate());
-			cal.setTime(activity.getStartDate());
-			cal.add(Calendar.DAY_OF_MONTH, activity.getMostLikelyDuration());
-			activity.setDueDate(cal.getTime());
-		    }	
-		}
 	    }
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ListenableDirectedGraph<Activity, DefaultEdge> toListenableDirectedGraph() {
-	    ListenableDirectedGraph g = new ListenableDirectedGraph(DefaultEdge.class);
-	    for (Activity activity : activities) {
-		g.addVertex(activity);
-	    }
-	    for (Activity activity : activities) {
-		List<Integer> dependents = activity.getDependents();
-		for (Integer dependent : dependents) {
-		    g.addEdge(activity, new Activity(dependent));
-		}
-	    }
-	    return g;
 	}
 	
 	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraph() {
@@ -545,7 +501,7 @@ public class Project {
 	  return cloneActivities;
 	}
 	
-	public DefaultDirectedGraph<Activity, DefaultEdge> getCriticalPathGraph() {
+	public synchronized DefaultDirectedGraph<Activity, DefaultEdge> getCriticalPathGraph() {
 	    criticalPathOptimize();
 	    DefaultDirectedGraph<Activity, DefaultEdge> digraph = toDigraph();
 	    for (Activity activity : activities) {
@@ -553,13 +509,26 @@ public class Project {
 		    digraph.removeVertex(activity);
 		}
 	    }
-	    Set<Activity> currentDigraph = digraph.vertexSet();
-	    for (Activity activity : currentDigraph) {
-		if (digraph.inDegreeOf(activity) == 0 && digraph.outDegreeOf(activity) == 0) {
-		    digraph.removeVertex(activity);
+	    // Convert to array and iterate over array to prevent concurrent modification of underlying vertexSet
+	    // and subsequent iterator invalidation
+	    Object[] currentDigraph = digraph.vertexSet().toArray(); 
+	    for (int i = 0; i < currentDigraph.length; i++) {
+		if (digraph.inDegreeOf((Activity) currentDigraph[i]) == 0 && digraph.outDegreeOf((Activity) currentDigraph[i]) == 0) {
+		    digraph.removeVertex((Activity) currentDigraph[i]);
 		}
 	    }
 	    return digraph;
+	}
+	
+	public DefaultDirectedGraph<Activity, DefaultEdge> toDigraphWithoutOrphans() {
+	    DefaultDirectedGraph<Activity, DefaultEdge> orphanage = toDigraph();
+	    Object[] currentDigraph = orphanage.vertexSet().toArray(); 
+	    for (int i = 0; i < currentDigraph.length; i++) {
+		if (orphanage.inDegreeOf((Activity) currentDigraph[i]) == 0 && orphanage.outDegreeOf((Activity) currentDigraph[i]) == 0) {
+		    orphanage.removeVertex((Activity) currentDigraph[i]);
+		}
+	    }
+	    return orphanage;
 	}
 	
 	public void criticalPathOptimize() {

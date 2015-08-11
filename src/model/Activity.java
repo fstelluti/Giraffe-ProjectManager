@@ -228,7 +228,7 @@ public class Activity {
 		throw new Exception("Activity name must be unique--an activity with that name already exists in the project");
 	    }
 	    
-	    //Verifies all text boxes are filled out, if not = error
+	    //Verifies all required text boxes are filled out, if not = error
 	    if (activityName.hashCode() == 0) {
 		throw new Exception("Activity name cannot be empty");
 	    }
@@ -240,7 +240,7 @@ public class Activity {
 	    
 	    if (projectStartDate != null) {
 		if (activityStartDate != null && activityStartDate.before(projectStartDate)) {
-		    throw new Exception("Please ensure start date is before project start date (" + DataManager.DATE_FORMAT.format(projectStartDate) +")");
+		    throw new Exception("Please ensure start date is after project start date (" + DataManager.DATE_FORMAT.format(projectStartDate) +")");
 		}
 	    }
 	    
@@ -385,7 +385,7 @@ public class Activity {
 	}
 
 	public void clearDependents() {
-	    predecessors = null;
+	    predecessors = new HashSet<Integer>();
 	}
 
 	public int getEarliestStart() {

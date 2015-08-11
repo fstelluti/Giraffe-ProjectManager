@@ -236,6 +236,7 @@ private JPanel usersSubPanel;
 		      activity = new Activity(projectId, activityNameEntered);
 		  } else {
 		      edit = true;
+		      activity.clearDependents();
 		      activity.setName(activityNameEntered);
 		  }
 
@@ -276,9 +277,6 @@ private JPanel usersSubPanel;
 		  activity.setPercentageComplete(percentageCompleted);
 		  activity.setStatus(activityStatus);
 		  
-		  for (int i = 0; i < availableActivities.getSize(); i++) {
-		      activity.removeDependent(availableActivities.getElementAt(i).getId());
-		  }
 		  
 		  for (int i = 0; i < dependantActivities.getSize(); i++) {
 		      activity.addDependent(dependantActivities.getElementAt(i).getId());
@@ -595,7 +593,6 @@ private JPanel usersSubPanel;
 	  sourceActivities = currentProject.getActivities();
 	  //Iterate over all activities, and add them to activitiesList
 	  for(Activity activity: sourceActivities){
-	      //System.out.println("Wow" + activity + " " + this.activity);
 	  	if (this.activity != activity && activity != null) {
 	  	    availableActivities.addElement(activity);
 	  	}
