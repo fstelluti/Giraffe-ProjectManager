@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.jgraph.JGraph;
@@ -26,13 +27,14 @@ public class PERTReport//NOT FINISHED
 		this.project = project;
 		this.graph = this.project.toDigraphPert();
 		JGraphAdapter graphAdapter = new JGraphAdapter();
-		JFrame frame = new JFrame();
+		JDialog dialog = new JDialog();
 		computeData();
-		frame.getContentPane().add(graphAdapter);
-		frame.setTitle("PERT chart");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+		dialog.getContentPane().add(graphAdapter);
+		dialog.setTitle("PERT chart");
+		dialog.pack();
+		dialog.setLocationRelativeTo(null);
+		dialog.setModal(true);
+		dialog.setVisible(true);
 		
 	}
 	

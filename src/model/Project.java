@@ -338,13 +338,15 @@ public class Project {
 	    {
 	    	PertActivity tempActivity = iterator.next();
 	    	
-	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0)
+	    	System.out.println("Printing temp activity");
+	    	System.out.println(tempActivity.getName());
+	    	
+	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equalsIgnoreCase("End"))
 	    	{
 	    		diGraph.addEdge(start, tempActivity);
-	    		continue;
 	    	}
 	    	
-	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equals("End"))
+	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equalsIgnoreCase("End"))
 	    	{
 	    		diGraph.addEdge(tempActivity, end);
 	    	}

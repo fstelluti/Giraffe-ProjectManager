@@ -44,7 +44,18 @@ public class PertActivity extends Activity
 	@Override
 	public String toString()
 	{
-		return "Activity " + super.getName() + "\nExpected duration: " + expectedDuration + "\nStandard deviation: " + standardDeviation;
+		if(super.getName().equalsIgnoreCase("start"))
+		{
+			return "Project start";
+		}
+		else if(super.getName().equalsIgnoreCase("end"))
+		{
+			return "Project end";
+		}
+		else
+		{
+			return "Activity " + super.getName() + "\nExpected duration: " + expectedDuration + "\nStandard deviation: " + standardDeviation;
+		}
 	}
 	
 	
