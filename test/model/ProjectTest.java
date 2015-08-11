@@ -127,9 +127,9 @@ public class ProjectTest {
 		testProject.addActivity(testActivity2);
 		testProject.addActivity(testActivity3);
 		
-		testActivity1.setId(1);
-		testActivity2.setId(2);
-		testActivity3.setId(3);
+		testActivity1.setActivityId(1);
+		testActivity2.setActivityId(2);
+		testActivity3.setActivityId(3);
 		
 		testActivity1.addDependent(2);
 		testActivity2.addDependent(3);
