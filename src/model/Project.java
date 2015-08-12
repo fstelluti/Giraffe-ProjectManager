@@ -342,22 +342,22 @@ public class Project {
 	    while(iterator.hasNext())
 	    {
 	    	PertActivity tempActivity = iterator.next();
-	    	
-	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equalsIgnoreCase("End"))
+	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0)
 	    	{
-	    		diGraph.addEdge(start, tempActivity);
+	    		if (!tempActivity.getName().equalsIgnoreCase(start.getName())&& !tempActivity.getName().equalsIgnoreCase(end.getName()))
+	    		{
+	    			diGraph.addEdge(start, tempActivity);
+	    		}
 	    	}
 	    	
-	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0 && !tempActivity.getName().equalsIgnoreCase("End"))
+	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0)
 	    	{
-	    		diGraph.addEdge(tempActivity, end);
+	    		if (!tempActivity.getName().equalsIgnoreCase(start.getName())&& !tempActivity.getName().equalsIgnoreCase(end.getName()))
+	    		{
+	    			diGraph.addEdge(tempActivity, end);
+	    		}
 	    	}
-	    	
 	    }
-	    for (PertEvent event : diGraph.edgesOf(start))
-	    {
-			event.setExpectedDate(0);
-		}
 	    return diGraph;
 	}
 
