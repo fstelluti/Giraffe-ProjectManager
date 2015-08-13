@@ -121,27 +121,47 @@ public abstract class DataManager
 		return DEFAULT_DB;
 	}
 
+	/**
+	 * Gets the current user database 
+	 * @return String 
+	 */
 	public static String getUserDatabase() {
 		return userDatabase;
 	}
 
+	/**
+	 * Set a new user database
+	 * @param String userDatabase
+	 */
 	public static void setUserDatabase(String userDatabase) {
 		DataManager.userDatabase = "jdbc:sqlite:" + userDatabase + ".db";
 	}
 
+	//Used for testing purposes
 	public static boolean isTesting() {
 		return testing;
 	}
 
+	//Set to testing if running test cases
 	public static void setTesting(boolean testing) {
 		DataManager.testing = testing;
 	}
 
+	/**
+	 * Method to help sanitize the database
+	 * @param String name
+	 * @return String result
+	 */
 	public static String safeSql(String name) {
 	    String result = name.replace("'", "''");
 	    return result;
 	}
-
+	
+	/**
+	 * Gets the projects assigned to the given user
+	 * @param user
+	 * @return List<Project>
+	 */
 	public static List<Project> getAssignedUserProjects(User user) {
 	    List<Activity> userActivities = UserActivitiesDB.getActivities(user.getId());
 	    HashSet<Project> userProjects = new HashSet<Project>();
@@ -151,6 +171,11 @@ public abstract class DataManager
 	    return new ArrayList<Project>(userProjects);
 	}
 
+	/**
+	 * Checks if the user is a Project manager for the given project
+	 * @param user, project
+	 * @return boolean - True is user manages project
+	 */
 	public static boolean userManagesProject(User user, Project project) {
 	    List<User> projectManagers = UserRolesDB.getProjectManagersByProjectId(project.getId());
 	    for (User manager : projectManagers) {

@@ -32,7 +32,7 @@ public class UserRolesDB extends DataManager
 			stmt = c.createStatement();
 			String sql = "CREATE TABLE IF NOT EXISTS USERROLES " + "(USERID 		INTEGER,"
 					+ " PROJECTID 	INTEGER," + " ROLEID  	INTEGER,"
-    					+ " PRIMARY KEY(USERID,PROJECTID)," //TODO Remove? Still works but get error because it doesn't want duplicates
+    					+ " PRIMARY KEY(USERID,PROJECTID)," 
 					+ " FOREIGN KEY(USERID) REFERENCES USERS(ID),"
 					+ " FOREIGN KEY(PROJECTID) REFERENCES PROJECTS(ID))";
 			stmt.executeUpdate(sql);
@@ -94,7 +94,7 @@ public class UserRolesDB extends DataManager
 	
 	/**
 	 * Method to get the Project Manager(s) associated to a Project
-	 * @param id as an Int
+	 * @param id as an int
 	 * @return List<User>
 	 */
 	public static ArrayList<User> getProjectManagersByProjectId(int id)
@@ -210,6 +210,10 @@ public class UserRolesDB extends DataManager
 	    }
 	}
 
+	/**
+	 * Delete the roleID of a given project id
+	 * @param int projectID
+	 */
 	public static void delete(int id) {
 	    Connection c = null;
 	    Statement stmt = null;

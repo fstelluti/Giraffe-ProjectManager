@@ -18,11 +18,10 @@ import javax.swing.JTextField;
 import model.Project;
 import model.User;
 import controller.ProjectDB;
-import controller.UserRolesDB;
 import controller.ViewManager;
 
 /**
- * Create a Dialog window, where the user can create a project.
+ * Create a Dialog window, where the user can create a project using only a project name.
  *
  * @author Anne-Marie Dube, Lukas Cardot-Goyette, Zachary Bergeron
  */
@@ -30,8 +29,6 @@ import controller.ViewManager;
 @SuppressWarnings("serial")
 public class CreateProjectDialog extends JDialog 
 {
-
-
 	private JTextField projectName;
 
 	private User user;
@@ -49,6 +46,10 @@ public class CreateProjectDialog extends JDialog
 		this.setVisible(true);
 
 	}	
+	
+  /**
+   * Initialize the dialog
+   */
 	private void initComponent()
 	{
 		final JPanel content = new JPanel();
@@ -87,7 +88,6 @@ public class CreateProjectDialog extends JDialog
 					project.persist();
 
 					//Gets id of project just created
-
 					//Sets initial project manager for project
 					ViewManager.setUserRole(user.getId(), project.getId(), 1);
 						

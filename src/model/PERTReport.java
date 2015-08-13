@@ -19,6 +19,10 @@ import org.jgrapht.traverse.GraphIterator;
 
 import com.jgraph.layout.tree.JGraphTreeLayout;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class PERTReport//NOT FINISHED
 {
 	private Project project;

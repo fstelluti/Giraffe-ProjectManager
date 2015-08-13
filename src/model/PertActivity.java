@@ -4,6 +4,10 @@ import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class PertActivity extends Activity
 {
 	private String expectedDuration;

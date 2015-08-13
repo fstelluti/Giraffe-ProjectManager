@@ -5,6 +5,10 @@ import java.util.Date;
 
 import org.jgrapht.graph.DefaultEdge;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class PertEvent extends DefaultEdge
 {
 	private int eventNumber;

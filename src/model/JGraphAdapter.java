@@ -13,6 +13,10 @@ import com.mxgraph.view.mxGraph;
 
 import controller.ViewManager;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class JGraphAdapter extends JPanel
 {
 	private JGraphXAdapter<PertActivity, PertEvent> jgxAdapter;
