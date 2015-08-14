@@ -187,41 +187,37 @@ public class ProjectTest {
 	public void shouldBeBeforeDate() throws ParseException, InvalidProjectException
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date testDate1 = null, testDate2 = null, testDate3 = null;
+		Date testDate = null;
+		int activityNumber = 20;
+		Activity[] activities = new Activity[activityNumber];
 		
 		//Initialize Test variables
 		Project testProject = new Project(1, "test", sdf.parse("01/01/2015"), sdf.parse("01/02/2015"), "Test");
-		Activity testActivity1 = new Activity(1, "Test1");
-		testActivity1.setDueDate(sdf.parse("10/01/2015"));
-		testActivity1.setStartDate(sdf.parse("09/01/2015"));
-		Activity testActivity2 = new Activity(1, "Test2");
-		testActivity2.setDueDate(sdf.parse("20/01/2015"));
-		testActivity2.setStartDate(sdf.parse("19/01/2015"));
-		Activity testActivity3 = new Activity(1, "Test3");
-		testActivity3.setDueDate(sdf.parse("30/01/2015"));
-		testActivity3.setStartDate(sdf.parse("29/01/2015"));
 		
-		testProject.addActivity(testActivity1);
-		testProject.addActivity(testActivity2);
-		testProject.addActivity(testActivity3);
-		
-		//Create 3 test dates
-		try {
-			testDate1 = sdf.parse("09/01/2015");
-			testDate2 = sdf.parse("19/01/2015");
-			testDate3 = sdf.parse("31/01/2015");
-		} catch (ParseException e) {
-			e.printStackTrace();
+		for(int i = 0; i < activityNumber; i++)
+		{
+			if(i == 0)
+			{
+				//No Activities in Project
+				assertEquals(testProject.getActivities(), new ArrayList());
+			}
+			
+			testDate = sdf.parse(((i+3)%30) + "/01/2015");
+			activities[i] = new Activity(1, "Test " + (i + 1));
+			activities[i].setDueDate(sdf.parse(((i+2)%30) + "/01/2015"));
+			activities[i].setStartDate(sdf.parse(((i+1)%30) + "/01/2015"));
+			testProject.addActivity(activities[i]);
+			
+			if(i > 0)
+			{
+				//testDate is after the last added activity's due date
+				assertEquals(testProject.getActivities(), testProject.getActivitiesStrictlyBeforeDate(testDate));
+			}
+			else if(i == 0)
+			{
+				assertEquals(testProject.getActivities().get(0), activities[0]);
+			}
 		}
-		
-		//Assert method
-		assertEquals("Should return all activities.", testProject.getActivities(), testProject.getActivitiesStrictlyBeforeDate(testDate3));
-		
-		assertEquals("Activity should be equal.", testActivity1, testProject.getActivitiesStrictlyBeforeDate(testDate2).get(0));
-		assertEquals("Should have only one activity", 1, testProject.getActivitiesStrictlyBeforeDate(testDate2).size());
-		
-		assertTrue("Should return no activities.", testProject.getActivitiesStrictlyBeforeDate(testDate1).isEmpty());
-		assertFalse("Should return activities.", testProject.getActivitiesStrictlyBeforeDate(testDate3).isEmpty());
 	}
 	
 	//Test getActivitiesWithinDate()

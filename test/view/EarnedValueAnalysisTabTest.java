@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,53 +38,39 @@ public class EarnedValueAnalysisTabTest {
 	public void shouldReturnPvCost() throws ParseException 
 	{
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		int activityNumber = 20, pvCost = 0;
+		Activity[] activities = new Activity[activityNumber];
+		Date evaDate = null;
 		
 		Project testProject = new Project(1, "test", new Date(), new Date(), "Test");
 		
-		Activity testActivity1 = new Activity(1, "Test1");
-		testActivity1.setId(1);
-		testActivity1.setEstimatedCost(1000);
-		testActivity1.setStartDate(sdf.parse("09/01/2015"));
-		testActivity1.setDueDate(sdf.parse("10/01/2015"));
-		testActivity1.setStatus(2);
-		
-		Activity testActivity2 = new Activity(1, "Test2");
-		testActivity2.setId(2);
-		testActivity2.setEstimatedCost(2000);
-		testActivity2.setStatus(2);
-		testActivity2.setStartDate(sdf.parse("11/01/2015"));
-		testActivity2.setDueDate(sdf.parse("12/01/2015"));
-		
-		Activity testActivity3 = new Activity(1, "Test3");
-		testActivity3.setId(3);
-		testActivity3.setEstimatedCost(3000);
-		testActivity3.setStatus(2);
-		testActivity3.setStartDate(sdf.parse("13/01/2015"));
-		testActivity3.setDueDate(sdf.parse("14/01/2015"));
-		
-		Activity testActivity4 = new Activity(1, "Test4");
-		testActivity4.setId(4);
-		testActivity4.setEstimatedCost(4000);
-		testActivity4.setStatus(2);
-		testActivity4.setStartDate(sdf.parse("15/01/2015"));
-		testActivity4.setDueDate(sdf.parse("16/01/2015"));
-		
-		Activity testActivity5 = new Activity(1, "Test5");
-		testActivity5.setId(4);
-		testActivity5.setEstimatedCost(5000);
-		testActivity5.setStatus(2);
-		testActivity5.setStartDate(sdf.parse("15/01/2016"));
-		testActivity5.setDueDate(sdf.parse("16/01/2016"));
-		
-		testProject.addActivity(testActivity1);
-		testProject.addActivity(testActivity2);
-		testProject.addActivity(testActivity3);
-		testProject.addActivity(testActivity4);
-		testProject.addActivity(testActivity5);
-		
-		testingClass.setProject(testProject);
-		
-		assertEquals("BAC calculation not working properly", 10000, testingClass.getPVCostMethod(testProject.getActivities(), true, sdf.parse("09/02/2015")), 0);
+		for(int i = 1; i <= activityNumber; i++)
+		{	
+			if(i == 1)
+			{
+				assertEquals("BAC calculation not working properly", pvCost, 0, 0);
+			}
+			
+			evaDate = sdf.parse(((i+2)%30) + "/01/2015");
+			activities[i - 1] = new Activity(1, "Test " + i);
+			activities[i - 1].setId(i);
+			activities[i - 1].setEstimatedCost(i * 1000);
+			activities[i - 1].setStatus(i % 3);
+			activities[i - 1].setStartDate(sdf.parse((i%30) + "/01/2015"));
+			activities[i - 1].setDueDate(sdf.parse(((i+1)%30) + "/01/2015"));
+			testProject.addActivity(activities[i - 1]);
+			
+			pvCost += i * 1000;
+			
+			if(i > 1)
+			{
+				assertEquals("BAC calculation not working properly", pvCost, testingClass.getPVCostMethod(testProject.getActivities(), true, evaDate), 0);
+			}
+			else if(i == 1)
+			{
+				assertEquals("BAC calculation not working properly", pvCost, 1000, 0);
+			}
+		}
 	}
 	
 	//test getBAC()
