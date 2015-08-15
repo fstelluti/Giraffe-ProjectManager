@@ -27,51 +27,61 @@ public class TabPanel extends JPanel {
     DetailsTab detailsTab;
     
     public TabPanel (User user) {
-	super(new BorderLayout());
-
-	this.project = ViewManager.getCurrentProject();
-	this.user = user;
-	
-	// If the user has no projects (which should be strictly equivalent to the statement
-	// user.getCurrentProject() == null), draw the welcome pane; else draw the TabView.
-	if (user.getCurrentProject() == null || user.getCurrentProject().getId() < 0) {
-		this.add(new JLabel(new ImageIcon(TabPanel.class.getResource("images/welcomegiraffe4.png"))));
-	} else {
-	    reload();
-	}
+			super(new BorderLayout());
+		
+			this.project = ViewManager.getCurrentProject();
+			this.user = user;
+			
+			// If the user has no projects (which should be strictly equivalent to the statement
+			// user.getCurrentProject() == null), draw the welcome pane; else draw the TabView.
+			if (user.getCurrentProject() == null || user.getCurrentProject().getId() < 0) {
+				this.add(new JLabel(new ImageIcon(TabPanel.class.getResource("images/welcomegiraffe4.png"))));
+			} else {
+			    reload();
+			}
     }
 
     public void setActiveTab(int i) {
-	tabPane.setSelectedIndex(i);
+    	tabPane.setSelectedIndex(i);
     }
+    
+  	/**
+  	 * This method refreshes the tab panels
+  	 */
     public void refresh (User user) {
-	activitiesTab.refresh();
-	reportsTab.refresh();
-	detailsTab.refresh();
-	this.revalidate();
-	this.repaint();
+			activitiesTab.refresh();
+			reportsTab.refresh();
+			detailsTab.refresh();
+			this.revalidate();
+			this.repaint();
     }
 
+  	/**
+  	 * This method reloads the tab panels
+  	 */
     public void reload() {
-	this.project = ViewManager.getCurrentProject();
-	this.removeAll();
-	JPanel labelPanel = new JPanel(new GridBagLayout());
-	JLabel projectLabel = new JLabel("<html><h1>" + this.project.toString() + "</h1></html");
-	labelPanel.add(projectLabel);
-	this.add(labelPanel, BorderLayout.NORTH);
-	this.validate();
-	this.tabPane = new JTabbedPane();
-	this.activitiesTab = new ActivitiesTab();
-	ImageIcon activitiesIcon = new ImageIcon(TabPanel.class.getResource("images/activitiesIcon.png"));
-	this.reportsTab = new ReportsTab();
-	ImageIcon reportsIcon = new ImageIcon(TabPanel.class.getResource("images/reportsIcon.png"));
-	this.detailsTab = new DetailsTab();
-	ImageIcon detailsIcon = new ImageIcon(TabPanel.class.getResource("images/detailsIcon.png"));
-	this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
-	if (DataManager.userManagesProject(user, project)) {
-	    this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
-	    this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
-	}
+			this.project = ViewManager.getCurrentProject();
+			this.removeAll();
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			//Project Name
+			JLabel projectLabel = new JLabel("<html><h1>" + this.project.toString() + "</h1></html");
+			labelPanel.add(projectLabel);
+			this.add(labelPanel, BorderLayout.NORTH);
+			this.validate();
+			this.tabPane = new JTabbedPane();
+			
+			//Create tabs and add relevant icons
+			this.activitiesTab = new ActivitiesTab();
+			ImageIcon activitiesIcon = new ImageIcon(TabPanel.class.getResource("images/activitiesIcon.png"));
+			this.reportsTab = new ReportsTab();
+			ImageIcon reportsIcon = new ImageIcon(TabPanel.class.getResource("images/reportsIcon.png"));
+			this.detailsTab = new DetailsTab();
+			ImageIcon detailsIcon = new ImageIcon(TabPanel.class.getResource("images/detailsIcon.png"));
+			this.tabPane.addTab("Activities", activitiesIcon, activitiesTab, "View all activities associated with this project");
+			if (DataManager.userManagesProject(user, project)) {
+			    this.tabPane.addTab("Details", detailsIcon, detailsTab, "View and Edit Project Details");
+			    this.tabPane.addTab("Reports", reportsIcon, reportsTab, "Generate reports based on data from this project");
+			}
 	
 	//Add a changeListner to update the AC for a project
 	tabPane.addChangeListener(new ChangeListener() {

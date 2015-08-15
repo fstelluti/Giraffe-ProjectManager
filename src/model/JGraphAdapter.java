@@ -13,6 +13,10 @@ import com.mxgraph.view.mxGraph;
 
 import controller.ViewManager;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class JGraphAdapter extends JPanel
 {
 	private JGraphXAdapter<PertActivity, PertEvent> jgxAdapter;
@@ -32,10 +36,7 @@ public class JGraphAdapter extends JPanel
 				
 				
 				graph.clearCellOverlays();
-				
-				/*mxGraph gr = new mxGraph();
-				gr.getStylesheet().getDefaultEdgeStyle().put(mxConstants.STYLE_NOLABEL, "1") */
-				
+
 				// positioning via jgraphx layouts
 				mxHierarchicalLayout layout = new mxHierarchicalLayout(jgxAdapter);
 				layout.execute(jgxAdapter.getDefaultParent());

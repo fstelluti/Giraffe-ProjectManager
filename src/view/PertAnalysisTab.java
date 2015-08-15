@@ -7,8 +7,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import model.JGraphAdapter;
 import model.PERTReport;
 import model.Project;
 import controller.ViewManager;
@@ -19,6 +21,9 @@ public class PertAnalysisTab extends JPanel
 	  private JButton generatePertButton;
 	  private JPanel control, content;
 	  private DefaultTableCellRenderer centerText;
+	private JGraphAdapter graphAdapter;
+	protected JScrollPane scrollPane;
+
 
 	  public PertAnalysisTab() {
 			super(new BorderLayout());
@@ -49,8 +54,15 @@ public class PertAnalysisTab extends JPanel
 		  generatePertButton = new JButton("Generate PERT chart");
 		  generatePertButton.addActionListener(new ActionListener() {
 
+
 			public void actionPerformed(ActionEvent e) {
 			  PERTReport pertReport = new PERTReport(project);
+			  graphAdapter = pertReport.getGraphAdapter();
+			  scrollPane = new JScrollPane();
+			  scrollPane.setViewportView(graphAdapter);
+			  add(scrollPane, BorderLayout.CENTER);
+			  revalidate();
+			  repaint();
 			}
 	  		
 	  	});

@@ -45,6 +45,7 @@ public class GraphPanel extends JPanel {
     private JComboBox<String> comboBox;
     private JPanel controlPanel;
     private JButton saveToPng;
+    private JButton saveToJpeg;
 
     
     public GraphPanel() {
@@ -80,7 +81,7 @@ public class GraphPanel extends JPanel {
 	    }
 	    
 	});
-	saveToPng = new JButton("Save to PNG");
+	saveToPng = new JButton("Export to PNG");
 	saveToPng.addActionListener(new ActionListener() {
 
 	    @Override
@@ -101,9 +102,31 @@ public class GraphPanel extends JPanel {
 	    }
 	    
 	});
+	saveToJpeg = new JButton("Export to JPEG");
+	saveToJpeg.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		JFileChooser fc = new JFileChooser();
+		int returnVal = fc.showSaveDialog(GraphPanel.this);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+		    File file = fc.getSelectedFile();
+		    try {
+			BufferedImage image = new BufferedImage(getSize().width, getSize().height, BufferedImage.TYPE_INT_ARGB);
+			Graphics g = image.createGraphics();
+			paint(g);
+			ImageIO.write(image, "JPEG", file);
+		    } catch (IOException e1) {
+			e1.printStackTrace();
+		    }
+		}
+	    }
+	    
+	});
 	controlPanel = new JPanel();
 	controlPanel.add(comboBox, BorderLayout.CENTER);
 	controlPanel.add(saveToPng, BorderLayout.CENTER);
+	controlPanel.add(saveToJpeg, BorderLayout.CENTER);
 	this.add(controlPanel, BorderLayout.NORTH);
 	redraw();
     }

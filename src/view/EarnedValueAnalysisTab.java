@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -26,8 +25,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -69,8 +66,8 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private JDatePickerImpl progressDatePicker;
 	private DefaultTableCellRenderer centerText;
 	private JTextPane evaReport;
-	private double EV, PV, AC, BAC, percentC, percentA, CV, SV, CPI, SPI, EAC,
-			ETC;
+	private Box box;
+	private double EV, PV, AC, BAC, percentC, percentA, CV, SV, CPI, SPI, EAC, ETC;
 
 	private Date EVADate = null; // Initially, there is no date selected
 	private ArrayList<Activity> activitiesStrictlyBeforeDate,
@@ -78,13 +75,9 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 	private NumberFormat numberFormat = NumberFormat.getCurrencyInstance();
 	private DecimalFormat decimalFormat = new DecimalFormat("0.00");
-	private DecimalFormat negativeDecimalFormat = (DecimalFormat) NumberFormat
-			.getCurrencyInstance();
-	private String symbol = negativeDecimalFormat.getCurrency().getSymbol(); // To
-																				// display
-																				// a
-																				// minus
-																				// sign
+	private DecimalFormat negativeDecimalFormat = (DecimalFormat) NumberFormat.getCurrencyInstance();
+	// To display a minus sign
+	private String symbol = negativeDecimalFormat.getCurrency().getSymbol(); 
 
 	public EarnedValueAnalysisTab() {
 		super(new BorderLayout());
@@ -101,14 +94,24 @@ public class EarnedValueAnalysisTab extends JPanel {
 		this.reload();
 	}
 	
+	//Used for testing purposes only
 	public EarnedValueAnalysisTab(String test){}
 
+	/**
+	 * This method reloads EVA statistics grids
+	 */
 	public void reload() {
 		if (this.grid1 != null) {
 			this.remove(this.grid1);
 		}
 		if (this.grid2 != null) {
 			this.remove(this.grid2);
+		}
+		if (this.projectReport != null) {
+			this.remove(this.projectReport);
+		}
+		if (this.box != null) {
+			this.remove(this.box);
 		}
 		if (EVADate != null) {
 			this.grid1 = new JTable(tableModel1);
@@ -131,14 +134,12 @@ public class EarnedValueAnalysisTab extends JPanel {
 			for (int i = 0; i < 6; i++) {
 				this.grid1.getColumnModel().getColumn(i).setPreferredWidth(50);
 				this.grid2.getColumnModel().getColumn(i).setPreferredWidth(50);
-				this.grid1.getColumnModel().getColumn(i)
-						.setCellRenderer(centerText);
-				this.grid2.getColumnModel().getColumn(i)
-						.setCellRenderer(centerText);
+				this.grid1.getColumnModel().getColumn(i).setCellRenderer(centerText);
+				this.grid2.getColumnModel().getColumn(i).setCellRenderer(centerText);
 			}
 
 			// Combine grids into one
-			Box box = new Box(BoxLayout.Y_AXIS);
+			box = new Box(BoxLayout.Y_AXIS);
 			box.add(new JScrollPane(grid1));
 			box.add(new JSeparator(SwingConstants.VERTICAL));
 			box.add(new JScrollPane(grid2));
@@ -156,8 +157,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private void createEVAReport() {
 		this.projectReport = new JPanel();
 		this.projectReport.setPreferredSize(new Dimension(350, 300));
-		this.projectReport.setBorder(BorderFactory
-				.createTitledBorder("EVA Report"));
+		this.projectReport.setBorder(BorderFactory.createTitledBorder("EVA Report"));
 
 		// Create a text pane
 		evaReport = new JTextPane();
@@ -174,19 +174,16 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 	/**
 	 * Creates the EVA report
-	 * 
 	 * @return String containing the full EVA report
 	 */
 	private String getEVAReport() {
 
 		StringBuilder report = new StringBuilder(250);
 
-		report.append("<html><p><font size=\"5\"><u>Project  "
-				+ project.getName() + ":</u></font></p>");
+		report.append("<html><p><font size=\"5\"><u>Project  " + project.getName() + ":</u></font></p>");
 
 		// Actual Cost
-		report.append("<p>Total spent to date: <b>" + numberFormat.format(AC)
-				+ "</b></p>");
+		report.append("<p>Total spent to date: <b>" + numberFormat.format(AC) + "</b></p>");
 
 		// Check if over or under budget
 		if (CV < 0) {
@@ -203,12 +200,10 @@ public class EarnedValueAnalysisTab extends JPanel {
 		}
 
 		// Estimate at completion
-		report.append("<p>Revised budget: <b>" + numberFormat.format(EAC)
-				+ "</b></p>");
+		report.append("<p>Revised budget: <b>" + numberFormat.format(EAC) + "</b></p>");
 
 		// Estimate to complete
-		report.append("<p>Amount to spend to complete project: <b>"
-				+ numberFormat.format(ETC) + "</b></p>");
+		report.append("<p>Amount to spend to complete project: <b>" + numberFormat.format(ETC) + "</b></p>");
 
 		report.append("</html>");
 
@@ -252,8 +247,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 				if (dateWithinProject) {
 					// Check that the due date isn't null
 					try {
-						activitiesStrictlyBeforeDate = project
-								.getActivitiesStrictlyBeforeDate(EVADate);
+						activitiesStrictlyBeforeDate = project.getActivitiesStrictlyBeforeDate(EVADate);
 					} catch (InvalidProjectException exception) {
 						JOptionPane.showMessageDialog(datesPanel,
 								exception.getMessage(),
@@ -287,8 +281,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 					// range
 					// Check that the due date isn't null
 					try {
-						activitiesExactlyWithinDate = project
-								.getActivitiesWithinDate(EVADate);
+						activitiesExactlyWithinDate = project.getActivitiesWithinDate(EVADate);
 					} catch (InvalidProjectException exception) {
 						JOptionPane.showMessageDialog(datesPanel,
 								exception.getMessage(),
@@ -306,9 +299,12 @@ public class EarnedValueAnalysisTab extends JPanel {
 						generateEVAStatistics(EVADate);
 						reload();
 					}
-				}// if
+					
+					
+				}// if datewithinProject
 
 			}
+			
 
 		});
 
@@ -338,9 +334,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	/**
 	 * Calculates the Planned Value (PV) of what should have been completed
 	 * 
-	 * @param activitySet
-	 *            and completeActivities - true if the set of activities are
-	 *            100% completed
+	 * @param activitySet and completeActivities - true if the set of activities are 100% completed
 	 * @return double total PV up to at a certain date
 	 */
 	private double getPVCost(ArrayList<Activity> activitySet,
@@ -372,9 +366,15 @@ public class EarnedValueAnalysisTab extends JPanel {
 				dateDifference1 = differenceOfDates(cal2, cal1);
 				// Then dueDate - startDate
 				dateDifference2 = differenceOfDates(cal2, cal3);
-				// Now get the percentage expected to be complete for the
-				// activity
-				datePercent = (double) dateDifference1 / dateDifference2;
+				// Now get the percentage expected to be complete for the activity
+				// The the activity starts and ends on the same day (which would result
+				// in a division by zero), then datePercent is set to zero
+				if(dateDifference2 == 0) {
+					datePercent = 0;
+				}
+				else {
+					datePercent = (double) dateDifference1 / dateDifference2;
+				}
 				pvTotal += datePercent * act.getEstimatedCost();
 			}
 		}
@@ -384,8 +384,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 	/**
 	 * Helper method for calculating the difference between two dates for PV
 	 * 
-	 * @param start
-	 *            and end Calendar dates
+	 * @param start and end Calendar dates
 	 * @return int difference in number of days
 	 */
 	private int differenceOfDates(Calendar start, Calendar end) {
@@ -428,8 +427,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 		// Assume that the % completed in each activity is accurate of what is
 		// actually completed
 		for (Activity act : activitySet) {
-			evTotal += ((double) act.getPercentageComplete() / 100)
-					* act.getEstimatedCost();
+			evTotal += ((double) act.getPercentageComplete() / 100) * act.getEstimatedCost();
 		}
 		
 		return evTotal;
@@ -444,13 +442,10 @@ public class EarnedValueAnalysisTab extends JPanel {
 		// Project review date
 		projectDate = new JPanel();
 		projectDate.setPreferredSize(new Dimension(220, 60));
-		projectDate.setBorder(BorderFactory
-				.createTitledBorder("Progress Review Date"));
+		projectDate.setBorder(BorderFactory.createTitledBorder("Progress Review Date"));
 		startModel.setSelected(true);
-		JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel,
-				p);
-		progressDatePicker = new JDatePickerImpl(startDateCalendarPanel,
-				new DateLabelFormatter());
+		JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(startModel,p);
+		progressDatePicker = new JDatePickerImpl(startDateCalendarPanel, new DateLabelFormatter());
 		// If the start date is not null, set initial date to the project start
 		// date
 		if (project.getStartDate() != null) {
@@ -467,9 +462,7 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 	/**
 	 * Generates the EVA statistics Table
-	 * 
-	 * @param The
-	 *            EVA selected Date
+	 * @param The EVA selected Date
 	 */
 	private void generateEVAStatistics(Date date) {
 
@@ -483,13 +476,11 @@ public class EarnedValueAnalysisTab extends JPanel {
 			negativeDecimalFormat.setNegativeSuffix("");
 
 			// Earned Value cost
-			EV = getEVCost(activitiesStrictlyBeforeDate)
-					+ getEVCost(activitiesExactlyWithinDate);
+			EV = getEVCost(activitiesStrictlyBeforeDate) + getEVCost(activitiesExactlyWithinDate);
 			String earnedValue = numberFormat.format(EV);
 
 			// Project Value cost
-			PV = getPVCost(activitiesStrictlyBeforeDate, true, EVADate)
-					+ getPVCost(activitiesExactlyWithinDate, false, EVADate);
+			PV = getPVCost(activitiesStrictlyBeforeDate, true, EVADate) + getPVCost(activitiesExactlyWithinDate, false, EVADate);
 			String plannedValue = numberFormat.format(PV);
 
 			// Actual cost
@@ -501,11 +492,21 @@ public class EarnedValueAnalysisTab extends JPanel {
 			String budgetAtCompletion = numberFormat.format(BAC);
 
 			// Percent schedules for completion, rounded to two decimal places
-			percentC = ((double) PV / BAC) * 100;
+			// Handle possible divisions by zero
+			if(BAC == 0) {
+				percentC = 0;
+			} else {
+				percentC = ((double) PV / BAC) * 100;
+			}
 			String percentShouldBeCompleted = decimalFormat.format(percentC);
 
 			// Percentage actually completed, rounded to two decimal places
-			percentA = ((double) EV / BAC) * 100;
+			// Handle possible divisions by zero
+			if(BAC == 0) {
+				percentA = 0;
+			} else {
+				percentA = ((double) EV / BAC) * 100;
+			}
 			String percentActuallyCompleted = decimalFormat.format(percentA);
 
 			// Performance Metrics
@@ -518,21 +519,37 @@ public class EarnedValueAnalysisTab extends JPanel {
 			String scheduleVariance = negativeDecimalFormat.format(SV);
 
 			// Cost Performance index, rounded to two decimal places
-			CPI = (double) EV / AC;
+			// Handle possible divisions by zero
+			if(AC == 0) {
+				CPI = 0;
+			}
+			else {
+				CPI = (double) EV / AC;
+			}
 			CPI = CPI * 100;
 			CPI = (double) ((int) CPI); // Truncate after two decimals
 			CPI = CPI / 100;
 			String costPerformanceIndex = decimalFormat.format(CPI);
 
 			// Schedule Performance index, rounded to two decimal places
-			SPI = (double) EV / PV;
+			// Handle possible divisions by zero
+			if(PV == 0) {
+				SPI = 0;
+			} else {
+				SPI = (double) EV / PV;
+			}
 			SPI = SPI * 100;
 			SPI = (double) ((int) SPI); // Truncate after two decimals
 			SPI = SPI / 100;
 			String schedulePerformanceIndex = decimalFormat.format(SPI);
 
 			// Estimate at completion, rounded to two decimal places
-			EAC = (double) BAC / CPI;
+			// Handle possible divisions by zero
+			if(CPI == 0) {
+				EAC = 0;
+			} else {
+				EAC = (double) BAC / CPI;
+			}
 			String estimateAtCompletion = numberFormat.format(EAC);
 
 			// Estimate to completion
@@ -541,20 +558,20 @@ public class EarnedValueAnalysisTab extends JPanel {
 
 			// Columns and date for tables
 			Vector<String> columnNames1 = new Vector<String>();
-			columnNames1.add("PV");
-			columnNames1.add("EV");
-			columnNames1.add("AC");
-			columnNames1.add("BAC");
+			columnNames1.add("Planned Value");
+			columnNames1.add("Earned Value");
+			columnNames1.add("Actual Cost");
+			columnNames1.add("Budget at Completion");
 			columnNames1.add("% Scheduled");
 			columnNames1.add("% Completed");
 
 			Vector<String> columnNames2 = new Vector<String>();
-			columnNames2.add("CV");
-			columnNames2.add("SV");
-			columnNames2.add("CPI");
-			columnNames2.add("SPI");
-			columnNames2.add("EAC");
-			columnNames2.add("ETC");
+			columnNames2.add("Cost Variance");
+			columnNames2.add("Schedule Variance");
+			columnNames2.add("Cost Performance Index");
+			columnNames2.add("Schedule Performance Index");
+			columnNames2.add("Estimate at Completion");
+			columnNames2.add("Estimate to Complete");
 
 			// data of the table
 			Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -592,7 +609,11 @@ public class EarnedValueAnalysisTab extends JPanel {
 		}// if
 
 	}
-
+	
+  /**
+   * Used to test the various private methods in this class
+   * i.e. this class is only used for testing purposes
+   */
 	public static  class TestingClass {
 		private static TestingClass instance = null;
 		private static EarnedValueAnalysisTab a = null;

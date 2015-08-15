@@ -51,7 +51,7 @@ import controller.ViewManager;
 public class ActivityDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JTextField activityName;
-  private JTextArea activityDescription, activityComment;
+  private JTextArea activityDescription;
   private JScrollPane scrollPanDescription;
   private JComboBox<?> statusBox;
   DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -63,13 +63,11 @@ public class ActivityDialog extends JDialog {
   final List<JPanel> dependList = new ArrayList<JPanel>();
   
   private Project currentProject;
-  private JButton addDependantButton, removeDependantButton, addCommentButton, okButton;
+  private JButton addDependantButton, removeDependantButton, okButton;
   private JPanel dependSubPanel, panActivityStatus, panEstimatedCost, subDepButtons; 
   private JPanel panActivity, panActivityStartDate, panActivityDueDate, panButtons, panDescription, panActualCost;
-  private JPanel panSubDuration,panPessimisticDur, panOptimisticDur, panMostLikelyDur, activitiCommentsSubPanel, panPercent;
+  private JPanel panSubDuration,panPessimisticDur, panOptimisticDur, panMostLikelyDur, panPercent;
   private JSpinner activityPercent;
-  
-  private ArrayList<String> activityComments;
   
   private List<Activity> sourceActivities;
   private JList<Activity> activitiesSourceList;
@@ -84,11 +82,11 @@ public class ActivityDialog extends JDialog {
   private JFormattedTextField activityEstimatedBudget, activityActualBudget, pessimisticDur, optimisticDur, mostLikelyDur;
   
   private Activity activity;
-private DefaultListModel<User> currentUsers;
-private DefaultListModel<User> availableUsers;
-private JList<User> usersSourceList;
-private JList<User> usersDestList;
-private JPanel usersSubPanel;
+	private DefaultListModel<User> currentUsers;
+	private DefaultListModel<User> availableUsers;
+	private JList<User> usersSourceList;
+	private JList<User> usersDestList;
+	private JPanel usersSubPanel;
 
   
   /**
@@ -200,14 +198,6 @@ private JPanel usersSubPanel;
 	  //Activity Description
 	  createActivityDescription();
 	  
-	  //Adding Comments panel
-	  // createComments();
-	  
-	  //Create the scrollable panel for comments
-	  final JScrollPane scrollPanDependArea = new JScrollPane(activityComment, 
-	  		JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	  scrollPanDependArea.setPreferredSize(new Dimension(350, 88));
-	  
 	  //Bottom buttons
 	  panButtons = new JPanel();
 	  String okButtonString = (this.activity == null) ? "Add Activity" : "Edit Activity";
@@ -215,17 +205,6 @@ private JPanel usersSubPanel;
 	  
 	  checkIfDependantActivitiesAreComplete();
 	  
-	  //Create Add button for the comment
-	  addCommentButton = new JButton("Add");
-	  addCommentButton.addActionListener(new ActionListener(){
-	      public void actionPerformed(ActionEvent arg0) {
-	      	//createActivityComment(); TODO: Not completed
-	      }      
-	  });
-	  
-	  //activitiCommentsSubPanel.add(addCommentButton);
-	  //activitiCommentsSubPanel.add(scrollPanDependArea);
-
 	  //Checks and Creates the Activity
 	  okButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
@@ -298,7 +277,7 @@ private JPanel usersSubPanel;
 		      JOptionPane.showMessageDialog(activityPanel, e.getMessage(), "Cannot Create Activity", JOptionPane.ERROR_MESSAGE);
 		      e.printStackTrace();
 		  }
-		  
+
 		  if (activityIsInsertable && projectId >= 0) {
 		      activity.persist();
 		      setVisible(false); 
@@ -312,6 +291,7 @@ private JPanel usersSubPanel;
 	  cancelButton.addActionListener(new ActionListener(){
 	      public void actionPerformed(ActionEvent arg0) {
 	        setVisible(false);
+	        activity = null;  //Make sure the activity doesn't display in the grid if the dialog is cancelled 
 	      }      
 	    });
 
@@ -338,22 +318,6 @@ private JPanel usersSubPanel;
 	  this.getContentPane().add(scroll, BorderLayout.CENTER);
 	  this.getContentPane().add(panButtons, BorderLayout.SOUTH);
   }
-
-	/**
-	 * Creates the Comments Panel
-	 */
-	private void createComments() {
-		activitiCommentsSubPanel = new JPanel();
-		activitiCommentsSubPanel.setBackground(Color.white);
-		activitiCommentsSubPanel.setBorder(BorderFactory.createTitledBorder("Comments"));
-		activitiCommentsSubPanel.setPreferredSize(new Dimension(465, 120));
-		
-		//Add a text field to add the comment(s)
-		activityComment = new JTextArea();
-		activityComment.setBorder( new JTextField().getBorder() );
-		activityComment.setLineWrap(true);
-		activityComment.setWrapStyleWord(true);
-	}
 
 	/**
 	 * Creates the Description Panel

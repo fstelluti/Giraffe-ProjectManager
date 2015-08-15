@@ -79,16 +79,8 @@ public class Activity {
 	    }
 	    
 	}
-
-	private void loadDependents() {
-	    this.predecessors = new HashSet<Integer>();
-	    List<Activity> dependentsFromDb = PredecessorDB.getPredecessors(this.id);
-	    if (predecessors != null) {
-		for (Activity dependent : dependentsFromDb) {
-		    this.predecessors.add(dependent.getId());
-		}
-	    }
-	}
+	
+	//Various getters and setters
 	
 	public String getStatusName() {
 		return statusArray[status];
@@ -119,6 +111,7 @@ public class Activity {
 	}
 	
 	public void setPercentageComplete(int percentComplete) {
+		//Make sure that the percentage isn't negative or above 100
 		if(percentComplete < 0 || percentComplete > 100)
 			this.percentageComplete = 0;
 		else
@@ -126,6 +119,7 @@ public class Activity {
 	}
 
 	public void setStatus(int status) {
+		//Make sure the status is valid
 		if (status >= 0 && status < statusArray.length)
 			this.status = status;
 		else
@@ -366,12 +360,18 @@ public class Activity {
 		return name;
 	}
 	
+	/**
+	 * Deletes and activity from the Database, including dependents 
+	 */
 	public void delete() {
 	    PredecessorDB.deleteActivityPredecessors(this.id);
 	    ActivityDB.delete(this.id);
 	    UserActivitiesDB.deleteActivityUsers(this.id);;
 	}
 	
+	/**
+	 * Gets all Users for an activity
+	 */
 	public List<User> getUsers() {
 	    return new ArrayList<User>(this.users);
 	}

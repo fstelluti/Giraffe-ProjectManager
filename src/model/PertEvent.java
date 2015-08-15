@@ -1,14 +1,19 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jgrapht.graph.DefaultEdge;
+
+/**
+ * @authors Andrey Uspenskiy
+ */
 
 public class PertEvent extends DefaultEdge
 {
 	private int eventNumber;
 	private Date targetDate;
-	private Date expectedDate;
+	private double expectedDate;
 	private double standardDeviation;
 	
 	public Date getTargetDate()
@@ -19,11 +24,11 @@ public class PertEvent extends DefaultEdge
 	{
 		this.targetDate = targetDate;
 	}
-	public Date getExpectedDate()
+	public double getExpectedDate()
 	{
 		return expectedDate;
 	}
-	public void setExpectedDate(Date expectedDate)
+	public void setExpectedDate(double expectedDate)
 	{
 		this.expectedDate = expectedDate;
 	}
@@ -48,7 +53,8 @@ public class PertEvent extends DefaultEdge
 	@Override
 	public String toString()
 	{
-		return "From " + ((PertActivity)getSource()).getName();
+		SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
+		return "Expected Date: \n" + df2.format(((PertActivity)getSource()).getExpectedFinishDate());
 	}
 
 }

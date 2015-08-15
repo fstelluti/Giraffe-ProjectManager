@@ -89,12 +89,18 @@ public class ViewManager {
 	    ViewManager.projectListPanel = projectListPanel;
 	}
 	
+	/**
+	 *  Refreshes the project list and tabs 
+	 */
 	public static void refresh() {
 	    User user = getCurrentUser();
 	    projectListPanel.refresh(user);
 	    tabPanel.refresh(user);
 	}
 	
+	/**
+	 *  Reloads the tabs
+	 */
 	public static void reload() {
 	    tabPanel.reload();
 	}
@@ -134,6 +140,10 @@ public class ViewManager {
   	}
 	}
 	
+	/**
+	 *  Gets a list of all users
+	 *  @return List<User> List of all users
+	 */
 	public static List<User> getAllUsers() {
 	    return UserDB.getAll();
 	}
@@ -142,6 +152,11 @@ public class ViewManager {
 		UserRolesDB.insert(userID, projectID, roleID);
 	}
 	
+	/**
+	 *  Get all project managers with a specified project id
+	 *  @param int project id
+	 *  @return List<User> 
+	 */
 	public static List<User> getProjectManagersByProject(int id) {
 		return UserRolesDB.getProjectManagersByProjectId(id);
 	}
@@ -186,18 +201,18 @@ public class ViewManager {
 		    }
 		}
 	    } catch (InvalidProjectException e) {
-		getCurrentProject().setName(oldName);
-		getCurrentProject().setStartDate(oldStartDate);
-		getCurrentProject().setDueDate(oldDueDate);
-		getCurrentProject().setProjectManagers(oldManagers);
-		throw e;
-	    } 
-	    getCurrentProject().setDescription(description);
-	    getCurrentProject().setEstimatedBudget(estimatedBudget);
-	    getCurrentProject().setActualBudget(actualBudget);
-	    getCurrentProject().setProjectManagers(new ArrayList<User>(addedUsers));
-
-	    getCurrentProject().persist();
+				getCurrentProject().setName(oldName);
+				getCurrentProject().setStartDate(oldStartDate);
+				getCurrentProject().setDueDate(oldDueDate);
+				getCurrentProject().setProjectManagers(oldManagers);
+				throw e;
+			    } 
+			    getCurrentProject().setDescription(description);
+			    getCurrentProject().setEstimatedBudget(estimatedBudget);
+			    getCurrentProject().setActualBudget(actualBudget);
+			    getCurrentProject().setProjectManagers(new ArrayList<User>(addedUsers));
+		
+			    getCurrentProject().persist();
 	}
 
 	/**
@@ -228,6 +243,9 @@ public class ViewManager {
 	    tabPanel.setActiveTab(i);
 	}
 
+	/**
+	 *  Optimizes the dates for the current project
+	 */
 	public static void optimizeCurrentProject() throws InvalidProjectException {
 	    if (getCurrentProject().isValid()) {
 		getCurrentProject().optimize();
