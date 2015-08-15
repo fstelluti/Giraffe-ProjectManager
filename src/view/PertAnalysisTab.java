@@ -32,7 +32,6 @@ public class PertAnalysisTab extends JPanel
 	private JPanel control, content;
 	private DefaultTableCellRenderer centerText;
 	protected JScrollPane scrollPane;
-	private JTextField targetDateField;
 	private JPanel targetDatePanel;
 	private JDatePickerImpl targetDatePicker;
 	private UtilDateModel targetDateModel = new UtilDateModel();
@@ -70,14 +69,12 @@ public class PertAnalysisTab extends JPanel
 		  prop.put("text.month", "Month");
 		  prop.put("text.year", "Year");
 
-		targetDateField = new JTextField(20);
 		targetDatePicker = createTargetDate();
-		targetDateField.setText(((Date)targetDatePicker.getModel().getValue()).toGMTString());
 		
 	  	control = new JPanel();
 	  	generatePertButton = new JButton("Generate PERT chart");
 	  	control.add(generatePertButton);  	
-	  	control.add(targetDateField);
+	  	control.add(targetDatePanel);
 	  	
 	  	//Build content panel
 	  	content = new JPanel();
@@ -87,8 +84,6 @@ public class PertAnalysisTab extends JPanel
 	  	subPanel.add(content);
 	  	
 	  	generatePertButton.addActionListener(new ActionListener() {
-
-
 			public void actionPerformed(ActionEvent e) {
 			  PERTReport pertReport = new PERTReport(project, (Date)targetDatePicker.getModel().getValue());
 			  scrollPane = new JScrollPane();
@@ -109,11 +104,11 @@ public class PertAnalysisTab extends JPanel
 		  targetDatePanel = new JPanel();
 		  targetDatePanel.setBackground(Color.white);
 		  targetDatePanel.setPreferredSize(new Dimension(230, 60));
-		  targetDatePanel.setBorder(BorderFactory.createTitledBorder("Start Date"));
+		  targetDatePanel.setBorder(BorderFactory.createTitledBorder("Target Date"));
 		  targetDateModel.setSelected(true);
-			JDatePanelImpl startDateCalendarPanel = new JDatePanelImpl(targetDateModel, prop);
-			final JDatePickerImpl startDatePicker = new JDatePickerImpl(startDateCalendarPanel,new DateLabelFormatter());
-			targetDateField.add(startDatePicker);
-			return startDatePicker;
+			JDatePanelImpl targetDateCalendarPanel = new JDatePanelImpl(targetDateModel, prop);
+			final JDatePickerImpl targetDatePicker = new JDatePickerImpl(targetDateCalendarPanel,new DateLabelFormatter());
+			targetDatePanel.add(targetDatePicker);
+			return targetDatePicker;
 		}
 }
