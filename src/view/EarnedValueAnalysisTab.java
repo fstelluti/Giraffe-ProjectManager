@@ -518,39 +518,11 @@ public class EarnedValueAnalysisTab extends JPanel {
 			SV = EV - PV;
 			String scheduleVariance = negativeDecimalFormat.format(SV);
 
-			// Cost Performance index, rounded to two decimal places
-			// Handle possible divisions by zero
-			if(AC == 0) {
-				CPI = 0;
-			}
-			else {
-				CPI = (double) EV / AC;
-			}
-			CPI = CPI * 100;
-			CPI = (double) ((int) CPI); // Truncate after two decimals
-			CPI = CPI / 100;
-			String costPerformanceIndex = decimalFormat.format(CPI);
+			String costPerformanceIndex = getCPI(EV, AC);
 
-			// Schedule Performance index, rounded to two decimal places
-			// Handle possible divisions by zero
-			if(PV == 0) {
-				SPI = 0;
-			} else {
-				SPI = (double) EV / PV;
-			}
-			SPI = SPI * 100;
-			SPI = (double) ((int) SPI); // Truncate after two decimals
-			SPI = SPI / 100;
-			String schedulePerformanceIndex = decimalFormat.format(SPI);
+			String schedulePerformanceIndex = getSPI(EV,PV);
 
-			// Estimate at completion, rounded to two decimal places
-			// Handle possible divisions by zero
-			if(CPI == 0) {
-				EAC = 0;
-			} else {
-				EAC = (double) BAC / CPI;
-			}
-			String estimateAtCompletion = numberFormat.format(EAC);
+			String estimateAtCompletion = getEAC(BAC, CPI);
 
 			// Estimate to completion
 			ETC = EAC - AC;
@@ -608,6 +580,86 @@ public class EarnedValueAnalysisTab extends JPanel {
 			};
 		}// if
 
+	}
+
+	/**
+	 * Gets the Cost performance index of the project
+	 * @param double EV and AC 
+	 * @return String of the CPI, rounded to two decimal places
+	 */
+	private String getCPI(double EV, double AC) {
+		//Test if the EV and AC are negative
+		if(EV < 0 || AC < 0) {
+			throw new IllegalArgumentException("The earned value and/or actual cost cannot be negative");
+		}
+			
+		// Handle possible divisions by zero
+		if(AC == 0) {
+			CPI = 0;
+		}
+		else {
+			CPI = (double) EV / AC;
+		}
+		
+		//Round the CPI to two decimal places
+		CPI = CPI * 100;
+		CPI = (double) ((int) CPI); // Truncate after two decimals
+		CPI = CPI / 100;
+		String costPerformanceIndex = decimalFormat.format(CPI);
+		
+		return costPerformanceIndex;
+	}
+
+	/**
+	 * Gets the Estimate at completion of the project
+	 * @param double BAC and CPI 
+	 * @return String of the EAC, rounded to two decimal places
+	 */
+	private String getEAC(double BAC, double CPI) {
+		//Test if the BAC and CPI are negative
+		if(BAC < 0 || CPI < 0) {
+			throw new IllegalArgumentException("The budget at completion and/or the CPI cannot be negative");
+		}
+		// Handle possible divisions by zero
+		if(CPI == 0) {
+			EAC = 0;
+		} else {
+			EAC = (double) BAC / CPI;
+		}
+		
+		//Round the EAC to two decimal places
+		EAC = EAC * 100;
+		EAC = (double) ((int) EAC); // Truncate after two decimals
+		EAC = EAC / 100;
+		String estimateAtCompletion = numberFormat.format(EAC);
+		
+		return estimateAtCompletion;
+	}
+
+	/**
+	 * Gets the Schedule Performance Index of the project
+	 * @param double EV and PV 
+	 * @return String of the SPI, rounded to two decimal places
+	 */
+	private String getSPI(double EV, double PV) {
+		//Check for negative input
+		if(PV < 0 || EV < 0) {
+			throw new IllegalArgumentException("The planned value and/or earned value cannot be negative");
+		}
+		// Handle possible divisions by zero
+		if(PV == 0) {
+			SPI = 0;
+		} else {
+			SPI = (double) EV / PV;
+		}
+		
+		//Round the SPI to two decimal places
+		SPI = SPI * 100;
+		SPI = (double) ((int) SPI); // Truncate after two decimals
+		SPI = SPI / 100;
+		String schedulePerformanceIndex = decimalFormat.format(SPI);
+		
+		return schedulePerformanceIndex;
 	}
 	
   /**
