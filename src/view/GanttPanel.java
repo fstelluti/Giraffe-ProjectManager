@@ -18,6 +18,12 @@ import org.jfree.chart.JFreeChart;
 
 import controller.ViewManager;
 
+/**
+ * This class defines the Gantt panel
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class GanttPanel extends JPanel implements ActionListener {
     
     private static final long serialVersionUID = 1L;
@@ -30,14 +36,17 @@ public class GanttPanel extends JPanel implements ActionListener {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-	// Silence is golden...
+    	// Silence is golden...
     }
     
     public GanttPanel() {
-	super(new BorderLayout());
-	this.build();
+			super(new BorderLayout());
+			this.build();
     }
     
+  	/**
+  	 * This method builds the Gnatt panel
+  	 */
     private void build() {
 	this.gantt = new Gantt(ViewManager.getCurrentProject());
 	this.chart = gantt.getChart();
@@ -62,6 +71,7 @@ public class GanttPanel extends JPanel implements ActionListener {
 	    
 	});
 	
+	//Export the gnatt chart to a jpeg image
 	this.exportToJpg = new JButton("Export to JPEG");
 	this.exportToJpg.addActionListener(new ActionListener() {
 
@@ -90,10 +100,13 @@ public class GanttPanel extends JPanel implements ActionListener {
 
     }
 
+  	/**
+  	 * This method refreshes the panel
+  	 */
     public void refresh() {
-	this.remove(chartPanel);
-	this.build();
-	this.revalidate();
+			this.remove(chartPanel);
+			this.build();
+			this.revalidate();
     }
 
 }

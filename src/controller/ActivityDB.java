@@ -176,7 +176,6 @@ public class ActivityDB extends DataManager
 	 * 
 	 * @return
 	 */
-	// XXX Unused method
 	public static List<Activity> getAll()
 	{
 		List<Activity> activities = new ArrayList<Activity>();

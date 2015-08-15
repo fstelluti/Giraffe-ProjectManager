@@ -31,6 +31,12 @@ import com.jgraph.layout.JGraphLayout;
 import com.jgraph.layout.hierarchical.JGraphHierarchicalLayout;
 import controller.ViewManager;
 
+/**
+ * This class defines graph panel
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class GraphPanel extends JPanel {
 
     private static final long serialVersionUID = 2752605959840841865L;
@@ -49,12 +55,15 @@ public class GraphPanel extends JPanel {
 
     
     public GraphPanel() {
-	super(new BorderLayout());
-	buildGraph("project");
-	refresh();
+			super(new BorderLayout());
+			buildGraph("project");
+			refresh();
     }
-    
-    public void refresh() {
+   
+  	/**
+  	 * This method refreshes the panel
+  	 */
+public void refresh() {
 	int selectedIndex = 0;
 	if (comboBox != null) { selectedIndex = comboBox.getSelectedIndex(); }
 	this.removeAll();
@@ -81,6 +90,7 @@ public class GraphPanel extends JPanel {
 	    }
 	    
 	});
+	//Save the graph to a png image
 	saveToPng = new JButton("Export to PNG");
 	saveToPng.addActionListener(new ActionListener() {
 
@@ -102,6 +112,8 @@ public class GraphPanel extends JPanel {
 	    }
 	    
 	});
+	
+	//save the image to a jpeg image
 	saveToJpeg = new JButton("Export to JPEG");
 	saveToJpeg.addActionListener(new ActionListener() {
 
@@ -131,40 +143,47 @@ public class GraphPanel extends JPanel {
 	redraw();
     }
     
+	/**
+	 * This method redraws the panel
+	 */
     private void redraw() {
-	this.revalidate();
-	this.repaint();
+			this.revalidate();
+			this.repaint();
     }
     
+  	/**
+  	 * This method builds the graph
+  	 */
     private void buildGraph(String arg0) {
-	if (arg0.equals("project")) {
-	    digraph = ViewManager.getCurrentProject().toDigraphWithoutOrphans();
-	}
-	if (arg0.equals("criticalPath")) {
-	    digraph = ViewManager.getCurrentProject().getCriticalPathGraph();
-	}
-	
-	graphModel = new JGraphModelAdapter<Activity, DefaultEdge>(digraph);
-	
-	graph = new JGraph(graphModel);
-	// Removes the labels from the edges
-	GraphLayoutCache cache = graph.getGraphLayoutCache();
-	CellView[] cells = cache.getCellViews();
-	for (CellView cell : cells) {
-	    if (cell instanceof EdgeView) {
-		EdgeView ev = (EdgeView) cell;
-		org.jgraph.graph.DefaultEdge eval = (org.jgraph.graph.DefaultEdge) ev.getCell();
-		eval.setUserObject("");
-	    }
-	}
-	layout = new JGraphHierarchicalLayout();
-	graphFacade = new JGraphFacade(graph);
-	layout.run(graphFacade);
-	nestedMap = graphFacade.createNestedMap(true, true);
-	graph.getGraphLayoutCache().edit(nestedMap);
-	
-	graph.setEditable(false);
-	graph.setGridMode(JGraph.CROSS_GRID_MODE);
-	graph.setGridEnabled(true);
-    }
+    	//Build either the whole project or the critical path graph
+			if (arg0.equals("project")) {
+			    digraph = ViewManager.getCurrentProject().toDigraphWithoutOrphans();
+			}
+			if (arg0.equals("criticalPath")) {
+			    digraph = ViewManager.getCurrentProject().getCriticalPathGraph();
+			}
+			
+			graphModel = new JGraphModelAdapter<Activity, DefaultEdge>(digraph);
+			
+			graph = new JGraph(graphModel);
+			// Removes the labels from the edges
+			GraphLayoutCache cache = graph.getGraphLayoutCache();
+			CellView[] cells = cache.getCellViews();
+			for (CellView cell : cells) {
+			    if (cell instanceof EdgeView) {
+				EdgeView ev = (EdgeView) cell;
+				org.jgraph.graph.DefaultEdge eval = (org.jgraph.graph.DefaultEdge) ev.getCell();
+				eval.setUserObject("");
+			    }
+			}
+			layout = new JGraphHierarchicalLayout();
+			graphFacade = new JGraphFacade(graph);
+			layout.run(graphFacade);
+			nestedMap = graphFacade.createNestedMap(true, true);
+			graph.getGraphLayoutCache().edit(nestedMap);
+			
+			graph.setEditable(false);
+			graph.setGridMode(JGraph.CROSS_GRID_MODE);
+			graph.setGridEnabled(true);
+		    }
 }

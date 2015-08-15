@@ -6,6 +6,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+/**
+ * This class defined the Reports tab panel, which contains PERT, EVA, Gantt, and Critical Path Analysis
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class ReportsTab extends JPanel {
 
     private static final long serialVersionUID = 6105597890457941706L;

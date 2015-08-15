@@ -21,6 +21,12 @@ import model.User;
 import controller.DataManager;
 import controller.ViewManager;
 
+/**
+ * This class defined the tab panel used to display Activities
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class ActivitiesTab extends JPanel {
 
     private static final long serialVersionUID = -5620207709069310909L;
@@ -33,45 +39,56 @@ public class ActivitiesTab extends JPanel {
     private DefaultTableModel tableModel;
 
     public ActivitiesTab() {
-	this.setLayout(new BorderLayout());
-	this.buttonPanel = new JPanel();
-	this.buildAddActivityButton();
-	this.buttonPanel.add(this.addActivityButton);
-	this.buildEditActivityButton();
-	this.buttonPanel.add(this.editActivityButton);
-	this.buildDeleteActivityButton();
-	this.buttonPanel.add(this.deleteActivityButton);
-	this.add(buttonPanel, BorderLayout.NORTH);
-	this.reload();
+			this.setLayout(new BorderLayout());
+			this.buttonPanel = new JPanel();
+			this.buildAddActivityButton();
+			this.buttonPanel.add(this.addActivityButton);
+			this.buildEditActivityButton();
+			this.buttonPanel.add(this.editActivityButton);
+			this.buildDeleteActivityButton();
+			this.buttonPanel.add(this.deleteActivityButton);
+			this.add(buttonPanel, BorderLayout.NORTH);
+			this.reload();
     }
     
+  	/**
+  	 * This method reloads grid that displays the activities
+  	 */
     public void reload() {
-	if (this.grid != null) { this.remove(this.grid); }
-	buildActivityTableModel();
-	this.grid = new JTable(tableModel);
-	Font dataFont = new Font(null, 0, 12);
-	Font headerFont = new Font(null, 0, 12);
-	this.grid.setGridColor(Color.LIGHT_GRAY);
-	this.grid.setRowHeight(25);
-	this.grid.setFont(dataFont);
-	this.grid.getTableHeader().setFont(headerFont);
-	this.grid.getColumnModel().getColumn(0).setPreferredWidth(1);
-	this.grid.getColumnModel().getColumn(1).setPreferredWidth(200);
-	this.grid.getColumnModel().getColumn(2).setPreferredWidth(50);
-	this.grid.getColumnModel().getColumn(3).setPreferredWidth(50);
-	this.grid.getColumnModel().getColumn(4).setPreferredWidth(200);
-	this.add(new JScrollPane(grid), BorderLayout.CENTER);
-	this.repaint();
-	this.revalidate();
-    }
+				if (this.grid != null) { this.remove(this.grid); }
+				
+				buildActivityTableModel();
+				this.grid = new JTable(tableModel);
+				Font dataFont = new Font(null, 0, 12);
+				Font headerFont = new Font(null, 0, 12);
+				this.grid.setGridColor(Color.LIGHT_GRAY);
+				this.grid.setRowHeight(25);
+				this.grid.setFont(dataFont);
+				
+				this.grid.getTableHeader().setFont(headerFont);
+				this.grid.getColumnModel().getColumn(0).setPreferredWidth(1);
+				this.grid.getColumnModel().getColumn(1).setPreferredWidth(200);
+				this.grid.getColumnModel().getColumn(2).setPreferredWidth(50);
+				this.grid.getColumnModel().getColumn(3).setPreferredWidth(50);
+				this.grid.getColumnModel().getColumn(4).setPreferredWidth(200);
+				this.add(new JScrollPane(grid), BorderLayout.CENTER);
+				
+				this.repaint();
+				this.revalidate();
+	    }
     
+  	/**
+  	 * This method refreshes the panel
+  	 */
     public void refresh() {
-	buildActivityTableModel();
-	this.repaint();
+			buildActivityTableModel();
+			this.repaint();
     }
     
-    // TODO
-    private void buildDeleteActivityButton() {
+  	/**
+  	 * This method deletes an Activity
+  	 */
+ private void buildDeleteActivityButton() {
 	this.deleteActivityButton = new JButton();
 	this.deleteActivityButton.setText("Delete Selected Activity");
 	this.deleteActivityButton.addActionListener(new ActionListener() {
@@ -79,6 +96,8 @@ public class ActivitiesTab extends JPanel {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 			  int selectedRow = grid.getSelectedRow(); 
+			  
+			  //Checks if an activity is selected before trying to delete it
 			  if (selectedRow < 0) {
 			  	JOptionPane.showMessageDialog(null, "No activies exist or are selected", "Error deleting an activity", JOptionPane.ERROR_MESSAGE);
 			  } else {
@@ -102,7 +121,9 @@ public class ActivitiesTab extends JPanel {
 	});
     }
     
-    // TODO
+	/**
+	 * This method edits an Activity
+	 */
     private void buildEditActivityButton() {
 	this.editActivityButton = new JButton();
 	this.editActivityButton.setText("Edit Selected Activity");
@@ -110,6 +131,8 @@ public class ActivitiesTab extends JPanel {
 	    @Override
 	    public void actionPerformed(ActionEvent e) {
 		int selectedRow = grid.getSelectedRow();
+		
+	//Checks if an activity is selected before trying to edit it
 		if (selectedRow < 0) {
 		    JOptionPane.showMessageDialog(null, "No activies exist or are selected", "Error editing an activity", JOptionPane.ERROR_MESSAGE);
 		} else {
@@ -135,7 +158,6 @@ public class ActivitiesTab extends JPanel {
 			}
 			tableModel.setValueAt(result.getDescription(), selectedRow, 4);
 		    }
-		    //ViewManager.refresh();
 		}
 		ViewManager.refresh();
 		ViewManager.reload();
@@ -143,9 +165,12 @@ public class ActivitiesTab extends JPanel {
 	    }
 
 	});
-    }
+}
 
-    private void buildAddActivityButton() {
+  	/**
+  	 * This method adds an Activity
+  	 */
+ private void buildAddActivityButton() {
 	this.addActivityButton = new JButton();
 	this.addActivityButton.setText("Add New Activity");
 	this.addActivityButton.addActionListener(new ActionListener() {
@@ -156,6 +181,7 @@ public class ActivitiesTab extends JPanel {
 		if (result != null) {
 		    ViewManager.getCurrentProject().addActivity(result);
 		    try {
+		    	//if the project is valid, add the activity fields to the grid
 			if (ViewManager.getCurrentProject().isValid()) {
 			    Vector<Object> newRow = new Vector<Object>();
 			    newRow.add(Integer.toString(result.getId()));

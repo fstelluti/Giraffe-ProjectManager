@@ -73,7 +73,6 @@ public class Project {
 		}
 	}
 	
-	///should be modified to reflect new DB schema!!!
 	public Project(int id, String name, Date startDate, Date dueDate, String description)
 	{
 		this.id = id;
@@ -83,7 +82,6 @@ public class Project {
 		this.description = description;
 	}
 	
-	///should be modified to reflect new DB schema!!! TODO Need all these constructors?
 	public Project(String name, Date startDate, Date dueDate, String description)
 	{
 		this.name = name;

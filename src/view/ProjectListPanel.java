@@ -26,6 +26,12 @@ import controller.ViewManager;
 import model.Project;
 import model.User;
 
+/**
+ * This class defines the project list section on the left of the main panel
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class ProjectListPanel extends JPanel {
 
     private static final long serialVersionUID = 2253306118347658896L;
@@ -68,6 +74,8 @@ public class ProjectListPanel extends JPanel {
 	    }
 	    
 	});
+	
+	//Create a new project
 	this.createProjectButton = new JButton();
 	this.createProjectButton.setText("Create New Project");
 	this.createProjectButton.addActionListener(new ActionListener() {
@@ -81,7 +89,9 @@ public class ProjectListPanel extends JPanel {
     }
 
 
-    
+  	/**
+  	 * This method refreshes the panel
+  	 */
     public void refresh(User user) {
 	this.removeAll();
 	northPanel = new JPanel(new BorderLayout());
@@ -138,6 +148,7 @@ public class ProjectListPanel extends JPanel {
 	    }
 	});
 	
+	//Displays the list of projects depending on what permissions the user has
 	switch (selectedFilter) {
 		case 0: this.add(projectsList, BorderLayout.CENTER);
 			break;
@@ -154,7 +165,6 @@ public class ProjectListPanel extends JPanel {
 	/**
 	 * Creates a Panel that displays the Project Name and the user name and picture
 	 * User picture can be clicked to see user settings or to logout
-	 * @return JPanel
 	 */
     public void buildUserPanel() {
 	userPanel = new JPanel();

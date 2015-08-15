@@ -25,6 +25,10 @@ import model.PERTReport;
 import model.Project;
 import controller.ViewManager;
 
+/**
+ * @authors Andrey Uspenskiy
+ */
+
 public class PertAnalysisTab extends JPanel
 {
 	private Project project;	  

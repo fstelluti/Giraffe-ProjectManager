@@ -15,6 +15,12 @@ import controller.ViewManager;
 import model.Project;
 import model.User;
 
+/**
+ * This class defines all the tab panels 
+ * 
+ * @author Matthew Mongrain
+ */
+
 public class TabPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
