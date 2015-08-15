@@ -53,8 +53,7 @@ public class PertEvent extends DefaultEdge
 	@Override
 	public String toString()
 	{
-		SimpleDateFormat df2 = new SimpleDateFormat("EEE, dd MMM yyyy");
-		return "Expected Date: \n" + df2.format(((PertActivity)getSource()).getExpectedFinishDate());
+		return "";
 	}
 
 }

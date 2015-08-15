@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +10,8 @@ import java.util.Set;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import org.jgraph.JGraph;
 import org.jgrapht.alg.DirectedNeighborIndex;
@@ -23,101 +26,75 @@ import com.jgraph.layout.tree.JGraphTreeLayout;
  * @authors Andrey Uspenskiy
  */
 
-public class PERTReport//NOT FINISHED
+public class PERTReport extends JPanel
 {
 	private Project project;
 	private DefaultDirectedGraph<PertActivity, PertEvent> graph;
-	private List<List<PertActivity>> allPaths;
+	private ArrayList<PertActivity> criticalActivities;
+	private double cumulativeExpectedDuration = 0;
+	private double cumulativeVariance = 0;
+	private JPanel resultsPanel;
+	private JTextArea resultsText;
+	private double projectZValue = 0;
+	private double targetDifference = 0;
+	private Date projectTargetDate;
 	private JGraphAdapter graphAdapter;
 	
-	public PERTReport(Project project)
+	public PERTReport(Project project, Date date)
 	{
 		this.project = project;
-		this.graph = this.project.toDigraphPert();
+		this.criticalActivities = this.project.getCriticalActivities();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, 40);
+		this.setProjectTargetDate(cal.getTime());
 		graphAdapter = new JGraphAdapter();
-		computeData();
-		/*JDialog dialog = new JDialog();
-		dialog.getContentPane().add(graphAdapter);
-		dialog.setTitle("PERT chart");
-		dialog.pack();
-		dialog.setLocationRelativeTo(null);
-		dialog.setModal(true);
-		dialog.setVisible(true);*/
+		resultsPanel = new JPanel();
+		resultsText = new JTextArea(getResultText());
+		this.setLayout(new BorderLayout());
+		this.add(graphAdapter, BorderLayout.NORTH);
+		this.add(resultsText, BorderLayout.SOUTH);
 		
 	}
 	
 	private void computeData()
 	{
-		PertActivity start = null;
-		PertActivity end = null;
-		GraphIterator<PertActivity, PertEvent> iterator = 
-                new DepthFirstIterator<PertActivity, PertEvent>(graph);
-        while (iterator.hasNext())
-        {
-        	PertActivity temp = iterator.next();
-        	
-        	if(temp.getName().equals("Start"))
-        	{
-        		start = temp;
-        	}
-        	else if(temp.getName().equals("End"))
-        	{
-        		end = temp;
-        	}
-        	else
-        	{
-        		computeExpectedFinishDate(temp);
-        	}
-        }
-		allPaths = getAllPaths(start, end);
-		
-		Set<PertEvent> events = graph.edgeSet();
-		for (PertEvent pertEvent : events)
+		for (PertActivity pertActivity : this.criticalActivities)
 		{
-			pertEvent.setExpectedDate(Double.parseDouble(graph.getEdgeTarget(pertEvent).getExpectedDuration()));
-			graph.getEdgeTarget(pertEvent);
+			cumulativeExpectedDuration = cumulativeExpectedDuration + pertActivity.getExpectedDuration();
 		}
 		
+		for (PertActivity pertActivity : this.criticalActivities)
+		{
+			cumulativeVariance = cumulativeVariance + Math.pow(pertActivity.getStandardDeviation(), 2);
+		}
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(this.projectTargetDate);
+		
+		projectZValue = Math.sqrt(cumulativeVariance);
 	}
 	
-	private void computeExpectedFinishDate(PertActivity activity)
+	private String getResultText()
 	{
-			double durDouble = Double.parseDouble(activity.getExpectedDuration());
-			int durInt = (int) durDouble;
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(new Date());
-			cal.add(Calendar.DATE, durInt);
-			activity.setExpectedFinishDate(cal.getTime());
+		computeData();
+		StringBuilder builder = new StringBuilder();
+		builder.append("Expected duration for the project is: ");
+		builder.append(cumulativeExpectedDuration + " days\n");
+		builder.append("Z value for achieving target date is: ");
+		builder.append(cumulativeVariance);
+		
+		return builder.toString();
 	}
 	
-	public List<List<PertActivity>> getAllPaths(PertActivity source, PertActivity destination)
-	{
-        List<List<PertActivity>> paths = new ArrayList<List<PertActivity>>();
-        recursive(source, destination, paths, new LinkedHashSet<PertActivity>());
-        return paths;
-    }
-
-    private void recursive (PertActivity current, PertActivity destination, List<List<PertActivity>> paths, LinkedHashSet<PertActivity> path) {
-        path.add(current);
-
-        if (current.getName().equals(destination.getName())) {
-            paths.add(new ArrayList<PertActivity>(path));
-            path.remove(current);
-            return;
-        }
-        DirectedNeighborIndex<PertActivity, PertEvent> g = 
-                new DirectedNeighborIndex<PertActivity, PertEvent>(graph);
-        final List<PertActivity> edges  = g.successorListOf(current);
-
-        for (PertActivity t : edges) {
-            if (!path.contains(t)) {
-                recursive (t, destination, paths, path);
-            }
-        }
-
-        path.remove(current);
-    }
-    public JGraphAdapter getGraphAdapter() {
+	public JGraphAdapter getGraphAdapter() {
         return graphAdapter;
-    }    
+    }
+
+	public Date getProjectTargetDate() {
+		return projectTargetDate;
+	}
+
+	public void setProjectTargetDate(Date projectTargetDate) {
+		this.projectTargetDate = projectTargetDate;
+	}    
 }

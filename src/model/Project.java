@@ -310,22 +310,37 @@ public class Project {
 	    return diGraph;
 	}
 	
+	public ArrayList<PertActivity> getCriticalActivities()
+	{
+	    DefaultDirectedGraph<PertActivity, PertEvent> diGraph = toDigraphPert();
+	    
+	    DefaultDirectedGraph<Activity, DefaultEdge> criticalPathGraph = getCriticalPathGraph();
+	    
+	    Set<Activity> criticalPathActivities = criticalPathGraph.vertexSet();
+	    ArrayList<PertActivity> criticalActivities = new ArrayList<PertActivity>();
+	    
+	    for (Activity activity : criticalPathActivities)
+	    {
+				for (PertActivity pertActivity : diGraph.vertexSet())
+				{
+					if(activity.getName().equalsIgnoreCase(pertActivity.getName()))
+					{
+						criticalActivities.add(pertActivity);
+					}
+				}
+	    }
+	    return criticalActivities;
+	}
+	
 	public DefaultDirectedGraph<PertActivity, PertEvent> toDigraphPert() {
 	    DefaultDirectedGraph<PertActivity, PertEvent> diGraph = 
 		    new DefaultDirectedGraph<PertActivity, PertEvent>(PertEvent.class);
 	    List<Activity> predecessorActivities;
-
-	    PertActivity start = new PertActivity(0, "Start");
-	    PertActivity end = new PertActivity(-1, "End");
-	    
-	    diGraph.addVertex(start);
 	    
 	    // Vertices
 	    for (Activity source : activities) {
 		diGraph.addVertex(new PertActivity(source.getId()));
 	    }
-	    
-	    diGraph.addVertex(end);
 
 	    // Edges
 	    for (Activity source : activities) {
@@ -334,29 +349,6 @@ public class Project {
 		for (Activity target : predecessorActivities) {
 		    diGraph.addEdge(new PertActivity(target.getId()), new PertActivity(source.getId()));
 		}
-	    }
-	    
-	    GraphIterator<PertActivity, PertEvent> iterator = 
-                new DepthFirstIterator<PertActivity, PertEvent>(diGraph);
-	    
-	    while(iterator.hasNext())
-	    {
-	    	PertActivity tempActivity = iterator.next();
-	    	if(diGraph.incomingEdgesOf(tempActivity).size() == 0)
-	    	{
-	    		if (!tempActivity.getName().equalsIgnoreCase(start.getName())&& !tempActivity.getName().equalsIgnoreCase(end.getName()))
-	    		{
-	    			diGraph.addEdge(start, tempActivity);
-	    		}
-	    	}
-	    	
-	    	if(diGraph.outgoingEdgesOf(tempActivity).size() == 0)
-	    	{
-	    		if (!tempActivity.getName().equalsIgnoreCase(start.getName())&& !tempActivity.getName().equalsIgnoreCase(end.getName()))
-	    		{
-	    			diGraph.addEdge(tempActivity, end);
-	    		}
-	    	}
 	    }
 	    return diGraph;
 	}
