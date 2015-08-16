@@ -3,7 +3,8 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-	view.EarnedValueAnalysisTabTest.class
+	whiteBox.getCPIShouldHaveEVandACPositive.class,
+	whiteBox.getCPIwithACexactlyZero.class
 })
 
 public class WhiteBoxTestSuites {}  	
