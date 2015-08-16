@@ -14,26 +14,26 @@ import model.Project;
 import view.EarnedValueAnalysisTab.EVATestingClass;
 
 /**
- * This class tests the getCPI method with AC equal to exactly zero
+ * This class tests the getCPI method with AC negative
  * 
  * @author Francois Stelluti
  */
 
-public class getCPIwithACexactlyZero {
+public class getCPIShouldHaveNegativeInput {
 
-//Create a EVA testing object in order to test the private methods in the EarnedValueAnalyssTab
+	//Create a EVA testing object in order to test the private methods in the EarnedValueAnalyssTab
 	private EVATestingClass evaTestingClass = null;
-	//Use a AC = 0
-	private double EV, AC = 0, estimatedCost = 700;
+	//Use a negative value for AC
+	private double estimatedCost = 1200, EV, AC = -1000;
 	
 	@Before
 	public void init() {
 		evaTestingClass = EVATestingClass.getInstance();
 	}
 	
-	@Test
-	//Run the getCPI method with a value of zero for the AC
-	public void shouldUseZeroAC() {
+	@Test(expected = IllegalArgumentException.class)
+	//Run the getCPI method with a negative AC
+	public void shouldUseNegativeBAC() {
 		
 		//Create one project with one activity that is 50% completed
 		Project testProject = new Project(1, "Project1", new Date(), new Date(), "Test project");
@@ -50,16 +50,14 @@ public class getCPIwithACexactlyZero {
 		//Get the EV, which is positive
 		EV = evaTestingClass.getEVCostMethod(activitySet);
 		
-		//Set the project's AC (which is zero)
-		testProject.setActualBudget((long)AC);
-		
 		//Add the activity to the project
 		testProject.addActivity(testActivity1);
 		
 		//Set the project to the inner testing class
 		evaTestingClass.setProject(testProject);
 		
-		assertEquals("CPI is not zero when the AC is zero", 0.0, evaTestingClass.getCPImethod(EV, AC), 0);
+		//Try to throw the exception
+    evaTestingClass.getCPImethod(EV, AC);
 		
 	}
 	

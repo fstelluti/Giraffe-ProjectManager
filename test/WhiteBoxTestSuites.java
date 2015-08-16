@@ -5,6 +5,10 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	whiteBox.getCPIShouldHaveEVandACPositive.class,
 	whiteBox.getCPIwithACexactlyZero.class,
+	whiteBox.getCPIShouldHaveNegativeInput.class,
+	whiteBox.getEACShouldHaveBACandCPIPositive.class,
+	whiteBox.getEACwithCPIexactlyZero.class,
+	whiteBox.getEACShouldHaveNegativeInput.class,
 	whiteBox.getDifferenceOfDatesShouldBe2.class,
 	whiteBox.getDifferenceOfDatesHaveEndDateBeforeStart.class,
 	whiteBox.getDifferenceOfDatesHaveSameDates.class,
@@ -12,7 +16,7 @@ import org.junit.runners.Suite;
 	whiteBox.isValidHasValidProject.class,
 	whiteBox.isValidHasTwoProjectsWithSameName.class,
 	whiteBox.isValidProjectHasStartDateAfterDueDate.class,
-	whiteBox.isValidProjectHasNoProjectManager.class
+	whiteBox.isValidProjectHasNoProjectManager.class,
 })
 
 public class WhiteBoxTestSuites {}  	

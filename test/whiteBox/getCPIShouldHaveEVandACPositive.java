@@ -39,7 +39,6 @@ public class getCPIShouldHaveEVandACPositive {
 		Project testProject = new Project(1, "Project1", new Date(), new Date(), "Test project");
 		Activity testActivity1 = new Activity(1, "TestActivity");
 		testActivity1.setId(1);
-		testActivity1.setEstimatedCost((long)EV);
 		//Make sure the activity is 50% complete and set the estimated cost
 		testActivity1.setPercentageComplete(50);
 		testActivity1.setEstimatedCost((long)estimatedCost);
