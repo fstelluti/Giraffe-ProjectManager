@@ -36,6 +36,23 @@ public class isWithinProjectDatesHaveDateBetweenProjectDates
 			}
 			
 			@Test
+			public void isDateWithinProjectDatesDueDateIsNull() throws ParseException, Exception
+			{
+				Calendar start = Calendar.getInstance();
+				start.setTime(new SimpleDateFormat("dd/MM/yyyy").parse("15/08/2015"));//let start date be today's date
+				
+				Calendar chosenDate = Calendar.getInstance();
+				chosenDate.setTime(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/2001"));
+				
+				Project testProject = new Project("Test", start.getTime(), null, "Description");
+				
+				exception.expect(Exception.class);
+				exception.expectMessage("Please pick a date that is after the project start date");
+				
+				testProject.isWithinProjectDates(testProject, chosenDate.getTime());
+			}
+			
+			@Test
 			public void isDateWithinProjectDatesDateIsNotWithinExceptionThrown() throws ParseException, Exception
 			{
 				Calendar start = Calendar.getInstance();
