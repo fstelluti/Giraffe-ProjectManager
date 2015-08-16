@@ -8,7 +8,11 @@ import org.junit.runners.Suite;
 	whiteBox.getDifferenceOfDatesShouldBe2.class,
 	whiteBox.getDifferenceOfDatesHaveEndDateBeforeStart.class,
 	whiteBox.getDifferenceOfDatesHaveSameDates.class,
-	whiteBox.isWithinProjectDatesHaveDateBetweenProjectDates.class
+	whiteBox.isWithinProjectDatesHaveDateBetweenProjectDates.class,
+	whiteBox.isValidHasValidProject.class,
+	whiteBox.isValidHasTwoProjectsWithSameName.class,
+	whiteBox.isValidProjectHasStartDateAfterDueDate.class,
+	whiteBox.isValidProjectHasNoProjectManager.class
 })
 
 public class WhiteBoxTestSuites {}  	

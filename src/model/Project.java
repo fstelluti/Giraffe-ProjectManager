@@ -80,6 +80,7 @@ public class Project {
 		this.startDate = startDate;
 		this.dueDate = dueDate;
 		this.description = description;
+		this.projectManagers = new ArrayList();
 	}
 	
 	public Project(String name, Date startDate, Date dueDate, String description)
