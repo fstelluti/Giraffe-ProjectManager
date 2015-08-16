@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -14,7 +13,7 @@ import model.Project;
 import org.junit.Before;
 import org.junit.Test;
 
-import view.EarnedValueAnalysisTab.TestingClass;;
+import view.EarnedValueAnalysisTab.EVATestingClass;;
 
 /**
  * Tests view.EarnedValueAnalysisTab
@@ -24,12 +23,12 @@ import view.EarnedValueAnalysisTab.TestingClass;;
 
 public class EarnedValueAnalysisTabTest {
 	
-	private TestingClass testingClass = null;
+	private EVATestingClass evaTestingClass = null;
 	
 	@Before
 	public void init()
 	{
-		testingClass = TestingClass.getInstance();
+		evaTestingClass = EVATestingClass.getInstance();
 	}
 	
 	
@@ -64,7 +63,7 @@ public class EarnedValueAnalysisTabTest {
 			
 			if(i > 1)
 			{
-				assertEquals("BAC calculation not working properly", pvCost, testingClass.getPVCostMethod(testProject.getActivities(), true, evaDate), 0);
+				assertEquals("BAC calculation not working properly", pvCost, evaTestingClass.getPVCostMethod(testProject.getActivities(), true, evaDate), 0);
 			}
 			else if(i == 1)
 			{
@@ -96,9 +95,9 @@ public class EarnedValueAnalysisTabTest {
 		testProject.addActivity(testActivity3);
 		testProject.addActivity(testActivity4);
 		
-		testingClass.setProject(testProject);
+		evaTestingClass.setProject(testProject);
 		
-		assertEquals("BAC calculation not working properly", 10000, testingClass.getBACMethod(), 0);
+		assertEquals("BAC calculation not working properly", 10000, evaTestingClass.getBACMethod(), 0);
 	}
 	
 	//test getEVCost()
@@ -128,9 +127,9 @@ public class EarnedValueAnalysisTabTest {
 		testProject.addActivity(testActivity3);
 		testProject.addActivity(testActivity4);
 		
-		testingClass.setProject(testProject);
+		evaTestingClass.setProject(testProject);
 		
-		assertEquals("EV cost calculation not working properly", 6000, testingClass.getEVCostMethod(testProject.getActivities()), 0);
+		assertEquals("EV cost calculation not working properly", 6000, evaTestingClass.getEVCostMethod(testProject.getActivities()), 0);
 	}
 
 	//tests differenceOfDates
@@ -145,7 +144,7 @@ public class EarnedValueAnalysisTabTest {
 		cal1.setTime(sdf.parse("09/02/2015"));
 		cal2.setTime(sdf.parse("09/01/2015"));
 		
-		assertEquals("Difference of days not working properly", 31, testingClass.getDifferenceOfDatesMethod(cal2,cal1), 0);
+		assertEquals("Difference of days not working properly", 31, evaTestingClass.getDifferenceOfDatesMethod(cal2,cal1), 0);
 
 	}
 }

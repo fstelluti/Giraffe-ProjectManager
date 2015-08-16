@@ -188,7 +188,7 @@ public class Activity {
 		return estimatedCost;
 	}
 
-	public void setEstimatedCost(int cost) {
+	public void setEstimatedCost(long cost) {
 		this.estimatedCost = cost;
 	}
 
@@ -196,7 +196,7 @@ public class Activity {
 		return actualCost;
 	}
 
-	public void setActualCost(int actualCost) {
+	public void setActualCost(long actualCost) {
 		this.actualCost = actualCost;
 	}
 
