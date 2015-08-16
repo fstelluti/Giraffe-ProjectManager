@@ -7,7 +7,8 @@ import org.junit.runners.Suite;
 	whiteBox.getCPIwithACexactlyZero.class,
 	whiteBox.getDifferenceOfDatesShouldBe2.class,
 	whiteBox.getDifferenceOfDatesHaveEndDateBeforeStart.class,
-	whiteBox.getDifferenceOfDatesHaveSameDates.class
+	whiteBox.getDifferenceOfDatesHaveSameDates.class,
+	whiteBox.isWithinProjectDatesHaveDateBetweenProjectDates.class
 })
 
 public class WhiteBoxTestSuites {}  	
