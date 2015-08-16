@@ -390,6 +390,11 @@ public class EarnedValueAnalysisTab extends JPanel {
 	private int differenceOfDates(Calendar start, Calendar end) {
 		Calendar date = (Calendar) start.clone();
 		int differenceDays = 0;
+		
+		if(start.after(end))
+		{
+			throw new IllegalArgumentException("End date cannot be before Start date");
+		}
 
 		while (date.before(end)) {
 			date.add(Calendar.DAY_OF_MONTH, 1);
