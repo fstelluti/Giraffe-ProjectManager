@@ -13,10 +13,11 @@ import org.junit.runners.Suite;
 	whiteBox.getDifferenceOfDatesHaveEndDateBeforeStart.class,
 	whiteBox.getDifferenceOfDatesHaveSameDates.class,
 	whiteBox.isWithinProjectDatesHaveDateBetweenProjectDates.class,
-	whiteBox.isValidHasValidProject.class,
-	whiteBox.isValidHasTwoProjectsWithSameName.class,
-	whiteBox.isValidProjectHasStartDateAfterDueDate.class,
-	whiteBox.isValidProjectHasNoProjectManager.class,
+	whiteBox.getPvCostActivitiesAreCompletedWithOneLoop.class ,
+	whiteBox.getPvCostActivitiesAreCompletedWithNoLoop.class ,
+	whiteBox.getPvCostActivitiesAreNotCompletedWithALoop.class ,
+	whiteBox.getPvCostActivitiesAreNotCompletedWithNoLoop.class ,
+	whiteBox.getPvCostActivitiesAreNotCompletedWithNoLoopAndSameDueAndStart.class 
 })
 
 public class WhiteBoxTestSuites {}  	
