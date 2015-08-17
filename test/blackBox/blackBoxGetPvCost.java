@@ -16,6 +16,13 @@ import org.junit.Test;
 
 import view.EarnedValueAnalysisTab.EVATestingClass;
 
+/**
+ * This class tests the getEAC method with BAC negative
+ * 
+ * @author Lukas Cardot-Goyette
+ * @modifiedBy Francois Stelluti
+ */
+
 public class blackBoxGetPvCost {
 	//Create a EVA testing object in order to test the private methods in the EarnedValueAnalyssTab
 	private EVATestingClass evaTestingClass = null;
@@ -46,26 +53,31 @@ public class blackBoxGetPvCost {
 		nomAct = new Activity(1, "nom");
 		nomAct.setStartDate(nomDate);
 		nomAct.setDueDate(nomDate);
+		nomAct.setPercentageComplete(100);
 		nomAct.setEstimatedCost(1000);
 		
 		minAct = new Activity(1, "min");
 		minAct.setStartDate(minDate);
 		minAct.setDueDate(minPDate);
+		minAct.setPercentageComplete(100);
 		minAct.setEstimatedCost(2000);
 		
 		minPAct = new Activity(1, "minP");
 		minPAct.setStartDate(minPDate);
 		minPAct.setDueDate(new Date(Long.MIN_VALUE + 2));
+		minPAct.setPercentageComplete(100);
 		minPAct.setEstimatedCost(3000);
 		
 		maxMAct = new Activity(1, "maxM");
 		maxMAct.setStartDate(new Date(Long.MAX_VALUE - 2));
 		maxMAct.setDueDate(maxMDate);
+		maxMAct.setPercentageComplete(100);
 		maxMAct.setEstimatedCost(4000);
 		
 		maxAct = new Activity(1, "max");
 		maxAct.setStartDate(maxMDate);
 		maxAct.setDueDate(maxDate);
+		maxAct.setPercentageComplete(100);
 		maxAct.setEstimatedCost(5000);
 		
 		ArrayList<Activity> nomList = new ArrayList<Activity>();
@@ -132,6 +144,28 @@ public class blackBoxGetPvCost {
 		assertEquals(evaTestingClass.getPVCostMethod(maxList, true, maxDate), 5000, 0);
 		
 		//completedActivities = False
+		
+		//Clear each list
+		nomList.remove(0);
+		minList.remove(0);
+		minPList.remove(0);
+		maxMList.remove(0);
+		maxList.remove(0);
+		
+		//Set activity percentage to zero
+		nomAct.setPercentageComplete(0);
+		minAct.setPercentageComplete(0);
+		minPAct.setPercentageComplete(0);
+		maxMAct.setPercentageComplete(0);
+		maxAct.setPercentageComplete(0);
+		
+		//add them again
+		nomList.add(nomAct);
+		minList.add(minAct);
+		minPList.add(minPAct);
+		maxMList.add(maxMAct);
+		maxList.add(maxAct);
+		
 		//<1nom, 2nom>
 		assertEquals(evaTestingClass.getPVCostMethod(nomList, false, nomDate), 0, 0);
 		//<1nom, 2min> //error
