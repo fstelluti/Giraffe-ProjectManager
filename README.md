@@ -1,5 +1,5 @@
 # Giraffe Project Management Software
-#### Final intro to software engineering project for Comp 354 at Concordia University
+#### Final Intro to Software Engineering project for Comp 354 at Concordia University
 ##### Completed with a team of 8 people
 
 Giraffe Project Management software is used to manage projects for small to medium scale programs and let teams collaborate and complete activities/projects efficiently and on time. 
@@ -14,19 +14,35 @@ I was was primarily responsible for refactoring the code base (sometimes by appl
 
 Login screen:
 
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343886/ccf79dd0-45d2-11e5-8033-2ed20162d8dc.png)
+
+Main screen:
+
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343887/ccfc0852-45d2-11e5-9ee4-0fbd0787e066.png)
+
 Adding an Activity:
+
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343885/ccf75b22-45d2-11e5-86bf-54a943ee73e9.png)
 
 Adding a project:
 
-Editing a project:
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343888/ccfd47b2-45d2-11e5-8351-f7c1cb8f4722.png)
 
 Earned Value Analysis:
 
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343882/ccf54472-45d2-11e5-95e3-a3cce80c226d.png)
+
 PERT analysis:
+
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343884/ccf66348-45d2-11e5-8028-1db3184f088d.png)
 
 Gantt Chart:
 
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343881/ccf26810-45d2-11e5-9ea2-de4d2423aae6.png)
+
 Critical path chart display:
+
+![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343883/ccf63cb0-45d2-11e5-9921-fd50b8deba3b.png)
 
 External libraries used: JFreeChart + JCommon for Graphs
 
