@@ -24,7 +24,7 @@ Adding an Activity:
 
 ![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343885/ccf75b22-45d2-11e5-86bf-54a943ee73e9.png)
 
-Adding a project:
+Editing a project:
 
 ![ScreenShot](https://cloud.githubusercontent.com/assets/10926088/9343888/ccfd47b2-45d2-11e5-8351-f7c1cb8f4722.png)
 
