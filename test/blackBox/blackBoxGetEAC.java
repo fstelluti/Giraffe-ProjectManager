@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=1020">
     <meta content="origin-when-crossorigin" name="referrer" />
     
-    <title>comp354/blackBoxGetDifferenceOfDates.java at master · zbergeron01/comp354</title>
+    <title>comp354/blackBoxGetEAC.java at master · zbergeron01/comp354</title>
     <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
     <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-114.png">
@@ -24,7 +24,7 @@
       <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
     <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
     <link rel="assets" href="https://assets-cdn.github.com/">
-    <link rel="web-socket" href="wss://live.github.com/_sockets/MTA5MjYwODg6YzI4YmMzZDFmOWExYzYyNWUyOTgxM2NkNGRlMzI2MmU6ZWVjNGEwYWNiMDQ2Mzk0MTIwMWVhY2JjMDlhODBjMGE1NGFiZDE0NmI3ODgzYjViNTBlNTZhMGIxZWE3ZThjMA==--d7daf510f844b1ac05689f873f767212c2c0341c">
+    <link rel="web-socket" href="wss://live.github.com/_sockets/MTA5MjYwODg6YzI4YmMzZDFmOWExYzYyNWUyOTgxM2NkNGRlMzI2MmU6Y2I5ZmNmOTBmODFlZmIzMGU1YmMzMzY0ZTM1ZTAxMjQzM2ZkNmIwNTUwOGExNDEzMzZhNTk2ZjIzMTAwNDUxZA==--18bbd6b4f44c302ee71c566e9b41f1a237548cd5">
     <meta name="pjax-timeout" content="1000">
     <link rel="sudo-modal" href="/sessions/sudo_modal">
 
@@ -34,7 +34,7 @@
 
         <meta name="google-analytics" content="UA-3769691-2">
 
-    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="C630CA06:5BA3:E799C2B:55D4D6C1" name="octolytics-dimension-request_id" /><meta content="10926088" name="octolytics-actor-id" /><meta content="fstelluti" name="octolytics-actor-login" /><meta content="0f4b9f0d911727c87f140e5f2f53972f2c988a2418c72e2e6c9fac43d998028d" name="octolytics-actor-hash" />
+    <meta content="collector.githubapp.com" name="octolytics-host" /><meta content="collector-cdn.github.com" name="octolytics-script-host" /><meta content="github" name="octolytics-app-id" /><meta content="C630CA06:5BA3:E79A336:55D4D6C4" name="octolytics-dimension-request_id" /><meta content="10926088" name="octolytics-actor-id" /><meta content="fstelluti" name="octolytics-actor-login" /><meta content="0f4b9f0d911727c87f140e5f2f53972f2c988a2418c72e2e6c9fac43d998028d" name="octolytics-actor-hash" />
     <meta content="/&lt;user-name&gt;/&lt;repo-name&gt;/blob/show" data-pjax-transient="true" name="analytics-location" />
     <meta content="Rails, view, blob#show" data-pjax-transient="true" name="analytics-event" />
     <meta class="js-ga-set" name="dimension1" content="Logged In">
@@ -48,7 +48,7 @@
       <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico">
 
     <!-- </textarea> --><!-- '"` --><meta content="authenticity_token" name="csrf-param" />
-<meta content="oLI+knJxB0c2+hNB4TsfWeOGZJMCd69mIqFYXDdIYFfXeJD19vvY8adraUFJWnvtBl8p2q/sO9hnX3Tj+jpkoA==" name="csrf-token" />
+<meta content="3Bkt6rgj5F/zwdAHatayjYpwSF7/dJ5kmWlHo3QryBSuDUHF9KdFDzzM+9PQFMQxhjH/kkg+lbjrd5Yd0nLJlA==" name="csrf-token" />
     <meta content="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" name="form-nonce" />
 
     <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github/index-9f3b9b6f798e03419c34853e23b307439f59e850d54b1a6010a1533f084079d2.css" media="all" rel="stylesheet" />
@@ -64,7 +64,7 @@
   <meta name="go-import" content="github.com/zbergeron01/comp354 git https://github.com/zbergeron01/comp354.git">
 
   <meta content="8729182" name="octolytics-dimension-user_id" /><meta content="zbergeron01" name="octolytics-dimension-user_login" /><meta content="35513573" name="octolytics-dimension-repository_id" /><meta content="zbergeron01/comp354" name="octolytics-dimension-repository_nwo" /><meta content="false" name="octolytics-dimension-repository_public" /><meta content="false" name="octolytics-dimension-repository_is_fork" /><meta content="35513573" name="octolytics-dimension-repository_network_root_id" /><meta content="zbergeron01/comp354" name="octolytics-dimension-repository_network_root_nwo" />
-  <link href="https://github.com/zbergeron01/comp354/commits/master.atom?token=AKa4CAdjVNrnxDYdZvxn09P0MeByH1ULks6z4hdUwA%3D%3D" rel="alternate" title="Recent Commits to comp354:master" type="application/atom+xml">
+  <link href="https://github.com/zbergeron01/comp354/commits/master.atom?token=AKa4CH-8bAjKuFgs-1Q8eqg3ADb1397Kks6z4hdYwA%3D%3D" rel="alternate" title="Recent Commits to comp354:master" type="application/atom+xml">
 
   </head>
 
@@ -198,7 +198,7 @@
           Settings
         </a>
 
-        <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/logout" class="logout-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="Hh6zVDQ717hyRJ8fss0FLiB7QrGAuzzqhI15OFu6/XGHbyMzkoYW3/6veoHa/m7IaDVRRdWvQo5xu2jnkwJK3g==" /></div>
+        <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/logout" class="logout-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="s8Q1s3F5djGLl0cXoJUGfPM7vEpa79/xdaVw6VLCgVClP/jC+T2U6bGx7ML5RHnR1ofN/8NBTA5JBSJWGc3iHA==" /></div>
           <button class="dropdown-item dropdown-signout" data-ga-click="Header, sign out, icon:logout">
             Sign out
           </button>
@@ -230,7 +230,7 @@
 <ul class="pagehead-actions">
 
   <li>
-      <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/notifications/subscribe" class="js-social-container" data-autosubmit="true" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="p/veJ3VZH52p2fwfHH7d12jl/tb1c16xLjNN10mvRx9iNgG3X0HzpTs8qi8thbuGk0smumQMa6t4mTSYw8eCug==" /></div>    <input id="repository_id" name="repository_id" type="hidden" value="35513573" />
+      <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/notifications/subscribe" class="js-social-container" data-autosubmit="true" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="Ys3HqexIS48bujFTQyQIEwIO3LnW2CoeJ/XM6IOc01hFIzx/xYq3hBnlRuwjqBJtAsSPSk6LPSYw0Qmv2z4Hdw==" /></div>    <input id="repository_id" name="repository_id" type="hidden" value="35513573" />
 
       <div class="select-menu js-menu-container js-select-menu">
         <a href="/zbergeron01/comp354/subscription"
@@ -305,7 +305,7 @@
     
   <div class="js-toggler-container js-social-container starring-container ">
 
-    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/unstar" class="js-toggler-form starred js-unstar-button" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="WqJau8QsyfdwTl+x9IOW8SDSbXh9pDkOtne9H4opJr/y1oF1VeOg7rk/tzpkbnqAcDciW0goPxGkXwEHBZTZxQ==" /></div>
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/unstar" class="js-toggler-form starred js-unstar-button" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="9kctz+F2OdJ+RRE84JHivEg1FVLYzE+4ftF80hatpCW7tN1s4VCnxqrE64BEXBrRmod/brcQNNSU7+BmL7kB6Q==" /></div>
       <button
         class="btn btn-sm btn-with-count js-toggler-target"
         aria-label="Unstar this repository" title="Unstar zbergeron01/comp354"
@@ -317,7 +317,7 @@
           1
         </a>
 </form>
-    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/star" class="js-toggler-form unstarred js-star-button" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="UloeEpmLCW7tKh8AGOYO4a4mp8qtYe3WDIMjN5VmflmOoYSSreV5erdVN9wYsA9R8glCzQQcfV25EtlSepulrA==" /></div>
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/star" class="js-toggler-form unstarred js-star-button" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="AeCBaxER173ZNcdXWPZROCHXEAhuSR9eZLKxYPDZiiM/9Jy42ukH2hsM05bg3OoTDj+c0yZxWSz0ybBOCkMucA==" /></div>
       <button
         class="btn btn-sm btn-with-count js-toggler-target"
         aria-label="Star this repository" title="Star zbergeron01/comp354"
@@ -333,7 +333,7 @@
   </li>
 
         <li>
-          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/fork" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="yLbiEo+andwaroPq0KN4etldUNV6Cfc0jRPf4AB2Dg0r3s+6eAdI6K4F8dKuchrmvDzNd0njElDdMHjIXSsekw==" /></div>
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/fork" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="fx+vwuGC0djeZOuFc/HdJFod0Qt7u5BL1Nzl31/Fp4G69rsLFJrrVX1A1kTD1e5r7lVWUSD1LEIQBlPrzVDn3Q==" /></div>
             <button
                 type="submit"
                 class="btn btn-sm btn-with-count"
@@ -463,7 +463,7 @@
 
 
   <div class="clone-options">You can clone with
-    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=http&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="GQxhdR9xcfWTgdaogIwZsKkbGveWywvLWrDNrmhGbv1yqN6yK1sTYG3IywwN2fW/eziyK4ZgutsvcLxHOibQAQ==" /></div><button class="btn-link js-clone-selector" data-protocol="http" type="submit">HTTPS</button></form>, <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=ssh&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="05KbjRPobDPCAC3HZVSd7kSTsPgg8cVhmerWphpNTaIQe4dD55O6Dx2DLoTGfBTKaDIvAxpTunctKPddTJYYGA==" /></div><button class="btn-link js-clone-selector" data-protocol="ssh" type="submit">SSH</button></form>, or <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="fWuOKXYGb136hw+AJhjH0vYR4RjGv6fJpEU6tZIC03R/VHzvbZihYD2dNNaRaRQJECftcqTlZYgtGkiHqcF2Cw==" /></div><button class="btn-link js-clone-selector" data-protocol="subversion" type="submit">Subversion</button></form>.
+    <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=http&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="09lmSjAGMGvojnx/KJcQ9ps4z54ohFTPYzHfUtHuWoXZL+25ZLF1Peo8BO1WbCatJRpSiG6/BgLZXalSbr45xg==" /></div><button class="btn-link js-clone-selector" data-protocol="http" type="submit">HTTPS</button></form>, <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=ssh&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="CH/OpymWfdgJe8JEUNnJ+21TFzz8tmiA2fR19lV70oLOi+glp8CM+2cqryLyPWur8Kuh33mYAyql+WQ2VeDQGA==" /></div><button class="btn-link js-clone-selector" data-protocol="ssh" type="submit">SSH</button></form>, or <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/users/set_protocol?protocol_selector=subversion&amp;protocol_type=push" class="inline-form js-clone-selector-form is-enabled" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" data-remote="true" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="rGih+k30xWIXqvFY2qXXi/yuZZOW4LXW9ufAqIMrHq8DRgzkmq7N9noRFkF8X53vk/Lxtw0pF61vpstVdtcThQ==" /></div><button class="btn-link js-clone-selector" data-protocol="subversion" type="submit">Subversion</button></form>.
     <a href="https://help.github.com/articles/which-remote-url-should-i-use" class="help tooltipped tooltipped-n" aria-label="Get help on which URL is right for you.">
       <span class="octicon octicon-question"></span>
     </a>
@@ -483,9 +483,9 @@
 
             
 
-<a href="/zbergeron01/comp354/blob/2513bb24d43750beb3963d212bbd540d0e0572af/test/blackBox/blackBoxGetDifferenceOfDates.java" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
+<a href="/zbergeron01/comp354/blob/2513bb24d43750beb3963d212bbd540d0e0572af/test/blackBox/blackBoxGetEAC.java" class="hidden js-permalink-shortcut" data-hotkey="y">Permalink</a>
 
-<!-- blob contrib key: blob_contributors:v21:9b26cdc66e1564a1bced76121899a17c -->
+<!-- blob contrib key: blob_contributors:v21:de4c428e937f623d91b1240088fbdc87 -->
 
   <div class="file-navigation js-zeroclipboard-container">
     
@@ -528,7 +528,7 @@
 
 
             <a class="select-menu-item js-navigation-item js-navigation-open "
-               href="/zbergeron01/comp354/blob/backup/test/blackBox/blackBoxGetDifferenceOfDates.java"
+               href="/zbergeron01/comp354/blob/backup/test/blackBox/blackBoxGetEAC.java"
                data-name="backup"
                data-skip-pjax="true"
                rel="nofollow">
@@ -538,7 +538,7 @@
               </span>
             </a>
             <a class="select-menu-item js-navigation-item js-navigation-open selected"
-               href="/zbergeron01/comp354/blob/master/test/blackBox/blackBoxGetDifferenceOfDates.java"
+               href="/zbergeron01/comp354/blob/master/test/blackBox/blackBoxGetEAC.java"
                data-name="master"
                data-skip-pjax="true"
                rel="nofollow">
@@ -548,7 +548,7 @@
               </span>
             </a>
             <a class="select-menu-item js-navigation-item js-navigation-open "
-               href="/zbergeron01/comp354/blob/production/test/blackBox/blackBoxGetDifferenceOfDates.java"
+               href="/zbergeron01/comp354/blob/production/test/blackBox/blackBoxGetEAC.java"
                data-name="production"
                data-skip-pjax="true"
                rel="nofollow">
@@ -559,7 +559,7 @@
             </a>
         </div>
 
-          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/branches" class="js-create-branch select-menu-item select-menu-new-item-form js-navigation-item js-new-item-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="fVTd+VXfeLyemZcUZxTQdKwFCloeZ8b6ZOYdOcEkLUe4dqWldECEPkwaNYbqVZrwq5j0yMy7gXTp0gALZRMRBA==" /></div>
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/branches" class="js-create-branch select-menu-item select-menu-new-item-form js-navigation-item js-new-item-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="qPgGh0Zgd0mZ54nWtdPkY+lAccrT4fK9zwS9+ujNCKODOKVeyRg5rysDCbSaEBjKqVkm0WtIVq5kt098kC30+A==" /></div>
             <span class="octicon octicon-git-branch select-menu-item-icon"></span>
             <div class="select-menu-item-text">
               <span class="select-menu-item-heading">Create branch: <span class="js-new-item-name"></span></span>
@@ -567,7 +567,7 @@
             </div>
             <input type="hidden" name="name" id="name" class="js-new-item-value">
             <input type="hidden" name="branch" id="branch" value="master">
-            <input type="hidden" name="path" id="path" value="test/blackBox/blackBoxGetDifferenceOfDates.java">
+            <input type="hidden" name="path" id="path" value="test/blackBox/blackBoxGetEAC.java">
 </form>
       </div>
 
@@ -596,11 +596,11 @@
     </div>
 
     <div class="breadcrumb js-zeroclipboard-target">
-      <span class="repo-root js-repo-root"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">comp354</span></a></span></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354/tree/master/test" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">test</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354/tree/master/test/blackBox" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">blackBox</span></a></span><span class="separator">/</span><strong class="final-path">blackBoxGetDifferenceOfDates.java</strong>
+      <span class="repo-root js-repo-root"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">comp354</span></a></span></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354/tree/master/test" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">test</span></a></span><span class="separator">/</span><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="/zbergeron01/comp354/tree/master/test/blackBox" class="" data-branch="master" data-pjax="true" itemscope="url"><span itemprop="title">blackBox</span></a></span><span class="separator">/</span><strong class="final-path">blackBoxGetEAC.java</strong>
     </div>
   </div>
 
-<include-fragment class="commit commit-loader file-history-tease" src="/zbergeron01/comp354/contributors/master/test/blackBox/blackBoxGetDifferenceOfDates.java">
+<include-fragment class="commit commit-loader file-history-tease" src="/zbergeron01/comp354/contributors/master/test/blackBox/blackBoxGetEAC.java">
   <div class="file-history-tease-header">
     Fetching contributors&hellip;
   </div>
@@ -615,27 +615,27 @@
     <div class="file-actions">
 
       <div class="btn-group">
-        <a href="/zbergeron01/comp354/raw/master/test/blackBox/blackBoxGetDifferenceOfDates.java" class="btn btn-sm " id="raw-url">Raw</a>
-          <a href="/zbergeron01/comp354/blame/master/test/blackBox/blackBoxGetDifferenceOfDates.java" class="btn btn-sm js-update-url-with-hash">Blame</a>
-        <a href="/zbergeron01/comp354/commits/master/test/blackBox/blackBoxGetDifferenceOfDates.java" class="btn btn-sm " rel="nofollow">History</a>
+        <a href="/zbergeron01/comp354/raw/master/test/blackBox/blackBoxGetEAC.java" class="btn btn-sm " id="raw-url">Raw</a>
+          <a href="/zbergeron01/comp354/blame/master/test/blackBox/blackBoxGetEAC.java" class="btn btn-sm js-update-url-with-hash">Blame</a>
+        <a href="/zbergeron01/comp354/commits/master/test/blackBox/blackBoxGetEAC.java" class="btn btn-sm " rel="nofollow">History</a>
       </div>
 
 
-            <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/edit/master/test/blackBox/blackBoxGetDifferenceOfDates.java" class="inline-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="UJBcgFi6Y48FkOiPwbIy/qyI7xJruuLDxpVuopscx5lTBeNB0+4SkD7Bo9vQNGGlNr43nnADerpFSU1Fol2sXw==" /></div>
+            <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/edit/master/test/blackBox/blackBoxGetEAC.java" class="inline-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="qdFXVODrWp7yQfw4cGb0uGkuPYyaE1krB5rHu1HDtScFNconkrvthQ2lGISbaduZtgUOKskEaPaunLbm9y/hyA==" /></div>
               <button class="octicon-btn tooltipped tooltipped-n" type="submit" aria-label="Edit this file" data-hotkey="e" data-disable-with>
                 <span class="octicon octicon-pencil"></span>
               </button>
 </form>
-          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/delete/master/test/blackBox/blackBoxGetDifferenceOfDates.java" class="inline-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="bwsCoWpmZdylri/XVjghbl252RcbzUrgcrlr+8iSeJrdDJAgOLX/szosA9phXW1Ri69xy/rMCtMRiXZUuvLAiw==" /></div>
+          <!-- </textarea> --><!-- '"` --><form accept-charset="UTF-8" action="/zbergeron01/comp354/delete/master/test/blackBox/blackBoxGetEAC.java" class="inline-form" data-form-nonce="284eb12f24d1e12947c7ad2ecefdd8c88ee18c27" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="9jePOSolRtDfs8uhLsKSuvLtygISZv17HMf5OrJa2rBbAb0c8sNFS+bQtsgtsN3p0+ALAWM0Pt4P6SOXJD7i7g==" /></div>
             <button class="octicon-btn octicon-btn-danger tooltipped tooltipped-n" type="submit" aria-label="Delete this file" data-disable-with>
               <span class="octicon octicon-trashcan"></span>
             </button>
 </form>    </div>
 
     <div class="file-info">
-        101 lines (87 sloc)
+        91 lines (81 sloc)
         <span class="file-info-divider"></span>
-      3.746 kB
+      3.223 kB
     </div>
   </div>
   
@@ -653,7 +653,7 @@
       </tr>
       <tr>
         <td id="L3" class="blob-num js-line-number" data-line-number="3"></td>
-        <td id="LC3" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import static</span> <span class="pl-smi">org.junit.Assert.*</span>;</td>
+        <td id="LC3" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import static</span> <span class="pl-smi">org.junit.Assert.assertEquals</span>;</td>
       </tr>
       <tr>
         <td id="L4" class="blob-num js-line-number" data-line-number="4"></td>
@@ -666,94 +666,95 @@
       </tr>
       <tr>
         <td id="L6" class="blob-num js-line-number" data-line-number="6"></td>
-        <td id="LC6" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">java.text.SimpleDateFormat</span>;</td>
+        <td id="LC6" class="blob-code blob-code-inner js-file-line">
+</td>
       </tr>
       <tr>
         <td id="L7" class="blob-num js-line-number" data-line-number="7"></td>
-        <td id="LC7" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">java.util.Calendar</span>;</td>
+        <td id="LC7" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.After</span>;</td>
       </tr>
       <tr>
         <td id="L8" class="blob-num js-line-number" data-line-number="8"></td>
-        <td id="LC8" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">java.util.Date</span>;</td>
+        <td id="LC8" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.Before</span>;</td>
       </tr>
       <tr>
         <td id="L9" class="blob-num js-line-number" data-line-number="9"></td>
-        <td id="LC9" class="blob-code blob-code-inner js-file-line">
-</td>
+        <td id="LC9" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.Test</span>;</td>
       </tr>
       <tr>
         <td id="L10" class="blob-num js-line-number" data-line-number="10"></td>
-        <td id="LC10" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.After</span>;</td>
+        <td id="LC10" class="blob-code blob-code-inner js-file-line">
+</td>
       </tr>
       <tr>
         <td id="L11" class="blob-num js-line-number" data-line-number="11"></td>
-        <td id="LC11" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.Before</span>;</td>
+        <td id="LC11" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">view.EarnedValueAnalysisTab.EVATestingClass</span>;</td>
       </tr>
       <tr>
         <td id="L12" class="blob-num js-line-number" data-line-number="12"></td>
-        <td id="LC12" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">org.junit.Test</span>;</td>
+        <td id="LC12" class="blob-code blob-code-inner js-file-line">
+</td>
       </tr>
       <tr>
         <td id="L13" class="blob-num js-line-number" data-line-number="13"></td>
-        <td id="LC13" class="blob-code blob-code-inner js-file-line">
-</td>
+        <td id="LC13" class="blob-code blob-code-inner js-file-line"><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">blackBoxGetEAC</span> {</td>
       </tr>
       <tr>
         <td id="L14" class="blob-num js-line-number" data-line-number="14"></td>
-        <td id="LC14" class="blob-code blob-code-inner js-file-line"><span class="pl-k">import</span> <span class="pl-smi">view.EarnedValueAnalysisTab.EVATestingClass</span>;</td>
+        <td id="LC14" class="blob-code blob-code-inner js-file-line">	<span class="pl-c">//Create a EVA testing object in order to test the private methods in the EarnedValueAnalyssTab</span></td>
       </tr>
       <tr>
         <td id="L15" class="blob-num js-line-number" data-line-number="15"></td>
-        <td id="LC15" class="blob-code blob-code-inner js-file-line">
-</td>
+        <td id="LC15" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">EVATestingClass</span> evaTestingClass <span class="pl-k">=</span> <span class="pl-c1">null</span>;</td>
       </tr>
       <tr>
         <td id="L16" class="blob-num js-line-number" data-line-number="16"></td>
-        <td id="LC16" class="blob-code blob-code-inner js-file-line"><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">blackBoxGetDifferenceOfDates</span> {</td>
+        <td id="LC16" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-k">double</span> minBAC, minPBAC, nomBAC, maxMBAC, maxBAC;</td>
       </tr>
       <tr>
         <td id="L17" class="blob-num js-line-number" data-line-number="17"></td>
-        <td id="LC17" class="blob-code blob-code-inner js-file-line">	<span class="pl-c">//Create a EVA testing object in order to test the private methods in the EarnedValueAnalyssTab</span></td>
+        <td id="LC17" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-k">double</span> minCPI, minPCPI, nomCPI, maxMCPI, maxCPI;</td>
       </tr>
       <tr>
         <td id="L18" class="blob-num js-line-number" data-line-number="18"></td>
-        <td id="LC18" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">EVATestingClass</span> evaTestingClass <span class="pl-k">=</span> <span class="pl-c1">null</span>;</td>
+        <td id="LC18" class="blob-code blob-code-inner js-file-line">
+</td>
       </tr>
       <tr>
         <td id="L19" class="blob-num js-line-number" data-line-number="19"></td>
-        <td id="LC19" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">Calendar</span> nom <span class="pl-k">=</span> <span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC19" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@Before</span></td>
       </tr>
       <tr>
         <td id="L20" class="blob-num js-line-number" data-line-number="20"></td>
-        <td id="LC20" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">Calendar</span> minP <span class="pl-k">=</span> <span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC20" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">init</span>() {</td>
       </tr>
       <tr>
         <td id="L21" class="blob-num js-line-number" data-line-number="21"></td>
-        <td id="LC21" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">Calendar</span> min <span class="pl-k">=</span> <span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC21" class="blob-code blob-code-inner js-file-line">		evaTestingClass <span class="pl-k">=</span> <span class="pl-smi">EVATestingClass</span><span class="pl-k">.</span>getInstance();</td>
       </tr>
       <tr>
         <td id="L22" class="blob-num js-line-number" data-line-number="22"></td>
-        <td id="LC22" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">Calendar</span> max <span class="pl-k">=</span> <span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC22" class="blob-code blob-code-inner js-file-line">	}</td>
       </tr>
       <tr>
         <td id="L23" class="blob-num js-line-number" data-line-number="23"></td>
-        <td id="LC23" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">private</span> <span class="pl-smi">Calendar</span> maxM <span class="pl-k">=</span> <span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC23" class="blob-code blob-code-inner js-file-line">	</td>
       </tr>
       <tr>
         <td id="L24" class="blob-num js-line-number" data-line-number="24"></td>
-        <td id="LC24" class="blob-code blob-code-inner js-file-line">	</td>
+        <td id="LC24" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@After</span></td>
       </tr>
       <tr>
         <td id="L25" class="blob-num js-line-number" data-line-number="25"></td>
-        <td id="LC25" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@Before</span></td>
+        <td id="LC25" class="blob-code blob-code-inner js-file-line">	<span class="pl-c">//Make sure that the EVATestingClass object is set to null</span></td>
       </tr>
       <tr>
         <td id="L26" class="blob-num js-line-number" data-line-number="26"></td>
-        <td id="LC26" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">init</span>() {</td>
+        <td id="LC26" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">destructor</span>() {</td>
       </tr>
       <tr>
         <td id="L27" class="blob-num js-line-number" data-line-number="27"></td>
-        <td id="LC27" class="blob-code blob-code-inner js-file-line">		evaTestingClass <span class="pl-k">=</span> <span class="pl-smi">EVATestingClass</span><span class="pl-k">.</span>getInstance();</td>
+        <td id="LC27" class="blob-code blob-code-inner js-file-line">		evaTestingClass <span class="pl-k">=</span> <span class="pl-c1">null</span>;</td>
       </tr>
       <tr>
         <td id="L28" class="blob-num js-line-number" data-line-number="28"></td>
@@ -765,287 +766,247 @@
       </tr>
       <tr>
         <td id="L30" class="blob-num js-line-number" data-line-number="30"></td>
-        <td id="LC30" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@After</span></td>
+        <td id="LC30" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@Test</span></td>
       </tr>
       <tr>
         <td id="L31" class="blob-num js-line-number" data-line-number="31"></td>
-        <td id="LC31" class="blob-code blob-code-inner js-file-line">	<span class="pl-c">//Make sure that the EVATestingClass object is set to null</span></td>
+        <td id="LC31" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">worstCaseBoundaryTesting</span>() <span class="pl-k">throws</span> <span class="pl-smi">ParseException</span></td>
       </tr>
       <tr>
         <td id="L32" class="blob-num js-line-number" data-line-number="32"></td>
-        <td id="LC32" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">destructor</span>() {</td>
+        <td id="LC32" class="blob-code blob-code-inner js-file-line">	{</td>
       </tr>
       <tr>
         <td id="L33" class="blob-num js-line-number" data-line-number="33"></td>
-        <td id="LC33" class="blob-code blob-code-inner js-file-line">		evaTestingClass <span class="pl-k">=</span> <span class="pl-c1">null</span>;</td>
+        <td id="LC33" class="blob-code blob-code-inner js-file-line">		minBAC <span class="pl-k">=</span> <span class="pl-c1">0</span>; minCPI <span class="pl-k">=</span> <span class="pl-c1">0</span>;</td>
       </tr>
       <tr>
         <td id="L34" class="blob-num js-line-number" data-line-number="34"></td>
-        <td id="LC34" class="blob-code blob-code-inner js-file-line">	}</td>
+        <td id="LC34" class="blob-code blob-code-inner js-file-line">		minPBAC <span class="pl-k">=</span> <span class="pl-c1">0.01</span>; minPCPI <span class="pl-k">=</span> <span class="pl-c1">0.01</span>;</td>
       </tr>
       <tr>
         <td id="L35" class="blob-num js-line-number" data-line-number="35"></td>
-        <td id="LC35" class="blob-code blob-code-inner js-file-line">	</td>
+        <td id="LC35" class="blob-code blob-code-inner js-file-line">		nomBAC <span class="pl-k">=</span> <span class="pl-c1">10000</span>; nomCPI <span class="pl-k">=</span> <span class="pl-c1">5000</span>;</td>
       </tr>
       <tr>
         <td id="L36" class="blob-num js-line-number" data-line-number="36"></td>
-        <td id="LC36" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">@Test</span>(<span class="pl-c1">expected</span> <span class="pl-k">=</span> <span class="pl-smi">IllegalArgumentException</span><span class="pl-k">.</span>class)</td>
+        <td id="LC36" class="blob-code blob-code-inner js-file-line">		maxMBAC <span class="pl-k">=</span> <span class="pl-c1">999999999</span>; maxMCPI <span class="pl-k">=</span> <span class="pl-c1">9999</span>;</td>
       </tr>
       <tr>
         <td id="L37" class="blob-num js-line-number" data-line-number="37"></td>
-        <td id="LC37" class="blob-code blob-code-inner js-file-line">	<span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">worstCaseBoundaryTesting</span>() <span class="pl-k">throws</span> <span class="pl-smi">ParseException</span></td>
+        <td id="LC37" class="blob-code blob-code-inner js-file-line">		maxBAC <span class="pl-k">=</span> <span class="pl-c1">1000000000</span>; maxCPI <span class="pl-k">=</span> <span class="pl-c1">10000</span>;</td>
       </tr>
       <tr>
         <td id="L38" class="blob-num js-line-number" data-line-number="38"></td>
-        <td id="LC38" class="blob-code blob-code-inner js-file-line">	{</td>
+        <td id="LC38" class="blob-code blob-code-inner js-file-line">		</td>
       </tr>
       <tr>
         <td id="L39" class="blob-num js-line-number" data-line-number="39"></td>
-        <td id="LC39" class="blob-code blob-code-inner js-file-line">		nom<span class="pl-k">.</span>setTime(<span class="pl-k">new</span> <span class="pl-smi">SimpleDateFormat</span>(<span class="pl-s"><span class="pl-pds">&quot;</span>dd/MM/yyyy<span class="pl-pds">&quot;</span></span>)<span class="pl-k">.</span>parse(<span class="pl-s"><span class="pl-pds">&quot;</span>01/01/2001<span class="pl-pds">&quot;</span></span>));</td>
+        <td id="LC39" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2nom&gt;</span></td>
       </tr>
       <tr>
         <td id="L40" class="blob-num js-line-number" data-line-number="40"></td>
-        <td id="LC40" class="blob-code blob-code-inner js-file-line">		</td>
+        <td id="LC40" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(nomBAC,nomCPI), <span class="pl-c1">2</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L41" class="blob-num js-line-number" data-line-number="41"></td>
-        <td id="LC41" class="blob-code blob-code-inner js-file-line">		minP<span class="pl-k">.</span>setTime(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">Long</span><span class="pl-c1"><span class="pl-k">.</span>MIN_VALUE</span> <span class="pl-k">+</span> <span class="pl-c1">1</span>));</td>
+        <td id="LC41" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2min&gt; </span></td>
       </tr>
       <tr>
         <td id="L42" class="blob-num js-line-number" data-line-number="42"></td>
-        <td id="LC42" class="blob-code blob-code-inner js-file-line">		</td>
+        <td id="LC42" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(nomBAC,minCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L43" class="blob-num js-line-number" data-line-number="43"></td>
-        <td id="LC43" class="blob-code blob-code-inner js-file-line">		min<span class="pl-k">.</span>setTime(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">Long</span><span class="pl-c1"><span class="pl-k">.</span>MIN_VALUE</span>));</td>
+        <td id="LC43" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2min+&gt;	</span></td>
       </tr>
       <tr>
         <td id="L44" class="blob-num js-line-number" data-line-number="44"></td>
-        <td id="LC44" class="blob-code blob-code-inner js-file-line">		</td>
+        <td id="LC44" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(nomBAC,minPCPI), <span class="pl-c1">1000000</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L45" class="blob-num js-line-number" data-line-number="45"></td>
-        <td id="LC45" class="blob-code blob-code-inner js-file-line">		max<span class="pl-k">.</span>setTime(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">Long</span><span class="pl-c1"><span class="pl-k">.</span>MAX_VALUE</span>));</td>
+        <td id="LC45" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2max-&gt;</span></td>
       </tr>
       <tr>
         <td id="L46" class="blob-num js-line-number" data-line-number="46"></td>
-        <td id="LC46" class="blob-code blob-code-inner js-file-line">		</td>
+        <td id="LC46" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(nomBAC,maxMCPI), <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L47" class="blob-num js-line-number" data-line-number="47"></td>
-        <td id="LC47" class="blob-code blob-code-inner js-file-line">		maxM<span class="pl-k">.</span>setTime(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">Long</span><span class="pl-c1"><span class="pl-k">.</span>MAX_VALUE</span> <span class="pl-k">-</span> <span class="pl-c1">1</span>));</td>
+        <td id="LC47" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2max&gt;</span></td>
       </tr>
       <tr>
         <td id="L48" class="blob-num js-line-number" data-line-number="48"></td>
-        <td id="LC48" class="blob-code blob-code-inner js-file-line">		</td>
+        <td id="LC48" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(nomBAC,maxCPI), <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L49" class="blob-num js-line-number" data-line-number="49"></td>
-        <td id="LC49" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2nom&gt;</span></td>
+        <td id="LC49" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2min&gt;</span></td>
       </tr>
       <tr>
         <td id="L50" class="blob-num js-line-number" data-line-number="50"></td>
-        <td id="LC50" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(nom,nom), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC50" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minBAC,minCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L51" class="blob-num js-line-number" data-line-number="51"></td>
-        <td id="LC51" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2min&gt; //error expected</span></td>
+        <td id="LC51" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2min+&gt;</span></td>
       </tr>
       <tr>
         <td id="L52" class="blob-num js-line-number" data-line-number="52"></td>
-        <td id="LC52" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(nom,min);</td>
+        <td id="LC52" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minBAC,minPCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L53" class="blob-num js-line-number" data-line-number="53"></td>
-        <td id="LC53" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2min+&gt;	//error expected</span></td>
+        <td id="LC53" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2nom&gt;</span></td>
       </tr>
       <tr>
         <td id="L54" class="blob-num js-line-number" data-line-number="54"></td>
-        <td id="LC54" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(nom,minP);</td>
+        <td id="LC54" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minBAC,nomCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L55" class="blob-num js-line-number" data-line-number="55"></td>
-        <td id="LC55" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2max-&gt;</span></td>
+        <td id="LC55" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2max-&gt;</span></td>
       </tr>
       <tr>
         <td id="L56" class="blob-num js-line-number" data-line-number="56"></td>
-        <td id="LC56" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(nom,maxM), <span class="pl-c1">9.2233711e+18</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC56" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minBAC,maxMCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L57" class="blob-num js-line-number" data-line-number="57"></td>
-        <td id="LC57" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1nom, 2max&gt;</span></td>
+        <td id="LC57" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2max&gt;</span></td>
       </tr>
       <tr>
         <td id="L58" class="blob-num js-line-number" data-line-number="58"></td>
-        <td id="LC58" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(nom,max), <span class="pl-c1">9.2233711e+18</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC58" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minBAC,maxCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L59" class="blob-num js-line-number" data-line-number="59"></td>
-        <td id="LC59" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2min&gt;</span></td>
+        <td id="LC59" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2min&gt;	</span></td>
       </tr>
       <tr>
         <td id="L60" class="blob-num js-line-number" data-line-number="60"></td>
-        <td id="LC60" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(min,min), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC60" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minPBAC,minCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L61" class="blob-num js-line-number" data-line-number="61"></td>
-        <td id="LC61" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2min+&gt;</span></td>
+        <td id="LC61" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2min+&gt;</span></td>
       </tr>
       <tr>
         <td id="L62" class="blob-num js-line-number" data-line-number="62"></td>
-        <td id="LC62" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(min,minP), <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC62" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minPBAC,minPCPI), <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L63" class="blob-num js-line-number" data-line-number="63"></td>
-        <td id="LC63" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2nom&gt;</span></td>
+        <td id="LC63" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2nom&gt;</span></td>
       </tr>
       <tr>
         <td id="L64" class="blob-num js-line-number" data-line-number="64"></td>
-        <td id="LC64" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(min,nom), <span class="pl-c1">9.223373e+18</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC64" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minPBAC,nomCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L65" class="blob-num js-line-number" data-line-number="65"></td>
-        <td id="LC65" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2max-&gt;</span></td>
+        <td id="LC65" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2max-&gt;</span></td>
       </tr>
       <tr>
         <td id="L66" class="blob-num js-line-number" data-line-number="66"></td>
-        <td id="LC66" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(min,maxM), <span class="pl-c1">1.8446744e+19</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC66" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minPBAC,maxMCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L67" class="blob-num js-line-number" data-line-number="67"></td>
-        <td id="LC67" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min, 2max&gt;</span></td>
+        <td id="LC67" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2max&gt;</span></td>
       </tr>
       <tr>
         <td id="L68" class="blob-num js-line-number" data-line-number="68"></td>
-        <td id="LC68" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(min,max), <span class="pl-c1">1.8446744e+19</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC68" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(minPBAC,maxCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L69" class="blob-num js-line-number" data-line-number="69"></td>
-        <td id="LC69" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2min&gt;	//error expected</span></td>
+        <td id="LC69" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2min&gt; </span></td>
       </tr>
       <tr>
         <td id="L70" class="blob-num js-line-number" data-line-number="70"></td>
-        <td id="LC70" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(minP,min);</td>
+        <td id="LC70" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxMBAC,minCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L71" class="blob-num js-line-number" data-line-number="71"></td>
-        <td id="LC71" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2min+&gt;</span></td>
+        <td id="LC71" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2min+&gt; </span></td>
       </tr>
       <tr>
         <td id="L72" class="blob-num js-line-number" data-line-number="72"></td>
-        <td id="LC72" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(minP,minP), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC72" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxMBAC,minPCPI), <span class="pl-c1">2.147483647e7</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L73" class="blob-num js-line-number" data-line-number="73"></td>
-        <td id="LC73" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2nom&gt;</span></td>
+        <td id="LC73" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2nom&gt;	</span></td>
       </tr>
       <tr>
         <td id="L74" class="blob-num js-line-number" data-line-number="74"></td>
-        <td id="LC74" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(minP,nom), <span class="pl-c1">9.223373e+18</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC74" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxMBAC,nomCPI), <span class="pl-c1">199999.99</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L75" class="blob-num js-line-number" data-line-number="75"></td>
-        <td id="LC75" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2max-&gt;</span></td>
+        <td id="LC75" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2max-&gt;</span></td>
       </tr>
       <tr>
         <td id="L76" class="blob-num js-line-number" data-line-number="76"></td>
-        <td id="LC76" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(minP,maxM), <span class="pl-c1">1.8446744e+19</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC76" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxMBAC,maxMCPI), <span class="pl-c1">100010</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L77" class="blob-num js-line-number" data-line-number="77"></td>
-        <td id="LC77" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1min+, 2max&gt;</span></td>
+        <td id="LC77" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2max&gt;</span></td>
       </tr>
       <tr>
         <td id="L78" class="blob-num js-line-number" data-line-number="78"></td>
-        <td id="LC78" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(minP,max), <span class="pl-c1">1.8446744e+19</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC78" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxMBAC,maxCPI), <span class="pl-c1">99999.99</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L79" class="blob-num js-line-number" data-line-number="79"></td>
-        <td id="LC79" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2min&gt; //error expected</span></td>
+        <td id="LC79" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2min&gt;	</span></td>
       </tr>
       <tr>
         <td id="L80" class="blob-num js-line-number" data-line-number="80"></td>
-        <td id="LC80" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(maxM,min);</td>
+        <td id="LC80" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxBAC,minCPI), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L81" class="blob-num js-line-number" data-line-number="81"></td>
-        <td id="LC81" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2min+&gt; //error expected</span></td>
+        <td id="LC81" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2min+&gt;	</span></td>
       </tr>
       <tr>
         <td id="L82" class="blob-num js-line-number" data-line-number="82"></td>
-        <td id="LC82" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(maxM,minP);</td>
+        <td id="LC82" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxBAC,minPCPI), <span class="pl-c1">2.147483647e7</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L83" class="blob-num js-line-number" data-line-number="83"></td>
-        <td id="LC83" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2nom&gt;	//error expected</span></td>
+        <td id="LC83" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2nom&gt;	</span></td>
       </tr>
       <tr>
         <td id="L84" class="blob-num js-line-number" data-line-number="84"></td>
-        <td id="LC84" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(maxM,nom);</td>
+        <td id="LC84" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxBAC,nomCPI), <span class="pl-c1">200000</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L85" class="blob-num js-line-number" data-line-number="85"></td>
-        <td id="LC85" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2max-&gt;</span></td>
+        <td id="LC85" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2max-&gt;	</span></td>
       </tr>
       <tr>
         <td id="L86" class="blob-num js-line-number" data-line-number="86"></td>
-        <td id="LC86" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(maxM,maxM), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC86" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxBAC,maxMCPI), <span class="pl-c1">100010</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L87" class="blob-num js-line-number" data-line-number="87"></td>
-        <td id="LC87" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max-, 2max&gt;</span></td>
+        <td id="LC87" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2max&gt;</span></td>
       </tr>
       <tr>
         <td id="L88" class="blob-num js-line-number" data-line-number="88"></td>
-        <td id="LC88" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(maxM,max), <span class="pl-c1">1</span>, <span class="pl-c1">0</span> );</td>
+        <td id="LC88" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getEACmethod(maxBAC,maxCPI), <span class="pl-c1">100000</span>, <span class="pl-c1">0</span> );</td>
       </tr>
       <tr>
         <td id="L89" class="blob-num js-line-number" data-line-number="89"></td>
-        <td id="LC89" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2min&gt;	//error expected</span></td>
+        <td id="LC89" class="blob-code blob-code-inner js-file-line">	}</td>
       </tr>
       <tr>
         <td id="L90" class="blob-num js-line-number" data-line-number="90"></td>
-        <td id="LC90" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(max,min);</td>
-      </tr>
-      <tr>
-        <td id="L91" class="blob-num js-line-number" data-line-number="91"></td>
-        <td id="LC91" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2min+&gt;	//error expected</span></td>
-      </tr>
-      <tr>
-        <td id="L92" class="blob-num js-line-number" data-line-number="92"></td>
-        <td id="LC92" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(max,minP);</td>
-      </tr>
-      <tr>
-        <td id="L93" class="blob-num js-line-number" data-line-number="93"></td>
-        <td id="LC93" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2nom&gt;	//error expected</span></td>
-      </tr>
-      <tr>
-        <td id="L94" class="blob-num js-line-number" data-line-number="94"></td>
-        <td id="LC94" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(max,nom);</td>
-      </tr>
-      <tr>
-        <td id="L95" class="blob-num js-line-number" data-line-number="95"></td>
-        <td id="LC95" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2max-&gt;	//error expected</span></td>
-      </tr>
-      <tr>
-        <td id="L96" class="blob-num js-line-number" data-line-number="96"></td>
-        <td id="LC96" class="blob-code blob-code-inner js-file-line">		evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(max,maxM);</td>
-      </tr>
-      <tr>
-        <td id="L97" class="blob-num js-line-number" data-line-number="97"></td>
-        <td id="LC97" class="blob-code blob-code-inner js-file-line">		<span class="pl-c">//&lt;1max, 2max&gt;</span></td>
-      </tr>
-      <tr>
-        <td id="L98" class="blob-num js-line-number" data-line-number="98"></td>
-        <td id="LC98" class="blob-code blob-code-inner js-file-line">		assertEquals(evaTestingClass<span class="pl-k">.</span>getDifferenceOfDatesMethod(max,max), <span class="pl-c1">0</span>, <span class="pl-c1">0</span> );</td>
-      </tr>
-      <tr>
-        <td id="L99" class="blob-num js-line-number" data-line-number="99"></td>
-        <td id="LC99" class="blob-code blob-code-inner js-file-line">	}</td>
-      </tr>
-      <tr>
-        <td id="L100" class="blob-num js-line-number" data-line-number="100"></td>
-        <td id="LC100" class="blob-code blob-code-inner js-file-line">}</td>
+        <td id="LC90" class="blob-code blob-code-inner js-file-line">}</td>
       </tr>
 </table>
 
@@ -1086,7 +1047,7 @@
       <span class="mega-octicon octicon-mark-github" title="GitHub"></span>
 </a>
     <ul class="site-footer-links">
-      <li>&copy; 2015 <span title="0.08061s from github-fe135-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
+      <li>&copy; 2015 <span title="0.06479s from github-fe121-cp1-prd.iad.github.net">GitHub</span>, Inc.</li>
         <li><a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">Terms</a></li>
         <li><a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">Privacy</a></li>
         <li><a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">Security</a></li>
